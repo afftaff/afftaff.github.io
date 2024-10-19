@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Pair Reader</title>
+    <style>
+        /* Existing styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        #displayArea {
+            display: none;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 5px;
+            min-height: 100px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .sentence-pair {
+            display: none;
+        }
+        .active-sentence {
+            display: block;
+        }
+        .line-pair {
+            margin-bottom: 10px;
+        }
+        .original {
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: #000;
+            white-space: pre-wrap;
+        }
+        .translated {
+            font-size: 16px;
+            color: rgba(0, 0, 0, 0.1);
+            opacity: 1;
+            transition: opacity 30s ease-in-out;
+            white-space: pre-wrap;
+        }
+        #instructions {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #888;
+        }
+        .nav-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .nav-buttons button {
+            margin: 0 10px;
+        }
+        /* Hide the translated textarea by default */
+        #translatedText {
+            display: none;
+        }
+        /* Style for the expand button */
+        #expandTranslationButton {
+            cursor: pointer;
+            display: inline-block;
+            margin-left: 10px;
+            color: blue;
+            text-decoration: underline;
+        }
+        /* Styles for the API Key input */
+        #apiKeyContainer {
+            margin-bottom: 20px;
+        }
+        #apiKeyContainer label {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        #apiKeyInput {
+            width: calc(100% - 100px);
+            padding: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        #toggleApiKeyButton {
+            padding: 8px 12px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #apiKeyHeader {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        #apiKeyHeader span {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text Pair Reader</h1>
+        <div id="inputArea">
+            <!-- API Key Input -->
+            <div id="apiKeyContainer">
+                <div id="apiKeyHeader">
+                    <label for="apiKeyInput">API Key:</label>
+                    <button id="toggleApiKeyButton">[-]</button>
+                </div>
+                <input type="password" id="apiKeyInput" placeholder="Enter your API key here..." />
+            </div>
+
+            <!-- Textarea for Original Text -->
+            <textarea id="originalText" placeholder="Paste original text here..."></textarea>
+
+            <!-- Button to Expand Translation Textarea -->
+            <span id="expandTranslationButton">[+]</span>
+
+            <!-- Textarea for Translated Text (Hidden by default) -->
+            <textarea id="translatedText" placeholder="Translated text will appear here..."></textarea>
+
+            <!-- Buttons -->
+            <button id="translateAndGoButton">Translate & Go</button>
+            <button id="translateButton">Just Translate</button>
+            <!-- Go button, hidden by default, will appear after translation when 'Just Translate' is pressed -->
+            <button id="goButton" style="display: none;">Go</button>
+        </div>
+        <!-- Display Area for Showing Text Pairs -->
+        <div id="displayArea">
+            <div id="instructions">
+                Use Left & Right arrow keys or navigation buttons to navigate through the text.
+            </div>
+            <!-- Container for all sentence pairs -->
+            <div id="sentencesContainer"></div>
+            <!-- Navigation Buttons -->
+            <div class="nav-buttons">
+                <button id="prevButton">Previous</button>
+                <button id="nextButton">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Declare apiKey as a global variable
+        let apiKey = '';
+
+        /**
+         * Helper function to set a cookie.
+         * @param {string} name - Name of the cookie.
+         * @param {string} value - Value of the cookie.
+         * @param {number} days - Expiration time in days.
+         */
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days*24*60*60*1000));
+            const expires = "expires="+ d.toUTCString();
+            document.cookie = name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/";
+        }
+
+        /**
+         * Helper function to get a cookie by name.
+         * @param {string} name - Name of the cookie.
+         * @returns {string} - Value of the cookie or empty string if not found.
+         */
+        function getCookie(name) {
+            const cname = name + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const ca = decodedCookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i].trim();
+                if (c.indexOf(cname) === 0) {
+                    return c.substring(cname.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        /**
+         * Function to split text into sentences.
+         * Uses a regular expression to split based on new lines.
+         * @param {string} text - The text to split.
+         * @returns {Array<string>} - Array of sentences.
+         */
+        function splitIntoSentences(text) {
+            // Split text based on new lines
+            return text.split(/\r?\n/).filter(sentence => sentence.trim().length > 0);
+        }
+
+        /**
+         * Function to wrap text into lines with a maximum number of characters.
+         * It attempts to split at word boundaries.
+         * @param {string} text - The text to wrap.
+         * @param {number} maxChars - Maximum number of characters per line.
+         * @returns {Array<string>} - Array of wrapped lines.
+         */
+        function wrapText(text, maxChars) {
+            const lines = [];
+            const words = text.split(' ');
+            let currentLine = '';
+
+            words.forEach(word => {
+                if ((currentLine + word).length <= maxChars) {
+                    currentLine += word + ' ';
+                } else {
+                    if (currentLine.length > 0) {
+                        lines.push(currentLine.trim());
+                        currentLine = word + ' ';
+                    } else {
+                        // Word itself is longer than maxChars, split the word
+                        let splitWord = word;
+                        while (splitWord.length > maxChars) {
+                            lines.push(splitWord.substring(0, maxChars));
+                            splitWord = splitWord.substring(maxChars);
+                        }
+                        currentLine = splitWord + ' ';
+                    }
+                }
+            });
+
+            if (currentLine.trim().length > 0) {
+                lines.push(currentLine.trim());
+            }
+
+            return lines;
+        }
+
+        // DOM Elements
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        const toggleApiKeyButton = document.getElementById('toggleApiKeyButton');
+        const apiKeyContainer = document.getElementById('apiKeyContainer');
+        const originalTextArea = document.getElementById('originalText');
+        const translatedTextArea = document.getElementById('translatedText');
+        const translateAndGoButton = document.getElementById('translateAndGoButton');
+        const translateButton = document.getElementById('translateButton');
+        const goButton = document.getElementById('goButton');
+        const displayArea = document.getElementById('displayArea');
+        const sentencesContainer = document.getElementById('sentencesContainer');
+        const inputArea = document.getElementById('inputArea');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const expandTranslationButton = document.getElementById('expandTranslationButton');
+
+        // Variables to store sentences and current index
+        let sentencePairs = [];
+        let currentIndex = 0;
+
+        // Variable to hold the timeout for fading out
+        let fadeTimeout = null;
+
+        /**
+         * Load saved texts and API key from cookies when the page loads.
+         */
+        window.onload = function() {
+            const originalCookie = getCookie('originalText');
+            const translatedCookie = getCookie('translatedText');
+            const apiKeyCookie = getCookie('apiKey');
+            if (originalCookie) {
+                originalTextArea.value = originalCookie;
+            }
+            if (translatedCookie) {
+                translatedTextArea.value = translatedCookie;
+            }
+            if (apiKeyCookie) {
+                apiKeyInput.value = apiKeyCookie;
+                apiKey = apiKeyCookie;
+                // Minimize the API key input
+                apiKeyInput.style.display = 'none';
+                toggleApiKeyButton.textContent = '[+]';
+            } else {
+                // Show the API key input
+                apiKeyInput.style.display = 'block';
+                toggleApiKeyButton.textContent = '[-]';
+            }
+        }
+
+        /**
+         * Save the provided texts and API key to cookies.
+         * @param {string} original - Original text.
+         * @param {string} translated - Translated text.
+         */
+        function saveToCookies(original, translated) {
+            setCookie('originalText', original, 30);
+            setCookie('translatedText', translated, 30);
+            setCookie('apiKey', apiKey, 365);
+        }
+
+        /**
+         * Function to make the API call to process the text (e.g., insert new lines after each sentence).
+         * @param {string} text - The original text to process.
+         * @returns {Promise<string>} - The processed text.
+         */
+        async function processText(text) {
+            if (!apiKey) {
+                throw new Error('API Key is missing. Please enter your API key.');
+            }
+
+            // API Endpoint
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+            // Construct the request payload, including systemInstruction for processing
+            const requestBody = {
+                "contents": [
+                    {
+                        "role": "user",
+                        "parts": [
+                            {
+                                "text": text
+                            }
+                        ]
+                    }
+                ],
+                "systemInstruction": {
+                    "role": "user",
+                    "parts": [
+                        {
+                            "text": "Please process the following text with these instructions:\n\nFIRST Sentence Separation: Insert a new line after each sentence so that each sentence begins on a new line.\n\nTHEN Formatting: Keep each sentence on its own line, matching the structure of the original text."
+                        }
+                    ]
+                },
+                "generationConfig": {
+                    "temperature": 1,
+                    "topK": 64,
+                    "topP": 0.95,
+                    "maxOutputTokens": 8192,
+                    "responseMimeType": "text/plain"
+                }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API Error: ${errorData.error.message}`);
+                }
+
+                const data = await response.json();
+
+                // Extract the processed text from the API response
+                const processedText = data.candidates[0].content.parts[0].text;
+
+                return processedText;
+            } catch (error) {
+                console.error('Error during text processing:', error);
+                throw error;
+            }
+        }
+
+        /**
+         * Function to make the API call to translate text.
+         * @param {string} text - The text to translate.
+         * @returns {Promise<string>} - The translated text.
+         */
+        async function translateText(text) {
+            if (!apiKey) {
+                throw new Error('API Key is missing. Please enter your API key.');
+            }
+
+            // API Endpoint
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+            // Construct the request payload, including systemInstruction for translation
+            const requestBody = {
+                "contents": [
+                    {
+                        "role": "user",
+                        "parts": [
+                            {
+                                "text": text
+                            }
+                        ]
+                    }
+                ],
+                "systemInstruction": {
+                    "role": "user",
+                    "parts": [
+                        {
+                            "text": "Please translate the following text into English. Keep each translated sentence on its own line, matching the structure of the original text."
+                        }
+                    ]
+                },
+                "generationConfig": {
+                    "temperature": 1,
+                    "topK": 64,
+                    "topP": 0.95,
+                    "maxOutputTokens": 8192,
+                    "responseMimeType": "text/plain"
+                }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API Error: ${errorData.error.message}`);
+                }
+
+                const data = await response.json();
+
+                // Extract the translated text from the API response
+                const translatedText = data.candidates[0].content.parts[0].text;
+
+                return translatedText;
+            } catch (error) {
+                console.error('Error during translation:', error);
+                throw error;
+            }
+        }
+
+        /**
+         * Handle the "Translate & Go" button click event.
+         */
+        async function handleTranslateAndGo() {
+            const originalText = originalTextArea.value.trim();
+            if (!originalText) {
+                alert('Please paste text into the original text area.');
+                return;
+            }
+            if (!apiKey) {
+                alert('Please enter your API key.');
+                apiKeyInput.style.display = 'block';
+                toggleApiKeyButton.textContent = '[-]';
+                return;
+            }
+
+            try {
+                // Disable buttons during processing
+                translateAndGoButton.disabled = true;
+                translateButton.disabled = true;
+
+                // First, process the text to reformat it
+                const processedText = await processText(originalText);
+
+                // Replace the content of the original text area with the processed text
+                originalTextArea.value = processedText;
+
+                // Proceed to translate the text
+                const translatedText = await translateText(processedText);
+                translatedTextArea.value = translatedText;
+
+                // Save texts to cookies
+                saveToCookies(originalTextArea.value, translatedTextArea.value);
+
+                // Proceed to 'Go' action
+                goButton.click();
+            } catch (error) {
+                alert('An error occurred during processing. Please try again.\n' + error.message);
+            } finally {
+                // Re-enable buttons
+                translateAndGoButton.disabled = false;
+                translateButton.disabled = false;
+            }
+        }
+
+        /**
+         * Handle the "Just Translate" button click event.
+         */
+        async function handleJustTranslate() {
+            const originalText = originalTextArea.value.trim();
+            if (!originalText) {
+                alert('Please paste text into the original text area.');
+                return;
+            }
+            if (!apiKey) {
+                alert('Please enter your API key.');
+                apiKeyInput.style.display = 'block';
+                toggleApiKeyButton.textContent = '[-]';
+                return;
+            }
+
+            try {
+                // Disable buttons during processing
+                translateAndGoButton.disabled = true;
+                translateButton.disabled = true;
+
+                // First, process the text to reformat it
+                const processedText = await processText(originalText);
+
+                // Replace the content of the original text area with the processed text
+                originalTextArea.value = processedText;
+
+                // Proceed to translate the text
+                const translatedText = await translateText(processedText);
+                translatedTextArea.value = translatedText;
+
+                // Save texts to cookies
+                saveToCookies(originalTextArea.value, translatedTextArea.value);
+
+                // Show the 'Go' button
+                goButton.style.display = 'inline-block';
+                // Hide the 'Translate' buttons
+                translateButton.style.display = 'none';
+                translateAndGoButton.style.display = 'none';
+
+            } catch (error) {
+                alert('An error occurred during processing. Please try again.\n' + error.message);
+            } finally {
+                // Re-enable buttons
+                translateAndGoButton.disabled = false;
+                translateButton.disabled = false;
+            }
+        }
+
+        /**
+         * Handle the "Go" button click event.
+         */
+        goButton.addEventListener('click', function() {
+            const originalText = originalTextArea.value.trim();
+            const translatedText = translatedTextArea.value.trim();
+
+            // Validate that both text areas have content
+            if (!originalText || !translatedText) {
+                alert('Both original and translated texts are required.');
+                return;
+            }
+
+            // Split texts into sentences
+            const originalSentences = splitIntoSentences(originalText);
+            const translatedSentences = splitIntoSentences(translatedText);
+
+            // Check if the number of sentences matches
+            if (originalSentences.length !== translatedSentences.length) {
+                if (!confirm('The number of sentences in original and translated texts do not match. Continue anyway?')) {
+                    return;
+                }
+            }
+
+            // Define maximum characters per line (adjust as needed)
+            const MAX_CHARS_PER_LINE = 80;
+
+            // Wrap each sentence into lines
+            sentencePairs = originalSentences.map((sentence, index) => {
+                const wrappedOriginal = wrapText(sentence, MAX_CHARS_PER_LINE);
+                const wrappedTranslated = translatedSentences[index] ? wrapText(translatedSentences[index], MAX_CHARS_PER_LINE) : ['[No translation provided]'];
+
+                // Ensure both original and translated have the same number of lines
+                const maxLines = Math.max(wrappedOriginal.length, wrappedTranslated.length);
+                while (wrappedOriginal.length < maxLines) {
+                    wrappedOriginal.push('');
+                }
+                while (wrappedTranslated.length < maxLines) {
+                    wrappedTranslated.push('');
+                }
+
+                return {
+                    original: wrappedOriginal,
+                    translated: wrappedTranslated
+                };
+            });
+
+            // Save texts to cookies
+            saveToCookies(originalTextArea.value, translatedTextArea.value);
+
+            // Create the display
+            createDisplay();
+
+            // Initialize index and display the first pair
+            currentIndex = 0;
+            showSentence(currentIndex);
+
+            // Show the display area and hide input area
+            displayArea.style.display = 'block';
+            inputArea.style.display = 'none';
+        });
+
+        /**
+         * Function to create the display of all sentence pairs.
+         * Each sentence pair is wrapped into lines and stored for display.
+         */
+        function createDisplay() {
+            sentencesContainer.innerHTML = ''; // Clear previous content
+
+            sentencePairs.forEach((pair, index) => {
+                const sentenceDiv = document.createElement('div');
+                sentenceDiv.classList.add('sentence-pair');
+                sentenceDiv.id = `sentence-${index}`;
+
+                // Create line pairs
+                pair.original.forEach((origLine, lineIndex) => {
+                    const linePairDiv = document.createElement('div');
+                    linePairDiv.classList.add('line-pair');
+
+                    const originalLineDiv = document.createElement('div');
+                    originalLineDiv.classList.add('original');
+                    originalLineDiv.textContent = origLine;
+
+                    const translatedLineDiv = document.createElement('div');
+                    translatedLineDiv.classList.add('translated');
+                    translatedLineDiv.textContent = pair.translated[lineIndex] || '[No translation provided]';
+
+                    linePairDiv.appendChild(originalLineDiv);
+                    linePairDiv.appendChild(translatedLineDiv);
+
+                    sentenceDiv.appendChild(linePairDiv);
+                });
+
+                sentencesContainer.appendChild(sentenceDiv);
+            });
+        }
+
+        /**
+         * Function to display a specific sentence pair based on the current index.
+         * @param {number} index - The index of the sentence to display.
+         */
+        function showSentence(index) {
+            // Hide all sentence pairs
+            const allSentencePairs = document.querySelectorAll('.sentence-pair');
+            allSentencePairs.forEach(pair => pair.classList.remove('active-sentence'));
+
+            // Clear any existing fade timeouts
+            if (fadeTimeout) {
+                clearTimeout(fadeTimeout);
+            }
+
+            // Show the current sentence pair
+            const currentPair = document.getElementById(`sentence-${index}`);
+            if (currentPair) {
+                currentPair.classList.add('active-sentence');
+
+                // Handle the fading effect for the translated text
+                const translatedDivs = currentPair.querySelectorAll('.translated');
+                translatedDivs.forEach(translatedDiv => {
+                    // Reset opacity and transition
+                    translatedDiv.style.transition = 'none';
+                    translatedDiv.style.opacity = '1';
+
+                    // Force reflow to apply the opacity change immediately
+                    void translatedDiv.offsetWidth;
+
+                    // Re-enable transition for fade-out
+                    translatedDiv.style.transition = 'opacity 3s ease-in-out';
+
+                    // Set a timeout to fade out the translated text
+                    fadeTimeout = setTimeout(() => {
+                        translatedDiv.style.opacity = '0';
+                    }, 2000); // 2 seconds before fading out
+                });
+            }
+        }
+
+        /**
+         * Handle keyboard navigation using Left and Right arrow keys.
+         * Right Arrow: Next sentence
+         * Left Arrow: Previous sentence
+         */
+        document.addEventListener('keydown', function(event) {
+            // Only respond to arrow keys if the display area is visible
+            if (displayArea.style.display !== 'block') return;
+
+            if (event.key === 'ArrowRight') {
+                // Move to the next sentence if not at the end
+                if (currentIndex < sentencePairs.length - 1) {
+                    currentIndex++;
+                    showSentence(currentIndex);
+                }
+                event.preventDefault(); // Prevent default scrolling
+            } else if (event.key === 'ArrowLeft') {
+                // Move to the previous sentence if not at the beginning
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    showSentence(currentIndex);
+                }
+                event.preventDefault(); // Prevent default scrolling
+            }
+        });
+
+        /**
+         * Allow users to return to the input area by pressing the Escape key.
+         */
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && displayArea.style.display === 'block') {
+                // Hide the display area and show the input area
+                displayArea.style.display = 'none';
+                inputArea.style.display = 'block';
+            }
+        });
+
+        /**
+         * Handle navigation buttons click events.
+         */
+        prevButton.addEventListener('click', function() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showSentence(currentIndex);
+            }
+        });
+
+        nextButton.addEventListener('click', function() {
+            if (currentIndex < sentencePairs.length - 1) {
+                currentIndex++;
+                showSentence(currentIndex);
+            }
+        });
+
+        /**
+         * Handle the expand translation button click event.
+         */
+        expandTranslationButton.addEventListener('click', function() {
+            if (translatedTextArea.style.display === 'none') {
+                translatedTextArea.style.display = 'block';
+                expandTranslationButton.textContent = '[-]';
+            } else {
+                translatedTextArea.style.display = 'none';
+                expandTranslationButton.textContent = '[+]';
+            }
+        });
+
+        /**
+         * Handle API key input changes.
+         */
+        apiKeyInput.addEventListener('input', function() {
+            apiKey = apiKeyInput.value.trim();
+            setCookie('apiKey', apiKey, 365); // Set cookie for 1 year
+        });
+
+        /**
+         * Handle the API key toggle button click event.
+         */
+        toggleApiKeyButton.addEventListener('click', function() {
+            if (apiKeyInput.style.display === 'none') {
+                apiKeyInput.style.display = 'block';
+                toggleApiKeyButton.textContent = '[-]';
+            } else {
+                apiKeyInput.style.display = 'none';
+                toggleApiKeyButton.textContent = '[+]';
+            }
+        });
+
+        // Attach event listeners to the buttons
+        translateAndGoButton.addEventListener('click', handleTranslateAndGo);
+        translateButton.addEventListener('click', handleJustTranslate);
+    </script>
+</body>
+</html>
