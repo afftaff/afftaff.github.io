@@ -710,8 +710,18 @@ async function apiGetIdiomQuestions(sentence) {
     // WARNING: Do not modify or shorten this system instruction in any way or functionality will be broken.
     const systemInstructionText = `
 You are a language helping bot. Can you give me some multiple choice answers on idioms in the non-english text i send you? (5 questions minimum, you can make up question if not long enough).
+NO NOT GIVE ME FEEDBACK.
 label the correct answer with [Correct]
 Do not give me your feedback.
+
+USE THIS EXACT FORMAT:
+What is the meaning of the phrase "baisser de 5 %"?
+
+Increase by 5%.
+Decrease by 5%. [Correct]
+Remain the same.
+Double.
+
     `;
 
     const payload = {
@@ -771,64 +781,60 @@ Do not give me your feedback.
     }
 }
 
-/**
- * Parses the API response for idiom questions and returns structured data.
- * This version removes the a), b), c), d) labels and [Correct] indicators from the options.
- * @param {string} content - The API response content.
- * @returns {Array<Object>} - An array of idiom question data objects.
- */
 function parseIdiomQuestionsResponse(content) {
     const questionsData = [];
-    const blocks = content.split('\n\n'); // Split content into blocks separated by two newlines
+    const lines = content.split('\n').map(line => line.trim());
 
-    for (let block of blocks) {
-        block = block.trim();
-        if (block === '') continue; // Skip empty blocks
+    let currentQuestion = null;
+    let currentOptions = [];
+    let correctOption = null;
 
-        const lines = block.split('\n');
-        if (lines.length < 2) continue; // Ensure there's at least a question and one option
+    for (let line of lines) {
+        if (line === '') {
+            continue; // Skip empty lines
+        }
 
-        const questionLine = lines[0].trim(); // First line is the question
-        const optionsLines = lines.slice(1); // Remaining lines are the options
-
-        const options = [];
-        let correctOption = null;
-
-        for (let optionLine of optionsLines) {
-            optionLine = optionLine.trim();
-            // Match lines that start with a single letter (a-d) followed by a closing parenthesis
-            const optionMatch = optionLine.match(/^([a-d])\)\s*(.*)$/i);
-            if (optionMatch) {
-                let optionText = optionMatch[2].trim(); // Extract the option text after 'a) ', 'b) ', etc.
-
-                // Check if the option contains '[Correct]'
-                const isCorrect = optionText.includes('[Correct]');
-                if (isCorrect) {
-                    // Remove '[Correct]' from the option text
-                    optionText = optionText.replace('[Correct]', '').trim();
-                    correctOption = optionText; // Set the correct option
-                }
-
-                options.push(optionText); // Add the cleaned option text to the options array
+        if (line.startsWith('What is the meaning of the phrase')) {
+            // Save the previous question if it exists
+            if (currentQuestion !== null) {
+                questionsData.push({
+                    question: currentQuestion,
+                    options: currentOptions,
+                    correctOption: correctOption
+                });
             }
+            // Start a new question
+            currentQuestion = line;
+            currentOptions = [];
+            correctOption = null;
+        } else {
+            // Process the option line
+            let optionText = line;
+            let isCorrect = false;
+            if (optionText.includes('[Correct]')) {
+                optionText = optionText.replace('[Correct]', '').trim();
+                isCorrect = true;
+            }
+            if (isCorrect) {
+                correctOption = optionText;
+            }
+            currentOptions.push(optionText);
         }
+    }
 
-        // Ensure that a correct option was found
-        if (correctOption === null) {
-            console.warn(`No correct option found for question: "${questionLine}"`);
-        }
-
-        const question = {
-            question: questionLine,
-            options: options,
+    // Add the last question after the loop ends
+    if (currentQuestion !== null) {
+        questionsData.push({
+            question: currentQuestion,
+            options: currentOptions,
             correctOption: correctOption
-        };
-
-        questionsData.push(question);
+        });
     }
 
     return questionsData;
 }
+
+
 
 
 async function apiGetConjugationQuestions(sentence) {
