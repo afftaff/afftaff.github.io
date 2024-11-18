@@ -290,7 +290,7 @@ function createListeningTestUI(chunks, shuffledChunks, chunkState, container) {
     chunkSelect.appendChild(defaultOption);
 
     // Populate the dropdown with shuffled chunks
-    shuffledChunks.forEach((chunk) => {
+    shuffleArray([...chunks]).forEach((chunk) => {
         const option = document.createElement('option');
         option.value = chunk;
         option.textContent = chunk;
