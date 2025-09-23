@@ -1,0 +1,42 @@
+{
+  "id": "vocabulary-concepts-u1-5",
+  "title": "Vocabulary: Concepts (Usefulness 1-5)",
+  "description": "Traveler usefulness 1-5/10 phrases for the Concepts subcategory within Vocabulary. Includes 7 card(s).",
+  "cards": [
+    {
+      "english": "Day",
+      "romaji": "hi",
+      "japanese": "日"
+    },
+    {
+      "english": "Holiday / Day off",
+      "romaji": "yasumi",
+      "japanese": "休み"
+    },
+    {
+      "english": "Birthday",
+      "romaji": "tanjobi",
+      "japanese": "誕生日"
+    },
+    {
+      "english": "Culture",
+      "romaji": "bunka",
+      "japanese": "文化"
+    },
+    {
+      "english": "Marriage",
+      "romaji": "kekkon",
+      "japanese": "結婚"
+    },
+    {
+      "english": "Reading",
+      "romaji": "dokusho",
+      "japanese": "読書"
+    },
+    {
+      "english": "Labor",
+      "romaji": "kinrō",
+      "japanese": "勤労"
+    }
+  ]
+}

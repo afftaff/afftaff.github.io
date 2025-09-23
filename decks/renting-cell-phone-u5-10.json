@@ -1,0 +1,42 @@
+{
+  "id": "renting-cell-phone-u5-10",
+  "title": "Renting: Cell Phone (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Cell Phone subcategory within Renting. Includes 7 card(s).",
+  "cards": [
+    {
+      "english": "I’d like to rent a cell phone.",
+      "romaji": "Keitai o karitai desu.",
+      "japanese": "携帯を借りたいです。"
+    },
+    {
+      "english": "Please give me a charger.",
+      "romaji": "Judenki o kudasai.",
+      "japanese": "充電器をください。"
+    },
+    {
+      "english": "I'd like this model.",
+      "romaji": "Kono kishu ga hoshi desu.",
+      "japanese": "この機種が欲しいです。"
+    },
+    {
+      "english": "Which model would you like?",
+      "romaji": "Dono kishu ga hoshii desu ka?",
+      "japanese": "どの機種が欲しいですか？"
+    },
+    {
+      "english": "Please add minutes.",
+      "romaji": "Tsuwa jikan o tsuika shite kudasai.",
+      "japanese": "通話時間を追加してください。"
+    },
+    {
+      "english": "You have ten minutes left on your phone.",
+      "romaji": "Nokori no tsuwa jikan wa ju-ppun.",
+      "japanese": "残りの通話時間は十分。"
+    },
+    {
+      "english": "I have 1 minute remaining to call.",
+      "romaji": "Tsuwa jikan no nokori wa ippun desu.",
+      "japanese": "通話時間の残りは一分です。"
+    }
+  ]
+}

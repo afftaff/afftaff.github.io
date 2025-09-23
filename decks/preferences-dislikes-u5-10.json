@@ -1,0 +1,22 @@
+{
+  "id": "preferences-dislikes-u5-10",
+  "title": "Preferences: Dislikes (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Dislikes subcategory within Preferences. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "I don't like this.",
+      "romaji": "Kore wa kirai desu.",
+      "japanese": "これは嫌いです。"
+    },
+    {
+      "english": "I don't like fermented beans.",
+      "romaji": "Natto wa kirai desu.",
+      "japanese": "納豆は嫌いです。"
+    },
+    {
+      "english": "I dislike natto.",
+      "romaji": "Natto wa kirai desu.",
+      "japanese": "納豆は嫌いです。"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "preferences-likes-u1-5",
+  "title": "Preferences: Likes (Usefulness 1-5)",
+  "description": "Traveler usefulness 1-5/10 phrases for the Likes subcategory within Preferences. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "I like movies.",
+      "romaji": "Watashi wa eiga ga suki desu.",
+      "japanese": "私は映画が好きです。"
+    },
+    {
+      "english": "I like Audrey Hepburn.",
+      "romaji": "Watashi wa Odori Heppuban ga suki desu.",
+      "japanese": "私はオードリー・ヘップバーンが好きです。"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "postal-service-sending-items-u5-10",
+  "title": "Postal Service: Sending Items (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Sending Items subcategory within Postal Service. Includes 7 card(s).",
+  "cards": [
+    {
+      "english": "I'm sending this to New York.",
+      "romaji": "Nyuyoku e okurimasu.",
+      "japanese": "ニューヨークへ送ります。"
+    },
+    {
+      "english": "I'm sending a postcard to New York.",
+      "romaji": "Hagaki o nyuyoku e okurimasu.",
+      "japanese": "葉書をニューヨークへ送ります。"
+    },
+    {
+      "english": "I'm sending a small package to Tokyo.",
+      "romaji": "Kozutsumi wo Tokyo ni okurimasu.",
+      "japanese": "小包を東京に送ります。"
+    },
+    {
+      "english": "I'm sending a letter to New York.",
+      "romaji": "Tegami wo Nyuyoku e okurimasu.",
+      "japanese": "手紙をニューヨークへ送ります。"
+    },
+    {
+      "english": "I'm sending a small package to New York.",
+      "romaji": "Kozutsumi o Nyuyoku e okurimasu.",
+      "japanese": "小包をニューヨークへ送ります。"
+    },
+    {
+      "english": "I'll send a postcard to my friend.",
+      "romaji": "Hagaki wo tomodachi ni okurimasu.",
+      "japanese": "葉書を友達に送ります。"
+    },
+    {
+      "english": "I'll send clothes home.",
+      "romaji": "Fuku wo ie ni okuru.",
+      "japanese": "服を家に送る。"
+    }
+  ]
+}

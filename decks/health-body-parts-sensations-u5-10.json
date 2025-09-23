@@ -1,0 +1,22 @@
+{
+  "id": "health-body-parts-sensations-u5-10",
+  "title": "Health (Body Parts): Sensations (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Sensations subcategory within Health (Body Parts). Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "My leg has fallen asleep.",
+      "romaji": "Ashi ga shibiremashita.",
+      "japanese": "足が痺れました。"
+    },
+    {
+      "english": "My ankles are tired.",
+      "romaji": "Ashikubi ga tsukaremashita.",
+      "japanese": "足首が疲れました。"
+    },
+    {
+      "english": "My knees are shaking.",
+      "romaji": "Hiza ga furuete imasu.",
+      "japanese": "膝が震えています。"
+    }
+  ]
+}

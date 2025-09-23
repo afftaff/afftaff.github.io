@@ -1,0 +1,12 @@
+{
+  "id": "health-ailments-u1-5",
+  "title": "Health: Ailments (Usefulness 1-5)",
+  "description": "Traveler usefulness 1-5/10 phrases for the Ailments subcategory within Health. Includes 1 card(s).",
+  "cards": [
+    {
+      "english": "I have many pimples.",
+      "romaji": "Nikibi ga takusan aru.",
+      "japanese": "ニキビがたくさんある。"
+    }
+  ]
+}

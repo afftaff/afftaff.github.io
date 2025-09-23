@@ -1,0 +1,42 @@
+{
+  "id": "common-responses-disagreement-correction-u5-10",
+  "title": "Common Responses: Disagreement / Correction (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Disagreement / Correction subcategory within Common Responses. Includes 7 card(s).",
+  "cards": [
+    {
+      "english": "That's incorrect.",
+      "romaji": "Chigaimasu.",
+      "japanese": "違います。"
+    },
+    {
+      "english": "It's wrong.",
+      "romaji": "Chigaimasu.",
+      "japanese": "違います。"
+    },
+    {
+      "english": "That's not right.",
+      "romaji": "Sore wa chigaimasu.",
+      "japanese": "それは違います。"
+    },
+    {
+      "english": "No, that's wrong.",
+      "romaji": "Iie, chigaimasu.",
+      "japanese": "いいえ、違います。"
+    },
+    {
+      "english": "No, that's wrong.",
+      "romaji": "Iie, chigaimasu.",
+      "japanese": "いいえ、違います。"
+    },
+    {
+      "english": "No, that's wrong.",
+      "romaji": "Iie, chigaimasu.",
+      "japanese": "いいえ、違います。"
+    },
+    {
+      "english": "You have the wrong one.",
+      "romaji": "Chigaimasu.",
+      "japanese": "違います。"
+    }
+  ]
+}

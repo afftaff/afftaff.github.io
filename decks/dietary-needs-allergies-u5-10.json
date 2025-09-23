@@ -1,0 +1,27 @@
+{
+  "id": "dietary-needs-allergies-u5-10",
+  "title": "Dietary Needs: Allergies (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Allergies subcategory within Dietary Needs. Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "I am allergic to eggs.",
+      "romaji": "Tamago arerugi desu.",
+      "japanese": "卵アレルギーです。"
+    },
+    {
+      "english": "I am allergic to dairy products.",
+      "romaji": "Nyuseihin arerugi desu.",
+      "japanese": "乳製品アレルギーです。"
+    },
+    {
+      "english": "I'm allergic to peanuts.",
+      "romaji": "Pinattsu arerugi ga arimasu.",
+      "japanese": "ピーナッツアレルギーがあります。"
+    },
+    {
+      "english": "I have allergies.",
+      "romaji": "Arerugi ga arimasu.",
+      "japanese": "アレルギーがあります。"
+    }
+  ]
+}

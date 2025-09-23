@@ -1,0 +1,17 @@
+{
+  "id": "greetings-well-being-u5-10",
+  "title": "Greetings: Well-being (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Well-being subcategory within Greetings. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "How are you? (Are you doing well?)",
+      "romaji": "O-genki desu ka?",
+      "japanese": "お元気ですか？"
+    },
+    {
+      "english": "Fine, thanks for asking.",
+      "romaji": "O-kage sama de.",
+      "japanese": "おかげさまで。"
+    }
+  ]
+}

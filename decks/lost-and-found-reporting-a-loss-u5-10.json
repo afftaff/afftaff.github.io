@@ -1,0 +1,32 @@
+{
+  "id": "lost-and-found-reporting-a-loss-u5-10",
+  "title": "Lost & Found: Reporting a Loss (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Reporting a Loss subcategory within Lost & Found. Includes 5 card(s).",
+  "cards": [
+    {
+      "english": "I lost my passport.",
+      "romaji": "Pasupoto o nakushimashita.",
+      "japanese": "パスポートをなくしました。"
+    },
+    {
+      "english": "I lost a bag.",
+      "romaji": "Kaban o nakushimashita.",
+      "japanese": "鞄をなくしました。"
+    },
+    {
+      "english": "I lost my glasses.",
+      "romaji": "Megane wo nakushimashita.",
+      "japanese": "眼鏡をなくしました。"
+    },
+    {
+      "english": "Oh no! I forgot my wallet!",
+      "romaji": "Ikenai! O-saifu o wasureta!",
+      "japanese": "いけない！お財布を忘れた！"
+    },
+    {
+      "english": "I lost my umbrella.",
+      "romaji": "Kasa o nakushimashita.",
+      "japanese": "傘をなくしました。"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "requests-items-u5-10",
+  "title": "Requests: Items (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Items subcategory within Requests. Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "Please give me the map.",
+      "romaji": "Chizu o kudasai.",
+      "japanese": "地図をください。"
+    },
+    {
+      "english": "I would like a map.",
+      "romaji": "Chizu onegai shimasu.",
+      "japanese": "地図お願いします。"
+    },
+    {
+      "english": "Please give me that umbrella.",
+      "romaji": "Ano kasa o kudasai.",
+      "japanese": "あの傘をください。"
+    },
+    {
+      "english": "Please give me a blanket.",
+      "romaji": "Mofu o kudasai.",
+      "japanese": "毛布をください。"
+    }
+  ]
+}

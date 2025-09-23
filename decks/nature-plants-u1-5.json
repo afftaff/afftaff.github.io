@@ -1,0 +1,32 @@
+{
+  "id": "nature-plants-u1-5",
+  "title": "Nature: Plants (Usefulness 1-5)",
+  "description": "Traveler usefulness 1-5/10 phrases for the Plants subcategory within Nature. Includes 5 card(s).",
+  "cards": [
+    {
+      "english": "The cherry blossoms are pretty, aren't they?",
+      "romaji": "Sakura ga kirei da ne.",
+      "japanese": "桜がきれいだね。"
+    },
+    {
+      "english": "I bought a chrysanthemum.",
+      "romaji": "Kiku no hana o katta.",
+      "japanese": "菊の花を買った。"
+    },
+    {
+      "english": "Japanese people enjoy cherry blossom viewing at night as well.",
+      "romaji": "Nihon-jin wa, yozakura mo tamoshimimasu.",
+      "japanese": "日本人は、夜桜も楽しみます。"
+    },
+    {
+      "english": "Chrysanthemums are a typical flower to offer at the Buddhist family altar and tomb.",
+      "romaji": "Kiku wa, bukka no daihy teki na hana desu.",
+      "japanese": "菊は、仏花の代表的な花です。"
+    },
+    {
+      "english": "The color of a hydrangea depends on the pH level in the soil.",
+      "romaji": "Ajisai no hana no iro wa, doj no sanseido ni yotte kimarimasu.",
+      "japanese": "アジサイの花の色は、土壌の酸性度によって決まります。"
+    }
+  ]
+}

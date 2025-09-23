@@ -1,0 +1,32 @@
+{
+  "id": "directions-locations-u5-10",
+  "title": "Directions: Locations (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Locations subcategory within Directions. Includes 5 card(s).",
+  "cards": [
+    {
+      "english": "There is a convenience store on the right side.",
+      "romaji": "Migi ni konbini ga arimasu.",
+      "japanese": "右にコンビニがあります。"
+    },
+    {
+      "english": "There is a post office on this street.",
+      "romaji": "Kono tori ni yubinkyoku ga arimasu.",
+      "japanese": "この通りに郵便局があります。"
+    },
+    {
+      "english": "There is a good ramen shop to the left of the convenience store.",
+      "romaji": "Konbini no hidari ni oishii ramen-ya ga arimasu.",
+      "japanese": "コンビニの左においしいラーメン屋があります。"
+    },
+    {
+      "english": "There is a big bookstore in front of the bank.",
+      "romaji": "Ginko no mae ni okii hon-ya ga aru.",
+      "japanese": "銀行の前に大きい本屋がある。"
+    },
+    {
+      "english": "There's a Bank of Japan in Nihonbashi.",
+      "romaji": "Nihonbashi ni Nihon-ginko ga arimasu.",
+      "japanese": "日本橋に日本銀行があります。"
+    }
+  ]
+}

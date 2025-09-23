@@ -1,0 +1,42 @@
+{
+  "id": "feelings-physical-state-u5-10",
+  "title": "Feelings: Physical State (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Physical State subcategory within Feelings. Includes 7 card(s).",
+  "cards": [
+    {
+      "english": "My stomach is empty. (I'm hungry)",
+      "romaji": "O-naka ga suite imasu.",
+      "japanese": "お腹が空いています。"
+    },
+    {
+      "english": "My throat is dry. (I'm thirsty)",
+      "romaji": "Nodo ga kawaite imasu.",
+      "japanese": "喉が渇いています。"
+    },
+    {
+      "english": "I'm thirsty.",
+      "romaji": "Nodo ga kawakimashita.",
+      "japanese": "喉が渇きました。"
+    },
+    {
+      "english": "I'm tired.",
+      "romaji": "Tsukarete imasu.",
+      "japanese": "疲れています。"
+    },
+    {
+      "english": "I'm cold.",
+      "romaji": "Samui desu.",
+      "japanese": "寒いです。"
+    },
+    {
+      "english": "I'm hot.",
+      "romaji": "Atsui desu.",
+      "japanese": "暑いです。"
+    },
+    {
+      "english": "My ankles are tired.",
+      "romaji": "Ashikubi ga tsukaremashita.",
+      "japanese": "足首が疲れました。"
+    }
+  ]
+}

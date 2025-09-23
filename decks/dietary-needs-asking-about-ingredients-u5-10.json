@@ -1,0 +1,27 @@
+{
+  "id": "dietary-needs-asking-about-ingredients-u5-10",
+  "title": "Dietary Needs: Asking About Ingredients (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Asking About Ingredients subcategory within Dietary Needs. Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "Does this contain meat?",
+      "romaji": "Niku wa haitte imasu ka?",
+      "japanese": "肉は入っていますか？"
+    },
+    {
+      "english": "Does it contain fish?",
+      "romaji": "Sakana wa haitte imasu ka?",
+      "japanese": "魚は入っていますか？"
+    },
+    {
+      "english": "Does it contain eggs?",
+      "romaji": "Tamago wa haitte imasu ka?",
+      "japanese": "卵は入っていますか？"
+    },
+    {
+      "english": "Does it contain a dairy product?",
+      "romaji": "Nyuseihin wa haitte imasu ka.",
+      "japanese": "乳製品は入っていますか？"
+    }
+  ]
+}

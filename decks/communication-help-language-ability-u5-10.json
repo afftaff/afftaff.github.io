@@ -1,0 +1,32 @@
+{
+  "id": "communication-help-language-ability-u5-10",
+  "title": "Communication Help: Language Ability (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Language Ability subcategory within Communication Help. Includes 5 card(s).",
+  "cards": [
+    {
+      "english": "Can you speak English?",
+      "romaji": "Eigo o hanasemasu ka?",
+      "japanese": "英語を話せますか？"
+    },
+    {
+      "english": "Can you speak English?",
+      "romaji": "Eigo o hanasemasu ka?",
+      "japanese": "英語を話せますか？"
+    },
+    {
+      "english": "English okay?",
+      "romaji": "Eigo okay?",
+      "japanese": "英語オッケー？"
+    },
+    {
+      "english": "Can you speak Spanish?",
+      "romaji": "Supein-go o hanasemasu ka?",
+      "japanese": "スペイン語を話せますか？"
+    },
+    {
+      "english": "Can you speak French?",
+      "romaji": "Furansu-go o hanasemasu ka?",
+      "japanese": "フランス語を話せますか？"
+    }
+  ]
+}
