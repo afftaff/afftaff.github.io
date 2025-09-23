@@ -1,0 +1,12 @@
+{
+  "id": "common-responses-disagreement-correction-u8",
+  "title": "Common Responses: Disagreement / Correction (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Disagreement / Correction subcategory within Common Responses. Includes 1 card(s).",
+  "cards": [
+    {
+      "english": "That's incorrect.",
+      "romaji": "Chigaimasu.",
+      "japanese": "違います。"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "language-help-ability-u5",
+  "title": "Language Help: Ability (Usefulness 5)",
+  "description": "Traveler usefulness 5/10 phrases for the Ability subcategory within Language Help. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "I speak Chinese.",
+      "romaji": "Watashi wa chugokugo o hanashimasu.",
+      "japanese": "私は中国語を話します。"
+    },
+    {
+      "english": "Can you speak Korean?",
+      "romaji": "Kankokugo wo hanasemasu ka.",
+      "japanese": "韓国語を話せますか。"
+    }
+  ]
+}

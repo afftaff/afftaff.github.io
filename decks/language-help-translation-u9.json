@@ -1,0 +1,22 @@
+{
+  "id": "language-help-translation-u9",
+  "title": "Language Help: Translation (Usefulness 9)",
+  "description": "Traveler usefulness 9/10 phrases for the Translation subcategory within Language Help. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "How do you say it in Japanese?",
+      "romaji": "Kore wa nihongo de do iimasu ka?",
+      "japanese": "これは日本語でどう言いますか？"
+    },
+    {
+      "english": "How do you say [ ] in Japanese?",
+      "romaji": "[ ] wa nihongo de do iimasu ka?",
+      "japanese": "[ ]は日本語でどう言いますか？"
+    },
+    {
+      "english": "How do you say this in Japanese?",
+      "romaji": "Kore wa nihongo de do imasu ka.",
+      "japanese": "これは日本語でどう言いますか。"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "vocabulary-animals-u3",
+  "title": "Vocabulary: Animals (Usefulness 3)",
+  "description": "Traveler usefulness 3/10 phrases for the Animals subcategory within Vocabulary. Includes 5 card(s).",
+  "cards": [
+    {
+      "english": "Bird",
+      "romaji": "tori",
+      "japanese": "鳥"
+    },
+    {
+      "english": "Bunny / Rabbit",
+      "romaji": "usagi",
+      "japanese": "うさぎ"
+    },
+    {
+      "english": "Monkey",
+      "romaji": "saru",
+      "japanese": "猿"
+    },
+    {
+      "english": "Snake",
+      "romaji": "hebi",
+      "japanese": "蛇"
+    },
+    {
+      "english": "Turtle",
+      "romaji": "kame",
+      "japanese": "亀"
+    }
+  ]
+}

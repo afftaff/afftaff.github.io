@@ -1,0 +1,12 @@
+{
+  "id": "transportation-train-u7",
+  "title": "Transportation: Train (Usefulness 7)",
+  "description": "Traveler usefulness 7/10 phrases for the Train subcategory within Transportation. Includes 1 card(s).",
+  "cards": [
+    {
+      "english": "Have you ever taken the Shinkansen?",
+      "romaji": "Shinkansen ni notta koto ga arimasu ka.",
+      "japanese": "新幹線に乗ったことがありますか。"
+    }
+  ]
+}

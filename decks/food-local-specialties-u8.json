@@ -1,0 +1,17 @@
+{
+  "id": "food-local-specialties-u8",
+  "title": "Food: Local Specialties (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Local Specialties subcategory within Food. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Local delicacies.",
+      "romaji": "Jimoto no gochiso.",
+      "japanese": "地元の御馳走。"
+    },
+    {
+      "english": "What are the local delicacies?",
+      "romaji": "Jimoto no gochiso wa?",
+      "japanese": "地元の御馳走は？"
+    }
+  ]
+}

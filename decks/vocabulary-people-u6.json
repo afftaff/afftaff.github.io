@@ -1,0 +1,27 @@
+{
+  "id": "vocabulary-people-u6",
+  "title": "Vocabulary: People (Usefulness 6)",
+  "description": "Traveler usefulness 6/10 phrases for the People subcategory within Vocabulary. Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "Adult",
+      "romaji": "otona",
+      "japanese": "大人"
+    },
+    {
+      "english": "Child / Children",
+      "romaji": "kodomo",
+      "japanese": "子供"
+    },
+    {
+      "english": "Man",
+      "romaji": "otoko",
+      "japanese": "男"
+    },
+    {
+      "english": "Woman",
+      "romaji": "onna",
+      "japanese": "女"
+    }
+  ]
+}

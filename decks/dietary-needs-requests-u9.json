@@ -1,0 +1,27 @@
+{
+  "id": "dietary-needs-requests-u9",
+  "title": "Dietary Needs: Requests (Usefulness 9)",
+  "description": "Traveler usefulness 9/10 phrases for the Requests subcategory within Dietary Needs. Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "A small serving of noodles please.",
+      "romaji": "Men sukuname de onegai shimasu.",
+      "japanese": "麺少な目でお願いします。"
+    },
+    {
+      "english": "A large serving of rice, please.",
+      "romaji": "Raisu omori onegai shimasu.",
+      "japanese": "ライス大盛りお願いします。"
+    },
+    {
+      "english": "Rice large serving.",
+      "romaji": "Raisu omori.",
+      "japanese": "ライス大盛り。"
+    },
+    {
+      "english": "Rice small serving.",
+      "romaji": "Raisu sukuname.",
+      "japanese": "ライス少なめ。"
+    }
+  ]
+}

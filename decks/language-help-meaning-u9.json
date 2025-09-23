@@ -1,0 +1,17 @@
+{
+  "id": "language-help-meaning-u9",
+  "title": "Language Help: Meaning (Usefulness 9)",
+  "description": "Traveler usefulness 9/10 phrases for the Meaning subcategory within Language Help. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "What does that mean?",
+      "romaji": "Sore wa doiu imi desu ka?",
+      "japanese": "それはどういう意味ですか？"
+    },
+    {
+      "english": "What does this mean?",
+      "romaji": "Kore wa doiu imi desu ka.",
+      "japanese": "これはどういう意味ですか。"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "vocabulary-other-u8",
+  "title": "Vocabulary: Other (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Other subcategory within Vocabulary. Includes 7 card(s).",
+  "cards": [
+    {
+      "english": "Again / More",
+      "romaji": "mo",
+      "japanese": "もう"
+    },
+    {
+      "english": "Before / Front",
+      "romaji": "mae",
+      "japanese": "前"
+    },
+    {
+      "english": "How",
+      "romaji": "do / dōyatte",
+      "japanese": "どう / どうやって"
+    },
+    {
+      "english": "More",
+      "romaji": "motto",
+      "japanese": "もっと"
+    },
+    {
+      "english": "Near / Nearby",
+      "romaji": "chikaku",
+      "japanese": "近く"
+    },
+    {
+      "english": "Separately",
+      "romaji": "betsu-betsu",
+      "japanese": "別々"
+    },
+    {
+      "english": "Under / Below",
+      "romaji": "shita",
+      "japanese": "下"
+    }
+  ]
+}

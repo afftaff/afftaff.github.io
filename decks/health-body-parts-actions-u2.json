@@ -1,0 +1,17 @@
+{
+  "id": "health-body-parts-actions-u2",
+  "title": "Health (Body Parts): Actions (Usefulness 2)",
+  "description": "Traveler usefulness 2/10 phrases for the Actions subcategory within Health (Body Parts). Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "I bend my elbow.",
+      "romaji": "Hiji wo mageru.",
+      "japanese": "肘を曲げる。"
+    },
+    {
+      "english": "I massage my toes.",
+      "romaji": "Ashi no yubi wo massaji suru.",
+      "japanese": "足の指をマッサージする。"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "food-condiments-u8",
+  "title": "Food: Condiments (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Condiments subcategory within Food. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "Where is the sauce?",
+      "romaji": "Sosu wa doko ni arimasu ka.",
+      "japanese": "ソースはどこにありますか。"
+    },
+    {
+      "english": "Could you pass me the pepper?",
+      "romaji": "Kosho wo totte kudasai.",
+      "japanese": "胡椒をとってください。"
+    },
+    {
+      "english": "Could you pass me the soy sauce?",
+      "romaji": "Shoyu o totte kudasai.",
+      "japanese": "醤油をとってください。"
+    }
+  ]
+}

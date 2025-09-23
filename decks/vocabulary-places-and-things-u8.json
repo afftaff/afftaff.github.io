@@ -1,0 +1,42 @@
+{
+  "id": "vocabulary-places-and-things-u8",
+  "title": "Vocabulary: Places & Things (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Places & Things subcategory within Vocabulary. Includes 7 card(s).",
+  "cards": [
+    {
+      "english": "Bag",
+      "romaji": "kaban",
+      "japanese": "鞄"
+    },
+    {
+      "english": "Cell phone",
+      "romaji": "keitai denwa / keitai",
+      "japanese": "携帯電話 / 携帯"
+    },
+    {
+      "english": "Charger",
+      "romaji": "judenki",
+      "japanese": "充電器"
+    },
+    {
+      "english": "Internet",
+      "romaji": "intanetto / netto",
+      "japanese": "インターネット / ネット"
+    },
+    {
+      "english": "Internet cafe",
+      "romaji": "netto cafe",
+      "japanese": "ネットカフェ"
+    },
+    {
+      "english": "Police box",
+      "romaji": "koban",
+      "japanese": "交番"
+    },
+    {
+      "english": "Power converter",
+      "romaji": "denryoku henkan ki",
+      "japanese": "電力変換器"
+    }
+  ]
+}

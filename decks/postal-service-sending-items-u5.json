@@ -1,0 +1,17 @@
+{
+  "id": "postal-service-sending-items-u5",
+  "title": "Postal Service: Sending Items (Usefulness 5)",
+  "description": "Traveler usefulness 5/10 phrases for the Sending Items subcategory within Postal Service. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "I'll send a postcard to my friend.",
+      "romaji": "Hagaki wo tomodachi ni okurimasu.",
+      "japanese": "葉書を友達に送ります。"
+    },
+    {
+      "english": "I'll send clothes home.",
+      "romaji": "Fuku wo ie ni okuru.",
+      "japanese": "服を家に送る。"
+    }
+  ]
+}

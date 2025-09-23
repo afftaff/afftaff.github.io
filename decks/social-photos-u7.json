@@ -1,0 +1,27 @@
+{
+  "id": "social-photos-u7",
+  "title": "Social: Photos (Usefulness 7)",
+  "description": "Traveler usefulness 7/10 phrases for the Photos subcategory within Social. Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "Please let me take your picture.",
+      "romaji": "Shashin o torasete kudasai.",
+      "japanese": "写真を撮らせてください。"
+    },
+    {
+      "english": "Please let me take a picture with you.",
+      "romaji": "Shashin o issho ni torasete kudasai.",
+      "japanese": "写真を一緒に撮らせてください。"
+    },
+    {
+      "english": "Photo, let me take, please.",
+      "romaji": "Shashin o torasete kudasai.",
+      "japanese": "写真を撮らせてください。"
+    },
+    {
+      "english": "Photo, together, let me take, please.",
+      "romaji": "Shashin o issho ni torasete kudasai.",
+      "japanese": "写真を一緒に撮らせてください。"
+    }
+  ]
+}

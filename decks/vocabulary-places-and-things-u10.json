@@ -1,0 +1,62 @@
+{
+  "id": "vocabulary-places-and-things-u10",
+  "title": "Vocabulary: Places & Things (Usefulness 10)",
+  "description": "Traveler usefulness 10/10 phrases for the Places & Things subcategory within Vocabulary. Includes 11 card(s).",
+  "cards": [
+    {
+      "english": "Ambulance",
+      "romaji": "kyukyusha",
+      "japanese": "救急車"
+    },
+    {
+      "english": "Bathroom / Toilet",
+      "romaji": "toire / otearai",
+      "japanese": "トイレ / お手洗い"
+    },
+    {
+      "english": "Bus stop",
+      "romaji": "basu tei",
+      "japanese": "バス停"
+    },
+    {
+      "english": "Convenience store",
+      "romaji": "konbini",
+      "japanese": "コンビニ"
+    },
+    {
+      "english": "Menu",
+      "romaji": "menyu",
+      "japanese": "メニュー"
+    },
+    {
+      "english": "Passport",
+      "romaji": "pasupoto",
+      "japanese": "パスポート"
+    },
+    {
+      "english": "Station",
+      "romaji": "eki",
+      "japanese": "駅"
+    },
+    {
+      "english": "Taxi",
+      "romaji": "takushii",
+      "japanese": "タクシー"
+    },
+    {
+      "english": "Taxi stand",
+      "romaji": "takushi noriba",
+      "japanese": "タクシー乗り場"
+    },
+    {
+      "english": "Ticket",
+      "romaji": "kippu",
+      "japanese": "切符"
+    },
+    {
+      "english": "Train (electric)",
+      "romaji": "densha",
+      "japanese": "電車"
+    }
+  ]
+}

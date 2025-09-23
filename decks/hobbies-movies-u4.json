@@ -1,0 +1,17 @@
+{
+  "id": "hobbies-movies-u4",
+  "title": "Hobbies: Movies (Usefulness 4)",
+  "description": "Traveler usefulness 4/10 phrases for the Movies subcategory within Hobbies. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "I watch a dubbed movie.",
+      "romaji": "Fukikae eiga wo miru.",
+      "japanese": "吹き替え映画を見る。"
+    },
+    {
+      "english": "I watch movies without subtitles.",
+      "romaji": "Jimaku nashi de eiga wo miru.",
+      "japanese": "字幕なしで映画を見る。"
+    }
+  ]
+}

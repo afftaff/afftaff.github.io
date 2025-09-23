@@ -1,0 +1,22 @@
+{
+  "id": "at-a-restaurant-greeting-and-seating-u10",
+  "title": "At a Restaurant: Greeting & Seating (Usefulness 10)",
+  "description": "Traveler usefulness 10/10 phrases for the Greeting & Seating subcategory within At a Restaurant. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "How many people in your party?",
+      "romaji": "Nan-mei sama desu ka?",
+      "japanese": "何名様ですか？"
+    },
+    {
+      "english": "Two people.",
+      "romaji": "Ni mei.",
+      "japanese": "二名。"
+    },
+    {
+      "english": "Four people.",
+      "romaji": "Yon mei.",
+      "japanese": "四名。"
+    }
+  ]
+}

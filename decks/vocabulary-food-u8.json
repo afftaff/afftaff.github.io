@@ -1,0 +1,82 @@
+{
+  "id": "vocabulary-food-u8",
+  "title": "Vocabulary: Food (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Food subcategory within Vocabulary. Includes 15 card(s).",
+  "cards": [
+    {
+      "english": "Broth",
+      "romaji": "tsuyu",
+      "japanese": "つゆ"
+    },
+    {
+      "english": "Dairy products",
+      "romaji": "nyuseihin",
+      "japanese": "乳製品"
+    },
+    {
+      "english": "Dumplings",
+      "romaji": "dango",
+      "japanese": "団子"
+    },
+    {
+      "english": "Hot pot",
+      "romaji": "shabushabu",
+      "japanese": "しゃぶしゃぶ"
+    },
+    {
+      "english": "Ketchup",
+      "romaji": "kechappu",
+      "japanese": "ケチャップ"
+    },
+    {
+      "english": "Mayonnaise",
+      "romaji": "mayonezu",
+      "japanese": "マヨネーズ"
+    },
+    {
+      "english": "Milk",
+      "romaji": "miruku",
+      "japanese": "ミルク"
+    },
+    {
+      "english": "Miso soup",
+      "romaji": "miso shiru",
+      "japanese": "味噌汁"
+    },
+    {
+      "english": "Peanuts",
+      "romaji": "pinattsu",
+      "japanese": "ピーナッツ"
+    },
+    {
+      "english": "Pepper",
+      "romaji": "kosho",
+      "japanese": "胡椒"
+    },
+    {
+      "english": "Rice cake",
+      "romaji": "mochi",
+      "japanese": "餅"
+    },
+    {
+      "english": "Salt",
+      "romaji": "shio",
+      "japanese": "塩"
+    },
+    {
+      "english": "Salmon roe",
+      "romaji": "ikura",
+      "japanese": "いくら"
+    },
+    {
+      "english": "Sauce",
+      "romaji": "sosu",
+      "japanese": "ソース"
+    },
+    {
+      "english": "Tofu",
+      "romaji": "tōfu",
+      "japanese": "豆腐"
+    }
+  ]
+}

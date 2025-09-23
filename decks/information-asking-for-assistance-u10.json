@@ -1,0 +1,12 @@
+{
+  "id": "information-asking-for-assistance-u10",
+  "title": "Information: Asking for Assistance (Usefulness 10)",
+  "description": "Traveler usefulness 10/10 phrases for the Asking for Assistance subcategory within Information. Includes 1 card(s).",
+  "cards": [
+    {
+      "english": "Do you have an English information guide?",
+      "romaji": "Eigo no gaido wa arimasu ka?",
+      "japanese": "英語のガイドはありますか？"
+    }
+  ]
+}

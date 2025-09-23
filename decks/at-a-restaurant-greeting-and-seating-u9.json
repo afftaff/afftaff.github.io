@@ -1,0 +1,22 @@
+{
+  "id": "at-a-restaurant-greeting-and-seating-u9",
+  "title": "At a Restaurant: Greeting & Seating (Usefulness 9)",
+  "description": "Traveler usefulness 9/10 phrases for the Greeting & Seating subcategory within At a Restaurant. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "Welcome.",
+      "romaji": "Irasshaimase.",
+      "japanese": "いらっしゃいませ。"
+    },
+    {
+      "english": "Two adults and one child.",
+      "romaji": "Otona ni-mei, kodomo ichi-mei.",
+      "japanese": "大人二名、子供一名。"
+    },
+    {
+      "english": "Two people, non-smoking.",
+      "romaji": "Ni-mei kin'en.",
+      "japanese": "二名、禁煙。"
+    }
+  ]
+}

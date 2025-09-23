@@ -1,0 +1,12 @@
+{
+  "id": "transportation-airport-u6",
+  "title": "Transportation: Airport (Usefulness 6)",
+  "description": "Traveler usefulness 6/10 phrases for the Airport subcategory within Transportation. Includes 1 card(s).",
+  "cards": [
+    {
+      "english": "There are no flights leaving the airport today, due to the stormy weather.",
+      "romaji": "Arashi no eikyo de kyo no furaito wa subete kyanseru saremashita.",
+      "japanese": "嵐の影響で今日のフライトはすべてキャンセルされました。"
+    }
+  ]
+}

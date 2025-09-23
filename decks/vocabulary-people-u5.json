@@ -1,0 +1,27 @@
+{
+  "id": "vocabulary-people-u5",
+  "title": "Vocabulary: People (Usefulness 5)",
+  "description": "Traveler usefulness 5/10 phrases for the People subcategory within Vocabulary. Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "Doctor",
+      "romaji": "isha",
+      "japanese": "医者"
+    },
+    {
+      "english": "Father",
+      "romaji": "chichi / o-to-san",
+      "japanese": "父 / お父さん"
+    },
+    {
+      "english": "Mother",
+      "romaji": "haha / o-ka-san",
+      "japanese": "母 / お母さん"
+    },
+    {
+      "english": "Senior",
+      "romaji": "shinia",
+      "japanese": "シニア"
+    }
+  ]
+}

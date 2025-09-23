@@ -1,0 +1,17 @@
+{
+  "id": "at-a-restaurant-ordering-u10",
+  "title": "At a Restaurant: Ordering (Usefulness 10)",
+  "description": "Traveler usefulness 10/10 phrases for the Ordering subcategory within At a Restaurant. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Please give me this.",
+      "romaji": "Kore kudasai.",
+      "japanese": "これください。"
+    },
+    {
+      "english": "Can I have some water, please?",
+      "romaji": "Mizu o kudasai.",
+      "japanese": "水をください。"
+    }
+  ]
+}

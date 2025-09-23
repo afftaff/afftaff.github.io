@@ -1,0 +1,12 @@
+{
+  "id": "transportation-tickets-u5",
+  "title": "Transportation: Tickets (Usefulness 5)",
+  "description": "Traveler usefulness 5/10 phrases for the Tickets subcategory within Transportation. Includes 1 card(s).",
+  "cards": [
+    {
+      "english": "This ticket can be used nationwide.",
+      "romaji": "Kono kippu wa zenkokukyotsu desu.",
+      "japanese": "この切符は全国共通です。"
+    }
+  ]
+}

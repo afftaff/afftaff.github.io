@@ -1,0 +1,22 @@
+{
+  "id": "farewells-workplace-u3",
+  "title": "Farewells: Workplace (Usefulness 3)",
+  "description": "Traveler usefulness 3/10 phrases for the Workplace subcategory within Farewells. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "Goodbye. (used among colleagues)",
+      "romaji": "Otsukaresama deshita.",
+      "japanese": "お疲れ様でした。"
+    },
+    {
+      "english": "I'm leaving. Goodbye!",
+      "romaji": "O-saki ni shiturei shimasu. O-tsukare-sama deshita.",
+      "japanese": "お先に失礼します。お疲れ様でした。"
+    },
+    {
+      "english": "It's been a long hard day.",
+      "romaji": "Otsukaresama deshita.",
+      "japanese": "お疲れ様でした。"
+    }
+  ]
+}

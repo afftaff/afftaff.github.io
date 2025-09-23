@@ -1,0 +1,12 @@
+{
+  "id": "location-asking-u8",
+  "title": "Location: Asking (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Asking subcategory within Location. Includes 1 card(s).",
+  "cards": [
+    {
+      "english": "Where are you now?",
+      "romaji": "Ima doko ni iru?",
+      "japanese": "今どこにいる？"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "id": "directions-instructions-u8",
+  "title": "Directions: Instructions (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Instructions subcategory within Directions. Includes 8 card(s).",
+  "cards": [
+    {
+      "english": "Turn right at the dead end.",
+      "romaji": "Tsukiatari de migi ni magaru.",
+      "japanese": "突き当たりで右に曲がる。"
+    },
+    {
+      "english": "Go straight until the second traffic signal.",
+      "romaji": "Futatsume no shingo made massugu susumu.",
+      "japanese": "二つ目の信号までまっすぐ進む。"
+    },
+    {
+      "english": "Turn right at the fourth traffic signal.",
+      "romaji": "Yottsu-me no shingo de migi ni magarimasu.",
+      "japanese": "四つ目の信号で右に曲がります。"
+    },
+    {
+      "english": "Go straight until the fifth corner.",
+      "romaji": "Itsutsu-me no kado made susumimasu.",
+      "japanese": "五つ目の角まで進みます。"
+    },
+    {
+      "english": "Turn left at the first traffic signal.",
+      "romaji": "Hitotsu-me no shingo wo hidari ni magarimasu.",
+      "japanese": "一つ目の信号を左に曲がります。"
+    },
+    {
+      "english": "Then go straight.",
+      "romaji": "Soshite, massugu ikimasu.",
+      "japanese": "そして、まっすぐ行きます。"
+    },
+    {
+      "english": "Then turn left at the third traffic signal.",
+      "romaji": "Sanban-me no shingo wo hidari ni magarimasu.",
+      "japanese": "三番目の信号を左に曲がります。"
+    },
+    {
+      "english": "Turn right at the dead end.",
+      "romaji": "Tsuki atari de migi ni magaru.",
+      "japanese": "突き当たりで右に曲がる。"
+    }
+  ]
+}

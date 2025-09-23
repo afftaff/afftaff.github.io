@@ -1,0 +1,22 @@
+{
+  "id": "greetings-time-of-day-u10",
+  "title": "Greetings: Time of Day (Usefulness 10)",
+  "description": "Traveler usefulness 10/10 phrases for the Time of Day subcategory within Greetings. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "Good morning.",
+      "romaji": "O-hayo gozaimasu.",
+      "japanese": "おはようございます。"
+    },
+    {
+      "english": "Good afternoon.",
+      "romaji": "Konnichi wa.",
+      "japanese": "こんにちは。"
+    },
+    {
+      "english": "Good evening.",
+      "romaji": "Konban wa.",
+      "japanese": "こんばんは。"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "transportation-bus-u9",
+  "title": "Transportation: Bus (Usefulness 9)",
+  "description": "Traveler usefulness 9/10 phrases for the Bus subcategory within Transportation. Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "I'll get off at the next bus stop.",
+      "romaji": "Watashi wa, tsugi no basutei de orimasu.",
+      "japanese": "私は、次のバス停で降ります。"
+    },
+    {
+      "english": "Where is the next bus stop?",
+      "romaji": "Tsugi no basutei wa doko desu ka?",
+      "japanese": "次のバス停はどこですか？"
+    },
+    {
+      "english": "Is Narita Airport the next stop?",
+      "romaji": "Narita kuko wa tsugi desu ka?",
+      "japanese": "成田空港は次ですか？"
+    },
+    {
+      "english": "I'll get off at the next bus stop.",
+      "romaji": "Watashi wa, tsugi no basutei de orimasu.",
+      "japanese": "私は、次のバス停で降ります。"
+    }
+  ]
+}

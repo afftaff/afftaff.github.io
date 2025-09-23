@@ -1,0 +1,17 @@
+{
+  "id": "requests-items-u9",
+  "title": "Requests: Items (Usefulness 9)",
+  "description": "Traveler usefulness 9/10 phrases for the Items subcategory within Requests. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Please give me the map.",
+      "romaji": "Chizu o kudasai.",
+      "japanese": "地図をください。"
+    },
+    {
+      "english": "I would like a map.",
+      "romaji": "Chizu onegai shimasu.",
+      "japanese": "地図お願いします。"
+    }
+  ]
+}

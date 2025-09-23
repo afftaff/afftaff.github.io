@@ -1,0 +1,32 @@
+{
+  "id": "health-illness-u8",
+  "title": "Health: Illness (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Illness subcategory within Health. Includes 5 card(s).",
+  "cards": [
+    {
+      "english": "I have a cold.",
+      "romaji": "Kaze o hiite imasu.",
+      "japanese": "風邪をひいています。"
+    },
+    {
+      "english": "I got an upset stomach.",
+      "romaji": "O-naka o kowashita.",
+      "japanese": "お腹を壊した。"
+    },
+    {
+      "english": "Do you have a cold?",
+      "romaji": "Kaze desu ka.",
+      "japanese": "風邪ですか。"
+    },
+    {
+      "english": "I caught a cold.",
+      "romaji": "Kaze wo hita.",
+      "japanese": "風邪をひいた。"
+    },
+    {
+      "english": "I got an upset stomach.",
+      "romaji": "O-naka o kowashita.",
+      "japanese": "お腹を壊した。"
+    }
+  ]
+}

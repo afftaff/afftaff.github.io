@@ -1,0 +1,17 @@
+{
+  "id": "language-help-writing-u8",
+  "title": "Language Help: Writing (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Writing subcategory within Language Help. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Please write it down.",
+      "romaji": "Kaite kudasai.",
+      "japanese": "書いてください。"
+    },
+    {
+      "english": "Please write it in romanized letters (alphabet).",
+      "romaji": "Romaji de kaite kudasai.",
+      "japanese": "ローマ字で書いてください。"
+    }
+  ]
+}

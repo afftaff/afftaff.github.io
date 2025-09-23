@@ -1,0 +1,22 @@
+{
+  "id": "transportation-train-u9",
+  "title": "Transportation: Train (Usefulness 9)",
+  "description": "Traveler usefulness 9/10 phrases for the Train subcategory within Transportation. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "The next station is Osaka.",
+      "romaji": "Tsugi no eki wa Osaka desu.",
+      "japanese": "次の駅は大阪です。"
+    },
+    {
+      "english": "The next station is Osaka.",
+      "romaji": "Tsugi no eki wa Osaka desu.",
+      "japanese": "次の駅は大阪です。"
+    },
+    {
+      "english": "I'll buy a train ticket.",
+      "romaji": "Densha no kippu o kaimasu.",
+      "japanese": "電車の切符を買います。"
+    }
+  ]
+}

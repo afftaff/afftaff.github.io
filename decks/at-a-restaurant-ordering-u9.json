@@ -1,0 +1,42 @@
+{
+  "id": "at-a-restaurant-ordering-u9",
+  "title": "At a Restaurant: Ordering (Usefulness 9)",
+  "description": "Traveler usefulness 9/10 phrases for the Ordering subcategory within At a Restaurant. Includes 7 card(s).",
+  "cards": [
+    {
+      "english": "What do you recommend?",
+      "romaji": "Nani ga o-susume desu ka.",
+      "japanese": "何がおすすめですか。"
+    },
+    {
+      "english": "What do you recommend?",
+      "romaji": "O-susume wa nan desu ka.",
+      "japanese": "おすすめは何ですか？"
+    },
+    {
+      "english": "Tempura, please.",
+      "romaji": "Tempura kudasai.",
+      "japanese": "天ぷらください。"
+    },
+    {
+      "english": "Beer.",
+      "romaji": "Biru.",
+      "japanese": "ビール。"
+    },
+    {
+      "english": "Coffee.",
+      "romaji": "Kohi.",
+      "japanese": "コーヒー。"
+    },
+    {
+      "english": "Coca cola.",
+      "romaji": "Coca cola.",
+      "japanese": "コカコーラ。"
+    },
+    {
+      "english": "English tea.",
+      "romaji": "Kocha.",
+      "japanese": "紅茶。"
+    }
+  ]
+}

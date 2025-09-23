@@ -1,0 +1,17 @@
+{
+  "id": "shopping-general-u1",
+  "title": "Shopping: General (Usefulness 1)",
+  "description": "Traveler usefulness 1/10 phrases for the General subcategory within Shopping. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "He will buy a house next to the river for his dog.",
+      "romaji": "Kare wa kawazoi no ie o inu no tame ni kau tsumori desu.",
+      "japanese": "彼は川沿いの家を犬のために買うつもりです。"
+    },
+    {
+      "english": "When it comes to shopping, Japan is still considered a cash-based society.",
+      "romaji": "kaimono ni oite wa, nihon wa mada genkin shugi shakai dato iemasu.",
+      "japanese": "買い物においては、日本はまだ現金主義社会だと言えます。"
+    }
+  ]
+}
