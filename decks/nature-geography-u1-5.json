@@ -1,0 +1,22 @@
+{
+  "id": "nature-geography-u1-5",
+  "title": "Nature: Geography (Usefulness 1-5)",
+  "description": "Traveler usefulness 1-5/10 phrases for the Geography subcategory within Nature. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "Mt. Fuji is a very tall mountain.",
+      "romaji": "Fuji-san wa totemo takai yama desu.",
+      "japanese": "富士山はとても高い山です。"
+    },
+    {
+      "english": "The longest river in Japan is Shinanogawa.",
+      "romaji": "Nihon ichi nagai kawa wa, Shinano-gawa desu.",
+      "japanese": "日本一長い川は、信濃川です。"
+    },
+    {
+      "english": "Sakurajima is a volcano which still has many small-scale eruptions every year.",
+      "romaji": "Sakura-jima wa, mada, maitoshi ch.sai funka o kurikaeshite iru kazan desu.",
+      "japanese": "桜島は、まだ、毎年小さい噴火を繰り返している火山です。"
+    }
+  ]
+}

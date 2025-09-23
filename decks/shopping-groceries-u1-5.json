@@ -1,0 +1,17 @@
+{
+  "id": "shopping-groceries-u1-5",
+  "title": "Shopping: Groceries (Usefulness 1-5)",
+  "description": "Traveler usefulness 1-5/10 phrases for the Groceries subcategory within Shopping. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Why don't you buy more groceries next time?",
+      "romaji": "Tsugi wa mo chotto shokuryo o katta ho ga ii n ja nai?",
+      "japanese": "次はもう少し食料を買ったほうがいいんじゃない？"
+    },
+    {
+      "english": "I always buy too many groceries when I am hungry.",
+      "romaji": "Watashi wa onaka ga suite kaimono ni iku to itsumo shokuryo o kaisugite shimau.",
+      "japanese": "私はお腹が空いて買い物に行くといつも食料を買いすぎてしまう。"
+    }
+  ]
+}

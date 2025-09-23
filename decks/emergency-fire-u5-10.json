@@ -1,0 +1,17 @@
+{
+  "id": "emergency-fire-u5-10",
+  "title": "Emergency: Fire (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Fire subcategory within Emergency. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "There's a fire! Please call 119.",
+      "romaji": "Kaji desu. 119ban wo onegai shimasu.",
+      "japanese": "火事です。119番をお願いします。"
+    },
+    {
+      "english": "Fire!",
+      "romaji": "Kaji!",
+      "japanese": "火事！"
+    }
+  ]
+}

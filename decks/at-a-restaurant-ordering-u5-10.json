@@ -1,0 +1,92 @@
+{
+  "id": "at-a-restaurant-ordering-u5-10",
+  "title": "At a Restaurant: Ordering (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Ordering subcategory within At a Restaurant. Includes 17 card(s).",
+  "cards": [
+    {
+      "english": "Please give me this.",
+      "romaji": "Kore kudasai.",
+      "japanese": "これください。"
+    },
+    {
+      "english": "Can I have some water, please?",
+      "romaji": "Mizu o kudasai.",
+      "japanese": "水をください。"
+    },
+    {
+      "english": "What do you recommend?",
+      "romaji": "Nani ga o-susume desu ka.",
+      "japanese": "何がおすすめですか。"
+    },
+    {
+      "english": "What do you recommend?",
+      "romaji": "O-susume wa nan desu ka.",
+      "japanese": "おすすめは何ですか？"
+    },
+    {
+      "english": "Tempura, please.",
+      "romaji": "Tempura kudasai.",
+      "japanese": "天ぷらください。"
+    },
+    {
+      "english": "Beer.",
+      "romaji": "Biru.",
+      "japanese": "ビール。"
+    },
+    {
+      "english": "Coffee.",
+      "romaji": "Kohi.",
+      "japanese": "コーヒー。"
+    },
+    {
+      "english": "Coca cola.",
+      "romaji": "Coca cola.",
+      "japanese": "コカコーラ。"
+    },
+    {
+      "english": "English tea.",
+      "romaji": "Kocha.",
+      "japanese": "紅茶。"
+    },
+    {
+      "english": "Are you ready to order, sir/ma'am?",
+      "romaji": "O-kyaku-sama, go-chumon wa?",
+      "japanese": "お客様、ご注文は？"
+    },
+    {
+      "english": "Would you like rice or bread?",
+      "romaji": "Raisu to pan, dochira ga ii desu ka.",
+      "japanese": "ライスとパン、どちらがいいですか？"
+    },
+    {
+      "english": "What are you ordering?",
+      "romaji": "Go-chumon wa?",
+      "japanese": "ご注文は？"
+    },
+    {
+      "english": "What would you like to drink?",
+      "romaji": "Nani o nomimasu ka.",
+      "japanese": "何を飲みますか。"
+    },
+    {
+      "english": "Your order is?",
+      "romaji": "Go-chumon wa?",
+      "japanese": "ご注文は？"
+    },
+    {
+      "english": "Would you like rice or bread?",
+      "romaji": "Raisu to pan, dochira ga ii desu ka.",
+      "japanese": "ライスとパン、どちらがいいですか。"
+    },
+    {
+      "english": "Start with your drink order, please.",
+      "romaji": "O-nomimono kara.",
+      "japanese": "お飲み物から。"
+    },
+    {
+      "english": "Starting from your drinks, Sir.",
+      "romaji": "Onomimono kara.",
+      "japanese": "お飲み物から。"
+    }
+  ]
+}

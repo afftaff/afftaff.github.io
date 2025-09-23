@@ -1,0 +1,37 @@
+{
+  "id": "health-body-parts-face-u5-10",
+  "title": "Health (Body Parts): Face (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Face subcategory within Health (Body Parts). Includes 6 card(s).",
+  "cards": [
+    {
+      "english": "My eyes are itchy.",
+      "romaji": "Me ga kayui desu.",
+      "japanese": "目が痒いです。"
+    },
+    {
+      "english": "My nose is itchy.",
+      "romaji": "Hana ga kayui desu.",
+      "japanese": "鼻が痒いです。"
+    },
+    {
+      "english": "I have an earache.",
+      "romaji": "Mimi ga itai desu.",
+      "japanese": "耳が痛いです。"
+    },
+    {
+      "english": "Get me some eye drops on your way home.",
+      "romaji": "Kaeru toki ni me-gusuri o katte kite.",
+      "japanese": "帰るときに目薬を買ってきて。"
+    },
+    {
+      "english": "To dislocate one's jaw.",
+      "romaji": "Ago ga hazureru.",
+      "japanese": "顎が外れる。"
+    },
+    {
+      "english": "My forehead is sweating.",
+      "romaji": "Hitai ni ase wo kaku.",
+      "japanese": "額に汗をかく。"
+    }
+  ]
+}

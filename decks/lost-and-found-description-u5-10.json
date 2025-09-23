@@ -1,0 +1,32 @@
+{
+  "id": "lost-and-found-description-u5-10",
+  "title": "Lost & Found: Description (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Description subcategory within Lost & Found. Includes 5 card(s).",
+  "cards": [
+    {
+      "english": "What color?",
+      "romaji": "Nani iro?",
+      "japanese": "何色？"
+    },
+    {
+      "english": "Big brown bag.",
+      "romaji": "Oki, chairo no kaban.",
+      "japanese": "大きい、茶色の鞄。"
+    },
+    {
+      "english": "Small black bag.",
+      "romaji": "Chisai kuro no kaban.",
+      "japanese": "小さい、黒の鞄。"
+    },
+    {
+      "english": "Bigger.",
+      "romaji": "Motto oki.",
+      "japanese": "もっと大きい。"
+    },
+    {
+      "english": "Smaller.",
+      "romaji": "Motto chisai.",
+      "japanese": "もっと小さい。"
+    }
+  ]
+}

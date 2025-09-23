@@ -1,0 +1,37 @@
+{
+  "id": "dietary-needs-restrictions-u5-10",
+  "title": "Dietary Needs: Restrictions (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Restrictions subcategory within Dietary Needs. Includes 6 card(s).",
+  "cards": [
+    {
+      "english": "I don’t eat meat.",
+      "romaji": "Niku wa tabemasen.",
+      "japanese": "肉は食べません。"
+    },
+    {
+      "english": "I don’t eat eggs.",
+      "romaji": "Tamago wa tabemasen.",
+      "japanese": "卵は食べません。"
+    },
+    {
+      "english": "I don’t eat fish.",
+      "romaji": "Sakana wa tabemasen.",
+      "japanese": "魚は食べません。"
+    },
+    {
+      "english": "I don't eat dairy products.",
+      "romaji": "Nyuseihin wa tabemasen.",
+      "japanese": "乳製品は食べません。"
+    },
+    {
+      "english": "I don't eat meat. I eat fish.",
+      "romaji": "Niku wa tabemasen. Sakana wa tabemasu.",
+      "japanese": "肉は食べません。魚は食べます。"
+    },
+    {
+      "english": "I don't eat (anything).",
+      "romaji": "Tabemasen.",
+      "japanese": "食べません。"
+    }
+  ]
+}

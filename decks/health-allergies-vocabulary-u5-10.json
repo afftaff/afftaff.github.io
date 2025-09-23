@@ -1,0 +1,32 @@
+{
+  "id": "health-allergies-vocabulary-u5-10",
+  "title": "Health (Allergies): Vocabulary (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Vocabulary subcategory within Health (Allergies). Includes 5 card(s).",
+  "cards": [
+    {
+      "english": "Runny nose.",
+      "romaji": "Hanamizu ga tareru.",
+      "japanese": "鼻水が垂れる。"
+    },
+    {
+      "english": "Itchy eyes.",
+      "romaji": "Me ga kayui.",
+      "japanese": "目が痒い。"
+    },
+    {
+      "english": "Itchy throat.",
+      "romaji": "Nodo ga kayui.",
+      "japanese": "喉が痒い。"
+    },
+    {
+      "english": "Dry throat.",
+      "romaji": "Nodo ga kawaku.",
+      "japanese": "喉が渇く。"
+    },
+    {
+      "english": "Sneezing.",
+      "romaji": "Kushami ga deru.",
+      "japanese": "くしゃみが出る。"
+    }
+  ]
+}

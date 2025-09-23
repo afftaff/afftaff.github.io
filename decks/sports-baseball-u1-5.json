@@ -1,0 +1,22 @@
+{
+  "id": "sports-baseball-u1-5",
+  "title": "Sports: Baseball (Usefulness 1-5)",
+  "description": "Traveler usefulness 1-5/10 phrases for the Baseball subcategory within Sports. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "The players are playing baseball.",
+      "romaji": "Senshu-tachi ga yaky. o shite iru.",
+      "japanese": "選手たちが野球をしている。"
+    },
+    {
+      "english": "A famous baseball event is the \"Koshien\", which is a high school baseball tournament held each summer.",
+      "romaji": "k sei no yaky. taikai dearu \"\"k shien\"\" wa y.mei na taikai desu.",
+      "japanese": "高校野球大会である「甲子園」は有名な大会です。"
+    },
+    {
+      "english": "The baseball players had a wonderful time with the children.",
+      "romaji": "Yaky. senshu-tachi wa kodomo to subarashii hitotoki o sugoshimashita.",
+      "japanese": "野球選手たちは子供と素晴らしいひとときを過ごしました。"
+    }
+  ]
+}

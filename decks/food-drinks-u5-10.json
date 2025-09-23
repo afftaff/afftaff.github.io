@@ -1,0 +1,22 @@
+{
+  "id": "food-drinks-u5-10",
+  "title": "Food: Drinks (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Drinks subcategory within Food. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "Do you have Japanese rice wine?",
+      "romaji": "Nihonshu ga arimasu ka.",
+      "japanese": "日本酒がありますか。"
+    },
+    {
+      "english": "I don't drink alcohol.",
+      "romaji": "Watashi wa o-sake o nomimasen.",
+      "japanese": "私はお酒を飲みません。"
+    },
+    {
+      "english": "I like Shoch.-based beverages.",
+      "romaji": "Ch.hai ga suki da.",
+      "japanese": "チューハイが好きだ。"
+    }
+  ]
+}

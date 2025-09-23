@@ -31,6 +31,12 @@ def slugify(text: str) -> str:
     return slug.strip("-")
 
 
+USEFULNESS_BUCKETS: Tuple[Tuple[str, int, int], ...] = (
+    ("1-5", 1, 5),
+    ("5-10", 5, 10),
+)
+
+
 def load_phrases() -> Dict[Tuple[str, str, int], List[Dict[str, str]]]:
     """Read the TSV file and group rows by category/subcategory/usefulness."""
     groupings: Dict[Tuple[str, str, int], List[Dict[str, str]]] = defaultdict(list)
@@ -91,15 +97,37 @@ def main() -> None:
 
     manifest_entries = []
 
+    bucket_lookup = {label: (lower, upper) for label, lower, upper in USEFULNESS_BUCKETS}
+    bucket_order = {label: index for index, (label, *_rest) in enumerate(USEFULNESS_BUCKETS)}
+
+    combined: Dict[Tuple[str, str, str], List[Dict[str, str]]] = defaultdict(list)
+
     for category, subcategory, usefulness in sorted(
         groupings,
         key=lambda item: (item[0].lower(), item[1].lower(), -item[2]),
     ):
         cards = groupings[(category, subcategory, usefulness)]
-        deck_slug = f"{slugify(category)}-{slugify(subcategory)}-u{usefulness}"
-        title = f"{category}: {subcategory} (Usefulness {usefulness})"
+        for label, lower, upper in USEFULNESS_BUCKETS:
+            if lower <= usefulness <= upper:
+                combined[(category, subcategory, label)].extend(cards)
+
+    for category, subcategory, label in sorted(
+        combined,
+        key=lambda item: (
+            item[0].lower(),
+            item[1].lower(),
+            bucket_order.get(item[2], len(USEFULNESS_BUCKETS)),
+        ),
+    ):
+        cards = combined[(category, subcategory, label)]
+        if not cards:
+            continue
+
+        lower, upper = bucket_lookup[label]
+        deck_slug = f"{slugify(category)}-{slugify(subcategory)}-u{label}"
+        title = f"{category}: {subcategory} (Usefulness {label})"
         description = (
-            f"Traveler usefulness {usefulness}/10 phrases for the {subcategory} subcategory"
+            f"Traveler usefulness {lower}-{upper}/10 phrases for the {subcategory} subcategory"
             f" within {category}. Includes {len(cards)} card(s)."
         )
 

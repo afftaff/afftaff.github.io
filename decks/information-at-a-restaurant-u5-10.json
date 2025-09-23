@@ -1,0 +1,17 @@
+{
+  "id": "information-at-a-restaurant-u5-10",
+  "title": "Information: At a Restaurant (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the At a Restaurant subcategory within Information. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Do you have an English menu?",
+      "romaji": "Eigo no menyu wa arimasu ka?",
+      "japanese": "英語のメニューはありますか？"
+    },
+    {
+      "english": "Can you give me an English menu?",
+      "romaji": "Eigo no menyu o kudasai.",
+      "japanese": "英語のメニューをください。"
+    }
+  ]
+}

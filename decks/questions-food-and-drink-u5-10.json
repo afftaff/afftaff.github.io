@@ -1,0 +1,22 @@
+{
+  "id": "questions-food-and-drink-u5-10",
+  "title": "Questions: Food & Drink (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Food & Drink subcategory within Questions. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "What would you like to drink?",
+      "romaji": "Nani o nomimasu ka.",
+      "japanese": "何を飲みますか。"
+    },
+    {
+      "english": "Would you like tea or coffee?",
+      "romaji": "Kocha ga ii desu ka, aruiwa kohi ga ii desu ka.",
+      "japanese": "紅茶がいいですか、あるいはコーヒーがいいですか。"
+    },
+    {
+      "english": "Is that Japanese tea?",
+      "romaji": "Sore wa nihon-cha desu ka.",
+      "japanese": "それは日本茶ですか？"
+    }
+  ]
+}

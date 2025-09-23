@@ -1,0 +1,22 @@
+{
+  "id": "business-hours-opening-u5-10",
+  "title": "Business Hours: Opening (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Opening subcategory within Business Hours. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "What time does this place open?",
+      "romaji": "Koko wa nan-ji ni akimasu ka?",
+      "japanese": "ここは何時に開きますか？"
+    },
+    {
+      "english": "It will open at 10 o'clock.",
+      "romaji": "Ju-ji ni akimasu.",
+      "japanese": "十時に開きます。"
+    },
+    {
+      "english": "It will open at 11:00 AM.",
+      "romaji": "Ju ichi-ji ni akimasu.",
+      "japanese": "十一時時に開きます。"
+    }
+  ]
+}

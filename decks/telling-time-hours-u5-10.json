@@ -1,0 +1,67 @@
+{
+  "id": "telling-time-hours-u5-10",
+  "title": "Telling Time: Hours (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Hours subcategory within Telling Time. Includes 12 card(s).",
+  "cards": [
+    {
+      "english": "one o'clock",
+      "romaji": "ichi-ji",
+      "japanese": "一時"
+    },
+    {
+      "english": "two o'clock",
+      "romaji": "ni-ji",
+      "japanese": "二時"
+    },
+    {
+      "english": "three o'clock",
+      "romaji": "san-ji",
+      "japanese": "三時"
+    },
+    {
+      "english": "four o'clock",
+      "romaji": "yo-ji",
+      "japanese": "四時"
+    },
+    {
+      "english": "five o'clock",
+      "romaji": "go-ji",
+      "japanese": "五時"
+    },
+    {
+      "english": "six o'clock",
+      "romaji": "roku-ji",
+      "japanese": "六時"
+    },
+    {
+      "english": "seven o'clock",
+      "romaji": "shichi-ji",
+      "japanese": "七時"
+    },
+    {
+      "english": "eight o'clock",
+      "romaji": "hachi-ji",
+      "japanese": "八時"
+    },
+    {
+      "english": "nine o'clock",
+      "romaji": "ku-ji",
+      "japanese": "九時"
+    },
+    {
+      "english": "ten o'clock",
+      "romaji": "ju-ji",
+      "japanese": "十時"
+    },
+    {
+      "english": "eleven o'clock",
+      "romaji": "juichi-ji",
+      "japanese": "十一時"
+    },
+    {
+      "english": "twelve o'clock",
+      "romaji": "juni-ji",
+      "japanese": "十二時"
+    }
+  ]
+}

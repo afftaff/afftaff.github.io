@@ -1,0 +1,17 @@
+{
+  "id": "transportation-airport-u5-10",
+  "title": "Transportation: Airport (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Airport subcategory within Transportation. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Please tell me how to get to Narita airport.",
+      "romaji": "Narita kuko no ikikata o oshiete kudasai.",
+      "japanese": "成田空港の行き方を教えてください。"
+    },
+    {
+      "english": "There are no flights leaving the airport today, due to the stormy weather.",
+      "romaji": "Arashi no eikyo de kyo no furaito wa subete kyanseru saremashita.",
+      "japanese": "嵐の影響で今日のフライトはすべてキャンセルされました。"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "id": "vocabulary-holidays-u1-5",
+  "title": "Vocabulary: Holidays (Usefulness 1-5)",
+  "description": "Traveler usefulness 1-5/10 phrases for the Holidays subcategory within Vocabulary. Includes 19 card(s).",
+  "cards": [
+    {
+      "english": "Christmas",
+      "romaji": "Kurisumasu",
+      "japanese": "クリスマス"
+    },
+    {
+      "english": "New Year's Day",
+      "romaji": "Gantan",
+      "japanese": "元旦"
+    },
+    {
+      "english": "New Year's Eve",
+      "romaji": "Ōmisoka",
+      "japanese": "大晦日"
+    },
+    {
+      "english": "Year-end party",
+      "romaji": "bōnenkai",
+      "japanese": "忘年会"
+    },
+    {
+      "english": "Bon Festival",
+      "romaji": "O-bon",
+      "japanese": "お盆"
+    },
+    {
+      "english": "Children's Day",
+      "romaji": "Kodomo no Hi",
+      "japanese": "こどもの日"
+    },
+    {
+      "english": "Coming of Age Day",
+      "romaji": "Seijin no Hi",
+      "japanese": "成人の日"
+    },
+    {
+      "english": "Culture Day",
+      "romaji": "Bunka no hi",
+      "japanese": "文化の日"
+    },
+    {
+      "english": "Doll's Festival",
+      "romaji": "Hinamatsuri",
+      "japanese": "ひな祭り"
+    },
+    {
+      "english": "Health and Sports Day",
+      "romaji": "Taiiku no hi",
+      "japanese": "体育の日"
+    },
+    {
+      "english": "Labor Thanksgiving Day",
+      "romaji": "Kinrō kansha no hi",
+      "japanese": "勤労感謝の日"
+    },
+    {
+      "english": "National Foundation Day",
+      "romaji": "Kenkoku kinen no hi",
+      "japanese": "建国記念の日"
+    },
+    {
+      "english": "Respect for the Aged Day",
+      "romaji": "Keirō no hi",
+      "japanese": "敬老の日"
+    },
+    {
+      "english": "Sea Day",
+      "romaji": "Umi no Hi",
+      "japanese": "海の日"
+    },
+    {
+      "english": "Setsubun",
+      "romaji": "setsubun",
+      "japanese": "節分"
+    },
+    {
+      "english": "Shichi-Go-San Festival",
+      "romaji": "Shichigosan",
+      "japanese": "七五三"
+    },
+    {
+      "english": "Star Festival",
+      "romaji": "Tanabata",
+      "japanese": "七夕"
+    },
+    {
+      "english": "Valentine's Day",
+      "romaji": "Barentain Dē",
+      "japanese": "バレンタインデー"
+    },
+    {
+      "english": "White Day",
+      "romaji": "Howaito Dē",
+      "japanese": "ホワイトデー"
+    }
+  ]
+}

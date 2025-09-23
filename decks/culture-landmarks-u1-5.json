@@ -1,0 +1,27 @@
+{
+  "id": "culture-landmarks-u1-5",
+  "title": "Culture: Landmarks (Usefulness 1-5)",
+  "description": "Traveler usefulness 1-5/10 phrases for the Landmarks subcategory within Culture. Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "Mt. Fuji is a very tall mountain.",
+      "romaji": "Fuji-san wa totemo takai yama desu.",
+      "japanese": "富士山はとても高い山です。"
+    },
+    {
+      "english": "The original Golden Pavilion was burned down in an arson attack in 1950 and was re-constructed in 1955 as a replica of the original.",
+      "romaji": "Kinkaku wa sen ky hyaku goj nen ni h.ka ni yori sh.shitushi, sen ky hyaku goj gonen ni saiken saremashita.",
+      "japanese": "金閣は千九百五十年に放火により焼失し、千九百五十五年に再建されました。"
+    },
+    {
+      "english": "Every year, thousands of people from all over the world visit Hiroshima Peace Memorial Park.",
+      "romaji": "Maitoshi, sekaij kara takusan no gaikokujin ga Hiroshima heiwa kinen k.en o otozuremasu.",
+      "japanese": "毎年、世界中からたくさんの外国人が広島平和記念公園を訪れます。"
+    },
+    {
+      "english": "The site of the Todai temple complex has an area larger than 340,000 square meters.",
+      "romaji": "T.daiji no shikichi wa, sanj yonman heih. m.toru ij. no hirosa ga arimasu.",
+      "japanese": "東大寺の敷地は、三十四万平方メートル以上の広さがあります。"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "vocabulary-animals-u1-5",
+  "title": "Vocabulary: Animals (Usefulness 1-5)",
+  "description": "Traveler usefulness 1-5/10 phrases for the Animals subcategory within Vocabulary. Includes 7 card(s).",
+  "cards": [
+    {
+      "english": "Cat",
+      "romaji": "neko",
+      "japanese": "猫"
+    },
+    {
+      "english": "Dog",
+      "romaji": "inu",
+      "japanese": "犬"
+    },
+    {
+      "english": "Bird",
+      "romaji": "tori",
+      "japanese": "鳥"
+    },
+    {
+      "english": "Bunny / Rabbit",
+      "romaji": "usagi",
+      "japanese": "うさぎ"
+    },
+    {
+      "english": "Monkey",
+      "romaji": "saru",
+      "japanese": "猿"
+    },
+    {
+      "english": "Snake",
+      "romaji": "hebi",
+      "japanese": "蛇"
+    },
+    {
+      "english": "Turtle",
+      "romaji": "kame",
+      "japanese": "亀"
+    }
+  ]
+}

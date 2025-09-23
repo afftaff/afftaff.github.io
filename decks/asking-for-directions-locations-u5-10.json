@@ -1,0 +1,27 @@
+{
+  "id": "asking-for-directions-locations-u5-10",
+  "title": "Asking for Directions: Locations (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Locations subcategory within Asking for Directions. Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "Where is the bathroom?",
+      "romaji": "Toire wa doko desu ka?",
+      "japanese": "トイレはどこですか？"
+    },
+    {
+      "english": "Where is Shibuya station?",
+      "romaji": "Shibuya eki wa doko desu ka?",
+      "japanese": "渋谷駅はどこですか？"
+    },
+    {
+      "english": "Is there a convenience store around here?",
+      "romaji": "Konbini wa chikaku ni arimasu ka?",
+      "japanese": "コンビニは近くにありますか？"
+    },
+    {
+      "english": "Is there a convenience store nearby?",
+      "romaji": "Konbini wa chikaku ni arimasu ka.",
+      "japanese": "コンビニは近くにありますか？"
+    }
+  ]
+}

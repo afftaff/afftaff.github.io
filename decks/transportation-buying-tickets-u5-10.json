@@ -1,0 +1,52 @@
+{
+  "id": "transportation-buying-tickets-u5-10",
+  "title": "Transportation: Buying Tickets (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Buying Tickets subcategory within Transportation. Includes 9 card(s).",
+  "cards": [
+    {
+      "english": "One ticket to Narita Airport, please.",
+      "romaji": "Narita kuko made no kippu o ichi-mai kudasai.",
+      "japanese": "成田空港までの切符を一枚ください。"
+    },
+    {
+      "english": "Four tickets, please.",
+      "romaji": "Kippu o yon-mai kudasai.",
+      "japanese": "切符を四枚ください。"
+    },
+    {
+      "english": "Two tickets to Narita Airport, please.",
+      "romaji": "Narita kuko made no kippu o ni mai kudasai.",
+      "japanese": "成田空港までの切符を二枚ください。"
+    },
+    {
+      "english": "A ticket to Tokyo Station, please.",
+      "romaji": "Tokyo eki made no kippu o kudasai.",
+      "japanese": "東京駅までの切符をください。"
+    },
+    {
+      "english": "Four tickets, please.",
+      "romaji": "Kippu o yon-mai kudasai.",
+      "japanese": "切符を四枚ください。"
+    },
+    {
+      "english": "One ticket to Tokyo Station please.",
+      "romaji": "Tokyo eki made no kippu wo ichi-mai kudasai.",
+      "japanese": "東京駅までの切符を一枚ください。"
+    },
+    {
+      "english": "Tickets to Osaka Station, please.",
+      "romaji": "Osaka eki made no kippu o kudasai.",
+      "japanese": "大阪駅までの切符をください。"
+    },
+    {
+      "english": "Two tickets please.",
+      "romaji": "Ni mai kippu wo kudasai.",
+      "japanese": "二枚切符をください。"
+    },
+    {
+      "english": "One ticket to Tokyo Station please.",
+      "romaji": "Tokyo eki made no kippu wo ichi-mai kudasai.",
+      "japanese": "東京駅までの切符を一枚ください。"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "communication-help-language-ability-u1-5",
+  "title": "Communication Help: Language Ability (Usefulness 1-5)",
+  "description": "Traveler usefulness 1-5/10 phrases for the Language Ability subcategory within Communication Help. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "He speaks French.",
+      "romaji": "Kare wa Furansu-go o hanasu.",
+      "japanese": "彼はフランス語を話す。"
+    },
+    {
+      "english": "He speaks English and Japanese.",
+      "romaji": "Kare wa Ei-go to Nihon-go o hanashimasu.",
+      "japanese": "彼は英語と日本語を話します。"
+    }
+  ]
+}

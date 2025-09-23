@@ -1,0 +1,27 @@
+{
+  "id": "shopping-and-restaurants-greeting-customers-u5-10",
+  "title": "Shopping & Restaurants: Greeting Customers (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Greeting Customers subcategory within Shopping & Restaurants. Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "May I help you?",
+      "romaji": "Irasshaimase.",
+      "japanese": "いらっしゃいませ。"
+    },
+    {
+      "english": "Welcome to our store.",
+      "romaji": "Irasshaimase.",
+      "japanese": "いらっしゃいませ。"
+    },
+    {
+      "english": "Welcome. (shorter, casual form)",
+      "romaji": "Irasshai.",
+      "japanese": "いらっしゃい。"
+    },
+    {
+      "english": "Good evening. May I help you?",
+      "romaji": "Konbanwa. Irasshaimase.",
+      "japanese": "こんばんは。いらっしゃいませ。"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "culture-activities-u1-5",
+  "title": "Culture: Activities (Usefulness 1-5)",
+  "description": "Traveler usefulness 1-5/10 phrases for the Activities subcategory within Culture. Includes 7 card(s).",
+  "cards": [
+    {
+      "english": "There are a lot of good hot springs in Japan.",
+      "romaji": "Nihon ni wa takusan ii onsen ga aru.",
+      "japanese": "日本にはたくさんいい温泉がある。"
+    },
+    {
+      "english": "Japanese people enjoy a game at the beach during the summer in which you have to find and split a watermelon with a stick while blindfolded.",
+      "romaji": "Nihon-jin wa, natsu ni umi de mekakushi o shite suika o waru g.mu o shimasu.",
+      "japanese": "日本人は、夏に海で目隠しをしてスイカを割るゲームをします。"
+    },
+    {
+      "english": "Elementary school children learn calligraphy at school.",
+      "romaji": "Sh gakusei wa, gakk no shod no jugy de sh.ji o naraimasu.",
+      "japanese": "小学生は、学校の書道の授業で習字を習います。"
+    },
+    {
+      "english": "In summer, children enjoy hand-held fireworks at the beach.",
+      "romaji": "Natsu ni wa, kodomo-tachi wa umi de temochi no hanabi de asobimasu.",
+      "japanese": "夏には、子供たちは海で手持ちの花火で遊びます。"
+    },
+    {
+      "english": "Hot springs are not only relaxing, but are also believed to have medical healing properties.",
+      "romaji": "onsen wa, rirakkusu dekiru dakedenaku, chiry k ka mo aru to iwarete imasu.",
+      "japanese": "温泉は、リラックスできるだけでなく、治療効果もあると言われています。"
+    },
+    {
+      "english": "Autumn is traditionally considered a good season for reading in Japan.",
+      "romaji": "nihon dewa, aki wa dokusho ni saiteki no kisetsu to sarete imasu.",
+      "japanese": "日本では、秋は読書に最適な季節とされています。"
+    },
+    {
+      "english": "In a stressful modern society, many people in Japan seek relaxation in reflexology salons.",
+      "romaji": "kindai no sutoresu shakai ni oitewa, .ku no hito ga iyashi ya rifurekusoroj. o motomete imasu.",
+      "japanese": "近代のストレス社会においては、多くの人が癒しやリフレクソロジーを求めています。"
+    }
+  ]
+}

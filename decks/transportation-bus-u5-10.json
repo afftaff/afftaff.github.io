@@ -1,0 +1,42 @@
+{
+  "id": "transportation-bus-u5-10",
+  "title": "Transportation: Bus (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Bus subcategory within Transportation. Includes 7 card(s).",
+  "cards": [
+    {
+      "english": "Where is the bus stop?",
+      "romaji": "Basu tei wa doko desu ka?",
+      "japanese": "バス停はどこですか？"
+    },
+    {
+      "english": "Does this bus go to Narita?",
+      "romaji": "Kono basu wa Narita ni ikimasu ka.",
+      "japanese": "このバスは成田に行きますか。"
+    },
+    {
+      "english": "I'll get off at the next bus stop.",
+      "romaji": "Watashi wa, tsugi no basutei de orimasu.",
+      "japanese": "私は、次のバス停で降ります。"
+    },
+    {
+      "english": "Where is the next bus stop?",
+      "romaji": "Tsugi no basutei wa doko desu ka?",
+      "japanese": "次のバス停はどこですか？"
+    },
+    {
+      "english": "Is Narita Airport the next stop?",
+      "romaji": "Narita kuko wa tsugi desu ka?",
+      "japanese": "成田空港は次ですか？"
+    },
+    {
+      "english": "I'll get off at the next bus stop.",
+      "romaji": "Watashi wa, tsugi no basutei de orimasu.",
+      "japanese": "私は、次のバス停で降ります。"
+    },
+    {
+      "english": "For long-distance journeys, all-day and all-night buses are also available.",
+      "romaji": "Ch.kyori ryok. ni wa, k.sokubasu mo arimasu.",
+      "japanese": "長距離旅行には、高速バスもあります。"
+    }
+  ]
+}

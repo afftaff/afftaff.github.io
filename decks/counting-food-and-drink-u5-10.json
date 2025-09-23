@@ -1,0 +1,42 @@
+{
+  "id": "counting-food-and-drink-u5-10",
+  "title": "Counting: Food & Drink (Usefulness 5-10)",
+  "description": "Traveler usefulness 5-10/10 phrases for the Food & Drink subcategory within Counting. Includes 7 card(s).",
+  "cards": [
+    {
+      "english": "Three cups of coffee, please.",
+      "romaji": "Kohi wo san bai kudasai.",
+      "japanese": "コーヒーを三杯ください。"
+    },
+    {
+      "english": "One cup.",
+      "romaji": "Ippai.",
+      "japanese": "一杯。"
+    },
+    {
+      "english": "Two cups.",
+      "romaji": "Nihai.",
+      "japanese": "二杯。"
+    },
+    {
+      "english": "Three cups.",
+      "romaji": "Sanbai.",
+      "japanese": "三杯。"
+    },
+    {
+      "english": "Please give me two glasses of sake.",
+      "romaji": "Sake ni hai kudasai.",
+      "japanese": "酒二杯ください。"
+    },
+    {
+      "english": "Seven glasses of beer and eight glasses of sake, please.",
+      "romaji": "Biru nanahai to, sake happai wo kudasai.",
+      "japanese": "ビール七杯と、酒八杯をください。"
+    },
+    {
+      "english": "Six glasses of sake, please.",
+      "romaji": "O-sake wo roppai o-negai shimasu.",
+      "japanese": "お酒を六杯お願いします。"
+    }
+  ]
+}
