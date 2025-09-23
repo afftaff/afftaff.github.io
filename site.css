@@ -1,0 +1,417 @@
+:root {
+  color-scheme: light dark;
+  --brand-bg: linear-gradient(160deg, #0f172a, #1e293b 55%, #0f172a 110%);
+  --main-bg: linear-gradient(135deg, #f8fafc, #eef2ff);
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --card-shadow: 0 20px 45px rgba(15, 23, 42, 0.18);
+  --accent: #6366f1;
+  --accent-strong: #4338ca;
+  --accent-soft: rgba(99, 102, 241, 0.14);
+  --text-primary: #0f172a;
+  --text-muted: #475569;
+  --text-inverse: #f8fafc;
+  --border-subtle: rgba(148, 163, 184, 0.35);
+  --radius-lg: 24px;
+  font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--main-bg);
+  color: var(--text-primary);
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.08), transparent 55%);
+}
+
+.sidebar {
+  width: 320px;
+  background: var(--brand-bg);
+  color: var(--text-inverse);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  position: sticky;
+  top: 0;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.brand {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.brand-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: rgba(99, 102, 241, 0.25);
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  font-weight: 700;
+  box-shadow: inset 0 0 12px rgba(15, 23, 42, 0.45);
+}
+
+.brand-text h1 {
+  font-size: 1.4rem;
+  margin: 0 0 6px;
+  font-weight: 600;
+}
+
+.brand-text p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(248, 250, 252, 0.78);
+}
+
+.deck-search {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.deck-search-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(248, 250, 252, 0.55);
+}
+
+#deck-filter {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  background: rgba(15, 23, 42, 0.35);
+  color: var(--text-inverse);
+}
+
+#deck-filter::placeholder {
+  color: rgba(248, 250, 252, 0.55);
+}
+
+.deck-list {
+  display: grid;
+  gap: 10px;
+}
+.deck-empty {
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.35);
+  color: rgba(248, 250, 252, 0.8);
+  text-align: center;
+}
+
+
+.deck-button {
+  text-align: left;
+  background: rgba(15, 23, 42, 0.35);
+  border: 1px solid transparent;
+  border-radius: 16px;
+  padding: 16px;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: transform 0.2s ease, border 0.2s ease, background 0.3s ease;
+}
+
+.deck-button:hover,
+.deck-button:focus-visible {
+  border-color: rgba(148, 163, 184, 0.55);
+  transform: translateY(-2px);
+}
+
+.deck-button[aria-current="true"] {
+  background: rgba(99, 102, 241, 0.35);
+  border-color: rgba(129, 140, 248, 0.9);
+  box-shadow: 0 10px 24px rgba(99, 102, 241, 0.35);
+}
+
+.deck-button h3 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+
+.deck-button p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(248, 250, 252, 0.75);
+}
+
+.main {
+  flex: 1;
+  padding: 48px clamp(24px, 5vw, 72px);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.deck-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-end;
+}
+
+.deck-meta h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+}
+
+.deck-meta p {
+  margin: 8px 0 0;
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 540px;
+}
+
+.deck-progress {
+  min-width: 240px;
+  padding: 16px;
+  border-radius: 18px;
+  background: white;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-subtle);
+}
+
+.progress-label {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.progress-bar {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(99, 102, 241, 0.15);
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  transition: width 0.4s ease;
+}
+
+.progress-count {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.card-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.card {
+  width: min(680px, 100%);
+  aspect-ratio: 16 / 11;
+  perspective: 1400px;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.5s ease;
+  background: transparent;
+  opacity: 1;
+}
+
+.card[data-side="back"] .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-inner.is-fading {
+  opacity: 0;
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius-lg);
+  padding: clamp(32px, 4vw, 48px);
+  backface-visibility: hidden;
+  background: var(--card-bg);
+}
+
+.card-front {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(226, 232, 255, 0.9));
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.card-back {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(224, 231, 255, 0.95));
+  border: 1px solid rgba(79, 70, 229, 0.28);
+  transform: rotateY(180deg);
+  text-align: center;
+}
+
+.card-face header {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent-strong);
+  margin-bottom: 18px;
+}
+
+.card-front p {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.card-back .romaji {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--accent-strong);
+  margin-bottom: 10px;
+}
+
+.card-back .japanese {
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic Pro", "Yu Gothic", sans-serif;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  color: var(--text-primary);
+  opacity: 0.85;
+  margin-bottom: 24px;
+}
+
+.audio-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(79, 70, 229, 0.4);
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--accent-strong);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.audio-button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.audio-button:not([disabled]):hover,
+.audio-button:not([disabled]):focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(79, 70, 229, 0.25);
+}
+
+.card-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.card-actions button {
+  font: inherit;
+  padding: 12px 26px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.card-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.card-actions .primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: white;
+  box-shadow: 0 16px 28px rgba(79, 70, 229, 0.35);
+}
+
+.card-actions .primary:not(:disabled):hover,
+.card-actions .primary:not(:disabled):focus-visible {
+  transform: translateY(-2px);
+}
+
+.card-actions .ghost {
+  background: white;
+  border-color: rgba(148, 163, 184, 0.4);
+  color: var(--text-primary);
+  box-shadow: 0 10px 22px rgba(148, 163, 184, 0.25);
+}
+
+.card-actions .ghost:not(:disabled):hover,
+.card-actions .ghost:not(:disabled):focus-visible {
+  transform: translateY(-2px);
+}
+
+.card-hotkeys {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.snackbar {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.92);
+  color: var(--text-inverse);
+  padding: 14px 24px;
+  border-radius: 999px;
+  box-shadow: 0 15px 30px rgba(15, 23, 42, 0.35);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 1024px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    position: relative;
+    border-bottom-left-radius: 32px;
+    border-bottom-right-radius: 32px;
+  }
+
+  .main {
+    padding: 32px clamp(16px, 5vw, 40px);
+  }
+}
+
+@media (max-width: 640px) {
+  .card {
+    aspect-ratio: 4 / 5;
+  }
+
+  .card-actions {
+    flex-direction: column;
+  }
+
+  .card-hotkeys {
+    text-align: center;
+  }
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Travel Japanese Study Decks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="site.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-logo">旅</div>
+          <div class="brand-text">
+            <h1>Travel Japanese Coach</h1>
+            <p>Learn useful phrases before your next adventure.</p>
+          </div>
+        </div>
+        <div class="deck-search">
+          <label class="deck-search-label" for="deck-filter">Filter decks</label>
+          <input type="search" id="deck-filter" placeholder="Search decks…" />
+        </div>
+        <nav class="deck-list" id="deck-list" aria-label="Deck list"></nav>
+      </aside>
+      <main class="main">
+        <section class="deck-header" id="deck-header">
+          <div class="deck-meta">
+            <h2 id="deck-title">Choose a deck</h2>
+            <p id="deck-description">Pick one of the travel-focused decks to begin studying.</p>
+          </div>
+          <div class="deck-progress" id="deck-progress" hidden>
+            <div class="progress-label">Progress</div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="progress-count" id="progress-count"></div>
+          </div>
+        </section>
+        <section class="card-stage" aria-live="polite">
+          <div class="card" id="study-card" data-side="front">
+            <div class="card-inner" id="card-inner">
+              <article class="card-face card-front" aria-label="Card front">
+                <header>English phrase</header>
+                <p id="card-front-text">Select a deck to begin.</p>
+              </article>
+              <article class="card-face card-back" aria-label="Card back">
+                <header>Japanese phrase</header>
+                <div class="romaji" id="card-romaji">ローマ字</div>
+                <div class="japanese" id="card-japanese">日本語</div>
+                <button class="audio-button" id="play-audio" type="button" disabled>
+                  <span aria-hidden="true">▶</span>
+                  <span class="audio-label">Play pronunciation</span>
+                </button>
+              </article>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button id="prev-card" type="button" class="ghost" disabled>Previous</button>
+            <button id="flip-card" type="button" class="primary" disabled>Flip Card</button>
+            <button id="next-card" type="button" class="ghost" disabled>Next</button>
+          </div>
+          <div class="card-hotkeys">Tip: Use ← Back • Space Flip • → Next.</div>
+        </section>
+      </main>
+    </div>
+    <div class="snackbar" id="snackbar" role="status" aria-live="polite" hidden></div>
+    <script src="Site.js" type="module"></script>
+  </body>
+</html>

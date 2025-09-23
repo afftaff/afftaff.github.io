@@ -1,0 +1,1258 @@
+Category	Subcategory	Traveler Usefulness (1-10)	English	Romanji	Japanese
+Common Responses	Negation / Inability	8	No, I can’t eat it.	Iie, taberaremasen.	いいえ、食べられません。
+Common Responses	Affirmation	3	Yes, I do.	Hanashimasu.	話します。
+Common Responses	Agreement	5	Of course.	Mochiron.	もちろん。
+Questions	Food & Drink	4	Can you eat Sushi?	Sushi ga taberaremasu ka?	寿司が食べられますか？
+Questions	Comprehension	9	Do you understand?	Wakarimasu ka?	わかりますか？
+Common Responses	Comprehension	9	I understand.	Wakarimashita.	わかりました。
+Common Responses	Comprehension	10	I don’t understand.	Wakarimasen.	わかりません。
+Common Responses	Negation / Inability	8	No I don’t. (speak)	Hanashimasen.	話しません。
+Questions	Language	10	Do you speak English?	Eigo o hanashimasu ka?	英語を話しますか？
+Greetings	General	10	Hello.	Konnichiwa.	こんにちは。
+Polite Expressions	Getting Attention / Apology	10	Excuse me.	Sumimasen.	すみません。
+Polite Expressions	Apology	9	I’m sorry.	Gomennasai.	ごめんなさい。
+Polite Expressions	Requests	10	Please.	O-negai shimasu.	お願いします。
+Common Responses	Basic Answers	10	Yes.	Hai.	はい。
+Common Responses	Basic Answers	10	No.	Iie.	いいえ。
+Gratitude	Expressing Thanks	10	Thank you.	Arigato.	ありがとう。
+Introductions	Initial Meeting	6	Nice to meet you.	Hajimemashite.	はじめまして。
+Gratitude	Expressing Thanks (Formal)	9	Thank you very much. (very formal)	Domo arigato gozaimasu.	どうもありがとうございます。
+Gratitude	Expressing Thanks (Casual)	7	Thanks. (casual)	Domo.	どうも。
+Gratitude	Expressing Thanks (Casual)	10	Thank you. (casual)	Arigato.	ありがとう。
+Gratitude	Expressing Thanks (Specific)	4	Thank you for telling me.	Oshiete kurete arigato.	教えてくれてありがとう。
+Gratitude	Expressing Thanks (Specific)	3	Thank you for coming.	Kiteitadaite, domo arigato gozaimasu.	来ていただいて、どうもありがとうございます。
+Gratitude	Responding to Thanks	7	You're welcome.	Doitashimashite.	どういたしまして。
+Gratitude	Responding to Thanks	6	It's no big deal. / Don't mention it.	Iie, iie.	いいえ、いいえ。
+Gratitude	Responding to Thanks	5	Oh, no. Thank YOU! (polite form)	Tondemo nai desu.	とんでもないです。
+Gratitude	Responding to Thanks	5	The pleasure is mine. (polite form)	Kochira koso.	こちらこそ。
+Gratitude	Expressing Thanks (Formal)	9	Thank you very much!	Arigato gozaimasu.	ありがとうございます！
+Gratitude	Responding to Thanks	7	(Response to "Thank you very much") You're welcome.	Do itashimashite.	どういたしまして。
+Gratitude	Expressing Thanks (Formal)	9	Thank you very much.	Domo arigato gozaimasu.	どうもありがとうございます。
+Gratitude	Responding to Thanks	6	(Response to "Thank you very much") It's no big deal.	Iie, iie.	いいえ、いいえ。
+Gratitude	Expressing Thanks (Specific)	4	Thank you for paying for my lunch.	O-hirugohan, arigatogozaimasu.	お昼ご飯、ありがとうございます。
+Gratitude	Responding to Thanks	5	No, thank you! (The pleasure is mine)	Tondemonai desu. / Kochira koso.	とんでもないです。 / こちらこそ。
+Gratitude	Responding to Thanks	5	I should be thanking you.	Kochira koso.	こちらこそ。
+Requests	General	10	Please give me this.	Kore kudasai.	これください。
+Requests	General	10	Please give me that.	Sore kudasai.	それください。
+Requests	Formal	10	Please take care of this. / Please take this on. (polite form)	O-negai shimasu.	お願いします。
+Requests	Casual	7	Please! (casual form)	O-negai.	お願い！
+Common Responses	Disagreement / Correction	7	It's wrong.	Chigaimasu.	違います。
+Shopping & Restaurants	Greeting Customers	9	May I help you?	Irasshaimase.	いらっしゃいませ。
+Shopping & Restaurants	Making a Selection	10	I'll take this.	Kore kudasai.	これください。
+Shopping & Restaurants	Buying Tickets	10	Two tickets please.	Ni mai kippu wo kudasai.	二枚切符をください。
+Questions	Food & Drink	6	Is that Japanese tea?	Sore wa nihon-cha desu ka.	それは日本茶ですか？
+Questions	Ownership	5	Huh? Is this mine?	Are? Kore wa watashi no desu ka.	あれ？これは私のですか？
+Requests	Food & Drink	10	Can I have some water, please?	Mizu o kudasai.	水をください。
+Common Responses	Disagreement / Correction	7	That's not right.	Sore wa chigaimasu.	それは違います。
+Requests	Social	2	Your signature (autograph), please.	Sain wo onegai shimasu.	サインをお願いします。
+Shopping & Restaurants	Paying the Bill	10	Check, please.	O-kaikei o-negai shimasu.	お会計をお願いします。
+Shopping & Restaurants	Ordering	8	What would you like?	Dore ni shimasu ka.	どれにしますか？
+Shopping & Restaurants	Making a Selection	10	I'll take that.	Sore kudasai.	それください。
+Requests	Items	9	Please give me the map.	Chizu o kudasai.	地図をください。
+Common Responses	Disagreement / Correction	6	You have the wrong one.	Chigaimasu.	違います。
+Greetings	Time of Day	10	Good morning.	O-hayo gozaimasu.	おはようございます。
+Greetings	Time of Day	10	Good afternoon.	Konnichi wa.	こんにちは。
+Greetings	Time of Day	10	Good evening.	Konban wa.	こんばんは。
+Greetings	Responding	5	Thanks to you.	O-kage sama de.	おかげさまで。
+Greetings	Well-being	7	How are you? (Are you doing well?)	O-genki desu ka?	お元気ですか？
+Greetings	Formal	6	Good morning, Teacher.	Sensei, ohayo gozaimasu.	先生、おはようございます。
+Greetings	Formal	7	Hello, Mr./Ms. Sakai.	Sakai-san, konnichiwa.	坂井さん、こんにちは。
+Greetings	Formal	7	Good evening, Mr/Ms. Smith.	Sumisu-san, konbanwa.	スミスさん、こんばんは。
+Small Talk	Weather	6	It's hot today.	Kyo wa atsui desu.	今日は暑いです。
+Greetings	Well-being	6	Fine, thanks for asking.	O-kage sama de.	おかげさまで。
+Questions	Identity	5	Are you Mr. Tanaka?	Tanaka-san desu ka.	田中さんですか？
+Common Responses	Well-being	6	I'm great!	Hai, sugoku genki desu.	はい、すごく元気です。
+Descriptions	People	2	Mr./Ms. Yamada is an energetic person.	Yamada-san wa genki na hito desu.	山田さんは元気な人です。
+Small Talk	Weather	6	Today is sunny, isn't it?	Konnichi wa hare desu ne.	今日は晴れですね。
+Small Talk	Weather	6	Tonight is chilly.	Konban wa samui desu ne.	今晩は寒いですね。
+Farewells	General	9	Goodbye.	Sayonara.	さようなら。
+Farewells	Formal	8	Excuse me. (polite form)	Shitsurei shimasu.	失礼します。
+Farewells	Formal	7	Excuse me. (more polite form)	Shitsurei itashimasu.	失礼いたします。
+Farewells	Workplace	3	Goodbye. (used among colleagues)	Otsukaresama deshita.	お疲れ様でした。
+Farewells	Casual	5	Bye bye, Maki!	Baibai, Maki-chan.	バイバイ、マキちゃん。
+Farewells	Formal	7	Excuse me, I'm leaving.	Sore dewa shitsurei shimasu.	それでは失礼します。
+Farewells	Workplace	3	I'm leaving. Goodbye!	O-saki ni shiturei shimasu. O-tsukare-sama deshita.	お先に失礼します。お疲れ様でした。
+Farewells	On the Phone	2	I am about to speak.	Moshimasu moshimasu.	申します申します。
+Farewells	Making Plans	4	So I'll see you Sunday.	Ja or dewa, Sayonara.	じゃあ、日曜日ね。さようなら。
+Farewells	Workplace	3	It's been a long hard day.	Otsukaresama deshita.	お疲れ様でした。
+Asking for Directions	Locations	10	Where is the bathroom?	Toire wa doko desu ka?	トイレはどこですか？
+Asking for Directions	Transportation	10	Where is the taxi stand?	Takushinoriba wa doko ni arimasu ka.	タクシー乗り場はどこにありますか。
+Questions	People	3	Is that person a man or a woman?	Ano hito wa otoko desu ka, onna desu ka.	あの人は男ですか、女ですか？
+Descriptions	People	2	Masami is a man.	Masami-san wa otoko no hito desu.	まさみさんは男の人です。
+Communication Help	Getting Attention	10	Excuse me.	Sumimasen.	すみません。
+Communication Help	Lack of Understanding	10	I don't understand.	Wakarimasen.	わかりません。
+Communication Help	Lack of Understanding	9	I don't understand Japanese.	Nihongo wa wakarimasen.	日本語は分かりません。
+Communication Help	Lack of Understanding	8	I don't understand what this Japanese means.	Kono nihongo wa wakarimasen.	この日本語は分かりません。
+Communication Help	Asking for Assistance	8	Do you have a Spanish information guide?	Supein-go no gaido arimasu ka.	スペイン語のガイドありますか？
+Communication Help	Lack of Understanding	10	Excuse me. I don't understand.	Sumimasen. Wakarimasen.	すみません。分かりません。
+Asking for Directions	Locations	10	Where is Shibuya station?	Shibuya eki wa doko desu ka?	渋谷駅はどこですか？
+Communication Help	Language Ability	10	Can you speak English?	Eigo o hanasemasu ka?	英語を話せますか？
+Communication Help	Repetition	9	Can you say it again?	Mo ichido itte kudasai?	もう一度言ってください？
+Communication Help	Language Ability	10	Can you speak English?	Eigo o hanasemasu ka?	英語を話せますか？
+Communication Help	Language Ability	7	Can you speak Spanish?	Supein-go o hanasemasu ka?	スペイン語を話せますか？
+Communication Help	Language Ability	7	Can you speak French?	Furansu-go o hanasemasu ka?	フランス語を話せますか？
+Communication Help	Language Ability	2	He speaks French.	Kare wa Furansu-go o hanasu.	彼はフランス語を話す。
+Communication Help	Language Ability	9	English okay?	Eigo okay?	英語オッケー？
+Communication Help	Repetition	9	Can you say it again?	Mo ichido itte kudasai.	もう一度言ってください。
+Communication Help	Pace	9	Please speak slowly.	Yukkuri hanashite kudasai.	ゆっくり話してください。
+Common Phrases	Status	4	That was already finished.	Mo, sore wa owarimashita yo.	もう、それは終わりましたよ。
+Communication Help	Repetition	9	What? Could you say that again?	E? Mo ichi-do onegai shimasu.	え？もう一度お願いします。
+Requests	Prohibitions	3	Please don't say anything.	Nani mo iwanaide kudasai.	何も言わないでください。
+Communication Help	Language Ability	2	He speaks English and Japanese.	Kare wa Ei-go to Nihon-go o hanashimasu.	彼は英語と日本語を話します。
+Communication Help	Repetition	9	Once again.	Mo Ichido.	もう一度。
+Communication Help	Pace	9	Slowly.	Yukkuri.	ゆっくり。
+Communication Help	Repetition	9	Again, say, please.	Mo ichido itte kudasai.	もう一度言ってください。
+Communication Help	Pace	9	Slowly, speak, please.	Yukkuri hanashite kudasai.	ゆっくり話してください。
+Communication Help	Repetition	8	Mo ichido, please.	Mo ichido, please.	もう一度、プリーズ。
+Communication Help	Pace	8	Yukkuri, please.	Yukkuri, please.	ゆっくり、プリーズ。
+Apologies	General	10	Excuse me.	Sumimasen.	すみません。
+Apologies	General	9	Sorry.	Gomennasai.	ごめんなさい。
+Apologies	Reassurance	6	No, no don't worry.	Iie iie.	いいえいいえ。
+Apologies	Formal	7	Excuse me. (polite form)	Shitsurei itashimashita.	失礼いたしました。
+Apologies	For Lateness	6	I'm sorry I'm late.	Osoku natte gomen nasai.	遅くなってごめんなさい。
+Common Responses	Reassurance	7	That's fine.	Iie iie.	いいえいいえ。
+Common Responses	Reassurance	7	Don't worry about it.	Iie iie.	いいえいいえ。
+Polite Expressions	Getting Attention	8	Um, I was wondering if I can get someone here.	Sumimasen.	すみません。
+Polite Expressions	Getting Attention	8	Excuse me. (to get attention)	Excuse me.	エクスキューズミー。
+Shopping & Restaurants	Greeting Customers	9	Welcome to our store.	Irasshaimase.	いらっしゃいませ。
+Shopping & Restaurants	Greeting Customers	8	Welcome. (shorter, casual form)	Irasshai.	いらっしゃい。
+Shopping & Restaurants	Thanking Customers	8	Thank you very much (for having shopped here.)	Arigato gozaimashita.	ありがとうございました。
+Shopping & Restaurants	Thanking Customers	7	Thank you for visiting us today. (at shop)	Honjitsu wa go-raiten arigato gozaimashita.	本日はご来店ありがとうございました。
+Shopping & Restaurants	Greeting Customers	8	Good evening. May I help you?	Konbanwa. Irasshaimase.	こんばんは。いらっしゃいませ。
+Shopping & Restaurants	Farewell to Customers	7	Please come again.	Mata oide kudasai.	またおいでください。
+Shopping & Restaurants	Farewell to Customers	6	We look forward to seeing you again.	Mata no go-raiten o machi shite orimasu.	またのご来店をお待ちしております。
+At a Restaurant	Greeting & Seating	9	Welcome.	Irasshaimase.	いらっしゃいませ。
+At a Restaurant	Greeting & Seating	10	How many people in your party?	Nan-mei sama desu ka?	何名様ですか？
+At a Restaurant	Ordering	8	Are you ready to order, sir/ma'am?	O-kyaku-sama, go-chumon wa?	お客様、ご注文は？
+At a Restaurant	Greeting & Seating	9	Two adults and one child.	Otona ni-mei, kodomo ichi-mei.	大人二名、子供一名。
+At a Restaurant	Greeting & Seating	10	Two people.	Ni mei.	二名。
+At a Restaurant	Greeting & Seating	10	Four people.	Yon mei.	四名。
+At a Restaurant	Greeting & Seating	8	Which do you prefer, smoking or non-smoking?	Kin'en, kitsuen, dochira ni shimasu ka?	禁煙、喫煙、どちらにしますか？
+At a Restaurant	Asking for Permission	6	May I? Is this alright?	Ii desu ka.	いいですか？
+At a Restaurant	Stating Preferences	8	I don't want to sit in the smoking section.	Kitsuenseki ni suwaritakunai desu.	喫煙席に座りたくないです。
+At a Restaurant	Ordering	8	Would you like rice or bread?	Raisu to pan, dochira ga ii desu ka.	ライスとパン、どちらがいいですか？
+At a Restaurant	Stating Preferences	9	Non-smoking.	Kin'en.	禁煙。
+At a Restaurant	Stating Preferences	9	Smoking.	Kitsuen.	喫煙。
+At a Restaurant	Greeting & Seating	9	Two people, non-smoking.	Ni-mei kin'en.	二名、禁煙。
+Questions	Asking for Permission	6	Is it alright?	Ii desu ka?	いいですか？
+At a Restaurant	Getting Attention	10	Excuse me.	Sumimasen.	すみません。
+At a Restaurant	Ordering	10	Please give me this.	Kore kudasai.	これください。
+At a Restaurant	Ordering	9	What do you recommend?	Nani ga o-susume desu ka.	何がおすすめですか。
+At a Restaurant	Ordering	8	What are you ordering?	Go-chumon wa?	ご注文は？
+At a Restaurant	Ordering	7	Start with your drink order, please.	O-nomimono kara.	お飲み物から。
+At a Restaurant	Ordering	10	Can I have some water, please?	Mizu o kudasai.	水をください。
+At a Restaurant	Ordering	8	What would you like to drink?	Nani o nomimasu ka.	何を飲みますか。
+At a Restaurant	Ordering	9	What do you recommend?	O-susume wa nan desu ka.	おすすめは何ですか？
+At a Restaurant	Ordering	9	Tempura, please.	Tempura kudasai.	天ぷらください。
+At a Restaurant	Ordering	7	Starting from your drinks, Sir.	Onomimono kara.	お飲み物から。
+At a Restaurant	Ordering	8	Your order is?	Go-chumon wa?	ご注文は？
+At a Restaurant	Ordering	9	Beer.	Biru.	ビール。
+At a Restaurant	Ordering	9	Coffee.	Kohi.	コーヒー。
+At a Restaurant	Ordering	9	Coca cola.	Coca cola.	コカコーラ。
+At a Restaurant	Ordering	9	English tea.	Kocha.	紅茶。
+At a Restaurant	Paying the Bill	10	Excuse me.	Sumimasen.	すみません。
+At a Restaurant	Paying the Bill	10	Check please.	Kaikei o-negai shimasu.	会計お願いします。
+At a Restaurant	Paying the Bill	8	Please take care of it.	Onegai shimasu.	お願いします。
+At a Restaurant	After the Meal	8	Thank you for the wonderful meal.	Gochisosama deshita.	ごちそうさまでした。
+At a Restaurant	Before the Meal	8	I am about to have this wonderful meal.	Itadakimasu.	いただきます。
+Food	Descriptions	4	British cookies are delicious.	Igirisu no kukki wa oishii.	イギリスのクッキーはおいしい。
+At a Restaurant	Paying the Bill	9	Separate checks, please.	Betsubetsu de o-negai shimasu.	別々でお願いします。
+Food	Descriptions	7	It was delicious.	Oishikatta.	おいしかった。
+At a Restaurant	Paying the Bill	7	Paying in a lump sum?	Ikkatsu de yoroshii desu ka?	一括でよろしいですか？
+Common Responses	Agreement	7	Okay. / Good.	Ii desu.	いいです。
+Common Responses	Reassurance	7	No, no, that's fine.	Iie, iie.	いいえ、いいえ。
+Common Responses	Reassurance	7	Don't worry about it.	Iie, iie.	いいえ、いいえ。
+Food	Habits	2	I drink a glass of water everyday.	Maiasa, mizu o i-ppai nomimasu.	毎朝、水を一杯飲みます。
+Counting	People	9	Two adults and one child.	Otona ni-mei, kodomo ichi-mei.	大人二名、子供一名。
+Counting	People	10	How many people are in your party?	Nan-mei-sama desu ka.	何名様ですか。
+Counting	People	8	Ten people.	Ju-nin desu.	十人です。
+Counting	Objects	8	I'll buy nine biscuits.	Bisuketto o kyu-ko kaimasu.	ビスケットを九個買います。
+Counting	Objects	2	There are eight pens on the table.	Hachihon(happon) no borupen ga teburu no ue ni arimasu.	八本（はっぽん）のボールペンがテーブルの上にあります。
+Counting	Food & Drink	8	Seven glasses of beer and eight glasses of sake, please.	Biru nanahai to, sake happai wo kudasai.	ビール七杯と、酒八杯をください。
+Counting	Food & Drink	8	Six glasses of sake, please.	O-sake wo roppai o-negai shimasu.	お酒を六杯お願いします。
+Counting	People	9	Do you have five people in your party?	Go-mei-sama desu ka.	五名様ですか？
+Counting	Objects	10	Four tickets, please.	Kippu o yon-mai kudasai.	切符を四枚ください。
+Counting	Food & Drink	9	Three cups of coffee, please.	Kohi wo san bai kudasai.	コーヒーを三杯ください。
+Counting	Objects	10	Two of these, please.	Kore o ni-ko kudasai.	これを二個ください。
+Counting	Objects	10	One ticket.	Ichi mai.	一枚。
+Counting	People	10	Two people.	Ni mei.	二名。
+Counting	People	10	Four people.	Yon mei.	四名。
+Counting	Food & Drink	9	One cup.	Ippai.	一杯。
+Counting	Food & Drink	9	Two cups.	Nihai.	二杯。
+Counting	Food & Drink	9	Three cups.	Sanbai.	三杯。
+Counting	Food & Drink	9	Please give me two glasses of sake.	Sake ni hai kudasai.	酒二杯ください。
+Counting	Objects	9	One piece.	Ikko.	一個。
+Counting	Objects	9	Two pieces.	Niko.	二個。
+Counting	Objects	9	Three pieces.	Sanko.	三個。
+Shopping & Money	Asking Prices	10	How much?	Ikura desu ka?	いくらですか？
+Shopping & Money	Asking Prices	10	How much is this?	Kore wa ikura desu ka?	これはいくらですか？
+Shopping & Money	Asking Prices	10	How much is that?	Sore wa ikura desu ka?	それはいくらですか？
+Shopping & Money	Commenting on Price	7	It's cheap, isn't it?	Yasui desu ne.	安いですね。
+Shopping & Money	Commenting on Price	7	It's expensive, isn't it?	Takai desu ne.	高いですね。
+Shopping & Money	Paying	8	How much is the change?	Otsuri wa ikura desu ka.	お釣りはいくらですか？
+Shopping & Money	Commenting on Price	3	Pork is cheap.	Butaniku wa yasui desu.	豚肉は安いです。
+Shopping & Money	Commenting on Price	3	Diamonds are expensive.	Daiyamondo wa takai desu.	ダイヤモンドは高いです。
+Shopping & Money	Asking Prices	10	How much?	Ikura?	いくら？
+Shopping & Money	Bargaining	7	Please lower the price.	Makete kudasai.	負けてください。
+Shopping & Money	Bargaining	6	At the other store, (they offered) 5000 yen.	Acchi no o-mise de wa 5000-en.	あっちのお店では5000円。
+Shopping & Money	Bargaining	7	Please give more discount on an ipod!	Kono aipoddo, motto makete kudasai.	このアイポッド、もっと負けてください。
+Requests	Food & Drink	6	Please have some more.	Motto tabete kudasai.	もっと食べてください。
+Shopping & Money	Commenting on Price	6	That store is cheap.	Ano o-mise wa yasui.	あの店は安いです。
+Shopping & Money	Commenting on Price	6	That store over there is expensive.	Atchi no o-mise wa takai.	あっちの店は高い。
+Shopping & Money	Currency Exchange	8	How much yen is it to one dollar?	1-doru wa nan-en desu ka.	1ドルは何円ですか。
+Shopping & Money	Bargaining	7	Please give me a discount.	Makete kudasai.	負けてください。
+Shopping & Money	Bargaining	7	Bigger discount.	Motto makete kudasai.	もっと負けてください。
+Common Responses	Agreement	7	Okay. / Good.	Ii desu.	いいです。
+Shopping & Money	Bargaining	5	Please lower the price. (Osaka dialect)	Makete kuren ka?	負けてくれんか？
+Shopping & Money	Bargaining	6	The other store.	Atchi no o-mise.	あっちのお店。
+Shopping & Money	Currency Exchange	8	How many yen is it to one dollar?	1-doru wa nan-en desu ka.	1ドルは何円ですか。
+Money	General	1	I picked up a 100 yen coin off the street.	Hyaku-en wo michi de hiroimashita.	百円を道で拾いました。
+Money	Transportation Cards	9	Can I have a one thousand yen Suica card, please.	Sen-en no suika wo kudasai.	千円のスイカをください。
+Money	Costs & Fares	7	It costs about 10,000 yen for a bullet train from Tokyo to Niigata.	Tokyo kara Nigata made, shinkansen de daitai ichi-man-en desu.	東京から新潟まで、新幹線でだいたい一万円です。
+Common Phrases	Relationships	1	I think there is a special connection between you and me.	Watashi to anata niwa tokubetsu na go-en ga aru to omoimasu.	私とあなたには特別なご縁があると思います。
+Money	General	1	I collect five yen coins.	Goendama wo atsumeru.	五円玉を集める。
+Money	Numbers	8	Six, ten, eight (68).	Roku-ju-hachi.	六十八。
+Money	Stating Price	9	It's 68 yen.	Roku-ju-hachi-en desu.	六十八円です。
+Money	Numbers	8	Five hundred.	Go-hyaku.	五百。
+Money	Numbers	8	Three hundred.	San-byaku.	三百。
+Money	Numbers	8	Six hundred.	Ro-ppyaku.	六百。
+Money	Numbers	8	Eight hundred.	Ha-ppyaku.	八百。
+Money	Currency	9	One thousand yen.	Sen-en.	千円。
+Money	Currency	9	Two thousand yen.	Ni-sen-en.	二千円。
+Money	Currency	9	Five thousand yen.	Go-sen-en.	五千円。
+Money	Currency	9	Ten thousand yen.	Ichi-man-en.	一万円。
+Money	Currency	9	Twenty thousand yen.	Ni-man-en.	二万円。
+Internet & Technology	WiFi	9	Does this store have WiFi?	Kono o-mise ni wa Wai Fai arimasu ka?	このお店にはWIFIありますか？
+Internet & Technology	Internet Cafe	7	Where is an internet cafe or manga cafe?	Netto cafe aruiwa manga kissa wa doko desu ka?	ネットカフェあるいは漫画喫茶はどこですか？
+Internet & Technology	Access	8	How do I access the Internet?	Netto ni wa do yatte setsuzoku shimasu ka?	ネットにはどうやって接続しますか？
+Internet & Technology	Login	8	Username and password please.	Yuzanemu to pasuwado o onegai shimasu.	ユーザーネームとパスワードをお願いします。
+Internet & Technology	Internet Cafe	5	I'll go to a net cafe.	Nettokafe ni iku.	ネットカフェに行く。
+Internet & Technology	Login	7	The password is 0000.	Pasuwado wa 0000 desu.	パスワードは0000です。
+Internet & Technology	Login	8	User name and password please.	Yuza nemu to pasuwado wo onegai shimasu.	ユーザーネームとパスワードをお願いします。
+Hobbies	Sports	2	Do you golf?	Gorufu o shimasu ka.	ゴルフをしますか。
+Internet & Technology	Access	4	I'll connect the internet with a new PC.	Atarashi pasokon de netto ni setsuzoku suru.	新しいパソコンでネットに接続する。
+Health	Allergies	9	I have allergies.	Arerugi ga arimasu.	アレルギーがあります。
+Shopping & Money	Stating Price	9	This bag is 3000 yen including tax.	Kono kaban wa zeikomi 3000-en desu.	この鞄は税込み3000円です。
+Asking for Directions	Transportation	10	Where is the taxi stand?	Takushinoriba wa doko ni arimasu ka.	タクシー乗り場はどこにありますか。
+Questions	Food & Drink	7	Would you like tea or coffee?	Kocha ga ii desu ka, aruiwa kohi ga ii desu ka.	紅茶がいいですか、あるいはコーヒーがいいですか。
+Internet & Technology	Internet Cafe	4	I sleep at a manga cafe.	Mangakissa de neru.	漫画喫茶で寝る。
+Requests	Social	2	Your signature (autograph), please.	Sain wo onegai shimasu.	サインをお願いします。
+Internet & Technology	Internet Cafe	6	Net cafe or manga cafe.	Netto cafe aruiwa manga kissa.	ネットカフェあるいは漫画喫茶。
+Shopping & Money	Business Hours	7	It's open 24 hours a day.	Nijū-yon-jikan aiteimasu.	24時間開いています。
+Shopping & Money	Prices	6	It's 400 yen to 500 yen per hour.	Yonhyaku-en kara gohyaku-en desu.	400円から500円です。
+Internet & Technology	Vocabulary	8	Internet.	Intanetto.	インターネット。
+Internet & Technology	Vocabulary	5	Manga.	Manga.	漫画。
+Transportation	Buying Tickets	10	One ticket to Narita Airport, please.	Narita kuko made no kippu o ichi-mai kudasai.	成田空港までの切符を一枚ください。
+Transportation	Bus	10	Where is the bus stop?	Basu tei wa doko desu ka?	バス停はどこですか？
+Transportation	Bus	9	I'll get off at the next bus stop.	Watashi wa, tsugi no basutei de orimasu.	私は、次のバス停で降ります。
+Transportation	Fares	9	How much does it cost to go to Narita airport?	Narita Kuko made ikura desu ka.	成田空港までいくらですか。
+Transportation	Buying Tickets	10	Four tickets, please.	Kippu o yon-mai kudasai.	切符を四枚ください。
+Transportation	Buying Tickets	10	Two tickets to Narita Airport, please.	Narita kuko made no kippu o ni mai kudasai.	成田空港までの切符を二枚ください。
+Transportation	Bus	9	Where is the next bus stop?	Tsugi no basutei wa doko desu ka?	次のバス停はどこですか？
+Transportation	Bus	9	Is Narita Airport the next stop?	Narita kuko wa tsugi desu ka?	成田空港は次ですか？
+Requests	Information	9	Please tell me.	Oshiete kudasai.	教えてください。
+Transportation	Taxi	10	Where is the taxi stand?	Takushinoriba wa doko ni arimasu ka.	タクシー乗り場はどこにありますか。
+Transportation	Train	9	The next station is Osaka.	Tsugi no eki wa Osaka desu.	次の駅は大阪です。
+Transportation	Bus	9	I'll get off at the next bus stop.	Watashi wa, tsugi no basutei de orimasu.	私は、次のバス停で降ります。
+Transportation	Train	10	Where is the ticket gate?	Kaisatsu wa doko desu ka.	改札はどこですか。
+Transportation	Airport	6	There are no flights leaving the airport today, due to the stormy weather.	Arashi no eikyo de kyo no furaito wa subete kyanseru saremashita.	嵐の影響で今日のフライトはすべてキャンセルされました。
+Transportation	Airport	9	Please tell me how to get to Narita airport.	Narita kuko no ikikata o oshiete kudasai.	成田空港の行き方を教えてください。
+Transportation	Buying Tickets	10	A ticket to Tokyo Station, please.	Tokyo eki made no kippu o kudasai.	東京駅までの切符をください。
+Transportation	Buying Tickets	10	Four tickets, please.	Kippu o yon-mai kudasai.	切符を四枚ください。
+Transportation	Buying Tickets	10	One ticket to Tokyo Station please.	Tokyo eki made no kippu wo ichi-mai kudasai.	東京駅までの切符を一枚ください。
+Transportation	Buying Tickets	10	Tickets to Osaka Station, please.	Osaka eki made no kippu o kudasai.	大阪駅までの切符をください。
+Transportation	Buying Tickets	10	Two tickets please.	Ni mai kippu wo kudasai.	二枚切符をください。
+Introductions	Origin	6	My hometown is Tokyo.	Jimoto wa Tokyo desu.	地元は東京です。
+Transportation	Train	4	The bullet train is slowly losing speed.	Shinkansen ga yukkuri to sokudo o otoshite iku.	新幹線がゆっくりと速度を落としていく。
+Food	Local Specialties	8	Local delicacies.	Jimoto no gochiso.	地元の御馳走。
+Food	Local Specialties	8	What are the local delicacies?	Jimoto no gochiso wa?	地元の御馳走は？
+Transportation	Train	10	Will this train go to Tokyo Station?	Tokyo eki made ikimasu ka?	東京駅まで行きますか？
+Transportation	Train	9	The next station is Osaka.	Tsugi no eki wa Osaka desu.	次の駅は大阪です。
+Transportation	Bus	10	Does this bus go to Narita?	Kono basu wa Narita ni ikimasu ka.	このバスは成田に行きますか。
+Polite Expressions	Offering	7	Please take it.	Dozo.	どうぞ。
+Transportation	On the Phone	4	On the train; call you back.	Densha ni iru; ato de denwa suru.	電車にいる；後で電話する。
+Transportation	Taxi	10	I would like to go to Tokyo Station.	Tokyo eki e onegai shimasu.	東京駅へお願いします。
+Requests	Items	9	I would like a map.	Chizu onegai shimasu.	地図お願いします。
+Transportation	Taxi	9	Please get me a taxi.	Takushi o onegai shimasu.	タクシーをお願いします。
+Transportation	Taxi	10	Where is the taxi stand?	Takushi noriba wa doko desu ka?	タクシー乗り場はどこですか？
+Introductions	Origin	7	I'm from Tokyo.	Shusshin wa Tokyo desu.	出身は東京です。
+Transportation	Buying Tickets	10	One ticket to Tokyo Station please.	Tokyo eki made no kippu wo ichi-mai kudasai.	東京駅までの切符を一枚ください。
+Requests	Social	2	Your signature (autograph), please.	Sain o onegai shimasu.	サインをお願いします。
+Transportation	Taxi	10	Where is the taxi terminal?	Takushinoriba wa doko ni arimasu ka.	タクシー乗り場はどこにありますか。
+Transportation	Taxi	10	Excuse me. Where's the taxi stand?	Sumimasen. Takushi noriba wa....	すみません。タクシー乗り場は...。
+Introductions	Personal Information	5	What's your address?	Jusho wa doko desu ka.	住所はどこですか。
+Travel	Duration	4	It takes 12 hours to go to Paris from Tokyo.	Tokyo kara pari made ju ni-jikan kakarimasu.	東京からパリまで十二時間かかります。
+Shopping	Finding Items	8	Where can I buy manga?	Manga wa doko de kaemasu ka?	漫画はどこで買えますか？
+Hobbies	Reading	4	What is your favorite manga?	Sukina manga wa nan desu ka.	好きな漫画は何ですか。
+Asking for Directions	Transportation	10	Where is the taxi stand?	Takushinoriba wa doko ni arimasu ka.	タクシー乗り場はどこにありますか。
+Shopping	General	1	He will buy a house next to the river for his dog.	Kare wa kawazoi no ie o inu no tame ni kau tsumori desu.	彼は川沿いの家を犬のために買うつもりです。
+Shopping	Groceries	3	Why don't you buy more groceries next time?	Tsugi wa mo chotto shokuryo o katta ho ga ii n ja nai?	次はもう少し食料を買ったほうがいいんじゃない？
+Shopping	Groceries	2	I always buy too many groceries when I am hungry.	Watashi wa onaka ga suite kaimono ni iku to itsumo shokuryo o kaisugite shimau.	私はお腹が空いて買い物に行くといつも食料を買いすぎてしまう。
+Shopping	Daily Habits	4	I buy coffee at Starbucks everyday.	Mainichi, Sutabakkusu de kohi o kau.	毎日、スターバックスでコーヒーを買う。
+Shopping	Clothing	7	I like kimonos.	Watashi wa kimono ga suki desu.	私は着物が好きです。
+Shopping	Clothing	7	Where can I buy Japanese socks?	Tabi wa doko de kaemasuka?	足袋はどこで買えますか？
+Shopping	Clothing	7	Where can I buy Japanese sandals?	Zori wa doko de kaemasuka?	草履はどこで買えますか？
+Shopping	Clothing	7	Do you have a yukata?	Yukata ga arimasu ka.	浴衣がありますか。
+Shopping	Clothing	8	Where can I buy a kimono?	Kimono wa doko de kaemasu ka?	着物はどこで買えますか？
+Asking for Directions	Locations	10	Is there a convenience store around here?	Konbini wa chikaku ni arimasu ka?	コンビニは近くにありますか？
+Questions	Services	9	Does this store have Wi-Fi?	Kono o-mise ni wa WaiFai arimasu ka.	このお店にはWi-Fiありますか。
+Asking for Directions	Locations	10	Is there a convenience store nearby?	Konbini wa chikaku ni arimasu ka.	コンビニは近くにありますか？
+Directions	Instructions	9	Go straight.	Massugu susumu.	まっすぐ進む。
+Directions	Instructions	9	Turn right.	Migi ni magaru.	右に曲がる。
+Directions	Instructions	9	Turn left.	Hidari ni magaru.	左に曲がる。
+Directions	Instructions	8	Turn right at the dead end.	Tsukiatari de migi ni magaru.	突き当たりで右に曲がる。
+Directions	Instructions	8	Go straight until the second traffic signal.	Futatsume no shingo made massugu susumu.	二つ目の信号までまっすぐ進む。
+Directions	Using Landmarks	9	Turn right at the convenience store.	Konbini de migi ni magaru.	コンビニで右に曲がる。
+Directions	Using Landmarks	9	Turn left at the bank.	Ginko de hidari ni magaru.	銀行で左に曲がる。
+Directions	Using Landmarks	9	Turn right at the post office.	Yubinkyoku de migi ni magaru.	郵便局で右に曲がる。
+Directions	Instructions	9	Turn left at the next traffic signal.	Tsugi no shingo wo hidari ni magatte kudasai.	次の信号を左に曲がってください。
+Directions	Transportation	8	I will get off at the third station.	Mittsume no eki de orimasu.	三つ目の駅で降ります。
+Directions	Instructions	8	Turn right at the fourth traffic signal.	Yottsu-me no shingo de migi ni magarimasu.	四つ目の信号で右に曲がります。
+Directions	Instructions	8	Go straight until the fifth corner.	Itsutsu-me no kado made susumimasu.	五つ目の角まで進みます。
+Directions	Instructions	8	Turn left at the first traffic signal.	Hitotsu-me no shingo wo hidari ni magarimasu.	一つ目の信号を左に曲がります。
+Directions	Instructions	8	Then go straight.	Soshite, massugu ikimasu.	そして、まっすぐ行きます。
+Directions	Instructions	8	Then turn left at the third traffic signal.	Sanban-me no shingo wo hidari ni magarimasu.	三番目の信号を左に曲がります。
+Directions	Finding Places	3	He has to find a bank that offers a better service.	Kare wa motto sabisu no yoi ginko o mitsukeru beki da.	彼はずっとサービスのよい銀行を見つけるべきだ。
+Directions	Locations	7	There's a Bank of Japan in Nihonbashi.	Nihonbashi ni Nihon-ginko ga arimasu.	日本橋に日本銀行があります。
+Directions	Locations	8	There is a post office on this street.	Kono tori ni yubinkyoku ga arimasu.	この通りに郵便局があります。
+Directions	Using Landmarks	9	Go straight and turn right at the post office.	Massugu itte, yubinkyoku de migi ni magaru.	まっすぐ行って、郵便局で右に曲がる。
+Directions	Instructions	9	Please go straight.	Massugu susunde kudasai.	まっすぐ進んでください。
+Directions	Instructions	9	Please turn left.	Hidari ni magatte kudasai.	左に曲がってください。
+Directions	Locations	8	There is a good ramen shop to the left of the convenience store.	Konbini no hidari ni oishii ramen-ya ga arimasu.	コンビニの左においしいラーメン屋があります。
+Directions	Instructions	9	Please turn right.	Migi ni magatte kudasai.	右に曲がってください。
+Directions	Locations	9	There is a convenience store on the right side.	Migi ni konbini ga arimasu.	右にコンビニがあります。
+Common Phrases	Progress	2	I've done five lessons.	Itsusu-me no ressun made owarimashita.	五つ目のレッスンまで終わりました。
+Directions	Instructions	8	Turn right at the dead end.	Tsuki atari de migi ni magaru.	突き当たりで右に曲がる。
+Social	Photos	8	Please take our picture.	Shashin o totte kudasai.	写真を撮ってください。
+Social	Photos	7	Please let me take your picture.	Shashin o torasete kudasai.	写真を撮らせてください。
+Social	Photos	7	Please let me take a picture with you.	Shashin o issho ni torasete kudasai.	写真を一緒に撮らせてください。
+Social	Making Plans	5	Let's go to a concert together.	Issho ni konsato ni ikimasho.	一緒にコンサートに行きましょう。
+Social	Making Plans	4	We should go to the party together.	Bokutachi issho ni pati ni iko yo.	僕たち一緒にパーティーに行こうよ。
+Social	Photos	8	Photo, take, please.	Shashin o totte kudasai.	写真を撮ってください。
+Social	Photos	7	Photo, let me take, please.	Shashin o torasete kudasai.	写真を撮らせてください。
+Social	Photos	7	Photo, together, let me take, please.	Shashin o issho ni torasete kudasai.	写真を一緒に撮らせてください。
+Social	Contact Info	7	Please give me your email address.	Meru adoresu o oshiete kudasai.	メールアドレスを教えてください。
+Social	Contact Info	6	This is my email address.	Watashi no meru adoresu desu.	私のメールアドレスです。
+Social	Communication	4	I will email often.	Hinpan ni meru shimasu.	頻繁にメールします。
+Social	Communication	4	I will email from time to time.	Tokidoki meru shimasu.	時々メールします。
+Social	Contact Info	7	Please give me your cell phone email address.	Keitai no meado wo oshiete kudasai.	携帯のメアドを教えてください。
+Social	Communication	5	I will do email.	Meru shimasu.	メールします。
+Language Help	Translation	9	How do you say it in Japanese?	Kore wa nihongo de do iimasu ka?	これは日本語でどう言いますか？
+Language Help	Translation	9	How do you say [ ] in Japanese?	[ ] wa nihongo de do iimasu ka?	[ ]は日本語でどう言いますか？
+Gratitude	Expressing Thanks	10	Thank you very much.	Domo arigato gozaimasu.	どうもありがとうございます。
+Questions	Identification	10	What is this?	Kore wa nan desu ka.	これは何ですか。
+Questions	Ownership	5	Huh? Is this mine?	Are? Kore wa watashi no desu ka.	あれ？これは私のですか？
+Common Phrases	Events	2	Today is Christmas.	Kyo wa Kurisumasu desu.	今日はクリスマスです。
+Language Help	Comprehension	9	I don't understand Japanese.	Nihongo, wakarimasen.	日本語、わかりません。
+Questions	Opinion	7	How is the taste?	Aji wa do desu ka.	味はどうですか。
+Language Help	Translation	9	How do you say this in Japanese?	Kore wa nihongo de do imasu ka.	これは日本語でどう言いますか。
+Language Help	Translation	8	Cold in Japanese.	Kōrudo wa nihongo de.	コールドは日本語で。
+Language Help	Translation	8	This in Japanese?	Nihongo de wa?	日本語では？
+Language Help	Writing	8	Please write it down.	Kaite kudasai.	書いてください。
+Language Help	Writing	8	Please write it in romanized letters (alphabet).	Romaji de kaite kudasai.	ローマ字で書いてください。
+Language Help	Writing	7	Please write it in English.	Eigo de kaite kudasai.	英語で書いてください。
+Requests	Food & Drink	10	Can I have some water, please?	Mizu o kudasai.	水をください。
+Language Help	Comprehension	10	Do you understand English?	Eigo ga wakarimasu ka.	英語がわかりますか。
+Language Help	Writing Systems	2	Kanji is interesting.	Kanji wa omoshiroi desu.	漢字は面白いです。
+Language Help	Writing Systems	3	Please teach me hiragana.	Hiragana wo oshiete kudasai.	ひらがなを教えてください。
+Language Help	Writing Systems	3	I don't know Katakana.	Katakana wa wakarimasen.	カタカナはわかりません。
+Language Help	Reading	9	How do you read this?	Kore wa do yomimasu ka?	これはどう読みますか？
+Language Help	Meaning	9	What does that mean?	Sore wa doiu imi desu ka?	それはどういう意味ですか？
+Questions	Identification	10	What is this?	Kore wa nan desu ka.	これは何ですか。
+Questions	Ownership	5	Huh? Is this mine?	Are? Kore wa watashi no desu ka.	あれ？これは私のですか？
+Questions	Opinion	7	How is the taste?	Aji wa do desu ka.	味はどうですか。
+Language Help	Reading	9	How do you read this?	Kore wa do yomimasu ka.	これはどう読みますか。
+Questions	Identification	10	What is that?	Sore wa nan desu ka.	それは何ですか。
+Requests	General	10	I'll take that.	Sore kudasai.	それください。
+Language Help	Meaning	9	What does this mean?	Kore wa doiu imi desu ka.	これはどういう意味ですか。
+Language Help	Comprehension	10	I don't understand what you mean.	Imi ga wakarimasen.	意味が分かりません。
+Language Help	Writing Systems	3	Please teach me hiragana.	Hiragana wo oshiete kudasai.	ひらがなを教えてください。
+Language Help	Writing Systems	3	I don't know Katakana.	Katakana wa wakarimasen.	カタカナはわかりません。
+At the Hotel	Amenities	9	Do you have a power converter?	Denryokuhenkanki wa arimasu ka?	電力変換器はありますか？
+At the Hotel	Amenities	9	Do you have a hair dryer?	Doraiya wa arimasu ka.	ドライヤーはありますか？
+At the Hotel	Amenities	8	Do you have an iron?	Airon wa arimasu ka.	アイロンはありますか？
+At the Hotel	Services	8	Can I use the internet?	Intanetto o shitemo i desu ka.	インターネットをしてもいいですか？
+At the Hotel	Amenities	9	Do you have power converters?	Denryoku henkanki wa arimasu ka?	電力変換器はありますか？
+At the Hotel	Amenities	9	Do you have a hair dryer?	Doraiya wa arimasu ka?	ドライヤーはありますか？
+At the Hotel	Amenities	8	Do you have an iron?	Airon wa arimasu ka.	アイロンはありますか？
+At the Hotel	Amenities	7	Do you have a computer?	Paso-kon wa arimasu ka?	パソコンはありますか？
+At the Hotel	Services	8	Do you have room service?	Rumusabisu wa arimasu ka?	ルームサービスはありますか？
+At the Hotel	Food	6	Do you have sushi?	Sushi wa arimasu ka?	寿司はありますか？
+At the Hotel	Food	6	Do you have tempura?	Tempura wa arimasu ka?	天ぷらはありますか？
+At the Hotel	Food	8	Do you have coffee?	Kohi wa arimasu ka?	コーヒーはありますか？
+At the Hotel	Services	7	Do you have massage services?	Massaji wa arimasu ka?	マッサージはありますか？
+At the Hotel	Services	8	Do you have laundry service?	Randori sabisu wa arimasu ka?	ランドリーサービスはありますか？
+At the Hotel	Services	8	Room service, please.	Rumusabisu wo o-negai shimasu.	ルームサービスをお願いします。
+Occupations	Arts & Media	1	He is the producer.	Kare wa purodusa desu.	彼はプロデューサーです。
+Occupations	Service	2	I'm a hairdresser.	Watashi wa hea sutairisuto desu.	私はヘアスタイリストです。
+Occupations	Service	2	My friend is a hair stylist.	Tomodachi wa biyoshi desu.	友達は美容師です。
+At the Hotel	Room Features	5	Where is the TV?	Terebi wa doko desu ka.	テレビはどこですか。
+At the Hotel	Room Features	4	Where is the radio?	Rajio wa doko desu ka.	ラジオはどこですか。
+At the Hotel	Services	8	Laundry service, please.	Randorisabisu wo o-negai shimasu.	ランドリーサービスをお願いします。
+Common Responses	Disagreement / Correction	7	No, that's wrong.	Iie, chigaimasu.	いいえ、違います。
+Occupations	Arts & Media	1	My girlfriend is an artist.	Boku no kanojo wa atisuto desu.	僕の彼女はアーティストです。
+Postal Service	Sending Items	6	I'm sending this to New York.	Nyuyoku e okurimasu.	ニューヨークへ送ります。
+Postal Service	Sending Items	6	I'm sending a postcard to New York.	Hagaki o nyuyoku e okurimasu.	葉書をニューヨークへ送ります。
+Telling Time	General	3	It's 1:00 in New York.	Nyu Yoku wa ichi-ji desu.	ニューヨークは一時です。
+Postal Service	Sending Items	5	I'll send a postcard to my friend.	Hagaki wo tomodachi ni okurimasu.	葉書を友達に送ります。
+Postal Service	Comments	3	It's a beautiful postcard isn't it.	Kirei na hagaki desu ne.	きれいな葉書ですね。
+Postal Service	Sending Items	4	I wrote a letter to my friend.	Tomodachi ni tegami o kakimashita.	友達に手紙を書きました。
+Postal Service	Sending Items	3	Yesterday I wrote a letter to my friend.	Kino tomodachi ni tegami o kakimashita.	昨日友達に手紙を書きました。
+Postal Service	Sending Items	6	I'm sending a small package to Tokyo.	Kozutsumi wo Tokyo ni okurimasu.	小包を東京に送ります。
+At the Hotel	Activities	4	I'll take a bath at the hotel.	Hoteru de nyuyoku suru.	ホテルで入浴する。
+Postal Service	Sending Items	6	I'm sending a letter to New York.	Tegami wo Nyuyoku e okurimasu.	手紙をニューヨークへ送ります。
+Postal Service	Sending Items	6	I'm sending a small package to New York.	Kozutsumi o Nyuyoku e okurimasu.	小包をニューヨークへ送ります。
+Postal Service	Questions	6	What's in the package?	Nakami wa nan desu ka?	中身は何ですか？
+Postal Service	Describing Contents	6	A book.	Hon desu.	本です。
+Questions	Preferences	7	What do you like?	Nani ga suki desu ka.	何が好きですか。
+Questions	Food & Drink	8	What would you like to drink?	Nani o nomimasu ka.	何を飲みますか。
+Postal Service	Sending Items	5	I'll send clothes home.	Fuku wo ie ni okuru.	服を家に送る。
+Hobbies	Reading	2	I'm reading a book.	hon o yonde imasu.	本を読んでいます。
+Hobbies	Reading	2	This book is pretty funny.	Kono hon wa totemo omoshiroi desu.	この本はとても面白いです。
+Shopping	Asking Price	9	How much is this book?	Kono hon wa ikura desu ka.	この本はいくらですか。
+Questions	Location	10	Where?	Doko?	どこ？
+Money Exchange	Making a Request	8	I’d like to change US dollars into yen.	Bei doru o en ni kaetai desu.	米ドルを円に替えたいです。
+Money Exchange	Making a Request	8	I'd like to change Canadian dollars into yen.	Canada doru o en ni kaetai desu.	カナダドルを円に替えたいです。
+Money Exchange	Making a Request	8	I'd like to change Australian dollars into yen.	Osutoraria doru o en ni kaetai desu.	オーストラリアドルを円に替えたいです。
+Money Exchange	Making a Request	8	I'd like to change Euros into yen.	Yuro o en ni kaetai desu.	ユーロを円に替えたいです。
+Money Exchange	Asking the Rate	8	How many yen is it to one dollar?	Ichi-doru wa nan-en desu ka.	1ドルは何円ですか。
+Money Exchange	Making a Request	7	I'd like to change Canadian dollars into Australian dollars.	Kanada doru wo Osutoraria doru ni kaetai desu.	カナダドルをオーストラリアドルに替えたいです。
+Shopping	Buying Items	7	Please give me a 1,000-yen telephone card.	Sen-en no tereka o kudasai.	千円のテレカをください。
+Shopping	Buying Items	7	Please give me a 5,000-yen telephone card.	Go-sen-en no tereka o kudasai.	五千円のテレカをください。
+Shopping	Buying Items	7	Can I have a one thousand yen telephone card, please?	Sen-en no tereka wo kudasai.	千円のテレカをください。
+Money	Stating Price	9	It's five thousand yen.	Go sen-en desu.	五千円です。
+Counting	People	9	Two adults.	Otona ni mei.	大人二名。
+Counting	People	8	Three children.	Kodomo san mei.	子供三名。
+Common Phrases	Life Stages	1	I turned twenty. I'm an adult now.	Hatachi desu. Otona ni narimashita.	二十歳です。大人になりました。
+Family	General	3	This is my child.	Kore wa watashi no kodomo desu.	これは私の子供です。
+Counting	People	10	How many people in your party?	Nan-mei desu ka.	何名ですか。
+Transportation	Tickets	5	This ticket can be used nationwide.	Kono kippu wa zenkokukyotsu desu.	この切符は全国共通です。
+Hobbies	Movies	4	I watch a dubbed movie.	Fukikae eiga wo miru.	吹き替え映画を見る。
+Hobbies	Movies	4	I watch movies without subtitles.	Jimaku nashi de eiga wo miru.	字幕なしで映画を見る。
+Counting	People	8	Four senior tickets, please.	Shinia yon-mei kudasai.	シニア四名ください。
+Common Phrases	Life Stages	1	I became a high school student.	Kokosei ni natta.	高校生になった。
+Family	General	2	My daughter is a junior high school student.	Watashi no musume wa chugakusei desu.	私の娘は中学生です。
+Counting	People	10	One person.	Ichi mei.	一名。
+Counting	People	10	Two people.	Ni mei.	二名。
+Counting	People	10	Three people.	San mei.	三名。
+Counting	People	9	Four adults.	Otona yon mei.	大人四名。
+Counting	People	8	Two adults for Spiderman.	Supaidaman otona ni mei.	スパイダーマン大人二名。
+Common Phrases	General	4	Used commonly nationwide.	Zenkoku kyotsu.	全国共通。
+Renting	Cell Phone	7	I’d like to rent a cell phone.	Keitai o karitai desu.	携帯を借りたいです。
+Renting	Cell Phone	6	Which model would you like?	Dono kishu ga hoshii desu ka?	どの機種が欲しいですか？
+Renting	Cell Phone	6	Please add minutes.	Tsuwa jikan o tsuika shite kudasai.	通話時間を追加してください。
+Renting	Cell Phone	5	You have ten minutes left on your phone.	Nokori no tsuwa jikan wa ju-ppun.	残りの通話時間は十分。
+Renting	Cell Phone	7	Please give me a charger.	Judenki o kudasai.	充電器をください。
+Common Phrases	Ownership	5	That's my cellular phone.	Are wa watashi no keitai denwa desu.	あれは私の携帯電話です。
+Telling Time	Duration	5	It's about ten minutes from my house to the station.	Ie kara eki made juppun kurai desu.	家から駅まで十分くらいです。
+Renting	Cell Phone	5	I have 1 minute remaining to call.	Tsuwa jikan no nokori wa ippun desu.	通話時間の残りは一分です。
+Common Phrases	Desires	5	I want money.	O-kane ga hoshi desu.	お金が欲しいです。
+Renting	Cell Phone	7	I'd like this model.	Kono kishu ga hoshi desu.	この機種が欲しいです。
+Information	Asking for Assistance	10	Do you have an English information guide?	Eigo no gaido wa arimasu ka?	英語のガイドはありますか？
+Information	Asking for Assistance	8	Do you have a Spanish information guide?	Supeingo no gaido wa arimasu ka?	スペイン語のガイドはありますか？
+Information	At a Restaurant	10	Do you have an English menu?	Eigo no menyu wa arimasu ka?	英語のメニューはありますか？
+Language Help	Comprehension	10	Do you understand English?	Eigo ga wakarimasu ka.	英語が分かりますか。
+Health	Allergies	9	I have allergies.	Arerugi ga arimasu.	アレルギーがあります。
+Language Help	Ability	5	I speak Chinese.	Watashi wa chugokugo o hanashimasu.	私は中国語を話します。
+Language Help	Ability	5	Can you speak Korean?	Kankokugo wo hanasemasu ka.	韓国語を話せますか。
+Information	At a Restaurant	10	Can you give me an English menu?	Eigo no menyu o kudasai.	英語のメニューをください。
+Information	Asking for Assistance	8	Do you have a Chinese info guide?	Chugokugo no gaido wa arimasu ka?	中国語のガイドはありますか？
+Food	Asking How to Eat	8	How do you eat this?	Tabekata wa?	食べ方は？
+Food	Instructions	7	Dip it in soy sauce.	Shoyu ni tsukeru.	醤油につける。
+Food	Instructions	7	Dip it in the broth.	Tsuyu ni tsukeru.	つゆにつける。
+Food	Instructions	7	Put mayonnaise on it.	Mayonezu o tsukeru.	マヨネーズをつける。
+Food	Instructions	7	Pour sauce on it.	Sosu o kakeru.	ソースをかける。
+Food	Asking How to Eat	8	Please teach me how to eat this.	Kono tabekata o oshiete kudasai.	この食べ方を教えてください。
+Food	Condiments	8	Where is the sauce?	Sosu wa doko ni arimasu ka.	ソースはどこにありますか。
+Food	Condiments	8	Could you pass me the pepper?	Kosho wo totte kudasai.	胡椒をとってください。
+Food	Condiments	7	Is this sugar or salt?	Kore wa sato desu ka. Shio desu ka.	これは砂糖ですか。塩ですか。
+Food	Condiments	7	How much is the mustard?	Masutado wa ikura desu ka.	マスタードはいくらですか。
+Food	Condiments	5	I put ketchup onto a hotdog.	Kechappu wo hottodotgu ni tsukeru.	ケチャップをホットドッグにつける。
+Food	Condiments	6	I love mayonnaise.	Mayonezu ga daisuki desu.	マヨネーズが大好きです。
+Food	Condiments	6	You need broth for buckwheat noodles.	O-osba niwa tsuyu ga hitsuyo desu.	お蕎麦にはつゆが必要です。
+Food	Condiments	7	I dip the sashimi into soy sauce.	O-sashimi ni syoyu wo tsukeru.	お刺身に醤油をつける。
+Food	Condiments	8	Could you pass me the soy sauce?	Shoyu o totte kudasai.	醤油をとってください。
+Food	Condiments	7	I pour sauce on top of the okonomiyaki.	Okonomiyaki ni sosu wo kakeru.	お好み焼きにソースをかける。
+Dietary Needs	Vegetarianism	9	I’m a vegetarian.	Watashi wa bejitarian desu.	私はベジタリアンです。
+Dietary Needs	Restrictions	9	I don’t eat meat.	Niku wa tabemasen.	肉は食べません。
+Dietary Needs	Restrictions	9	I don’t eat eggs.	Tamago wa tabemasen.	卵は食べません。
+Dietary Needs	Restrictions	9	I don’t eat fish.	Sakana wa tabemasen.	魚は食べません。
+Dietary Needs	Asking About Ingredients	9	Does this contain meat?	Niku wa haitte imasu ka?	肉は入っていますか？
+Dietary Needs	Asking About Ingredients	9	Does it contain fish?	Sakana wa haitte imasu ka?	魚は入っていますか？
+Dietary Needs	Asking About Ingredients	9	Does it contain eggs?	Tamago wa haitte imasu ka?	卵は入っていますか？
+Dietary Needs	Restrictions	9	I don't eat dairy products.	Nyuseihin wa tabemasen.	乳製品は食べません。
+Introductions	Nationality	4	I'm Japanese.	Watashi wa nihonjin desu.	私は日本人です。
+Dietary Needs	Vegetarianism	9	I am a vegetarian.	Watashi wa saishokushugisha desu.	私は菜食主義者です。
+Food	Identification	7	This is meat.	Kore wa niku desu.	これは肉です。
+Dietary Needs	Restrictions	8	I don't eat meat. I eat fish.	Niku wa tabemasen. Sakana wa tabemasu.	肉は食べません。魚は食べます。
+Food	Preferences	7	I don't like eggs.	Tamago wa suki ja arimasen.	卵は好きじゃありません。
+Food	Preferences	7	I like fish.	Sakana wa suki desu.	魚は好きです。
+Dietary Needs	Asking About Ingredients	9	Does it contain a dairy product?	Nyuseihin wa haitte imasu ka.	乳製品は入っていますか？
+Food	Identification	7	Milk and cheese are dairy products.	Gyunyu to chizu wa nyuseihin desu.	牛乳とチーズは乳製品です。
+Dietary Needs	Restrictions	8	I don't eat (anything).	Tabemasen.	食べません。
+Emergency	Calling for Help	10	Please help me.	Tasukete kudasai.	助けてください。
+Emergency	Calling for Help	10	Please call the police.	Keisatsu o yonde kudasai.	警察を呼んでください。
+Emergency	Calling for Help	10	Please dial 110. (Please call the police.)	Hyaku to ban onegai shimasu.	110番お願いします。
+Emergency	Calling for Help	10	Somebody help!	Dare ka, tasukete!	誰か、助けて！
+Emergency	Calling for Help	10	Please call an ambulance!	Kyukyusha wo yonde kudasai!	救急車を呼んでください！
+Emergency	Actions	9	I'll call 110.	Hyakutoban suru.	110番する。
+Introductions	Formal	6	Pleased to meet you.	Yoroshiku onegai shimasu.	よろしくお願いします。
+Emergency	Fire	10	There's a fire! Please call 119.	Kaji desu. 119ban wo onegai shimasu.	火事です。119番をお願いします。
+Emergency	Actions	9	Call the police.	Hyaku to ban suru.	110番する。
+Emergency	Providing Information	8	My name is...	Watashi no namae wa...	私の名前は...
+Emergency	Providing Information	8	The address is...	Jusho wa...	住所は...
+Emergency	Providing Information	9	Where?	Doko?	どこ？
+Emergency	Fire	10	Fire!	Kaji!	火事！
+Health	Medical Assistance	9	Please call a doctor.	Isha o yonde kudasai.	医者を呼んでください。
+Health	Medical Assistance	10	Please call an ambulance.	Kyukyusha o yonde kudasai.	救急車を呼んでください。
+Health	Locations	9	Where is the pharmacy?	Yakkyoku wa doko desu ka?	薬局はどこですか？
+Health	Symptoms	8	Do you have diarrhea?	Geri shite imasu ka?	下痢していますか？
+Asking for Directions	Transportation	10	Where is the taxi stand?	Takushinoriba wa doko ni arimasu ka.	タクシー乗り場はどこにありますか。
+Health	Symptoms	8	Do you have diarrhea?	Geri shite imasu ka.	下痢していますか。
+Health	Pain / Ailments	9	My stomach hurts.	Onaka ga itai desu.	お腹が痛いです。
+Health	Pain / Ailments	9	My head hurts.	Atama ga itai desu.	頭が痛いです。
+Health	Illness	8	I have a cold.	Kaze o hiite imasu.	風邪をひいています。
+Health	Symptoms	8	I have a fever.	Netsu ga arimasu.	熱があります。
+Health	Symptoms	8	I have diarrhea.	Geri o shite imasu.	下痢をしています。
+Health	Pain / Ailments	8	I have a sore throat.	Nodo ga itai desu.	喉が痛いです。
+Health (Body Parts)	Actions	2	I bend my elbow.	Hiji wo mageru.	肘を曲げる。
+Requests	Instructions	4	Please raise your hand.	Te o agete kudasai.	手を挙げてください。
+Health (Body Parts)	Injury	7	I broke my wrist.	Tekubi wo orimashita.	手首を折りました。
+Health (Body Parts)	Injury	7	I broke my finger.	Yubi o kossetsu shita.	指を骨折した。
+Health (Body Parts)	Pain	8	I have chest pain.	Mune ga itai desu.	胸が痛いです。
+Health (Body Parts)	Pain	8	My back hurts.	Senaka ga itai desu.	背中が痛いです。
+Health (Body Parts)	Pain	8	My lower back hurts.	Koshi ga itai desu.	腰が痛いです。
+Common Phrases	Actions	1	The parent spanked the child.	Oya ga kodomo no o-shiri wo tatakimashta.	親が子供のお尻を叩きました。
+Health (Body Parts)	Sensations	7	My leg has fallen asleep.	Ashi ga shibiremashita.	足が痺れました。
+Health (Body Parts)	Sensations	6	My knees are shaking.	Hiza ga furuete imasu.	膝が震えています。
+Health (Body Parts)	Sensations	7	My ankles are tired.	Ashikubi ga tsukaremashita.	足首が疲れました。
+Health (Body Parts)	Pain	8	My thighs hurt.	Futomomo ga itai desu.	太ももが痛いです。
+Health (Body Parts)	Ailments	7	I get a cramp in my calf.	Fukurahagi wo tsuru.	ふくらはぎを吊る。
+Health (Body Parts)	Injury	7	I injured my foot.	Ashi o kega shita.	足を怪我した。
+Health (Body Parts)	Actions	2	I massage my toes.	Ashi no yubi wo massaji suru.	足の指をマッサージする。
+Descriptions	Body	2	She has slim arms.	Kanojo no ude wa hosoi desu.	彼女の腕は細いです。
+Health (Body Parts)	Pain	8	My neck hurts.	Kubi ga itai desu.	首が痛いです。
+Health (Body Parts)	Injury	7	I injured my shoulder.	Kata wo kega shimashita.	肩を怪我しました。
+Health	Illness	8	I got an upset stomach.	O-naka o kowashita.	お腹を壊した。
+Health	Pain / Ailments	9	I have a headache.	Atama ga itai desu.	頭が痛いです。
+Health	Illness	8	Do you have a cold?	Kaze desu ka.	風邪ですか。
+Health	Illness	8	I caught a cold.	Kaze wo hita.	風邪をひいた。
+Common Phrases	Observations	1	They have too much garbage in their garden.	Karera no niwa ni wa gomi ga takusan arimasu.	彼らの庭にはゴミがたくさんあります。
+Health	Ailments	5	I have many pimples.	Nikibi ga takusan aru.	ニキビがたくさんある。
+Common Phrases	Feelings	4	I don't know what to do.	Nani o sureba ii no ka wakaranai.	何をすればいいのか分からない。
+Health	General	6	I often get sick.	Yoku byoki wo suru.	よく病気をする。
+Health (Body Parts)	Face	5	My forehead is sweating.	Hitai ni ase wo kaku.	額に汗をかく。
+Health (Body Parts)	Face	6	Get me some eye drops on your way home.	Kaeru toki ni me-gusuri o katte kite.	帰るときに目薬を買ってきて。
+Health (Body Parts)	Face	8	My eyes are itchy.	Me ga kayui desu.	目が痒いです。
+Idioms	Compliments	1	To feel proud from getting many compliments.	Takusan homerarete, hana ga takaku naru.	たくさん褒められて、鼻が高くなる。
+Health (Body Parts)	Face	8	My nose is itchy.	Hana ga kayui desu.	鼻が痒いです。
+Common Phrases	Actions	1	To put lipstick on one's mouth.	Kuchi ni kuchibeni o nuru.	口に口紅を塗る。
+Descriptions	Body	2	That child has a big mouth.	Ano kodomo no kuchi wa oki desu.	あの子供の口は大きいです。
+Descriptions	Body	2	That person has thick lips.	Ano hito no kuchibiru wa atsui.	あの人の唇は厚い。
+Health (Body Parts)	Face	8	I have an earache.	Mimi ga itai desu.	耳が痛いです。
+Health (Body Parts)	Face	6	To dislocate one's jaw.	Ago ga hazureru.	顎が外れる。
+Descriptions	Body	2	My dad has a beard.	Chichi wa ago ni hige ga arimsu.	父は顎にひげがあります。
+Descriptions	Body	3	The child's cheeks are red.	Kodomo no hoho ga akai desu.	子供の頬が赤いです。
+Descriptions	Body	2	Sumo wrestlers' stomachs are big.	O-sumo-san no ibukuro wa oki desu.	お相撲さんの胃袋は大きいです。
+Health	Pain / Ailments	8	Ouch!	Itai!	痛い！
+Health (Body Parts)	Pain	8	My forehead hurts.	Hitai ga itai desu.	額が痛いです。
+Health (Body Parts)	Pain	8	My eyes hurt.	Me ga itai desu.	目が痛いです。
+Health (Body Parts)	Pain	8	My nose hurts.	Hana ga itai desu.	鼻が痛いです。
+Health (Body Parts)	Pain	8	My mouth hurts.	Kuchi ga itai desu.	口が痛いです。
+Health (Body Parts)	Pain	8	My lips hurt.	Kuchibiru ga itai desu.	唇が痛いです。
+Health (Body Parts)	Pain	8	My ears hurt.	Mimi ga itai desu.	耳が痛いです。
+Health (Body Parts)	Pain	8	My chin hurts.	Ago ga itai desu.	顎が痛いです。
+Health (Body Parts)	Pain	8	My cheeks hurt.	Hoho ga itai desu.	頬が痛いです。
+Health (Body Parts)	Pain	8	My shoulders hurt.	Kata ga itai desu.	肩が痛いです。
+Health (Body Parts)	Pain	8	My neck hurts.	Kubi ga itai desu.	首が痛いです。
+Health (Body Parts)	Pain	8	My arms hurt.	Ude ga itai desu.	腕が痛いです。
+Health (Body Parts)	Pain	8	My elbows hurt.	Hiji ga itai desu.	肘が痛いです。
+Health (Body Parts)	Pain	8	My hands hurt.	Te ga itai desu.	手が痛いです。
+Health (Body Parts)	Pain	8	My wrists hurt.	Tekubi ga itai desu.	手首が痛いです。
+Health (Body Parts)	Pain	8	My fingers hurt.	Yubi ga itai desu.	指が痛いです。
+Health (Body Parts)	Pain	8	My chest hurts.	Mune ga itai desu.	胸が痛いです。
+Health (Body Parts)	Pain	9	My abdomen hurts.	Onaka ga itai desu.	お腹が痛いです。
+Health (Body Parts)	Pain	8	My back hurts.	Senaka ga itai desu.	背中が痛いです。
+Health (Body Parts)	Pain	8	My lower back hurts.	Koshi ga itai desu.	腰が痛いです。
+Health (Body Parts)	Pain	8	My buttocks hurt.	Shiri ga itai desu.	尻が痛いです。
+Health (Body Parts)	Pain	8	My legs hurt.	Ashi ga itai desu.	足が痛いです。
+Health (Body Parts)	Pain	8	My knees hurt.	Hiza ga itai desu.	膝が痛いです。
+Health (Body Parts)	Pain	8	My ankles hurt.	Ashikubi ga itai desu.	足首が痛いです。
+Health (Body Parts)	Pain	8	My thighs hurt.	Futomomo ga itai desu.	太ももが痛いです。
+Health (Body Parts)	Pain	8	My calves hurt.	Hukurahagi ga itai desu.	ふくらはぎが痛いです。
+Health (Body Parts)	Pain	8	My feet hurt.	Ashi ga itai desu.	足が痛いです。
+Health (Body Parts)	Pain	8	My toes hurt.	Ashi no yubi ga itai desu.	足の指が痛いです。
+Health (Body Parts)	Location	7	Right shoulder.	Migi kata.	右肩。
+Health (Body Parts)	Location	7	Left shoulder.	Hidari kata.	左肩。
+Health (Pharmacy)	Medicine	9	Please give me cold medicine.	Kaze gusuri o kudasai.	風邪薬をください。
+Health (Pharmacy)	Medicine	9	Please give me anti-migraine pills.	Zutsu yaku o kudasai.	頭痛薬をください。
+Health (Pharmacy)	Medicine	9	Please give me aspirin.	Asupirin o kudasai.	アスピリンをください。
+Health (Pharmacy)	Medicine	8	Please give me pills to calm my digestive system.	Seichozai o kudasai.	整腸剤をください。
+Health (Pharmacy)	Medicine	8	Please give me cough drops.	Nodo ame o kudasai.	喉飴をください。
+Health (Allergies)	Symptoms	8	I have hay fever.	Kahunsho desu.	花粉症です。
+Health (Allergies)	Symptoms	8	I have a runny nose.	Hanamizu ga tareru.	鼻水が垂れる。
+Health (Allergies)	Symptoms	8	My eyes itch.	Me ga kayui.	目が痒い。
+Health (Allergies)	Symptoms	8	My throat itches.	Nodo ga kayui.	喉が痒い。
+Health (Allergies)	Symptoms	8	My throat is dry.	Nodo ga kawaku.	喉が渇く。
+Health (Allergies)	Symptoms	8	I sneeze.	Kushami ga deru.	くしゃみが出る。
+Health (Allergies)	Symptoms	8	I can't stop sneezing.	Kushami ga tomaranai.	くしゃみが止まらない。
+Health	Symptoms	8	I'm thirsty.	Nodo ga kawakimashita.	喉が渇きました。
+Health (Allergies)	Symptoms	8	My hands are itchy.	Te ga kayui.	手が痒い。
+Health (Allergies)	Symptoms	8	My nose is running.	Hanamizu ga tareru.	鼻水が垂れる。
+Health (Allergies)	Symptoms	8	I have a terrible runny nose.	Hanamizu ga hidoi desu.	鼻水がひどいです。
+Health (Allergies)	Illness	8	I caught hay fever.	Kafunsho ni kakatta.	花粉症にかかった。
+Food	General	2	The child eats candy.	Kodomo ga ame wo namemasu.	子供が飴をなめます。
+Health (Pharmacy)	Medicine	8	How much is this antiflatulent?	Kono seichozai wa ikiura desu ka.	この整腸剤はいくらですか。
+Health	Pain / Ailments	9	I have a headache.	Zutsu ga shimasu.	頭痛がします。
+Common Phrases	Identification	5	That's medicine.	Are wa kusuri desu.	あれは薬です。
+Health (Allergies)	Vocabulary	8	Runny nose.	Hanamizu ga tareru.	鼻水が垂れる。
+Health (Allergies)	Vocabulary	8	Itchy eyes.	Me ga kayui.	目が痒い。
+Health (Allergies)	Vocabulary	8	Itchy throat.	Nodo ga kayui.	喉が痒い。
+Health (Allergies)	Vocabulary	8	Dry throat.	Nodo ga kawaku.	喉が渇く。
+Health (Allergies)	Vocabulary	8	Sneezing.	Kushami ga deru.	くしゃみが出る。
+Dietary Needs	Allergies	10	I am allergic to eggs.	Tamago arerugi desu.	卵アレルギーです。
+Dietary Needs	Allergies	10	I am allergic to dairy products.	Nyuseihin arerugi desu.	乳製品アレルギーです。
+Dietary Needs	Requests	10	Please serve it to me without eggs.	Tamago nuki de kudasai.	卵抜きでください。
+Making Plans	Scheduling	5	Is Friday night alright with you?	Kin-yobi no yoru wa daijobu desu ka.	金曜日の夜は大丈夫ですか。
+At a Restaurant	Ordering	8	Would you like rice or bread?	Raisu to pan, dochira ga ii desu ka.	ライスとパン、どちらがいいですか。
+Dietary Needs	Requests	9	A small serving of noodles please.	Men sukuname de onegai shimasu.	麺少な目でお願いします。
+Dietary Needs	Requests	9	A large serving of rice, please.	Raisu omori onegai shimasu.	ライス大盛りお願いします。
+Dietary Needs	Requests	10	No tomatoes, please.	Tomato nuki de o-negai shimasu.	トマト抜きでお願いします。
+Dietary Needs	Allergies	10	I'm allergic to peanuts.	Pinattsu arerugi ga arimasu.	ピーナッツアレルギーがあります。
+Food	Descriptions	6	Buckwheat noodles are delicious.	Soba wa oishii desu.	そばはおいしいです。
+Food	Identification	7	Milk and cheese are dairy products.	Gyunyu to chizu wa nyuseihin desu.	牛乳とチーズは乳製品です。
+Dietary Needs	Allergies	10	I have allergies.	Arerugi ga arimasu.	アレルギーがあります。
+Rules	Prohibitions	5	Children are not allowed.	Kodomo wa dame desu.	子供はだめです。
+Dietary Needs	Vocabulary	10	Without eggs.	Tamago nuki.	卵抜き。
+Dietary Needs	Vocabulary	9	Large serving.	Omori.	大盛り。
+Dietary Needs	Vocabulary	9	Small serving.	Sukuname.	少なめ。
+Dietary Needs	Requests	9	Rice large serving.	Raisu omori.	ライス大盛り。
+Dietary Needs	Requests	9	Rice small serving.	Raisu sukuname.	ライス少なめ。
+Dietary Needs	Requests	10	Without eggs.	Tamago nuki.	卵抜き。
+Common Responses	Reassurance	7	It's okay.	Daijobu.	大丈夫。
+Rules	Prohibitions	6	No! (Don't eat this)	Dame.	だめ。
+Emergency	Earthquake	8	Is this an earthquake?	Kore wa jishin desu ka?	これは地震ですか？
+Emergency	Earthquake	8	It's an earthquake.	Jishin desu.	地震です。
+Common Responses	Agreement	8	That's right.	So desu.	そうです。
+Common Responses	Disagreement / Correction	8	That's incorrect.	Chigaimasu.	違います。
+Emergency	Earthquake	9	Let's hide under a table.	Teburu no shita ni kakuremasho.	テーブルの下に隠れましょう。
+Emergency	Evacuation	9	Let's evacuate.	Hinan shimasho.	避難しましょう。
+Emergency	Evacuation	9	Please evacuate.	Hinan shite kudasai.	避難してください。
+Questions	Ownership	5	Huh? Is this mine?	Are? Kore wa watashi no desu ka.	あれ？これは私のですか？
+Common Phrases	Feelings	4	I don't know what to do.	Nani o sureba ii no ka wakaranai.	何をすればいいのか分からない。
+Health	General	6	I often get sick.	Yoku byoki wo suru.	よく病気をする。
+Social	Celebrations	4	Let's toast!	Kanpai shimasho.	乾杯しましょう！
+Emergency	Evacuation	9	Let's evacuate this place.	Koko kara hinan shimasho.	ここから避難しましょう。
+Location	Prepositions	4	The books are under the desk.	Hon wa tsukue no shita ni aru.	本は机の下にある。
+Location	Prepositions	4	There is a ball under the car.	Kuruma no shita ni boru ga arimasu.	車の下にボールがあります。
+Location	Prepositions	6	There is a cat under the table.	Teburu no shita ni neko ga imasu.	テーブルの下に猫がいます。
+Common Responses	Disagreement / Correction	7	No, that's wrong.	Iie, chigaimasu.	いいえ、違います。
+Introductions	Confirmation	5	Are you Mr. Tanaka? -Yes, I am.	Tanaka-san desu ka. -Hai, sou desu.	田中さんですか。 -はい、そうです。
+Facts	Natural Disasters	2	Japan is prone to earthquakes.	Nihon wa jishin-taikoku da.	日本は地震大国だ。
+Emergency	Earthquake	7	We had an earthquake yesterday.	Kino, jishin ga arimashita.	昨日、地震がありました。
+Emergency	Preparedness	5	I prepared an emergency backpack.	Hinanbukuro wo yoi shimashita.	避難袋を用意しました。
+Emergency	Earthquake	9	Let's hide under the table.	Teburu no shita de kakuremasho.	テーブルの下に隠れましょう。
+Introductions	Initial Meeting	6	Nice to meet you.	Hajimemashite.	はじめまして。
+Introductions	Formal	7	Thank you in advance for your assistance.	Yoroshiku onegai shimasu.	よろしくお願いします。
+Introductions	Origin	7	I am from New York.	Nyuyoku shusshin desu.	ニューヨーク出身です。
+Introductions	Origin	6	It is near Sydney.	Shidoni no chikaku desu.	シドニーの近くです。
+Introductions	Name (Formal)	8	I am (humbly) called Sachiko Nakagome.	Nakagome Sachiko to moshimasu.	中込佐知子と申します。
+Introductions	Formal	6	(super polite way of saying) Thank you in advance for your assistance.	Dozo yoroshiku onegai itashimasu.	どうぞよろしくお願いいたします。
+Introductions	Origin	7	Where are you from?	Shusshin wa doko desu ka.	出身はどこですか。
+Introductions	Name (Formal)	8	My name is Kazuo Mizuki.	Mizuki Kazuo to moshimasu.	水木和夫と申します。
+Introductions	Name	8	My name is Nakagome Sachiko.	Nakagome Sachiko desu.	中込佐知子です。
+Introductions	Name	8	My name is John Smith.	John Smith desu.	ジョン・スミスです。
+Introductions	Origin	7	I am from XXX.	XXX shusshin desu.	XXX出身です。
+Introductions	Origin	6	I am from London.	Rondon no chikaku desu.	ロンドンの近くです。
+Telling Time	Asking the Time	6	What time is it now?	Ima nan-ji desu ka?	今何時ですか？
+Common Phrases	Status	4	I'm on the phone right now.	Ima denwa chu desu.	今電話中です。
+Telling Time	Stating the Time	7	It's 11 o'clock now.	Ima, ju ichi-ji desu.	今、十一時です。
+Telling Time	Schedules	7	Breakfast starts at 6:30.	Roku-ji han kara asa-gohan desu.	六時半から朝ご飯です。
+Telling Time	Schedules	6	I will meet my friend at seven thirty.	Shichi-ji sanjuppun ni tomodachi ni aimasu.	七時三十分友達に会います。
+Telling Time	Relative Time	4	I came here 5 minutes ago.	Watashi wa gofun-mae ni koko ni kimashita.	私は五分前にここに来ました。
+Telling Time	Stating the Time	7	It's half past six now.	Ima, roku-ji han desu.	今、六時半です。
+Telling Time	Vocabulary	8	Six o'clock.	Roku-ji.	六時。
+Telling Time	Vocabulary	8	Ten o'clock.	Ju-ji.	十時。
+Telling Time	Vocabulary	8	Five minutes.	Go-fun.	五分。
+Telling Time	Vocabulary	8	Ten minutes.	Ju-ppun.	十分。
+Telling Time	Vocabulary	8	Twenty minutes.	Niju-ppun.	二十分。
+Telling Time	Vocabulary	8	Thirty minutes.	Sanju-ppun.	三十分。
+Telling Time	Stating the Time	8	6:20.	Roku-ji niju-ppun.	六時二十分。
+Telling Time	Stating the Time	8	6:30.	Roku-ji sanju-ppun.	六時三十分。
+Telling Time	Relative Time	7	Five minutes to.	Go-fun mae.	五分前。
+Telling Time	Relative Time	7	Five minutes to six.	Roku-ji go-fun mae.	六時五分前。
+Telling Time	Hours	8	one o'clock	ichi-ji	一時
+Telling Time	Hours	8	two o'clock	ni-ji	二時
+Telling Time	Hours	8	three o'clock	san-ji	三時
+Telling Time	Hours	8	four o'clock	yo-ji	四時
+Telling Time	Hours	8	five o'clock	go-ji	五時
+Telling Time	Hours	8	six o'clock	roku-ji	六時
+Telling Time	Hours	8	seven o'clock	shichi-ji	七時
+Telling Time	Hours	8	eight o'clock	hachi-ji	八時
+Telling Time	Hours	8	nine o'clock	ku-ji	九時
+Telling Time	Hours	8	ten o'clock	ju-ji	十時
+Telling Time	Hours	8	eleven o'clock	juichi-ji	十一時
+Telling Time	Hours	8	twelve o'clock	juni-ji	十二時
+Business Hours	Opening	9	What time does this place open?	Koko wa nan-ji ni akimasu ka?	ここは何時に開きますか？
+Business Hours	Opening	9	It will open at 10 o'clock.	Ju-ji ni akimasu.	十時に開きます。
+Business Hours	Closing	9	What time does it close?	Koko wa nan-ji ni shimarimasu ka?	ここは何時に閉まりますか？
+Business Hours	Closing	9	It will close at 12 o'clock.	Ju ni-ji ni shimarimasu.	十二時に閉まります。
+Business Hours	Closing	9	The kitchen will close at 12 o'clock.	Ju ni-ji ni kitchin ga shimarimasu.	十二時にキッチンが閉まります。
+Gratitude	Thanking for Past Actions	8	Thank you very much.	Arigato gozaimashita.	ありがとうございました。
+Common Phrases	Chores	1	I cleaned up the kitchen.	Kitchin wo soji shimashita.	キッチンを掃除しました。
+Business Hours	Closing	9	This restaurant closes at 11pm. The kitchen closes at 10pm.	Kono resutoran wa ju ichi-ji ni shimarimasu. Kitchin wa ju-ji ni shimarimasu.	このレストランは十一時に閉まります。キッチンは十時に閉まります。
+Business Hours	Opening	9	It will open at 11:00 AM.	Ju ichi-ji ni akimasu.	十一時時に開きます。
+Preferences	Likes	8	I like this.	Kore wa suki desu.	これは好きです。
+Preferences	Likes	8	I like ramen noodles.	Ramen wa suki desu.	ラーメンは好きです。
+Preferences	Likes	8	I like tempura.	Tempura wa suki desu.	天ぷらは好きです。
+Preferences	Dislikes	8	I don't like this.	Kore wa kirai desu.	これは嫌いです。
+Preferences	Dislikes	8	I don't like fermented beans.	Natto wa kirai desu.	納豆は嫌いです。
+Preferences	Asking	8	Do you have any food preferences?	Suki kirai wa arimasu ka?	好き嫌いはありますか？
+Questions	Identification	10	What is this?	Kore wa nan desu ka.	これは何ですか。
+Questions	Ownership	5	Huh? Is this mine?	Are? Kore wa watashi no desu ka.	あれ？これは私のですか？
+Shopping	Finding Items	7	Do you have any dried seaweed at the store?	Kono omise ni nori ha arimasuka?	このお店に海苔はありますか？
+Preferences	Likes	6	I like seaweed.	Wakame ga suki desu.	ワカメが好きです。
+Food	General	4	Children love salmon roe!	Kodomo-tachi ga daisuki na ikura!	子供たちが大好きなイクラ！
+Preferences	Likes	7	My favorite sushi is ikura (salmon roe).	Watashi wa ikura no sushi ga ichiban suki da.	私はいまの寿司が一番好きだ。
+Preferences	Dislikes	7	I dislike natto.	Natto wa kirai desu.	納豆は嫌いです。
+Culture	Food	3	Traditionally people in West Japan enjoy tempura with salt, whereas people in East Japan dip it in a special sauce.	Nishi Nihon de wa tempura o shio de tabemasu ga, higashi Nihon de wa tentsuyu ni tsukete tabemasu.	西日本では天ぷらを塩で食べますが、東日本では天つゆにつけて食べます。
+Culture	Food	3	Tempura is a Japanese dish.	Tenpura wa nihon no ryori desu.	天ぷらは日本の料理です。
+At a Restaurant	Asking for Recommendations	9	Are there any good ramen places?	Ii ramen-ya wa arimasu ka.	いいラーメン屋はありますか。
+Preferences	Dislikes	4	I hate sad movies.	Watashi wa kanashii eiga ga kirai desu.	私は悲しい映画が嫌いです。
+Preferences	Likes	7	I like this store.	Kono mise ga suki desu.	この店が好きです。
+Preferences	Likes	3	I like Audrey Hepburn.	Watashi wa Odori Heppuban ga suki desu.	私はオードリー・ヘップバーンが好きです。
+Food	Asking About Experience	6	Have you ever had Japanese yams?	Tororoimo wo tabeta koto ga arimasu ka.	とろろ芋を食べたことがありますか。
+Preferences	Asking	8	Do you like or dislike anything in particular?	Suki kirai wa arimasu ka?	好き嫌いはありますか？
+Exclamations	Amazement (Male)	4	Holy! (male speech)	Sugee!	すげえ！
+Exclamations	Surprise (Female)	4	Oh my! (female speech)	Ara ma!	あらま！
+Descriptions	People	3	Cameron Diaz is beautiful.	Kyameron Diasu wa utsukushii desu.	キャメロン・ディアスは美しいです。
+Descriptions	Color / Nature	5	The blue sky is beautiful.	Aoi sora wa kirei desu.	青い空はきれいです。
+Descriptions	Color / Food	4	Broccoli is a green vegetable.	Burokkori wa midori no yasai desu.	ブロッコリーは緑の野菜です。
+Descriptions	Color / Nature	4	What is the purple flower?	Murasaki iro no hana wa nan desu ka.	紫色の花は何ですか。
+Descriptions	Color / Clothing	6	I bought black shoes.	Kuroi kutsu o kaimashita.	黒い靴を買いました。
+Descriptions	Color / Clothing	6	I want a white dress.	Shiroi doresu ga hoshi desu.	白いドレスが欲しいです。
+Descriptions	Color / Clothing	6	I bought brown pants.	Chairoi zubon wo kaimashita.	茶色いズボンを買いました。
+Descriptions	Color / Clothing	5	Those yellow-green shoes are cute, aren't they.	Sono kimidori no kutsu, kawaii desu ne.	その黄緑の靴、かわいいですね。
+Descriptions	Color / Objects	3	I rode in a reddish purple car.	Akamurasaki iro no kuruma ni norimashita.	赤紫色の車に乗りました。
+Descriptions	Color / Objects	2	Japanese name stamps are a bright red color.	Nihon no hanko wa shuiro desu.	日本のハンコは朱色です。
+Descriptions	Color / People	3	The child's cheeks are red.	Kodomo no hoho ga akai desu.	子供の頬が赤い。
+Descriptions	Color / Nature	4	The sunflowers are yellow.	Himawari wa kiroi desu.	ひまわりは黄色いです。
+Descriptions	Art	2	She painted a picture with delicate brushstrokes.	Kanojo wa sensai na fudetsukai de e o kakimashita.	彼女は繊細な筆遣いで絵を描きました。
+Descriptions	People	3	Babies are cute.	Aka-chan wa kawaii.	赤ちゃんはかわいい。
+Descriptions	Art	4	This picture is great.	Kono e wa sugoi desu ne.	この絵はすごいですね。
+Descriptions	Places	5	Tokyo is really convenient.	Tokyo wa honto ni benri desu.	東京は本当に便利です。
+Comparisons	Speed	7	Which is faster, a bus or a train?	Basu to densha, dochira no ho ga hayai desu ka.	バスと電車、どちらの方が速いですか。
+Apologies	For Lateness	6	I'm sorry I'm late.	Osoku natte gomen nasai.	遅くなってごめんなさい。
+Requests	Offering	6	Please have some more.	Motto tabete kudasai.	もっと食べてください。
+Descriptions	People	3	She has a small face.	Kanojo wa kao ga chiisai.	彼女は顔が小さい。
+Directions	Locations	8	There is a big bookstore in front of the bank.	Ginko no mae ni okii hon-ya ga aru.	銀行の前に大きい本屋がある。
+Descriptions	Color / Objects	4	She has a pinkish beige cell phone.	Kanojo wa hadairo no keitai wo motte iru.	彼女は肌色の携帯を持っている。
+Descriptions	Aesthetics	6	Beautiful!	Utsukushi!	美しい！
+Descriptions	Aesthetics	6	Beautiful, isn't it?	Utsukushi desu ne.	美しいですね。
+Comparisons	Size	8	Smaller.	Motto chisai.	もっと小さい。
+Comparisons	Size	8	Bigger.	Motto oki.	もっと大きい。
+Lost & Found	Reporting a Loss	9	I lost a bag.	Kaban o nakushimashita.	鞄をなくしました。
+Lost & Found	Finding the Office	9	Where is the lost and found counter?	Wasuremono toriatsukaijo wa doko desu ka?	忘れ物取扱所はどこですか？
+Lost & Found	Claiming an Item	8	This bag is mine.	Kono kaban wa watashi no desu.	この鞄は私のです。
+Lost & Found	Reporting a Loss	9	I lost my glasses.	Megane wo nakushimashita.	眼鏡をなくしました。
+Lost & Found	Reporting a Loss	9	Oh no! I forgot my wallet!	Ikenai! O-saifu o wasureta!	いけない！お財布を忘れた！
+Travel	Documents	7	A passport is a must for an international trip.	Kaigairyoko ni pasupoto wa hissu da.	海外旅行にパスポートは必須だ。
+Travel	Documents	7	I have a passport.	Pasupoto ga arimasu.	パスポートがあります。
+Common Phrases	Actions	4	To put an umbrella up.	Kasa o sasu.	傘を差す。
+Requests	Items	8	Please give me that umbrella.	Ano kasa o kudasai.	あの傘をください。
+Lost & Found	Reporting a Loss	10	I lost my passport.	Pasupoto o nakushimashita.	パスポートをなくしました。
+Lost & Found	Reporting a Loss	9	I lost my umbrella.	Kasa o nakushimashita.	傘をなくしました。
+Questions	Ownership	7	Is this yours?	Kore wa anata no desu ka?	これはあなたのですか？
+Travel	Routes	8	From Tokyo Station to Shinjuku Station.	Tokyo eki kara Shinjuku Eki.	東京駅から新宿駅。
+Lost & Found	Inquiries	5	Will you have a sale of lost items?	Wasuremono no seru wa shimasu ka?	忘れ物のセールはしますか？
+Asking for Directions	Transportation	10	Where is the taxi stand?	Takushinoriba wa doko ni arimasu ka.	タクシー乗り場はどこにありますか。
+Questions	Time / Events	6	When does the football game start?	Sono sakka no shiai wa itsu hajimarimasu ka?	そのサッカーの試合はいつ始まりますか？
+Questions	Time / Events	5	When are you going to America?	Itsu Amerika ni ikimasu ka.	いつアメリカに行きますか。
+Questions	Personal Information	8	What's your phone number? / What's the phone number?	Denwabango wa nan-ban desu ka.	電話番号は何番ですか。
+Questions	Personal Information	8	What's your name?	O-namae wa nan desuka.	お名前は何ですか。
+Questions	Personal Information	7	What's that person's name?	Ano hito no namae wa nan desu ka.	あの人の名前は何ですか。
+Requests	Offering	6	Please have some more.	Motto tabete kudasai.	もっと食べてください。
+Common Responses	Disagreement / Correction	7	No, that's wrong.	Iie, chigaimasu.	いいえ、違います。
+Descriptions	Objects	2	The largest ship I had ever seen was arriving at the port.	Mita koto mo nai yona okisa no fune ga minato ni tochaku shita.	見たこともないような大きさの船が港に到着した。
+Shopping	Clothing	6	I want a white dress.	Shiroi doresu ga hoshi desu.	白いドレスが欲しいです。
+Shopping	Clothing	6	I bought brown pants.	Chairoi zubon wo kaimashita.	茶色いズボンを買いました。
+Travel	Distance	8	How far is it from Shinjuku to Shibuya?	Shinjuku kara Shibuya made dono kurai desu ka.	新宿から渋谷までどのくらいですか。
+Lost & Found	Description	8	What color?	Nani iro?	何色？
+Lost & Found	Description	8	Big brown bag.	Oki, chairo no kaban.	大きい、茶色の鞄。
+Lost & Found	Description	8	Small black bag.	Chisai kuro no kaban.	小さい、黒の鞄。
+Lost & Found	Description	8	Bigger.	Motto oki.	もっと大きい。
+Lost & Found	Description	8	Smaller.	Motto chisai.	もっと小さい。
+Lost & Found	Location	8	Tokyo Station to Shinjuku Station.	Tokyo eki kara Shinjuku eki.	東京駅から新宿駅。
+Feelings	Physical State	8	I'm tired.	Tsukarete imasu.	疲れています。
+Feelings	Physical State	8	I'm cold.	Samui desu.	寒いです。
+Feelings	Physical State	8	I'm hot.	Atsui desu.	暑いです。
+Feelings	Physical State	9	My stomach is empty. (I'm hungry)	O-naka ga suite imasu.	お腹が空いています。
+Feelings	Physical State	9	My throat is dry. (I'm thirsty)	Nodo ga kawaite imasu.	喉が渇いています。
+Feelings	Physical State	7	My ankles are tired.	Ashikubi ga tsukaremashita.	足首が疲れました。
+Weather	Temperature	6	It's getting so cold lately.	saikin, totemo samuku natte kimashita.	最近、とても寒くなってきました。
+Weather	Temperature	4	Alaska is very cold.	Arasuka wa totemo samui desu.	アラスカはとても寒いです。
+Weather	Temperature	6	It's hot today.	Kyo wa atsui desu.	今日は暑いです。
+Health	Illness	8	I got an upset stomach.	O-naka o kowashita.	お腹を壊した。
+Health	Pain / Ailments	8	My throat hurts.	Nodo ga itai desu.	喉が痛いです。
+Feelings	Physical State	9	I'm thirsty.	Nodo ga kawakimashita.	喉が渇きました。
+Location	Asking	8	Where are you now?	Ima doko ni iru?	今どこにいる？
+Common Phrases	Suggestions	7	Let's take a break.	Kyukei shimasho.	休憩しましょう。
+Requests	General	9	Please give me XXX.	XXX o kudasai.	XXXをください。
+Requests	Food & Drink	10	Please give me water.	Mizu o kudasai.	水をください。
+Requests	Items	8	Please give me a blanket.	Mofu o kudasai.	毛布をください。
+Celebrations	General	3	Congratulations (formal)	Omedeto gozaimasu.	おめでとうございます。
+Celebrations	Birthday	2	Happy Birthday!	Tanjobi omedeto gozaimasu!	誕生日おめでとうございます！
+Celebrations	Birthday	2	Today is my birthday.	Kyo wa watashi no tanjobi desu.	今日は私の誕生日です。
+Gratitude	Expressing Thanks	10	Thank you very much.	Domo arigato gozaimasu.	どうもありがとうございます。
+Celebrations	New Year	2	Happy New Year!	Akemashite omedeto gozaimasu!	明けましておめでとうございます！
+Celebrations	Wedding	2	Congratulations on your wedding!	Go-kekkon omedeto gozaimasu!	ご結婚おめでとうございます！
+Celebrations	Wedding	1	We are getting married in June.	Watashitachi wa roku-gatsu ni kekkon shimasu.	私たちは六月に結婚します。
+Culture	Events	1	My coming-of-age ceremony is next year.	Seijinshiki wa rainen desu.	成人式は来年です。
+Culture	Beliefs	1	People rarely have a wedding party on a Butsumetsu day.	Butsumetsu ni kekkonshiki wa shimasen.	仏滅に結婚式はしません。
+Celebrations	Birthday	2	Happy Birthday! (casual)	Omedeto!	おめでとう！
+Celebrations	Birthday	2	It's Jim's birthday.	Jim no tanjobi.	ジムの誕生日。
+Celebrations	New Year	2	Because the year started.	Akemashite.	明けましてお。
+Shopping	Free Items	6	It's free.	Sabisu.	サービス。
+Culture	Holidays	1	In the lunisolar calendar, Japan's National Foundation Day falls on New Year's Day.	Kenkoku kinen no hi wa, ky reki de wa Gantan desu.	建国記念の日は、旧暦では元旦です。
+Culture	Holidays	1	Labour Thanksgiving Day is the day for rewarding daily hard work.	Kinr. kansha no hi wa, hibi no kinr. o negirau hi desu.	勤労感謝の日は、日々の勤労をねぎらう日です。
+Culture	Holidays	1	On Coming of Age Day, many men and women who are or will be twenty years old by the end of March that year wear traditional Japanese clothes called "kimono" and "hakama".	Seijin no hi ni wa, hatachi o mukaeru .ku no danjo ga kimono ya hakama o kimasu.	成人の日には、二十歳を迎える多くの男女が着物や袴を着ます。
+Culture	Holidays	1	Japanese people show appreciation for their grandparents on Respect for the Aged Day.	Keir. no hi ni wa, sofubo ni kansha no kimochi o tsutaemasu.	敬老の日には、祖父母に感謝の気持ちを伝えます。
+Culture	Holidays	1	In the olden days, Japanese people measured the height of the children on Children's Day every year to see how much they had grown.	Mukashi wa, maitoshi kodomo no hi ni shinch. o hakari, seich. o miru sh kan ga arimashita.	昔は、毎年子供の日に身長を測り、成長を見る習慣がありました。
+Culture	Food	1	Cut mochi is enjoyed either grilled or cooked.	Kirimochi wa yaitari ry ri shitari shite tabemasu.	切り餅は焼いたり料理したりして食べます。
+Culture	Food	1	There are glutinous rice-pounding events held locally in Japan on New Year's Day.	O-sh gatsu ni wa, chiiki de mochitsuki taikai ga okonawaremasu.	お正月には、地域で餅つき大会が行われます。
+Culture	Food	1	In Japan, there are many people who eat natt. every morning.	Nihon de wa, maiasa natt o taberu hito ga takusan imasu.	日本では、毎朝納豆を食べる人がたくさんいます。
+Culture	Food	2	Rice balls are available even at convenience stores.	Onigiri wa, konbini de mo kaemasu.	おにぎりは、コンビニでも買えます。
+Culture	Food	2	Tofu is famous all over the world as a healthy food.	T fu wa, kenk teki na tabemono to shite sekai de mo y.mei desu.	豆腐は、健康的な食べ物として世界でも有名です。
+Culture	Food	2	Tofu is cheap and healthy.	T fu wa yasukute kenk teki desu.	豆腐は安くて健康的です。
+Culture	Food	2	Lately you can get taiyaki with a variety of different fillings.	Saikin wa, taiyaki no nakami ni iroiro na shurui ga arimasu.	最近は、たい焼きの中身にいろいろな種類があります。
+Shopping	Food	5	I want to buy fish-shaped pancakes.	Taiyaki o kaitai desu.	たい焼きを買いたいです。
+Culture	Food	1	In Japan, there are many different types of iced coffee available at vending machines.	Nihon de wa, iroiro na shurui no aisu k h. ga jid hanbaiki de kaemasu.	日本では、いろいろな種類のアイスコーヒーが自動販売機で買えます。
+Food	Drinks	7	Do you have Japanese rice wine?	Nihonshu ga arimasu ka.	日本酒がありますか。
+Culture	Food	1	Ramune is enjoyed typically in summer not only for its refreshing taste, but also for its refreshingly cool-looking glass bottle.	Ramune wa, sawayaka na aji dake de naku, suzushige na garasubin no shiy mo atte, natsu ni yoku nomaremasu.	ラムネは、爽やかな味だけでなく、涼しげなガラス瓶の仕様もあって、夏によく飲まれます。
+Culture	Events	1	In a traditional Shinto-style Japanese wedding ceremony, the bride and groom share sake as proof of their bond.	Shinzen kekkonshiki de wa, katame no shirushi to shite shinr shimpu ga nihonshu o nomimasu.	神前結婚式では、固めの印として新郎新婦が日本酒を飲みます。
+Culture	Food	2	Shizuoka is very famous for green tea.	Shizuoka wa, ryokucha de y.mei desu.	静岡は、緑茶で有名です。
+Culture	Food	1	The alcohol content in ch.hai is rather low, but canned ch.hai can have an alcohol percentage as high as 9%.	Ch.hai no aruk rudo wa hikume desu ga, kan ch.hai wa aruk rudo ga ky.-p.sento mo aru mono mo arimasu.	チューハイのアルコール度は低めですが、缶チューハイはアルコール度が9パーセントもあるものもあります。
+Food	Drinks	6	I like Shoch.-based beverages.	Ch.hai ga suki da.	チューハイが好きだ。
+Culture	Food	1	Hamburger steak is one of the most popular dishes chosen by children in Japan.	Hanb gu wa, Nihon no kodomo ga suki na tabemono no hitotsu desu.	ハンバーグは、日本の子供が好きな食べ物の一つです。
+Culture	Food	1	The taste of homemade miso soup differs from family to family.	Tezukuri no miso shiru wa, katei ni yotte aji ga chigaimasu.	手作りの味噌汁は、家庭によって味が違います。
+Culture	Food	1	Tempura is a Japanese dish.	Tenpura wa nihon no ry.ri desu.	天ぷらは日本の料理です。
+Culture	Food	1	Curry and rice is usually served on one plate, and consists of curry, white rice and special pickles called "fukushinzuke".	Kar. raisu wa, hitotsu no o-sara ni gohan, kar., fukujinzuke o moritukemasu.	カレーライスは、一つのお皿にご飯、カレー、福神漬けを盛り付けます。
+Culture	Food	1	Traditionally people in West Japan enjoy tempura with salt, whereas people in East Japan dip it in a special sauce.	Nishi Nihon de wa tempura o shio de tabemasu ga, higashi Nihon de wa tentsuyu ni tsukete tabemasu.	西日本では天ぷらを塩で食べますが、東日本では天つゆにつけて食べます。
+Culture	Food	1	In winter, Japanese people enjoy hotpot dishes by sharing food in one big pot with family members.	Fuyu wa, kazoku min'na de nabe o kakonde shokuji o tanoshimimasu.	冬は、家族みんなで鍋を囲んで食事を楽しみます。
+Culture	Food	1	Japanese people eat sakuramochi on the 3rd of March -Girls' Day.	Nihon-jin wa, sakuramochi o san-gatsu mikka Hinamatsuri no hi ni tabemasu.	日本人は、桜餅を三月三日ひな祭りの日に食べます。
+Culture	Food	1	Ramune melts in the mouth like sugar.	Ramune wa, sat no y ni kuchi de tokemasu.	ラムネは、砂糖のように口で溶けます。
+Culture	Food	1	Dumplings eaten at cherry-blossom viewings are coloured pink, white and green.	Hanami dango wa pinku, shiro, midori no san-shoku desu.	花見団子はピンク、白、緑の三色です。
+Culture	Food	1	Sweet bean jelly is very sweet, so it goes well with a bitter green tea called "matcha".	Y kan wa, totemo amai no de nigai matcha to yoku aimasu.	羊羹は、とても甘いので苦い抹茶とよく合います。
+Culture	Food	1	There are many different types of custard pudding in Japan: some are available at supermarkets, while others are posh desserts from famous patissiers.	Nihon ni wa, s.p. de kaeru purin kara y.mei patishie no k ky. dez.to made, iroiro na taipu no purin ga arimasu.	日本には、スーパーで買えるプリンから有名パティシエの高級デザートまで、いろいろなタイプのプリンがあります。
+Culture	Food	1	Apples from Aomori prefecture in season are sweet and very juicy.	Aomori-ken no shun no ringo wa, amakute mizumizush desu.	青森県の旬のりんごは、甘くてみずみずしいです。
+Culture	Food	1	Bitter Japanese persimmons become very sweet when they're dried.	Shibugaki wa, hoshigaki ni suru to amaku narimasu.	渋柿は、干し柿にすると甘くなります。
+Culture	Food	1	In Japan, cherries are one of the most expensive fruits.	Nihon de wa, sakurambo wa ichi-ban takai kudamono no hitotsu desu.	日本では、さくらんぼは一番高い果物の一つです。
+Food	General	3	I ate an apple a little while ago.	Sakki, ringo o tabemashita.	さっき、りんごを食べました。
+Food	General	3	Cherries look cute.	Sakuranbo wa, katachi ga kawaii.	さくらんぼは、形がかわいい。
+Culture	Activities	1	Japanese people enjoy a game at the beach during the summer in which you have to find and split a watermelon with a stick while blindfolded.	Nihon-jin wa, natsu ni umi de mekakushi o shite suika o waru g.mu o shimasu.	日本人は、夏に海で目隠しをしてスイカを割るゲームをします。
+Food	General	2	Watermelon is a summer fruit.	Suika wa, natsu no kudamono desu.	スイカは、夏の果物です。
+Culture	Food	1	Ehime and Wakayama prefectures are famous for their mandarin oranges.	Ehime-ken to Wakayama-ken wa, mikan de y.mei desu.	愛媛県と和歌山県は、みかんで有名です。
+Culture	Food	1	Many Japanese like eating cucumbers pickled with salt.	Nihon-jin no ku wa ky.ri no tsukemono ga suki desu.	日本人の多くはきゅうりの漬物が好きです。
+Culture	Food	1	Many children don't like green pepper in Japan due to its bitter taste.	P.man wa nigai no de, p.man ga kirai na kodomo ga takusan imasu.	ピーマンは苦いので、ピーマンが嫌いな子供がたくさんいます。
+Food Facts	Health	1	Recent studies show that eating onions improves blood flow.	Saikin no kenky. de, tamanegi o taberu to ketsury. ga yokunaru koto ga wakarimashita.	最近の研究で、たまねぎを食べると血流がよくなることがわかりました。
+Food	General	2	Cucumber is a summer vegetable.	Ky.ri wa, natsu no yasai desu.	きゅうりは、夏の野菜です。
+Culture	Food	1	Eating Japanese eggplants, particularly autumn eggplants, is said to lower body temperature.	Nasubi no naka de mo, akinasu o taberu to taion o sageru to iwarete imasu.	なすの中でも、秋なすを食べると体温を下げると言われています。
+Food	General	2	Cutting up an onion makes your eyes tear up.	Tamanegi o kiru to namida ga deru.	たまねぎを切ると涙が出る。
+Food	General	2	Carrots are good for your health.	Ninjin wa karada ni ii.	人参は体によい。
+Culture	Activities	1	Elementary school children learn calligraphy at school.	Sh gakusei wa, gakk no shod no jugy de sh.ji o naraimasu.	小学生は、学校の書道の授業で習字を習います。
+Culture	Arts	1	Haiku poetry expresses very deep thoughts with a very limited number of words.	Haiku ni wa, kagirareta moji ni fukai omoi ga komerarete imasu.	俳句には、限られた文字に深い思いが込められています。
+Culture	Events	1	When there's a festival, fireworks are often also set off.	Matsuri ga aru toki wa, yoku hanabi mo ageraremasu.	祭りがあるときは、よく花火も上げられます。
+Culture	Events	1	At the first visit to the shrine of the year, people buy lucky charms and protective charms for the coming year and return those from the past year.	Hatsum de de wa omamori o kai, furui omamori o kaeshimasu.	初詣ではお守りを買い、古いお守りを返します。
+Culture	Events	1	Obon is a period of honoring one's ancestors, so it's important to clean the family graves before welcoming their spirits.	O-bon wa sosen o matsuru kikan na no de, sosen no rei o mukaeru mae ni o-haka o s ji suru no wa taisetsu na koto desu.	お盆は祖先を祭る期間なので、祖先の霊を迎える前にお墓を掃除するのは大切なことです。
+Animals	General	3	It's my dog.	Watashi no inu desu.	私の犬です。
+Animals	General	1	The “shibaken” is a Japanese breed of dog which has always been one of the most popular with Japanese people.	Shibaken to iu inu wa, tsune ni Nihon-jin ni ninki no aru Nihonken desu.	柴犬という犬は、常に日本人に人気のある日本犬です。
+Animals	General	1	Turtles are said to live for 10,000 years.	Kame wa ichi-man-nen ikiru to iwarete imasu.	亀は一万年生きると言われています。
+Animals	General	2	The sea turtle is swimming in the sea.	Umigame ga umi o oyoide iru.	海亀が海を泳いでいる。
+Animals	General	3	There is a cat under the table.	T.buru no shita ni neko ga imasu.	テーブルの下に猫がいます。
+Animals	General	2	The brown rabbit is eating leaves in the garden.	Chairoi usagi ga niwa de happa o tabete iru.	茶色い兎が庭で葉っぱを食べている。
+Animals	General	1	In Japan, monkeys also enjoy hot natural springs in winter.	Nihon de wa, fuyu ni saru mo onsen o tanoshimimasu.	日本では、冬に猿も温泉を楽しみます。
+Animals	General	1	The monkeys are eating ants with a stick.	Saru ga b. de ari o tsukamaete tabete iru.	猿が棒で蟻を捕まえて食べている。
+Nature	Plants	1	Japanese people enjoy cherry blossom viewing at night as well.	Nihon-jin wa, yozakura mo tamoshimimasu.	日本人は、夜桜も楽しみます。
+Nature	Plants	1	Chrysanthemums are a typical flower to offer at the Buddhist family altar and tomb.	Kiku wa, bukka no daihy teki na hana desu.	菊は、仏花の代表的な花です。
+Nature	Plants	1	The color of a hydrangea depends on the pH level in the soil.	Ajisai no hana no iro wa, doj no sanseido ni yotte kimarimasu.	アジサイの花の色は、土壌の酸性度によって決まります。
+Nature	Plants	5	The cherry blossoms are pretty, aren't they?	Sakura ga kirei da ne.	桜がきれいだね。
+Nature	Plants	3	I bought a chrysanthemum.	Kiku no hana o katta.	菊の花を買った。
+Culture	Decorations	1	During the New Year period, traditional decorations made from pine and bamboo are placed in front of houses.	Sh gatsu no aida, kadomatsu o ie no mae ni kazarimasu.	正月の間、門松を家の前に飾ります。
+Culture	Food	1	Many Japanese people enjoy grilled or cooked ginkgo seeds.	.kuno Nihon-jin ga, ich no tane de aru gin'nan o kononde tabemasu.	多くの日本人が、銀杏の種であるぎんなんを好んで食べます。
+Nature	Geography	2	Mt. Fuji is a very tall mountain.	Fuji-san wa totemo takai yama desu.	富士山はとても高い山です。
+Nature	Geography	1	The longest river in Japan is Shinanogawa.	Nihon ichi nagai kawa wa, Shinano-gawa desu.	日本一長い川は、信濃川です。
+Culture	Activities	1	In summer, children enjoy hand-held fireworks at the beach.	Natsu ni wa, kodomo-tachi wa umi de temochi no hanabi de asobimasu.	夏には、子供たちは海で手持ちの花火で遊びます。
+Common Phrases	Storytelling	1	He said that he had seen a mermaid in the sea.	Kare wa, umi de ningyo o mita to itta.	彼は、海で人魚を見たと言った。
+Nature	Geography	1	Sakurajima is a volcano which still has many small-scale eruptions every year.	Sakura-jima wa, mada, maitoshi ch.sai funka o kurikaeshite iru kazan desu.	桜島は、まだ、毎年小さい噴火を繰り返している火山です。
+Geography (Japan)	Demographics	1	Out of the Japanese population of 128 million people, 13 million, which is almost one-tenth, reside in Tokyo.	Nihon no zen jink ichi-oku ni-sen happyaku-man-nin no uchi, j.-bun no ichi ni ataru sen san-byaku-man-nin ga T ky ni sunde imasu.	日本の全人口一億二千八百万人のうち、十分の一に当たる千三百万人 が東京に住んでいます。
+Culture	People	1	It is often said that people in Osaka are generally very friendly and kind.	.saka no hito wa, shitashimiyasukute shinsetsu da to iwarete imasu.	大阪の人は、親しみやすくて親切だと言われています。
+Geography (Japan)	History	1	Nagasaki is one of the two cities that experienced the atomic bomb during the Second World War.	Nagasaki wa, dai ni-ji sekai taisench. ni gembaku no higai o uketa futatsu no toshi no hitotsu desu.	長崎は、第二次世界大戦中に原爆の被害を受けた二つの都市の一つです。
+Introductions	Origin	7	I'm from Tokyo.	Shusshin wa T ky desu.	出身は東京です。
+Geography (Japan)	Cities	1	Sapporo city has hosted many different international sporting events over the years.	Sapporo-shi de wa naganen ni watari, samazama na sup tsu no ibento ga kaisai sarete imasu.	札幌市では長年にわたり、様々なスポーツのイベントが開催されています。
+Geography (Japan)	Landmarks	1	The Atomic Bomb Dome in Hiroshima is the symbol of the people's wish for peace.	Hiroshima no genbaku d mu wa, hitobito no heiwa o negau kimochi no sh ch desu.	広島の原爆ドームは、人々の平和を願う気持ちの象徴です。
+Sports	Baseball	1	A famous baseball event is the "Koshien", which is a high school baseball tournament held each summer.	k sei no yaky. taikai dearu ""k shien"" wa y.mei na taikai desu.	高校野球大会である「甲子園」は有名な大会です。
+Sports	Baseball	1	The baseball players had a wonderful time with the children.	Yaky. senshu-tachi wa kodomo to subarashii hitotoki o sugoshimashita.	野球選手たちは子供と素晴らしいひとときを過ごしました。
+Sports	Soccer	3	I'm bad at playing soccer.	Sakk. ga nigate desu.	サッカーが苦手です。
+Sports	Volleyball	1	In Japanese volleyball, there is a unique system of a nine player team.	Nihon no bar.b ru niwa, ky.nins. bar. toy. tokubetsuna s.do ga arimasu.	日本のバレーボールには、九人制バレーという特別な制度があります。
+Sports	Baseball	2	The players are playing baseball.	Senshu-tachi ga yaky. o shite iru.	選手たちが野球をしている。
+Sports	Soccer	1	Since 1999, the Japanese soccer league has had two divisions: J-1 and J-2.	sen ky.hyaku ky.j. ky.nen ik , nihon no sakk. wa jeiwan to jeits. no futatsu no r.gu ga arimasu.	千九百九十九年以降、日本のサッカーはJ1とJ2の二つのリーグがあります。
+Sports	Sumo	1	Recently, foreign wrestlers have been giving impressive performances in sumo.	kin'nen, sum dewa gaikokujin rikishi ga subarash. katsuyaku o misete imasu.	近年、相撲では外国人力士が素晴らしい活躍を見せています。
+Sports	Volleyball	2	I used to belong to a volleyball club.	Bar.b ru bu ni shozoku shite imashita.	バレーボール部に所属していました。
+Sports	Judo	1	Judo teaches not only martial techniques, but also spiritual lessons of good manners and respect.	J.d no oshie wa, bujutsu dake denaku, seishinmen ya reigi nimo oyobimasu.	柔道の教えは、武術だけでなく、精神面や礼儀にも及びます。
+Culture	Activities	1	Hot springs are not only relaxing, but are also believed to have medical healing properties.	onsen wa, rirakkusu dekiru dakedenaku, chiry k ka mo aru to iwarete imasu.	温泉は、リラックスできるだけでなく、治療効果もあると言われています。
+Entertainment	Theme Parks	1	(The Japanese) Disney Resort is an amusement park that more than 24 million people visit every year.	Dizun. Riz to wa, maitoshi, nisen yonhyakuman-nin ij ga otozureru y.enchi desu.	ディズニーリゾートは、毎年、二千四百万人以上が訪れる遊園地です。
+Shopping	General	1	When it comes to shopping, Japan is still considered a cash-based society.	kaimono ni oite wa, nihon wa mada genkin shugi shakai dato iemasu.	買い物においては、日本はまだ現金主義社会だと言えます。
+Culture	Activities	2	There are a lot of good hot springs in Japan.	Nihon ni wa takusan ii onsen ga aru.	日本にはたくさんいい温泉がある。
+Culture	Activities	1	Autumn is traditionally considered a good season for reading in Japan.	nihon dewa, aki wa dokusho ni saiteki no kisetsu to sarete imasu.	日本では、秋は読書に最適な季節とされています。
+Entertainment	Movies	1	Some famous Japanese movie directors are Akira Kurosawa, Yoji Yamada and Takeshi Kitano.	Y.meina nihonjin eiga kantoku ni wa, Kurosawa Akira, Yamada Y ji, Kitano Takeshi ga imasu.	有名な日本人映画監督には、黒澤明、山田洋次、北野武がいます。
+Preferences	Likes	4	I like movies.	Watashi wa eiga ga suki desu.	私は映画が好きです。
+Culture	Landmarks	1	The original Golden Pavilion was burned down in an arson attack in 1950 and was re-constructed in 1955 as a replica of the original.	Kinkaku wa sen ky hyaku goj nen ni h.ka ni yori sh.shitushi, sen ky hyaku goj gonen ni saiken saremashita.	金閣は千九百五十年に放火により焼失し、千九百五十五年に再建されました。
+Culture	Landmarks	1	Every year, thousands of people from all over the world visit Hiroshima Peace Memorial Park.	Maitoshi, sekaij kara takusan no gaikokujin ga Hiroshima heiwa kinen k.en o otozuremasu.	毎年、世界中からたくさんの外国人が広島平和記念公園を訪れます。
+Culture	Landmarks	1	The site of the Todai temple complex has an area larger than 340,000 square meters.	T.daiji no shikichi wa, sanj yonman heih. m.toru ij. no hirosa ga arimasu.	東大寺の敷地は、三十四万平方メートル以上の広さがあります。
+Culture	Landmarks	2	Mt. Fuji is a very tall mountain.	Fuji-san wa totemo takai yama desu.	富士山はとても高い山です。
+Culture	Entertainment	1	There are many cafes in Akihabara in which girls dressed as maids serve customers.	Akihabara niwa, josei ga meido sugata de sekkyaku o suru kafe ga takusan arimasu.	秋葉原には、女性がメイド姿で接客をするカフェがたくさんあります。
+Culture	Household	1	The family Buddhist altar is traditionally an essential and spiritual center of a Japanese family.	Butsudan wa, furukukara nihon no katei ni oite ch shintekina sonzai deshita.	仏壇は、古くから日本の家庭において中心的な存在でした。
+Culture	Household	1	A typical image of winter in Japan is a family sitting around a "kotatsu" eating mandarin oranges.	nihon no tenkeitekina fuyu no im.ji wa, kazokuga kotatsu o kakonde mikan o taberu y.su desu.	日本の典型的な冬のイメージは、家族がこたつを囲んでみかんを食べる様子です。
+Culture	Household	1	The most common type of miniature altar has a miniature shrine with a talisman inside it, which is called a "fudamiya".	kamidana no ichiban ippantekina katachi wa, ofuda o nakani osameru, "fudamiya" to y kamidana desu.	神棚の一番一般的な形は、お札を中に収める、「札宮」という神棚です。
+Culture	Household	1	The area of a room in Japan is often described by the number of tatami mats it contains, such as "6 tatami mats" for a room measuring around 9.9 square metres.	nihon dewa, oyoso ky ten ky heih. m.toru no heya o "roku j." to arawasu y.ni, heya no .kisa o tatami no kazu de arawashimasu.	日本では、およそ九点九平方メートルの部屋を「六畳」と表すように、部屋の大きさを畳の数で表します。
+Culture	Household	1	After taking your shoes off at the entrance, the shoes should be lined up neatly with the toes pointing towards the front door.	genkan de kutsu o nuida ato wa, tsumasaki ga doa no h. o mukuy.ni soroemasu.	玄関で靴を脱いだ後は、つま先がドアの方向を向くように揃えます。
+Health	Medicine	1	Because of Seirogan's strong smell, the pharmaceutical company that produces it invented a sugar-coated tablet version, which many people prefer.	Seirogan wa nioi ga tsuyoi node, t ij taipu ga hatsubai sare, ku no hito ni konomarete imasu.	正露丸は匂いが強いので、糖衣タイプが発売され、多くの人に好まれています。
+Health	Medicine	1	Muhi is one of the longest selling anti-itch creams in Japan.	muhi wa, nihon de nagaku tsukawareteiru kayumi dome desu.	ムヒは、日本で長く使われているかゆみ止めです。
+Health	Medicine	1	From children to the elderly, Japanese people use hot or cold pads for muscle pains and injuries.	kodomo kara otona made, hiroi sedai no nihonjin ga itami ya kega ni shippu o tsukaimasu.	子供から大人まで、幅広い世代の日本人が痛みや怪我にシップを使います。
+Health	Medicine	1	TV commercials for cold medicines are broadcast more often in winter.	kazegusuri no sh.emu wa, fuyu ni yoku nagaremasu.	風邪薬のコマーシャルは、冬によく流れます。
+Health	Medicine	1	There are around fifteen major types of headache medicines available without prescription in Japan.	Nihon dewa, shoh sen no iranai zuts.yakuga yaku j.go shurui mo arimasu.	日本では、処方箋のいらない頭痛薬が約十五種類もあります。
+Transportation	Bus	7	For long-distance journeys, all-day and all-night buses are also available.	Ch.kyori ryok. ni wa, k.sokubasu mo arimasu.	長距離旅行には、高速バスもあります。
+Transportation	Train	6	While local trains are all non smoking, some bullet trains have a few cars where smoking is allowed.	Zairaisen ga subete kin'en nanoni taishi, shinkansen niwa kitsuen shary. ga aru b i ga arimasu.	在来線がすべて禁煙なのに対し、新幹線には喫煙車両がある場合があります。
+Transportation	Train	9	I'll buy a train ticket.	Densha no kippu o kaimasu.	電車の切符を買います。
+Transportation	General	7	Which is faster, a bus or a train?	Basu to densha, dochira no h. ga hayai desu ka.	バスと電車、どちらの方が速いですか。
+Transportation	Train	7	Have you ever taken the Shinkansen?	Shinkansen ni notta koto ga arimasu ka.	新幹線に乗ったことがありますか。
+Transportation	Air Travel	5	I don't like airplanes.	Hik.ki ga nigate desu.	飛行機が苦手です。
+Transportation	Subway	2	Some underground stations in Tokyo go as deep as three floors down.	T.ky. no chikatetsu no eki niwa, chika sangai made aru eki mo arimasu.	東京の地下鉄の駅には、地下三階まである駅もあります。
+Shopping	Services	2	People can send parcels using carrier services at convenience stores.	konbini dewa takky bin o okuru koto mo dekimasu.	コンビニでは宅急便を送ることもできます。
+Culture	Activities	1	In a stressful modern society, many people in Japan seek relaxation in reflexology salons.	kindai no sutoresu shakai ni oitewa, .ku no hito ga iyashi ya rifurekusoroj. o motomete imasu.	近代のストレス社会においては、多くの人が癒しやリフレクソロジーを求めています。
+Entertainment	Karaoke	6	Won't you go to Karaoke (with me)?	Karaoke ni ikimasen ka.	カラオケに行きませんか。
+Entertainment	Bars (Izakaya)	6	I love Japanese-style bars.	Nihon no izaka-ya ga daisuki desu.	日本の居酒屋が大好きです。
+Shopping	Convenience Store	8	I'll go to the convenience store.	Watashi wa konbini ni ikimasu.	私はコンビニに行きます。
+Entertainment	Karaoke	1	Karaoke means "empty orchestra" in Japanese.	karaoke to wa, nihongo de "kara no .kesutora" to iu imi desu.	カラオケとは、日本語で「空のオーケストラ」という意味です。
+Entertainment	Bars (Izakaya)	1	Izakaya open around 5pm, and some don't close until 6am.	izakaya wa, t j. gogo goji ni kaiten shi, nakaniwa asa rokuji made aiteiru tokoroga arimasu.	居酒屋は、通常午後五時に開店し、中には朝六時まで開いているところがあります。
+Entertainment	Manga Cafe	1	Many manga cafes offer free soft drinks so that people can enjoy a long stay there.	manga kissa no .ku wa, ch.jikan taizai o unagasu tame, fur. dorinku sei o totteimasu.	漫画喫茶の多くは、長時間滞在を促すため、フリードリンク制をとっています。
+Entertainment	Manga Cafe	5	I go to a comic café./ I'll go to a comic café.	Watashi wa Manga-kissa ni ikimasu.	私は漫画喫茶に行きます。
+Shopping	Stores	1	Dais. has recently started to offer better quality products that cost more than 100 yen.	Dais wa saikin, yori shitsuno takai sh hin o hyaku en ij no nedan de urihajime mashita.	ダイソーは最近、より質の高い商品を百円以上の値段で売り始めました。
+Shopping	Stores	2	Don Quijote stores are usually open until very late at night.	Donkih te wa, ts.j yoru osokumade eigy shiteimasu.	ドン・キホーテは、通常夜遅くまで営業しています。
+Shopping	Stores	3	The bread sold at Seven Eleven is good.	Sebun-Irebun no pan wa oishii.	セブンイレブンのパンはおいしい。
+Shopping	Stores	1	Matsumoto Kiyoshi stores are found in 44 out of 47 prefectures in Japan.	Matsumoto Kiyoshi wa, nihon no zen yonj.nana tod fuken no uchi yonj.yon tod fuken ni shinshutsu shiteimasu.	マツモトキヨシは、日本の全四十七都道府県のうち四十四都道府県に進出しています。
+Shopping	Stores	1	7-Eleven has the highest number of convenience stores in Japan, with over 14,000 stores.	Sebun irebun wa, ichiman yonsenten ij no mise o kamaeru, nihon de ichiban tempos. no i kombini desu.	セブンイレブンは、一万四千店以上の店を構える、日本で一番店舗数の多いコンビニです。
+Shopping	Stores	1	Tsutaya also sells second-hand CDs, DVDs, books and video games.	Tsutaya dewa, ch.ko no sh.d. ya d.buid., hon, g.mu o kaukoto mo dekimasu.	ツタヤでは、中古のCDやDVD、本、ゲームを買うこともできます。
+Culture	Food	1	Pickled plums are usually eaten with rice, and are also a typical ingredient for rice balls.	umeboshi wa, ts j. raisu to issho ni taberare, onigiri no nakami to shitemo daihy.teki na zairy. desu.	梅干しは、通常ライスと一緒に食べられ、おにぎりの中身としても代表的な材料です。
+Culture	Food	1	Cut mochi is enjoyed either grilled or cooked.	Kirimochi wa yaitari ry.ri shitari shite tabemasu.	切り餅は焼いたり料理したりして食べます。
+Culture	Food	1	Since matcha powder melts easily, it's enjoyed in various ways, such as mixed into vanilla ice cream and in matcha pound cake.	matcha no kona wa tokeyasui node, banira aisu to mazetari, matcha paundo k.ki ni shiy. shitari, iroirona h.h. de tanoshimemasu.	抹茶の粉は溶けやすいので、バニラアイスと混ぜたり、抹茶パウンドケーキに使用したり、色々な方法で楽しめます。
+Culture	Food	1	There are glutinous rice-pounding events held locally in Japan on New Year's Day.	O-sh.gatsu ni wa, chiiki de mochitsuki taikai ga okonawaremasu.	お正月には、地域で餅つき大会が行われます。
+Culture	Food	1	Sweet bean jelly is very sweet, so it goes well with a bitter green tea called "matcha."	Y.kan wa, totemo amai no de nigai matcha to yoku aimasu.	羊羹は、とても甘いので苦い抹茶とよく合います。
+Culture	Food	1	A typical Japanese snack is senbei and green tea.	nihon no tenkeiteki na sunakku wa, senbei to ryokucha desu.	日本の典型的なスナックは、せんべいと緑茶です。
+History	People	1	The image of Prince Shotoku has been printed on seven different banknotes in total since 1930.	Sh tokutaishi no sh z ga wa, sen ky.hyaku sanj. nen ik , nanakai mo osatsu ni insatsu saremashita.	聖徳太子の肖像画は、千九百三十年以降、七回もお札に印刷されました。
+History	People	1	In his childhood, Nobunaga Oda was called "the fool of the Owari region" because of his bizarre behaviour.	Oda Nobunaga wa, kodomo no koro, kawatta k d no sei de "Owari no utsuke" to yobarete imashita.	織田信長は、子供の頃、変わった行動のせいで「尾張のうつけ」と呼ばれていました。
+History	People	1	Ryoma Sakamoto founded a private navy and trading company in Nagasaki.	Sakamoto Ry ma wa, Nagasaki ni kaigun b eki gaisha o setsuritsu shimashita.	坂本龍馬は、長崎に海軍貿易会社を設立しました。
+History	People	1	Hirobumi Ito was chosen as Prime Minister four times.	It Hirobumi wa, g kei yonkai s ridaijin ni erabaremashita.	伊藤博文は、合計四回総理大臣に選ばれました。
+Weather	Warnings	1	During winter and spring, weather forecasters often call people's attention to avalanches.	fuyu to haru no aida wa, tenki yoh de nadare ni taisuru ch.i o yobikakemasu.	冬と春の間は、天気予報で雪崩に対する注意を呼びかけます。
+Emergency	Drills	1	Japanese school children have periodic earthquake drills to teach them how to protect themselves in the event of an earthquake.	nihon no kodomo wa, gakk no hinan kunren de, jishin no sai ni mi o mamoru h h o manabimasu.	日本の子供は、学校の避難訓練で、地震の際に身を守る方法を学びます。
+Weather	Phenomena	1	Typhoons and fronts of rain often bring about cloudbusts in Japan.	nihon dewa, taif. ya baiu zensen no eiky de sh.ch. g u ni osowarerukoto ga yoku arimasu.	日本では、台風や梅雨前線の影響で集中豪雨に襲われることがよくあります。
+Emergency	Earthquake	7	We had an earthquake last night.	Kin , jishin ga arimashita.	昨夜、地震がありました。
+Emergency	Tsunami	6	There's no threat of a tsunami resulting from this earthquake.	Kono jishin ni yoru tsunami no shinpai wa arimasen.	この地震による津波の心配はありません。
+Weather	Phenomena	4	A tree fell over due to the typhoon.	Taif. de ki ga taoreta.	台風で木が倒れた。
+Famous People	Music	1	Seiji Ozawa became the music director of the Boston Symphony Orchestra at just 38 years of age.	Ozawa Seiji wa, wazuka sanj hassai de Bosuton k.ky. gakudan no ongaku kantoku ni sh nin shita.	小澤征爾は、わずか三十八歳でボストン交響楽団の音楽監督に就任した。
+Famous People	Music	1	Hibari Misora is the first woman to receive the People's Honour Award.	Misora Hibari wa, josei hatsu no kokumin eiyosh. jush.sha desu.	美空ひばりは、女性初の国民栄誉賞受賞者です。
+Famous People	Music	1	Kyu Sakamoto's best known song is "Ue o Muite Aruk.", or "Walk Looking Upward", which is known as "Sukiyaki" in English.	Sakamoto Ky no besuto hitto wa, eigo dewa "Sukiyaki" to shite shirareru "ue o muite aruk." toy uta desu.	坂本九のベストヒットは、英語では「スキヤキ」として知られる「上を向いて歩こう」という歌です。
+Famous People	Music	1	Enka songs by Kiyoshi Hikawa sound like a mix of enka and pop music.	Hikawa Kiyoshi no enka wa, enka to poppu no yg. no y.na uta desu.	氷川きよしの演歌は、演歌とポップの融合のような歌です。
+Famous People	Music	1	Since their debut in 1999, Arashi has become more and more popular both in Japan and abroad.	sen ky hyaku ky j ky nen no deby ik., Arashi wa nihon koku naigai de ninki o takamete kimashita.	千九百九十九年のデビュー以降、嵐は日本国内外で人気を高めてきました。
+Famous People	Literature	1	Ichiyo Higuchi is the first woman whose likeness was printed on banknotes.	Higuchi Ichiy wa, josei toshite hajimete osatsu no sh z ni narimashita.	樋口一葉は、女性として初めてお札の肖像になりました。
+Famous People	Literature	1	Almost all Japanese people have read Yasunari Kawabata's novels "Snow Country" and "the Dancing Girl of Izu".	nihonjin no hotondo no hito wa Kawabata Yasunari no "Yukiguni" ya "Izu no Odoriko" o yonda kotoga arimasu.	日本人のほとんどの人は川端康成の「雪国」や「伊豆の踊子」を読んだことがあります。
+Famous People	Literature	1	Lady Murasaki is best known for her long story "The Tale of Genji".	Murasakishikibu wa, "genji monogatari" de yoku shirarete imasu.	紫式部は、「源氏物語」でよく知られています。
+Famous People	Literature	1	Haruki Murakami's novel Norwegian Wood triggered the "Murakami boom", with total sales of 4.5 million copies.	Haruki Murakami no "Noruwei no mori" wa yonsen gohyakuman bu o uriage, "Murakami b.mu" no kikkake to natta.	村上春樹の「ノルウェイの森」は四千五百万部を売り上げ、「村上ブーム」のきっかけとなった。
+Famous People	Literature	1	"The Silent Cry" is one of Kenzaburo Oe's best known works.	"Man'nen gan'nen no futtob r." wa, .e Kenzabur no daihy saku desu.	「万延元年のフットボール」は、大江健三郎の代表作です。
+Holidays & Events	New Year	2	I received a gift of New Year's money.	Otoshidama o moraimashita.	お年玉をもらいました。
+Holidays & Events	New Year	3	I visit a shrine on New Year's Day.	Gantan ni jinja e o-mairi ni iku.	元旦に神社へお参りに行く。
+Holidays & Events	O-bon	1	O-bon is a period of honoring one's ancestors, so it's important to clean the family graves before welcoming their spirits.	O-bon wa sosen o matsuru kikan nanode, sosen no rei o mukaeru mae ni o-haka o soji suru no wa taisetsu na koto desu.	お盆は祖先を祭る期間なので、祖先の霊を迎える前にお墓を掃除するのは大切なことです。
+Food	Ingredients	4	I like red beans.	Azuki ga suki desu.	小豆が好きです。
+Holidays & Events	Coming of Age Day	1	On Coming of Age Day, many men and women who are or will be twenty years old by the end of March that year wear traditional Japanese clothes called "kimono" and "hakama".	Seijin no hi ni wa, hatachi o mukaeru oku no danjo ga kimono ya hakama o kimasu.	成人の日には、二十歳を迎える多くの男女が着物や袴を着ます。
+Holidays & Events	Setsubun	1	Devils out, fortune in!	Oni wa soto, fuku wa uchi!	鬼は外、福は内！
+Holidays & Events	National Foundation Day	1	In the lunisolar calendar, Japan's National Foundation Day falls on New Year's Day.	Kenkoku kinen no hi wa, kyureki de wa Gantan desu.	建国記念の日は、旧暦では元旦です。
+Holidays & Events	Valentine's Day	1	I got many obligation chocolates.	Girichoko o takusan moratta.	義理チョコをたくさんもらった。
+Shopping	General	5	I bought a magazine at the bookstore.	Hon'ya de zasshi o kaimashita.	本屋で雑誌を買いました。
+Holidays & Events	White Day	1	I got a return gift on Valentine's Day.	Barentainde no o-kaeshi o moratta.	バレンタインデーのお返しをもらった。
+Clothing	Traditional	7	I like kimonos.	Watashi wa kimono ga suki desu.	私は着物が好きです。
+Government	Imperial Family	1	The emperor of Japan is busy.	Tenno wa isogashii desu.	天皇は忙しいです。
+Government	Constitution	1	That country is prohibited by its constitution from exercising military force overseas.	Sono kuni wa kaigai de no gunjiryoku koshi o kenpo ni yori kinshi sarete imasu.	その国は海外での軍事力行使を憲法により禁止されています。
+Holidays & Events	Children's Day / Boys' Festival	1	Today is Boys' Festival.	Kyo wa tango no sekku da.	今日は端午の節句だ。
+Holidays & Events	Tanabata (Star Festival)	1	We write our wishes in the Star Festival.	Tanabata ni negaigoto o kaku shukan ga arimasu.	七夕に願い事を書く習慣があります。
+Work	Taking Leave	3	Please give me a week off.	I-sshukan no o-yasumi o kudasai.	一週間の御休みをください。
+Holidays & Events	O-bon	1	O-bon is a period of honoring one's ancestors, so it's important to clean the family graves before welcoming their spirits.	O-bon wa sosen o matsuru kikan nanode, sosen no rei o mukaeru mae ni o-haka o soji suru no wa taisetsu na koto desu.	お盆は祖先を祭る期間なので、祖先の霊を迎える前にお墓を掃除するのは大切なことです。
+Holidays & Events	Respect for the Aged Day	1	Japanese people show appreciation for their grandparents on Respect for the Aged Day.	Keiro no hi ni wa, sofubo ni kansha no kimochi o tsutaemasu.	敬老の日には、祖父母に感謝の気持ちを伝えます。
+Food	Desires	8	I want to eat buckwheat noodles.	Soba ga tabetai desu.	そばが食べたいです。
+Sports	Olympics	1	She gave a great performance at the Olympics.	Kanojo wa Orinpikku de katsuyaku shita.	彼女はオリンピックで活躍した。
+Clothing	Traditional	7	I like kimonos.	Watashi wa kimono ga suki desu.	私は着物が好きです。
+Food	Farming	1	It's about time to harvest crops.	Sorosoro shukaku no jiki da.	そろそろ収穫の時期だ。
+Holidays & Events	Labor Thanksgiving Day	1	Labour Thanksgiving Day is the day for rewarding daily hard work.	Kinro kansha no hi wa, hibi no kinro o negirau hi desu.	勤労感謝の日は、日々の勤労をねぎらう日です。
+Holidays & Events	Christmas	2	Merry Christmas!	Meri Kurisumasu!	メリークリスマス！
+Food	Drinks	7	I don't drink alcohol.	Watashi wa o-sake o nomimasen.	私はお酒を飲みません。
+Holidays & Events	Year-End Party	2	Let's have a year end party!	Bonen-kai o shimasho!	忘年会をしましょう！
+Holidays & Events	New Year	2	To eat a New Year's dish on New Year's day.	oshougatsu ni osechi ryouri wo taberu.	お正月に御節料理を食べる。
+Vocabulary	People	6	Adult	otona	大人
+Vocabulary	People	3	Artist	atisuto	アーティスト
+Vocabulary	People	4	Aunt	oba / o-ba-san	叔母 / 叔母さん
+Vocabulary	Animals	3	Bird	tori	鳥
+Vocabulary	Animals	3	Bunny / Rabbit	usagi	うさぎ
+Vocabulary	Animals	4	Cat	neko	猫
+Vocabulary	People	6	Child / Children	kodomo	子供
+Vocabulary	People	3	Cousin	itoko	いとこ
+Vocabulary	People	4	Daughter	musume / musume-san	娘 / 娘さん
+Vocabulary	People	5	Doctor	isha	医者
+Vocabulary	Animals	4	Dog	inu	犬
+Vocabulary	People	5	Father	chichi / o-to-san	父 / お父さん
+Vocabulary	Animals	7	Fish	sakana	魚
+Vocabulary	People	4	Grandfather	sofu / o-ji-san	祖父 / お祖父さん
+Vocabulary	People	4	Grandmother	sobo / o-ba-san	祖母 / お祖母さん
+Vocabulary	People	3	Hair stylist	biyoshi / sutairisuto	美容師 / スタイリスト
+Vocabulary	People	3	High school student	kokosei	高校生
+Vocabulary	People	4	Husband	otto / go-shujin	夫 / ご主人
+Vocabulary	People	3	Junior high student	chugakusei	中学生
+Vocabulary	People	6	Man	otoko	男
+Vocabulary	Animals	3	Monkey	saru	猿
+Vocabulary	People	5	Mother	haha / o-ka-san	母 / お母さん
+Vocabulary	People	4	Older brother	ani / ani-san	兄 / 兄さん
+Vocabulary	People	4	Older sister	ane / ane-san	姉 / 姉さん
+Vocabulary	People	7	Police	keisatsu	警察
+Vocabulary	People	2	Producer	purodusa	プロデューサー
+Vocabulary	People	5	Senior	shinia	シニア
+Vocabulary	Animals	3	Snake	hebi	蛇
+Vocabulary	People	4	Son	musuko / musuko-san	息子 / 息子さん
+Vocabulary	Animals	3	Turtle	kame	亀
+Vocabulary	People	4	Uncle	oji / o-ji-san	叔父 / 叔父さん
+Vocabulary	People	8	Vegetarian	bejitarian / saishoku shugi sha	ベジタリアン / 菜食主義者
+Vocabulary	People	4	Wife	tsuma / oku-san	妻 / 奥さん
+Vocabulary	People	6	Woman	onna	女
+Vocabulary	People	4	Younger brother	ototo	弟
+Vocabulary	People	4	Younger sister	imoto	妹
+Vocabulary	Food	9	Beef bowl	gyudon	牛丼
+Vocabulary	Food	9	Beer	biru	ビール
+Vocabulary	Food	8	Broth	tsuyu	つゆ
+Vocabulary	Food	9	Buckwheat noodles	soba	そば
+Vocabulary	Food	7	Candy	ame	飴
+Vocabulary	Food	9	Coffee	kohi	コーヒー
+Vocabulary	Food	9	Coke	koka kora	コカ・コーラ
+Vocabulary	Food	8	Dairy products	nyuseihin	乳製品
+Vocabulary	Food	7	Dried seaweed	nori	海苔
+Vocabulary	Food	8	Dumplings	dango	団子
+Vocabulary	Food	9	Eggs	tamago	卵
+Vocabulary	Food	7	Fermented soybeans	natto	納豆
+Vocabulary	Food	9	Fish	sakana	魚
+Vocabulary	Food	9	Grilled chicken skewers	yakitori	焼き鳥
+Vocabulary	Food	8	Hot pot	shabushabu	しゃぶしゃぶ
+Vocabulary	Food	9	Iced Coffee	aisu kōhī	アイスコーヒー
+Vocabulary	Food	9	Japanese curry	karē raisu	カレーライス
+Vocabulary	Food	9	Japanese hamburger steak	hanbāgu	ハンバーグ
+Vocabulary	Food	6	Japanese yams	tororo imo	とろろ芋
+Vocabulary	Food	8	Ketchup	kechappu	ケチャップ
+Vocabulary	Food	8	Mayonnaise	mayonezu	マヨネーズ
+Vocabulary	Food	9	Meat	niku	肉
+Vocabulary	Food	8	Milk	miruku	ミルク
+Vocabulary	Food	8	Miso soup	miso shiru	味噌汁
+Vocabulary	Food	7	Mustard	masutado	マスタード
+Vocabulary	Food	8	Peanuts	pinattsu	ピーナッツ
+Vocabulary	Food	8	Pepper	kosho	胡椒
+Vocabulary	Food	6	Pickled plum	umeboshi	梅干し
+Vocabulary	Food	7	Pudding	purin	プリン
+Vocabulary	Food	9	Ramen noodles	ramen	ラーメン
+Vocabulary	Food	9	Rice ball	onigiri	おにぎり
+Vocabulary	Food	8	Rice cake	mochi	餅
+Vocabulary	Food	8	Salt	shio	塩
+Vocabulary	Food	8	Salmon roe	ikura	いくら
+Vocabulary	Food	8	Sauce	sosu	ソース
+Vocabulary	Food	7	Seaweed	wakame	わかめ
+Vocabulary	Food	9	Soy sauce	shoyu	醤油
+Vocabulary	Food	7	Sugar candy	ramune	ラムネ
+Vocabulary	Food	9	Sushi	sushi	寿司
+Vocabulary	Food	7	Sweet bean jelly	yōkan	羊羹
+Vocabulary	Food	9	Tea (green)	ryokucha	緑茶
+Vocabulary	Food	9	Tea (black)	kocha	紅茶
+Vocabulary	Food	9	Tempura	tempura	天ぷら
+Vocabulary	Food	8	Tofu	tōfu	豆腐
+Vocabulary	Food	10	Water	mizu	水
+Vocabulary	Places & Things	7	Address	jusho	住所
+Vocabulary	Places & Things	9	Airplane	hikōki	飛行機
+Vocabulary	Places & Things	10	Ambulance	kyukyusha	救急車
+Vocabulary	Places & Things	8	Bag	kaban	鞄
+Vocabulary	Places & Things	9	Bank	ginko	銀行
+Vocabulary	Places & Things	10	Bathroom / Toilet	toire / otearai	トイレ / お手洗い
+Vocabulary	Places & Things	9	Bus	basu	バス
+Vocabulary	Places & Things	10	Bus stop	basu tei	バス停
+Vocabulary	Places & Things	8	Cell phone	keitai denwa / keitai	携帯電話 / 携帯
+Vocabulary	Places & Things	8	Charger	judenki	充電器
+Vocabulary	Places & Things	10	Convenience store	konbini	コンビニ
+Vocabulary	Places & Things	7	Dead end	tsukiatari	突き当り
+Vocabulary	Places & Things	7	House entrance	genkan	玄関
+Vocabulary	Places & Things	8	Internet	intanetto / netto	インターネット / ネット
+Vocabulary	Places & Things	8	Internet cafe	netto cafe	ネットカフェ
+Vocabulary	Places & Things	7	Kimono	kimono	着物
+Vocabulary	Places & Things	7	Kitchen	kitchin	キッチン
+Vocabulary	Places & Things	9	Lost and found	wasuremono toriatsukaijo	忘れ物取扱所
+Vocabulary	Places & Things	9	Map	chizu	地図
+Vocabulary	Places & Things	10	Menu	menyu	メニュー
+Vocabulary	Places & Things	10	Passport	pasupoto	パスポート
+Vocabulary	Places & Things	9	Pharmacy	yakkyoku	薬局
+Vocabulary	Places & Things	8	Police box	koban	交番
+Vocabulary	Places & Things	9	Post office	yubinkyoku	郵便局
+Vocabulary	Places & Things	8	Power converter	denryoku henkan ki	電力変換器
+Vocabulary	Places & Things	4	Radio	rajio	ラジオ
+Vocabulary	Places & Things	10	Station	eki	駅
+Vocabulary	Places & Things	9	Subway	chikatetsu	地下鉄
+Vocabulary	Places & Things	7	Table	teburu	テーブル
+Vocabulary	Places & Things	5	Tatami mat	tatami	畳
+Vocabulary	Places & Things	10	Taxi	takushii	タクシー
+Vocabulary	Places & Things	10	Taxi stand	takushi noriba	タクシー乗り場
+Vocabulary	Places & Things	6	Telephone card	tereka	テレカ
+Vocabulary	Places & Things	5	Television	terebi	テレビ
+Vocabulary	Places & Things	10	Ticket	kippu	切符
+Vocabulary	Places & Things	10	Train (electric)	densha	電車
+Vocabulary	Places & Things	9	Train (bullet)	shinkansen	新幹線
+Vocabulary	Places & Things	7	Umbrella	kasa	傘
+Vocabulary	Places & Things	9	Wallet	saifu	財布
+Vocabulary	Places & Things	9	WiFi	Wai Fai	ワイファイ
+Vocabulary	Concepts	9	Allergy	arerugi	アレルギー
+Vocabulary	Concepts	3	Birthday	tanjobi	誕生日
+Vocabulary	Concepts	7	Break / Rest	kyukei	休憩
+Vocabulary	Concepts	8	Cold (illness)	kaze	風邪
+Vocabulary	Concepts	7	Color	iro	色
+Vocabulary	Concepts	3	Culture	bunka	文化
+Vocabulary	Concepts	5	Day	hi	日
+Vocabulary	Concepts	8	Diarrhea	geri	下痢
+Vocabulary	Concepts	8	Earthquake	jishin	地震
+Vocabulary	Concepts	8	Evacuation	hinan	避難
+Vocabulary	Concepts	8	Fever	netsu	熱
+Vocabulary	Concepts	9	Fire	kaji	火事
+Vocabulary	Concepts	8	Hay fever	kafunsho	花粉症
+Vocabulary	Concepts	9	Headache	zutsu	頭痛
+Vocabulary	Concepts	5	Holiday / Day off	yasumi	休み
+Vocabulary	Concepts	6	Hometown	shusshin	出身
+Vocabulary	Concepts	8	Japanese (language)	Nihon-go	日本語
+Vocabulary	Concepts	2	Labor	kinrō	勤労
+Vocabulary	Concepts	9	Left	hidari	左
+Vocabulary	Concepts	9	Lost item	wasuremono	忘れ物
+Vocabulary	Concepts	7	Lump sum	ikkatsu	一括
+Vocabulary	Concepts	3	Marriage	kekkon	結婚
+Vocabulary	Concepts	8	Meaning	imi	意味
+Vocabulary	Concepts	9	Medicine	kusuri	薬
+Vocabulary	Concepts	6	Model (of a device)	kishu	機種
+Vocabulary	Concepts	8	Name	namae	名前
+Vocabulary	Concepts	7	Now	ima	今
+Vocabulary	Concepts	9	Order	chumon	注文
+Vocabulary	Concepts	3	Reading	dokusho	読書
+Vocabulary	Concepts	9	Right	migi	右
+Vocabulary	Concepts	8	Shopping	kaimono	買い物
+Vocabulary	Concepts	7	Time	jikan	時間
+Vocabulary	Concepts	7	Today	kyo	今日
+Vocabulary	Concepts	7	Tsunami	tsunami	津波
+Vocabulary	Concepts	7	Typhoon	taifū	台風
+Vocabulary	Concepts	8	What time	nan-ji	何時
+Vocabulary	Concepts	10	Yen	en	円
+Vocabulary	Holidays	1	Bon Festival	O-bon	お盆
+Vocabulary	Holidays	1	Children's Day	Kodomo no Hi	こどもの日
+Vocabulary	Holidays	2	Christmas	Kurisumasu	クリスマス
+Vocabulary	Holidays	1	Coming of Age Day	Seijin no Hi	成人の日
+Vocabulary	Holidays	1	Culture Day	Bunka no hi	文化の日
+Vocabulary	Holidays	1	Doll's Festival	Hinamatsuri	ひな祭り
+Vocabulary	Holidays	1	Health and Sports Day	Taiiku no hi	体育の日
+Vocabulary	Holidays	1	Labor Thanksgiving Day	Kinrō kansha no hi	勤労感謝の日
+Vocabulary	Holidays	1	National Foundation Day	Kenkoku kinen no hi	建国記念の日
+Vocabulary	Holidays	2	New Year's Day	Gantan	元旦
+Vocabulary	Holidays	2	New Year's Eve	Ōmisoka	大晦日
+Vocabulary	Holidays	1	Respect for the Aged Day	Keirō no hi	敬老の日
+Vocabulary	Holidays	1	Sea Day	Umi no Hi	海の日
+Vocabulary	Holidays	1	Setsubun	setsubun	節分
+Vocabulary	Holidays	1	Shichi-Go-San Festival	Shichigosan	七五三
+Vocabulary	Holidays	1	Star Festival	Tanabata	七夕
+Vocabulary	Holidays	1	Valentine's Day	Barentain Dē	バレンタインデー
+Vocabulary	Holidays	1	White Day	Howaito Dē	ホワイトデー
+Vocabulary	Holidays	2	Year-end party	bōnenkai	忘年会
+Vocabulary	Verbs	8	to be / exist (inanimate)	aru / arimasu	ある / あります
+Vocabulary	Verbs	7	to be / exist (animate)	iru / imasu	いる / います
+Vocabulary	Verbs	8	to buy	kau / kaimasu	買う / 買います
+Vocabulary	Verbs	6	to call	yobu / yobimasu	呼ぶ / 呼びます
+Vocabulary	Verbs	8	can eat	taberaremasu	食べられます
+Vocabulary	Verbs	8	cannot eat	taberaremasen	食べられません
+Vocabulary	Verbs	7	to catch (a cold)	hiku / hikimasu	ひく / ひきます
+Vocabulary	Verbs	8	to close	shimaru / shimarimasu	閉まる / 閉まります
+Vocabulary	Verbs	6	to connect	setsuzoku suru	接続する
+Vocabulary	Verbs	8	to contain	haitteiru / haitteimasu	入っている / 入っています
+Vocabulary	Verbs	7	to dip / to stick	tsukeru	つける
+Vocabulary	Verbs	6	to do	suru / shimasu	する / します
+Vocabulary	Verbs	8	to drink	nomu / nomimasu	飲む / 飲みます
+Vocabulary	Verbs	7	to dry up	kawaku	乾く
+Vocabulary	Verbs	9	to eat	taberu / tabemasu	食べる / 食べます
+Vocabulary	Verbs	7	to give a discount	makeru	負ける
+Vocabulary	Verbs	6	to hide	kakureru	隠れる
+Vocabulary	Verbs	8	to lose	nakusu / nakushimashita	無くす / 無くしました
+Vocabulary	Verbs	8	to open	aku / akimasu	開く / 開きます
+Vocabulary	Verbs	7	to pour	kakeru	かける
+Vocabulary	Verbs	5	to read	yomu / yomimasu	読む / 読みます
+Vocabulary	Verbs	7	to say / speak	iu / hanasu	言う / 話す
+Vocabulary	Verbs	8	can speak	hanasemasu	話せます
+Vocabulary	Verbs	6	to send	okuru / okurimasu	送る / 送ります
+Vocabulary	Verbs	7	to take (a picture)	toru / torimasu	撮る / 撮ります
+Vocabulary	Verbs	8	to teach / tell	oshieru / oshiemasu	教える / 教えます
+Vocabulary	Verbs	7	to get tired	tsukareru	疲れる
+Vocabulary	Verbs	9	to turn	magaru / magarimasu	曲がる / 曲がります
+Vocabulary	Verbs	9	to understand	wakaru / wakarimasu	分かる / 分かります
+Vocabulary	Verbs	8	to want to change	kaetai	替えたい
+Vocabulary	Verbs	7	to want to rent	karitai	借りたい
+Vocabulary	Verbs	7	to write	kaku / kakimasu	書く / 書きます
+Vocabulary	Adjectives	6	Amazing / Great	sugoi	すごい
+Vocabulary	Adjectives	6	Beautiful	utsukushii	美しい
+Vocabulary	Adjectives	8	Big / Large	okii	大きい
+Vocabulary	Adjectives	8	Cheap	yasui	安い
+Vocabulary	Adjectives	8	Cold (weather)	samui	寒い
+Vocabulary	Adjectives	6	Convenient	benri	便利
+Vocabulary	Adjectives	6	Cute	kawaii	かわいい
+Vocabulary	Adjectives	3	Delicate	sensai	繊細
+Vocabulary	Adjectives	8	Delicious	oishii	おいしい
+Vocabulary	Adjectives	8	(It was) delicious	oishikatta	美味しかった
+Vocabulary	Adjectives	8	Dislike	kirai	嫌い
+Vocabulary	Adjectives	8	Wrong / Different	chigaimasu	違います
+Vocabulary	Adjectives	8	Expensive / High	takai	高い
+Vocabulary	Adjectives	7	Fast / Quick	hayai	速い
+Vocabulary	Adjectives	6	Healthy / Energetic	genki	元気
+Vocabulary	Adjectives	8	Hot (weather)	atsui	暑い
+Vocabulary	Adjectives	8	Itchy	kayui	痒い
+Vocabulary	Adjectives	7	Late / Slow	osoi	遅い
+Vocabulary	Adjectives	8	Like	suki	好き
+Vocabulary	Adjectives	8	Painful / Hurt	itai	痛い
+Vocabulary	Adjectives	8	Small	chiisai	小さい
+Vocabulary	Adjectives	8	Want	hoshii	欲しい
+Vocabulary	Other	8	Again / More	mo	もう
+Vocabulary	Other	7	Also / Too	mo	も
+Vocabulary	Other	7	And	to	と
+Vocabulary	Other	8	Before / Front	mae	前
+Vocabulary	Other	7	From	kara	から
+Vocabulary	Other	9	Here	koko	ここ
+Vocabulary	Other	8	How	do / dōyatte	どう / どうやって
+Vocabulary	Other	10	How much	ikura	いくら
+Vocabulary	Other	7	Lump sum	ikkatsu	一括
+Vocabulary	Other	8	More	motto	もっと
+Vocabulary	Other	8	Near / Nearby	chikaku	近く
+Vocabulary	Other	6	Or	aruiwa	あるいは
+Vocabulary	Other	7	Please (go ahead)	dozo	どうぞ
+Vocabulary	Other	8	Separately	betsu-betsu	別々
+Vocabulary	Other	9	Slowly	yukkuri	ゆっくり
+Vocabulary	Other	9	Straight	massugu	まっすぐ
+Vocabulary	Other	10	That	sore	それ
+Vocabulary	Other	7	Then (casual)	ja / dewa	じゃ / では
+Vocabulary	Other	10	This	kore	これ
+Vocabulary	Other	7	Together	issho ni	一緒に
+Vocabulary	Other	8	Under / Below	shita	下
+Vocabulary	Other	9	What	nani / nan	何
+Vocabulary	Other	10	Where	doko	どこ
+Vocabulary	Other	9	Which	dono / dochira	どの / どちら
+Vocabulary	Other	9	Without	nuki	抜き
+Vocabulary	Exclamations	6	Hello (on phone)	moshi moshi	もしもし
+Vocabulary	Exclamations	4	Oh my! (female)	Ara ma!	あらまあ！
+Vocabulary	Exclamations	4	Wow! / Holy! (male)	Sugee!	すげえ！
+Vocabulary	Exclamations	8	Sorry (casual)	Gomen / Gomen ne	ごめん / ごめんね
