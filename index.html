@@ -26,13 +26,34 @@
           <label class="deck-search-label" for="deck-filter">Filter decks</label>
           <input type="search" id="deck-filter" placeholder="Search decks…" />
         </div>
+        <section class="deck-selection-panel">
+          <div class="selection-summary" id="selection-summary">No decks selected yet.</div>
+          <div class="selection-actions">
+            <button id="study-selected" type="button" class="pill-button primary" disabled>
+              Study selected decks
+            </button>
+            <button id="clear-selection" type="button" class="pill-button ghost" disabled>Clear</button>
+          </div>
+        </section>
+        <section class="preset-panel">
+          <div class="preset-header">
+            <h3>Presets</h3>
+            <p class="preset-help">Save frequently used deck combinations for quick access.</p>
+          </div>
+          <div class="preset-list" id="preset-list"></div>
+          <form id="preset-form" class="preset-form">
+            <label class="sr-only" for="preset-name">Preset name</label>
+            <input type="text" id="preset-name" name="preset-name" placeholder="Name this preset" autocomplete="off" />
+            <button type="submit" class="pill-button ghost small">Save preset</button>
+          </form>
+        </section>
         <nav class="deck-list" id="deck-list" aria-label="Deck list"></nav>
       </aside>
       <main class="main">
         <section class="deck-header" id="deck-header">
           <div class="deck-meta">
-            <h2 id="deck-title">Choose a deck</h2>
-            <p id="deck-description">Pick one of the travel-focused decks to begin studying.</p>
+            <h2 id="deck-title">Choose decks</h2>
+            <p id="deck-description">Pick one or more of the travel-focused decks to begin studying.</p>
           </div>
           <div class="deck-progress" id="deck-progress" hidden>
             <div class="progress-label">Progress</div>
@@ -47,7 +68,7 @@
             <div class="card-inner" id="card-inner">
               <article class="card-face card-front" aria-label="Card front">
                 <header>English phrase</header>
-                <p id="card-front-text">Select a deck to begin.</p>
+                <p id="card-front-text">Select decks to begin.</p>
               </article>
               <article class="card-face card-back" aria-label="Card back">
                 <header>Japanese phrase</header>
@@ -61,9 +82,9 @@
             </div>
           </div>
           <div class="card-actions">
-            <button id="prev-card" type="button" class="ghost" disabled>Previous</button>
-            <button id="flip-card" type="button" class="primary" disabled>Flip Card</button>
-            <button id="next-card" type="button" class="ghost" disabled>Next</button>
+            <button id="prev-card" type="button" class="pill-button ghost" disabled>Previous</button>
+            <button id="flip-card" type="button" class="pill-button primary" disabled>Flip Card</button>
+            <button id="next-card" type="button" class="pill-button ghost" disabled>Next</button>
           </div>
           <div class="card-hotkeys">Tip: Use ← Back • Space Flip • → Next.</div>
         </section>

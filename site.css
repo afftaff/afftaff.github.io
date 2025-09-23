@@ -22,6 +22,77 @@ body {
   color: var(--text-primary);
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.pill-button {
+  font: inherit;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.pill-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pill-button.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: white;
+  box-shadow: 0 16px 28px rgba(79, 70, 229, 0.35);
+}
+
+.pill-button.primary:not(:disabled):hover,
+.pill-button.primary:not(:disabled):focus-visible {
+  transform: translateY(-2px);
+}
+
+.pill-button.ghost {
+  background: white;
+  border-color: rgba(148, 163, 184, 0.4);
+  color: var(--text-primary);
+  box-shadow: 0 10px 22px rgba(148, 163, 184, 0.25);
+}
+
+.pill-button.ghost:not(:disabled):hover,
+.pill-button.ghost:not(:disabled):focus-visible {
+  transform: translateY(-2px);
+}
+
+.pill-button.outline {
+  background: transparent;
+  border-color: rgba(148, 163, 184, 0.4);
+  color: var(--text-inverse);
+  box-shadow: none;
+}
+
+.pill-button.outline:not(:disabled):hover,
+.pill-button.outline:not(:disabled):focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(248, 250, 252, 0.65);
+}
+
+.pill-button.small {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+}
+
 .app-shell {
   min-height: 100vh;
   display: flex;
@@ -98,10 +169,127 @@ body {
   color: rgba(248, 250, 252, 0.55);
 }
 
+.deck-selection-panel,
+.preset-panel {
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.selection-summary {
+  font-size: 0.9rem;
+  color: rgba(248, 250, 252, 0.85);
+  line-height: 1.5;
+}
+
+.selection-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.selection-actions .pill-button {
+  flex: 1;
+}
+
+.preset-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.preset-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.preset-help {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(248, 250, 252, 0.65);
+}
+
+.preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.preset-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.preset-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.preset-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-inverse);
+  word-break: break-word;
+}
+
+.preset-count {
+  font-size: 0.8rem;
+  color: rgba(248, 250, 252, 0.65);
+}
+
+.preset-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.preset-actions .pill-button {
+  box-shadow: none;
+}
+
+.preset-empty {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.35);
+  color: rgba(248, 250, 252, 0.65);
+  font-size: 0.85rem;
+}
+
+.preset-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#preset-name {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font: inherit;
+  background: rgba(15, 23, 42, 0.35);
+  color: var(--text-inverse);
+}
+
+#preset-name::placeholder {
+  color: rgba(248, 250, 252, 0.55);
+}
+
 .deck-list {
   display: grid;
   gap: 10px;
 }
+
 .deck-empty {
   padding: 18px;
   border-radius: 16px;
@@ -109,7 +297,6 @@ body {
   color: rgba(248, 250, 252, 0.8);
   text-align: center;
 }
-
 
 .deck-button {
   text-align: left;
@@ -121,6 +308,9 @@ body {
   font: inherit;
   cursor: pointer;
   transition: transform 0.2s ease, border 0.2s ease, background 0.3s ease;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
 }
 
 .deck-button:hover,
@@ -129,21 +319,42 @@ body {
   transform: translateY(-2px);
 }
 
-.deck-button[aria-current="true"] {
+.deck-option.is-selected {
   background: rgba(99, 102, 241, 0.35);
   border-color: rgba(129, 140, 248, 0.9);
   box-shadow: 0 10px 24px rgba(99, 102, 241, 0.35);
 }
 
-.deck-button h3 {
+.deck-option input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 4px 0 0;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+
+.deck-option-content h3 {
   margin: 0 0 6px;
   font-size: 1.05rem;
 }
 
-.deck-button p {
+.deck-option-content p {
   margin: 0;
   font-size: 0.85rem;
   color: rgba(248, 250, 252, 0.75);
+}
+
+.sidebar .pill-button.ghost {
+  background: rgba(15, 23, 42, 0.4);
+  border-color: rgba(148, 163, 184, 0.55);
+  color: rgba(248, 250, 252, 0.92);
+  box-shadow: none;
+}
+
+.sidebar .pill-button.ghost:not(:disabled):hover,
+.sidebar .pill-button.ghost:not(:disabled):focus-visible {
+  transform: translateY(-2px);
+  background: rgba(99, 102, 241, 0.4);
 }
 
 .main {
@@ -330,41 +541,8 @@ body {
   justify-content: center;
 }
 
-.card-actions button {
-  font: inherit;
+.card-actions .pill-button {
   padding: 12px 26px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-}
-
-.card-actions button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.card-actions .primary {
-  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-  color: white;
-  box-shadow: 0 16px 28px rgba(79, 70, 229, 0.35);
-}
-
-.card-actions .primary:not(:disabled):hover,
-.card-actions .primary:not(:disabled):focus-visible {
-  transform: translateY(-2px);
-}
-
-.card-actions .ghost {
-  background: white;
-  border-color: rgba(148, 163, 184, 0.4);
-  color: var(--text-primary);
-  box-shadow: 0 10px 22px rgba(148, 163, 184, 0.25);
-}
-
-.card-actions .ghost:not(:disabled):hover,
-.card-actions .ghost:not(:disabled):focus-visible {
-  transform: translateY(-2px);
 }
 
 .card-hotkeys {
