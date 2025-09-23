@@ -1,0 +1,32 @@
+{
+  "id": "culture-food-u2",
+  "title": "Culture: Food (Usefulness 2)",
+  "description": "Traveler usefulness 2/10 phrases for the Food subcategory within Culture. Includes 5 card(s).",
+  "cards": [
+    {
+      "english": "Rice balls are available even at convenience stores.",
+      "romaji": "Onigiri wa, konbini de mo kaemasu.",
+      "japanese": "おにぎりは、コンビニでも買えます。"
+    },
+    {
+      "english": "Tofu is famous all over the world as a healthy food.",
+      "romaji": "T fu wa, kenk teki na tabemono to shite sekai de mo y.mei desu.",
+      "japanese": "豆腐は、健康的な食べ物として世界でも有名です。"
+    },
+    {
+      "english": "Tofu is cheap and healthy.",
+      "romaji": "T fu wa yasukute kenk teki desu.",
+      "japanese": "豆腐は安くて健康的です。"
+    },
+    {
+      "english": "Lately you can get taiyaki with a variety of different fillings.",
+      "romaji": "Saikin wa, taiyaki no nakami ni iroiro na shurui ga arimasu.",
+      "japanese": "最近は、たい焼きの中身にいろいろな種類があります。"
+    },
+    {
+      "english": "Shizuoka is very famous for green tea.",
+      "romaji": "Shizuoka wa, ryokucha de y.mei desu.",
+      "japanese": "静岡は、緑茶で有名です。"
+    }
+  ]
+}

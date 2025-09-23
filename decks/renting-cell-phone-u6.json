@@ -1,0 +1,17 @@
+{
+  "id": "renting-cell-phone-u6",
+  "title": "Renting: Cell Phone (Usefulness 6)",
+  "description": "Traveler usefulness 6/10 phrases for the Cell Phone subcategory within Renting. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Which model would you like?",
+      "romaji": "Dono kishu ga hoshii desu ka?",
+      "japanese": "どの機種が欲しいですか？"
+    },
+    {
+      "english": "Please add minutes.",
+      "romaji": "Tsuwa jikan o tsuika shite kudasai.",
+      "japanese": "通話時間を追加してください。"
+    }
+  ]
+}

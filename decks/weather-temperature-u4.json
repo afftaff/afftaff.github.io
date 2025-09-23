@@ -1,0 +1,12 @@
+{
+  "id": "weather-temperature-u4",
+  "title": "Weather: Temperature (Usefulness 4)",
+  "description": "Traveler usefulness 4/10 phrases for the Temperature subcategory within Weather. Includes 1 card(s).",
+  "cards": [
+    {
+      "english": "Alaska is very cold.",
+      "romaji": "Arasuka wa totemo samui desu.",
+      "japanese": "アラスカはとても寒いです。"
+    }
+  ]
+}

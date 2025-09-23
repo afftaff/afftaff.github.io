@@ -1,0 +1,22 @@
+{
+  "id": "health-pharmacy-medicine-u8",
+  "title": "Health (Pharmacy): Medicine (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Medicine subcategory within Health (Pharmacy). Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "Please give me pills to calm my digestive system.",
+      "romaji": "Seichozai o kudasai.",
+      "japanese": "整腸剤をください。"
+    },
+    {
+      "english": "Please give me cough drops.",
+      "romaji": "Nodo ame o kudasai.",
+      "japanese": "喉飴をください。"
+    },
+    {
+      "english": "How much is this antiflatulent?",
+      "romaji": "Kono seichozai wa ikiura desu ka.",
+      "japanese": "この整腸剤はいくらですか。"
+    }
+  ]
+}

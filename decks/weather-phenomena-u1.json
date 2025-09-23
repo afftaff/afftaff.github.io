@@ -1,0 +1,12 @@
+{
+  "id": "weather-phenomena-u1",
+  "title": "Weather: Phenomena (Usefulness 1)",
+  "description": "Traveler usefulness 1/10 phrases for the Phenomena subcategory within Weather. Includes 1 card(s).",
+  "cards": [
+    {
+      "english": "Typhoons and fronts of rain often bring about cloudbusts in Japan.",
+      "romaji": "nihon dewa, taif. ya baiu zensen no eiky de sh.ch. g u ni osowarerukoto ga yoku arimasu.",
+      "japanese": "日本では、台風や梅雨前線の影響で集中豪雨に襲われることがよくあります。"
+    }
+  ]
+}

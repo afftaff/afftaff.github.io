@@ -1,0 +1,12 @@
+{
+  "id": "health-medical-assistance-u10",
+  "title": "Health: Medical Assistance (Usefulness 10)",
+  "description": "Traveler usefulness 10/10 phrases for the Medical Assistance subcategory within Health. Includes 1 card(s).",
+  "cards": [
+    {
+      "english": "Please call an ambulance.",
+      "romaji": "Kyukyusha o yonde kudasai.",
+      "japanese": "救急車を呼んでください。"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "celebrations-birthday-u2",
+  "title": "Celebrations: Birthday (Usefulness 2)",
+  "description": "Traveler usefulness 2/10 phrases for the Birthday subcategory within Celebrations. Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "Happy Birthday!",
+      "romaji": "Tanjobi omedeto gozaimasu!",
+      "japanese": "誕生日おめでとうございます！"
+    },
+    {
+      "english": "Today is my birthday.",
+      "romaji": "Kyo wa watashi no tanjobi desu.",
+      "japanese": "今日は私の誕生日です。"
+    },
+    {
+      "english": "Happy Birthday! (casual)",
+      "romaji": "Omedeto!",
+      "japanese": "おめでとう！"
+    },
+    {
+      "english": "It's Jim's birthday.",
+      "romaji": "Jim no tanjobi.",
+      "japanese": "ジムの誕生日。"
+    }
+  ]
+}

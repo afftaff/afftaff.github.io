@@ -1,0 +1,17 @@
+{
+  "id": "food-drinks-u7",
+  "title": "Food: Drinks (Usefulness 7)",
+  "description": "Traveler usefulness 7/10 phrases for the Drinks subcategory within Food. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Do you have Japanese rice wine?",
+      "romaji": "Nihonshu ga arimasu ka.",
+      "japanese": "日本酒がありますか。"
+    },
+    {
+      "english": "I don't drink alcohol.",
+      "romaji": "Watashi wa o-sake o nomimasen.",
+      "japanese": "私はお酒を飲みません。"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "id": "vocabulary-people-u4",
+  "title": "Vocabulary: People (Usefulness 4)",
+  "description": "Traveler usefulness 4/10 phrases for the People subcategory within Vocabulary. Includes 12 card(s).",
+  "cards": [
+    {
+      "english": "Aunt",
+      "romaji": "oba / o-ba-san",
+      "japanese": "叔母 / 叔母さん"
+    },
+    {
+      "english": "Daughter",
+      "romaji": "musume / musume-san",
+      "japanese": "娘 / 娘さん"
+    },
+    {
+      "english": "Grandfather",
+      "romaji": "sofu / o-ji-san",
+      "japanese": "祖父 / お祖父さん"
+    },
+    {
+      "english": "Grandmother",
+      "romaji": "sobo / o-ba-san",
+      "japanese": "祖母 / お祖母さん"
+    },
+    {
+      "english": "Husband",
+      "romaji": "otto / go-shujin",
+      "japanese": "夫 / ご主人"
+    },
+    {
+      "english": "Older brother",
+      "romaji": "ani / ani-san",
+      "japanese": "兄 / 兄さん"
+    },
+    {
+      "english": "Older sister",
+      "romaji": "ane / ane-san",
+      "japanese": "姉 / 姉さん"
+    },
+    {
+      "english": "Son",
+      "romaji": "musuko / musuko-san",
+      "japanese": "息子 / 息子さん"
+    },
+    {
+      "english": "Uncle",
+      "romaji": "oji / o-ji-san",
+      "japanese": "叔父 / 叔父さん"
+    },
+    {
+      "english": "Wife",
+      "romaji": "tsuma / oku-san",
+      "japanese": "妻 / 奥さん"
+    },
+    {
+      "english": "Younger brother",
+      "romaji": "ototo",
+      "japanese": "弟"
+    },
+    {
+      "english": "Younger sister",
+      "romaji": "imoto",
+      "japanese": "妹"
+    }
+  ]
+}

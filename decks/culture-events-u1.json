@@ -1,0 +1,32 @@
+{
+  "id": "culture-events-u1",
+  "title": "Culture: Events (Usefulness 1)",
+  "description": "Traveler usefulness 1/10 phrases for the Events subcategory within Culture. Includes 5 card(s).",
+  "cards": [
+    {
+      "english": "My coming-of-age ceremony is next year.",
+      "romaji": "Seijinshiki wa rainen desu.",
+      "japanese": "成人式は来年です。"
+    },
+    {
+      "english": "In a traditional Shinto-style Japanese wedding ceremony, the bride and groom share sake as proof of their bond.",
+      "romaji": "Shinzen kekkonshiki de wa, katame no shirushi to shite shinr shimpu ga nihonshu o nomimasu.",
+      "japanese": "神前結婚式では、固めの印として新郎新婦が日本酒を飲みます。"
+    },
+    {
+      "english": "When there's a festival, fireworks are often also set off.",
+      "romaji": "Matsuri ga aru toki wa, yoku hanabi mo ageraremasu.",
+      "japanese": "祭りがあるときは、よく花火も上げられます。"
+    },
+    {
+      "english": "At the first visit to the shrine of the year, people buy lucky charms and protective charms for the coming year and return those from the past year.",
+      "romaji": "Hatsum de de wa omamori o kai, furui omamori o kaeshimasu.",
+      "japanese": "初詣ではお守りを買い、古いお守りを返します。"
+    },
+    {
+      "english": "Obon is a period of honoring one's ancestors, so it's important to clean the family graves before welcoming their spirits.",
+      "romaji": "O-bon wa sosen o matsuru kikan na no de, sosen no rei o mukaeru mae ni o-haka o s ji suru no wa taisetsu na koto desu.",
+      "japanese": "お盆は祖先を祭る期間なので、祖先の霊を迎える前にお墓を掃除するのは大切なことです。"
+    }
+  ]
+}

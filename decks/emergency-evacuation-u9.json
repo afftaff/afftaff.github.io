@@ -1,0 +1,22 @@
+{
+  "id": "emergency-evacuation-u9",
+  "title": "Emergency: Evacuation (Usefulness 9)",
+  "description": "Traveler usefulness 9/10 phrases for the Evacuation subcategory within Emergency. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "Let's evacuate.",
+      "romaji": "Hinan shimasho.",
+      "japanese": "避難しましょう。"
+    },
+    {
+      "english": "Please evacuate.",
+      "romaji": "Hinan shite kudasai.",
+      "japanese": "避難してください。"
+    },
+    {
+      "english": "Let's evacuate this place.",
+      "romaji": "Koko kara hinan shimasho.",
+      "japanese": "ここから避難しましょう。"
+    }
+  ]
+}

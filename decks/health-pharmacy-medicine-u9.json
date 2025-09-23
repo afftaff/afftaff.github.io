@@ -1,0 +1,22 @@
+{
+  "id": "health-pharmacy-medicine-u9",
+  "title": "Health (Pharmacy): Medicine (Usefulness 9)",
+  "description": "Traveler usefulness 9/10 phrases for the Medicine subcategory within Health (Pharmacy). Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "Please give me cold medicine.",
+      "romaji": "Kaze gusuri o kudasai.",
+      "japanese": "風邪薬をください。"
+    },
+    {
+      "english": "Please give me anti-migraine pills.",
+      "romaji": "Zutsu yaku o kudasai.",
+      "japanese": "頭痛薬をください。"
+    },
+    {
+      "english": "Please give me aspirin.",
+      "romaji": "Asupirin o kudasai.",
+      "japanese": "アスピリンをください。"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "vocabulary-animals-u4",
+  "title": "Vocabulary: Animals (Usefulness 4)",
+  "description": "Traveler usefulness 4/10 phrases for the Animals subcategory within Vocabulary. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Cat",
+      "romaji": "neko",
+      "japanese": "猫"
+    },
+    {
+      "english": "Dog",
+      "romaji": "inu",
+      "japanese": "犬"
+    }
+  ]
+}

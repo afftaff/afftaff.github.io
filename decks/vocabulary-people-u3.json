@@ -1,0 +1,32 @@
+{
+  "id": "vocabulary-people-u3",
+  "title": "Vocabulary: People (Usefulness 3)",
+  "description": "Traveler usefulness 3/10 phrases for the People subcategory within Vocabulary. Includes 5 card(s).",
+  "cards": [
+    {
+      "english": "Artist",
+      "romaji": "atisuto",
+      "japanese": "アーティスト"
+    },
+    {
+      "english": "Cousin",
+      "romaji": "itoko",
+      "japanese": "いとこ"
+    },
+    {
+      "english": "Hair stylist",
+      "romaji": "biyoshi / sutairisuto",
+      "japanese": "美容師 / スタイリスト"
+    },
+    {
+      "english": "High school student",
+      "romaji": "kokosei",
+      "japanese": "高校生"
+    },
+    {
+      "english": "Junior high student",
+      "romaji": "chugakusei",
+      "japanese": "中学生"
+    }
+  ]
+}

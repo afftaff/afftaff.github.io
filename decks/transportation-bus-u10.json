@@ -1,0 +1,17 @@
+{
+  "id": "transportation-bus-u10",
+  "title": "Transportation: Bus (Usefulness 10)",
+  "description": "Traveler usefulness 10/10 phrases for the Bus subcategory within Transportation. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Where is the bus stop?",
+      "romaji": "Basu tei wa doko desu ka?",
+      "japanese": "バス停はどこですか？"
+    },
+    {
+      "english": "Does this bus go to Narita?",
+      "romaji": "Kono basu wa Narita ni ikimasu ka.",
+      "japanese": "このバスは成田に行きますか。"
+    }
+  ]
+}

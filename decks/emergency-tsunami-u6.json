@@ -1,0 +1,12 @@
+{
+  "id": "emergency-tsunami-u6",
+  "title": "Emergency: Tsunami (Usefulness 6)",
+  "description": "Traveler usefulness 6/10 phrases for the Tsunami subcategory within Emergency. Includes 1 card(s).",
+  "cards": [
+    {
+      "english": "There's no threat of a tsunami resulting from this earthquake.",
+      "romaji": "Kono jishin ni yoru tsunami no shinpai wa arimasen.",
+      "japanese": "この地震による津波の心配はありません。"
+    }
+  ]
+}

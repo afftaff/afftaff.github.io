@@ -1,0 +1,17 @@
+{
+  "id": "renting-cell-phone-u5",
+  "title": "Renting: Cell Phone (Usefulness 5)",
+  "description": "Traveler usefulness 5/10 phrases for the Cell Phone subcategory within Renting. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "You have ten minutes left on your phone.",
+      "romaji": "Nokori no tsuwa jikan wa ju-ppun.",
+      "japanese": "残りの通話時間は十分。"
+    },
+    {
+      "english": "I have 1 minute remaining to call.",
+      "romaji": "Tsuwa jikan no nokori wa ippun desu.",
+      "japanese": "通話時間の残りは一分です。"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "id": "health-allergies-symptoms-u8",
+  "title": "Health (Allergies): Symptoms (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Symptoms subcategory within Health (Allergies). Includes 10 card(s).",
+  "cards": [
+    {
+      "english": "I have hay fever.",
+      "romaji": "Kahunsho desu.",
+      "japanese": "花粉症です。"
+    },
+    {
+      "english": "I have a runny nose.",
+      "romaji": "Hanamizu ga tareru.",
+      "japanese": "鼻水が垂れる。"
+    },
+    {
+      "english": "My eyes itch.",
+      "romaji": "Me ga kayui.",
+      "japanese": "目が痒い。"
+    },
+    {
+      "english": "My throat itches.",
+      "romaji": "Nodo ga kayui.",
+      "japanese": "喉が痒い。"
+    },
+    {
+      "english": "My throat is dry.",
+      "romaji": "Nodo ga kawaku.",
+      "japanese": "喉が渇く。"
+    },
+    {
+      "english": "I sneeze.",
+      "romaji": "Kushami ga deru.",
+      "japanese": "くしゃみが出る。"
+    },
+    {
+      "english": "I can't stop sneezing.",
+      "romaji": "Kushami ga tomaranai.",
+      "japanese": "くしゃみが止まらない。"
+    },
+    {
+      "english": "My hands are itchy.",
+      "romaji": "Te ga kayui.",
+      "japanese": "手が痒い。"
+    },
+    {
+      "english": "My nose is running.",
+      "romaji": "Hanamizu ga tareru.",
+      "japanese": "鼻水が垂れる。"
+    },
+    {
+      "english": "I have a terrible runny nose.",
+      "romaji": "Hanamizu ga hidoi desu.",
+      "japanese": "鼻水がひどいです。"
+    }
+  ]
+}

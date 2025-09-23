@@ -1,0 +1,17 @@
+{
+  "id": "food-general-u3",
+  "title": "Food: General (Usefulness 3)",
+  "description": "Traveler usefulness 3/10 phrases for the General subcategory within Food. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "I ate an apple a little while ago.",
+      "romaji": "Sakki, ringo o tabemashita.",
+      "japanese": "さっき、りんごを食べました。"
+    },
+    {
+      "english": "Cherries look cute.",
+      "romaji": "Sakuranbo wa, katachi ga kawaii.",
+      "japanese": "さくらんぼは、形がかわいい。"
+    }
+  ]
+}

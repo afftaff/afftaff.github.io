@@ -1,0 +1,32 @@
+{
+  "id": "health-symptoms-u8",
+  "title": "Health: Symptoms (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Symptoms subcategory within Health. Includes 5 card(s).",
+  "cards": [
+    {
+      "english": "Do you have diarrhea?",
+      "romaji": "Geri shite imasu ka?",
+      "japanese": "下痢していますか？"
+    },
+    {
+      "english": "Do you have diarrhea?",
+      "romaji": "Geri shite imasu ka.",
+      "japanese": "下痢していますか。"
+    },
+    {
+      "english": "I have a fever.",
+      "romaji": "Netsu ga arimasu.",
+      "japanese": "熱があります。"
+    },
+    {
+      "english": "I have diarrhea.",
+      "romaji": "Geri o shite imasu.",
+      "japanese": "下痢をしています。"
+    },
+    {
+      "english": "I'm thirsty.",
+      "romaji": "Nodo ga kawakimashita.",
+      "japanese": "喉が渇きました。"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "renting-cell-phone-u7",
+  "title": "Renting: Cell Phone (Usefulness 7)",
+  "description": "Traveler usefulness 7/10 phrases for the Cell Phone subcategory within Renting. Includes 3 card(s).",
+  "cards": [
+    {
+      "english": "I’d like to rent a cell phone.",
+      "romaji": "Keitai o karitai desu.",
+      "japanese": "携帯を借りたいです。"
+    },
+    {
+      "english": "Please give me a charger.",
+      "romaji": "Judenki o kudasai.",
+      "japanese": "充電器をください。"
+    },
+    {
+      "english": "I'd like this model.",
+      "romaji": "Kono kishu ga hoshi desu.",
+      "japanese": "この機種が欲しいです。"
+    }
+  ]
+}

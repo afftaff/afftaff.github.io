@@ -1,0 +1,12 @@
+{
+  "id": "lost-and-found-location-u8",
+  "title": "Lost & Found: Location (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Location subcategory within Lost & Found. Includes 1 card(s).",
+  "cards": [
+    {
+      "english": "Tokyo Station to Shinjuku Station.",
+      "romaji": "Tokyo eki kara Shinjuku eki.",
+      "japanese": "東京駅から新宿駅。"
+    }
+  ]
+}

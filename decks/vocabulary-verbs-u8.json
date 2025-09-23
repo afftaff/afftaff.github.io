@@ -1,0 +1,67 @@
+{
+  "id": "vocabulary-verbs-u8",
+  "title": "Vocabulary: Verbs (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Verbs subcategory within Vocabulary. Includes 12 card(s).",
+  "cards": [
+    {
+      "english": "to be / exist (inanimate)",
+      "romaji": "aru / arimasu",
+      "japanese": "ある / あります"
+    },
+    {
+      "english": "to buy",
+      "romaji": "kau / kaimasu",
+      "japanese": "買う / 買います"
+    },
+    {
+      "english": "can eat",
+      "romaji": "taberaremasu",
+      "japanese": "食べられます"
+    },
+    {
+      "english": "cannot eat",
+      "romaji": "taberaremasen",
+      "japanese": "食べられません"
+    },
+    {
+      "english": "to close",
+      "romaji": "shimaru / shimarimasu",
+      "japanese": "閉まる / 閉まります"
+    },
+    {
+      "english": "to contain",
+      "romaji": "haitteiru / haitteimasu",
+      "japanese": "入っている / 入っています"
+    },
+    {
+      "english": "to drink",
+      "romaji": "nomu / nomimasu",
+      "japanese": "飲む / 飲みます"
+    },
+    {
+      "english": "to lose",
+      "romaji": "nakusu / nakushimashita",
+      "japanese": "無くす / 無くしました"
+    },
+    {
+      "english": "to open",
+      "romaji": "aku / akimasu",
+      "japanese": "開く / 開きます"
+    },
+    {
+      "english": "can speak",
+      "romaji": "hanasemasu",
+      "japanese": "話せます"
+    },
+    {
+      "english": "to teach / tell",
+      "romaji": "oshieru / oshiemasu",
+      "japanese": "教える / 教えます"
+    },
+    {
+      "english": "to want to change",
+      "romaji": "kaetai",
+      "japanese": "替えたい"
+    }
+  ]
+}

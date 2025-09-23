@@ -1,0 +1,17 @@
+{
+  "id": "at-the-hotel-food-u6",
+  "title": "At the Hotel: Food (Usefulness 6)",
+  "description": "Traveler usefulness 6/10 phrases for the Food subcategory within At the Hotel. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Do you have sushi?",
+      "romaji": "Sushi wa arimasu ka?",
+      "japanese": "寿司はありますか？"
+    },
+    {
+      "english": "Do you have tempura?",
+      "romaji": "Tempura wa arimasu ka?",
+      "japanese": "天ぷらはありますか？"
+    }
+  ]
+}

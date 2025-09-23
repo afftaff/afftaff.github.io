@@ -1,0 +1,32 @@
+{
+  "id": "culture-holidays-u1",
+  "title": "Culture: Holidays (Usefulness 1)",
+  "description": "Traveler usefulness 1/10 phrases for the Holidays subcategory within Culture. Includes 5 card(s).",
+  "cards": [
+    {
+      "english": "In the lunisolar calendar, Japan's National Foundation Day falls on New Year's Day.",
+      "romaji": "Kenkoku kinen no hi wa, ky reki de wa Gantan desu.",
+      "japanese": "建国記念の日は、旧暦では元旦です。"
+    },
+    {
+      "english": "Labour Thanksgiving Day is the day for rewarding daily hard work.",
+      "romaji": "Kinr. kansha no hi wa, hibi no kinr. o negirau hi desu.",
+      "japanese": "勤労感謝の日は、日々の勤労をねぎらう日です。"
+    },
+    {
+      "english": "On Coming of Age Day, many men and women who are or will be twenty years old by the end of March that year wear traditional Japanese clothes called \"kimono\" and \"hakama\".",
+      "romaji": "Seijin no hi ni wa, hatachi o mukaeru .ku no danjo ga kimono ya hakama o kimasu.",
+      "japanese": "成人の日には、二十歳を迎える多くの男女が着物や袴を着ます。"
+    },
+    {
+      "english": "Japanese people show appreciation for their grandparents on Respect for the Aged Day.",
+      "romaji": "Keir. no hi ni wa, sofubo ni kansha no kimochi o tsutaemasu.",
+      "japanese": "敬老の日には、祖父母に感謝の気持ちを伝えます。"
+    },
+    {
+      "english": "In the olden days, Japanese people measured the height of the children on Children's Day every year to see how much they had grown.",
+      "romaji": "Mukashi wa, maitoshi kodomo no hi ni shinch. o hakari, seich. o miru sh kan ga arimashita.",
+      "japanese": "昔は、毎年子供の日に身長を測り、成長を見る習慣がありました。"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "transportation-train-u10",
+  "title": "Transportation: Train (Usefulness 10)",
+  "description": "Traveler usefulness 10/10 phrases for the Train subcategory within Transportation. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Where is the ticket gate?",
+      "romaji": "Kaisatsu wa doko desu ka.",
+      "japanese": "改札はどこですか。"
+    },
+    {
+      "english": "Will this train go to Tokyo Station?",
+      "romaji": "Tokyo eki made ikimasu ka?",
+      "japanese": "東京駅まで行きますか？"
+    }
+  ]
+}

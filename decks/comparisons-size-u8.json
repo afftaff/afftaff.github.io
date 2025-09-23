@@ -1,0 +1,17 @@
+{
+  "id": "comparisons-size-u8",
+  "title": "Comparisons: Size (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Size subcategory within Comparisons. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Smaller.",
+      "romaji": "Motto chisai.",
+      "japanese": "もっと小さい。"
+    },
+    {
+      "english": "Bigger.",
+      "romaji": "Motto oki.",
+      "japanese": "もっと大きい。"
+    }
+  ]
+}

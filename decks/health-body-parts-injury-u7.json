@@ -1,0 +1,27 @@
+{
+  "id": "health-body-parts-injury-u7",
+  "title": "Health (Body Parts): Injury (Usefulness 7)",
+  "description": "Traveler usefulness 7/10 phrases for the Injury subcategory within Health (Body Parts). Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "I broke my wrist.",
+      "romaji": "Tekubi wo orimashita.",
+      "japanese": "手首を折りました。"
+    },
+    {
+      "english": "I broke my finger.",
+      "romaji": "Yubi o kossetsu shita.",
+      "japanese": "指を骨折した。"
+    },
+    {
+      "english": "I injured my foot.",
+      "romaji": "Ashi o kega shita.",
+      "japanese": "足を怪我した。"
+    },
+    {
+      "english": "I injured my shoulder.",
+      "romaji": "Kata wo kega shimashita.",
+      "japanese": "肩を怪我しました。"
+    }
+  ]
+}

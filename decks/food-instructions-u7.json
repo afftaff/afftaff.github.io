@@ -1,0 +1,27 @@
+{
+  "id": "food-instructions-u7",
+  "title": "Food: Instructions (Usefulness 7)",
+  "description": "Traveler usefulness 7/10 phrases for the Instructions subcategory within Food. Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "Dip it in soy sauce.",
+      "romaji": "Shoyu ni tsukeru.",
+      "japanese": "醤油につける。"
+    },
+    {
+      "english": "Dip it in the broth.",
+      "romaji": "Tsuyu ni tsukeru.",
+      "japanese": "つゆにつける。"
+    },
+    {
+      "english": "Put mayonnaise on it.",
+      "romaji": "Mayonezu o tsukeru.",
+      "japanese": "マヨネーズをつける。"
+    },
+    {
+      "english": "Pour sauce on it.",
+      "romaji": "Sosu o kakeru.",
+      "japanese": "ソースをかける。"
+    }
+  ]
+}

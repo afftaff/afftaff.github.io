@@ -1,0 +1,42 @@
+{
+  "id": "vocabulary-other-u7",
+  "title": "Vocabulary: Other (Usefulness 7)",
+  "description": "Traveler usefulness 7/10 phrases for the Other subcategory within Vocabulary. Includes 7 card(s).",
+  "cards": [
+    {
+      "english": "Also / Too",
+      "romaji": "mo",
+      "japanese": "も"
+    },
+    {
+      "english": "And",
+      "romaji": "to",
+      "japanese": "と"
+    },
+    {
+      "english": "From",
+      "romaji": "kara",
+      "japanese": "から"
+    },
+    {
+      "english": "Lump sum",
+      "romaji": "ikkatsu",
+      "japanese": "一括"
+    },
+    {
+      "english": "Please (go ahead)",
+      "romaji": "dozo",
+      "japanese": "どうぞ"
+    },
+    {
+      "english": "Then (casual)",
+      "romaji": "ja / dewa",
+      "japanese": "じゃ / では"
+    },
+    {
+      "english": "Together",
+      "romaji": "issho ni",
+      "japanese": "一緒に"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "vocabulary-verbs-u6",
+  "title": "Vocabulary: Verbs (Usefulness 6)",
+  "description": "Traveler usefulness 6/10 phrases for the Verbs subcategory within Vocabulary. Includes 5 card(s).",
+  "cards": [
+    {
+      "english": "to call",
+      "romaji": "yobu / yobimasu",
+      "japanese": "呼ぶ / 呼びます"
+    },
+    {
+      "english": "to connect",
+      "romaji": "setsuzoku suru",
+      "japanese": "接続する"
+    },
+    {
+      "english": "to do",
+      "romaji": "suru / shimasu",
+      "japanese": "する / します"
+    },
+    {
+      "english": "to hide",
+      "romaji": "kakureru",
+      "japanese": "隠れる"
+    },
+    {
+      "english": "to send",
+      "romaji": "okuru / okurimasu",
+      "japanese": "送る / 送ります"
+    }
+  ]
+}

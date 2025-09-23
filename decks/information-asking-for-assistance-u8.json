@@ -1,0 +1,17 @@
+{
+  "id": "information-asking-for-assistance-u8",
+  "title": "Information: Asking for Assistance (Usefulness 8)",
+  "description": "Traveler usefulness 8/10 phrases for the Asking for Assistance subcategory within Information. Includes 2 card(s).",
+  "cards": [
+    {
+      "english": "Do you have a Spanish information guide?",
+      "romaji": "Supeingo no gaido wa arimasu ka?",
+      "japanese": "スペイン語のガイドはありますか？"
+    },
+    {
+      "english": "Do you have a Chinese info guide?",
+      "romaji": "Chugokugo no gaido wa arimasu ka?",
+      "japanese": "中国語のガイドはありますか？"
+    }
+  ]
+}

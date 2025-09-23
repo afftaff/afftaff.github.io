@@ -1,0 +1,27 @@
+{
+  "id": "vocabulary-concepts-u3",
+  "title": "Vocabulary: Concepts (Usefulness 3)",
+  "description": "Traveler usefulness 3/10 phrases for the Concepts subcategory within Vocabulary. Includes 4 card(s).",
+  "cards": [
+    {
+      "english": "Birthday",
+      "romaji": "tanjobi",
+      "japanese": "誕生日"
+    },
+    {
+      "english": "Culture",
+      "romaji": "bunka",
+      "japanese": "文化"
+    },
+    {
+      "english": "Marriage",
+      "romaji": "kekkon",
+      "japanese": "結婚"
+    },
+    {
+      "english": "Reading",
+      "romaji": "dokusho",
+      "japanese": "読書"
+    }
+  ]
+}

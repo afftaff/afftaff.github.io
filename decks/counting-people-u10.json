@@ -1,0 +1,42 @@
+{
+  "id": "counting-people-u10",
+  "title": "Counting: People (Usefulness 10)",
+  "description": "Traveler usefulness 10/10 phrases for the People subcategory within Counting. Includes 7 card(s).",
+  "cards": [
+    {
+      "english": "How many people are in your party?",
+      "romaji": "Nan-mei-sama desu ka.",
+      "japanese": "何名様ですか。"
+    },
+    {
+      "english": "Two people.",
+      "romaji": "Ni mei.",
+      "japanese": "二名。"
+    },
+    {
+      "english": "Four people.",
+      "romaji": "Yon mei.",
+      "japanese": "四名。"
+    },
+    {
+      "english": "How many people in your party?",
+      "romaji": "Nan-mei desu ka.",
+      "japanese": "何名ですか。"
+    },
+    {
+      "english": "One person.",
+      "romaji": "Ichi mei.",
+      "japanese": "一名。"
+    },
+    {
+      "english": "Two people.",
+      "romaji": "Ni mei.",
+      "japanese": "二名。"
+    },
+    {
+      "english": "Three people.",
+      "romaji": "San mei.",
+      "japanese": "三名。"
+    }
+  ]
+}
