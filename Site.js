@@ -1,9 +1,16 @@
 const elements = {
-  deckList: document.getElementById('deck-list'),
-  deckFilter: document.getElementById('deck-filter'),
+  phraseFilter: document.getElementById('phrase-filter'),
+  showAllPhrases: document.getElementById('show-all-phrases'),
+  tagList: document.getElementById('tag-list'),
+  phrasePanel: document.getElementById('phrase-panel'),
+  phraseList: document.getElementById('phrase-list'),
+  phraseHint: document.getElementById('phrase-hint'),
   selectionSummary: document.getElementById('selection-summary'),
   studySelected: document.getElementById('study-selected'),
   clearSelection: document.getElementById('clear-selection'),
+  presetList: document.getElementById('preset-list'),
+  presetForm: document.getElementById('preset-form'),
+  presetName: document.getElementById('preset-name'),
   deckTitle: document.getElementById('deck-title'),
   deckDescription: document.getElementById('deck-description'),
   deckProgress: document.getElementById('deck-progress'),
@@ -14,13 +21,6 @@ const elements = {
   cardFrontText: document.getElementById('card-front-text'),
   cardRomaji: document.getElementById('card-romaji'),
   cardJapanese: document.getElementById('card-japanese'),
-  cardFilters: document.getElementById('card-filters'),
-  cardSearch: document.getElementById('card-search'),
-  usefulnessFilter: document.getElementById('usefulness-filter'),
-  clearCardFilters: document.getElementById('clear-card-filters'),
-  presetList: document.getElementById('preset-list'),
-  presetForm: document.getElementById('preset-form'),
-  presetName: document.getElementById('preset-name'),
   playAudio: document.getElementById('play-audio'),
   prevCard: document.getElementById('prev-card'),
   nextCard: document.getElementById('next-card'),
@@ -30,20 +30,20 @@ const elements = {
 
 const state = {
   manifest: [],
-  filtered: [],
-  selectedDeckIds: new Set(),
-  defaultPresets: [],
-  customPresets: [],
-  presets: [],
-  deckCache: new Map(),
-  currentDeckId: null,
-  currentDeckTitle: '',
+  phrases: [],
+  phraseMap: new Map(),
+  deckPhraseMap: new Map(),
+  tags: [],
+  filterTokens: [],
+  filterQuery: '',
+  showAllPhrases: false,
+  filteredPhrases: [],
+  selectedPhraseIds: new Set(),
+  defaultDecks: [],
+  customDecks: [],
+  decks: [],
+  currentDeckName: '',
   currentDeckBaseDescription: '',
-  unfilteredCards: [],
-  cardFilters: {
-    search: '',
-    minUsefulness: null
-  },
   cards: [],
   index: 0,
   side: 'front',
@@ -57,521 +57,268 @@ const state = {
 };
 
 const CARD_TRANSITION_DURATION = 500;
-const PRESET_STORAGE_KEY = 'travel-japanese-presets';
+const DECK_STORAGE_KEY = 'travel-japanese-phrase-decks';
 
 init();
 
 async function init() {
   state.currentDeckBaseDescription = elements.deckDescription?.textContent || '';
-  await loadManifest();
-  loadPresetsFromStorage();
-  await loadDefaultPresets();
-  refreshPresetCollections();
-  applyFilter('');
+  await loadPhrases();
+  await loadDefaultDecks();
+  loadDecksFromStorage();
+  refreshDeckCollections();
+  renderTagList();
+  const initialQuery = elements.phraseFilter?.value ?? '';
+  setFilterTokensFromInput(initialQuery);
+  applyPhraseFilter();
   attachEventListeners();
   prepareSpeech();
-  updateInterfaceForSelection();
+  updatePhrasePanelVisibility();
   updateSelectionControls();
+  updateInterfaceForSelection();
   if (!state.speechSupported) {
     notifyOnce('Audio playback is unavailable in this browser.');
   }
 }
 
 function attachEventListeners() {
-  elements.deckFilter.addEventListener('input', (event) => {
-    applyFilter(event.target.value);
-  });
-
+  if (elements.phraseFilter) {
+    elements.phraseFilter.addEventListener('input', handlePhraseFilterInput);
+  }
+  if (elements.showAllPhrases) {
+    elements.showAllPhrases.addEventListener('click', handleShowAllToggle);
+  }
+  if (elements.tagList) {
+    elements.tagList.addEventListener('click', (event) => {
+      const button = event.target.closest('.tag-chip');
+      if (!button) return;
+      const tagName = button.dataset.tag;
+      if (tagName) {
+        handleTagToggle(tagName);
+      }
+    });
+  }
+  if (elements.phraseList) {
+    elements.phraseList.addEventListener('click', handlePhraseListClick);
+  }
   if (elements.studySelected) {
-    elements.studySelected.addEventListener('click', () => {
-      studySelectedDecks();
-    });
+    elements.studySelected.addEventListener('click', () => studySelectedPhrases());
   }
-
   if (elements.clearSelection) {
-    elements.clearSelection.addEventListener('click', () => {
-      clearSelection();
-    });
+    elements.clearSelection.addEventListener('click', () => clearSelection());
   }
-
   if (elements.presetForm) {
-    elements.presetForm.addEventListener('submit', handlePresetSave);
+    elements.presetForm.addEventListener('submit', handleDeckSave);
   }
-
-  elements.prevCard.addEventListener('click', showPreviousCard);
-  elements.nextCard.addEventListener('click', showNextCard);
-  elements.flipCard.addEventListener('click', flipCardSide);
-  elements.playAudio.addEventListener('click', () => speakCurrentCard(false));
-
-  if (elements.cardSearch) {
-    elements.cardSearch.addEventListener('input', handleCardSearchChange);
+  if (elements.prevCard) {
+    elements.prevCard.addEventListener('click', showPreviousCard);
   }
-
-  if (elements.usefulnessFilter) {
-    elements.usefulnessFilter.addEventListener('change', handleUsefulnessFilterChange);
+  if (elements.nextCard) {
+    elements.nextCard.addEventListener('click', showNextCard);
   }
-
-  if (elements.clearCardFilters) {
-    elements.clearCardFilters.addEventListener('click', resetCardFilters);
+  if (elements.flipCard) {
+    elements.flipCard.addEventListener('click', flipCardSide);
   }
-
+  if (elements.playAudio) {
+    elements.playAudio.addEventListener('click', () => speakCurrentCard(false));
+  }
   document.addEventListener('keydown', handleKeyboardShortcuts);
 }
 
-async function loadManifest() {
+async function loadPhrases() {
   try {
-    state.manifest = await loadJson('decks/manifest.json');
-    state.filtered = state.manifest.slice();
-  } catch (error) {
-    console.error(error);
-    showSnackbar('Unable to load deck list. If the site is opened directly from your files, try a modern browser or a simple web server.');
-  }
-}
-
-function applyFilter(query) {
-  const normalized = query.trim().toLowerCase();
-  if (!normalized) {
-    state.filtered = state.manifest.slice();
-  } else {
-    state.filtered = state.manifest.filter((deck) => {
-      return (
-        deck.title.toLowerCase().includes(normalized) ||
-        deck.description.toLowerCase().includes(normalized)
-      );
-    });
-  }
-  renderDeckList();
-  updateSelectionControls();
-}
-
-function handleCardSearchChange(event) {
-  state.cardFilters.search = event?.target?.value ?? '';
-  applyCardFilters();
-}
-
-function handleUsefulnessFilterChange(event) {
-  const value = event?.target?.value ?? '';
-  const parsed = Number.parseInt(value, 10);
-  state.cardFilters.minUsefulness = Number.isNaN(parsed) ? null : parsed;
-  applyCardFilters();
-}
-
-function resetCardFilters() {
-  if (!state.unfilteredCards.length) return;
-  const hadFilters = state.cardFilters.search || state.cardFilters.minUsefulness !== null;
-  state.cardFilters.search = '';
-  state.cardFilters.minUsefulness = null;
-  if (elements.cardSearch) {
-    elements.cardSearch.value = '';
-  }
-  if (elements.usefulnessFilter) {
-    elements.usefulnessFilter.value = '';
-  }
-  if (hadFilters) {
-    applyCardFilters();
-  } else {
-    updateFilterControls();
-  }
-}
-
-function applyCardFilters(options = {}) {
-  const { preserveIndex = false } = options;
-  if (!state.unfilteredCards.length) {
-    state.cards = [];
-    state.index = 0;
-    state.side = 'front';
-    updateDeckDescription();
-    updateFilterControls();
-    updateInterfaceForSelection();
-    updateCardContent();
-    return;
-  }
-
-  const search = state.cardFilters.search.trim().toLowerCase();
-  const minUsefulness =
-    typeof state.cardFilters.minUsefulness === 'number' ? state.cardFilters.minUsefulness : null;
-
-  const filtered = state.unfilteredCards.filter((card) => {
-    if (minUsefulness !== null) {
-      const usefulness = Number.parseInt(card.usefulness, 10);
-      if (Number.isNaN(usefulness) || usefulness < minUsefulness) {
-        return false;
-      }
-    }
-    if (!search) {
-      return true;
-    }
-    return cardMatchesQuery(card, search);
-  });
-
-  state.cards = filtered;
-  if (!preserveIndex || state.index >= filtered.length) {
-    state.index = 0;
-  }
-  state.side = 'front';
-  updateDeckDescription();
-  updateFilterControls();
-  updateInterfaceForSelection();
-  updateCardContent();
-}
-
-function cardMatchesQuery(card, normalizedQuery) {
-  if (!card) return false;
-  const haystack = [];
-  if (typeof card.english === 'string') haystack.push(card.english);
-  if (typeof card.romaji === 'string') haystack.push(card.romaji);
-  if (typeof card.japanese === 'string') haystack.push(card.japanese);
-  if (Array.isArray(card.tags) && card.tags.length) {
-    haystack.push(card.tags.join(' '));
-  } else if (typeof card.tags === 'string') {
-    haystack.push(card.tags);
-  }
-  return haystack.some((text) => text && text.toLowerCase().includes(normalizedQuery));
-}
-
-function updateDeckDescription() {
-  if (!elements.deckDescription) return;
-  const base = state.currentDeckBaseDescription || '';
-  const total = state.unfilteredCards.length;
-  const filtered = state.cards.length;
-  let description = base;
-
-  if (total) {
-    let extra = '';
-    if (!filtered) {
-      extra = 'No cards match the current filters yet.';
-    } else if (filtered < total) {
-      extra = `Showing ${filtered} of ${total} card${total === 1 ? '' : 's'} after filtering.`;
-    }
-    if (extra) {
-      description = base ? `${base} ${extra}` : extra;
-    }
-  }
-
-  elements.deckDescription.textContent = description;
-}
-
-function updateFilterControls() {
-  const hasDeck = state.unfilteredCards.length > 0;
-  if (elements.cardFilters) {
-    elements.cardFilters.classList.toggle('is-disabled', !hasDeck);
-  }
-  if (elements.cardSearch) {
-    elements.cardSearch.disabled = !hasDeck;
-    elements.cardSearch.value = hasDeck ? state.cardFilters.search : '';
-  }
-  if (elements.usefulnessFilter) {
-    elements.usefulnessFilter.disabled = !hasDeck;
-    const value = hasDeck && typeof state.cardFilters.minUsefulness === 'number'
-      ? String(state.cardFilters.minUsefulness)
-      : '';
-    elements.usefulnessFilter.value = value;
-  }
-  if (elements.clearCardFilters) {
-    const hasFilters =
-      Boolean(state.cardFilters.search.trim()) || typeof state.cardFilters.minUsefulness === 'number';
-    elements.clearCardFilters.disabled = !hasDeck || !hasFilters;
-  }
-}
-
-function renderDeckList() {
-  elements.deckList.innerHTML = '';
-  if (!state.filtered.length) {
-    const empty = document.createElement('div');
-    empty.className = 'deck-empty';
-    empty.textContent = 'No decks match that search yet.';
-    elements.deckList.appendChild(empty);
-    return;
-  }
-
-  state.filtered.forEach((deck) => {
-    const option = document.createElement('label');
-    option.className = 'deck-button deck-option';
-    option.dataset.deckId = deck.id;
-    if (deck.description) {
-      option.title = deck.description;
-    }
-
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.name = 'deck-selection';
-    checkbox.value = deck.id;
-    checkbox.checked = state.selectedDeckIds.has(deck.id);
-    checkbox.addEventListener('change', (event) => {
-      toggleDeckSelection(deck.id, event.target.checked);
-      option.classList.toggle('is-selected', event.target.checked);
-    });
-
-    const content = document.createElement('div');
-    content.className = 'deck-option-content';
-
-    const title = document.createElement('div');
-    title.className = 'deck-option-title';
-    title.textContent = deck.title;
-
-    content.appendChild(title);
-
-    const cardCount = getDeckCardCount(deck);
-    if (cardCount !== null) {
-      const count = document.createElement('div');
-      count.className = 'deck-option-count';
-      count.textContent = `${cardCount} card${cardCount === 1 ? '' : 's'}`;
-      content.appendChild(count);
-    }
-
-    option.append(checkbox, content);
-    option.classList.toggle('is-selected', checkbox.checked);
-    elements.deckList.appendChild(option);
-  });
-}
-
-function getDeckCardCount(deck) {
-  if (!deck || !deck.description) return null;
-  const match = deck.description.match(/Includes (\d+) card/);
-  if (!match) return null;
-  const count = Number.parseInt(match[1], 10);
-  return Number.isNaN(count) ? null : count;
-}
-
-function updateDeckHeader(deckData) {
-  elements.deckTitle.textContent = deckData.title;
-  state.currentDeckBaseDescription = deckData.description || '';
-  updateDeckDescription();
-}
-
-function updateInterfaceForSelection() {
-  const hasCards = state.cards.length > 0;
-  const hasDeckLoaded = state.unfilteredCards.length > 0;
-  if (elements.deckProgress) {
-    elements.deckProgress.hidden = !hasCards;
-  }
-  elements.prevCard.disabled = !hasCards;
-  elements.nextCard.disabled = !hasCards;
-  elements.flipCard.disabled = !hasCards;
-  updateNavigationStates();
-  updateFlipLabel();
-  updateAudioState();
-  updateProgress();
-  if (!hasCards) {
-    cancelCardTransition();
-    elements.card.dataset.side = 'front';
-    if (!hasDeckLoaded) {
-      elements.cardFrontText.textContent = 'Select decks to begin.';
-      elements.cardRomaji.textContent = 'ローマ字';
-      elements.cardJapanese.textContent = '日本語';
-    }
-  }
-  updateFilterControls();
-}
-
-function toggleDeckSelection(deckId, isSelected) {
-  if (!deckId) return;
-  if (isSelected) {
-    state.selectedDeckIds.add(deckId);
-  } else {
-    state.selectedDeckIds.delete(deckId);
-  }
-  updateSelectionControls();
-}
-
-function clearSelection() {
-  if (!state.selectedDeckIds.size) return;
-  state.selectedDeckIds.clear();
-  renderDeckList();
-  updateSelectionControls();
-  showSnackbar('Selection cleared.');
-}
-
-function updateSelectionControls() {
-  if (!elements.selectionSummary) return;
-  const deckCount = state.selectedDeckIds.size;
-  if (!deckCount) {
-    elements.selectionSummary.textContent = 'No decks selected yet.';
-  } else {
-    const orderedIds = getOrderedDeckIds(state.selectedDeckIds);
-    const titles = orderedIds
-      .map((id) => state.manifest.find((deck) => deck.id === id)?.title)
-      .filter(Boolean);
-    if (deckCount === 1 && titles.length === 1) {
-      elements.selectionSummary.textContent = `1 deck selected: ${titles[0]}.`;
-    } else {
-      const preview = titles.slice(0, 3);
-      const remainder = deckCount - preview.length;
-      if (preview.length) {
-        let summary = `${deckCount} decks selected: ${formatList(preview)}`;
-        if (remainder > 0) {
-          summary += `, plus ${remainder} more deck${remainder > 1 ? 's' : ''}`;
-        }
-        elements.selectionSummary.textContent = `${summary}.`;
-      } else {
-        elements.selectionSummary.textContent = `${deckCount} decks selected.`;
-      }
-    }
-  }
-  const hasSelection = deckCount > 0;
-  if (elements.studySelected) {
-    elements.studySelected.disabled = !hasSelection;
-  }
-  if (elements.clearSelection) {
-    elements.clearSelection.disabled = !hasSelection;
-  }
-}
-
-async function studySelectedDecks() {
-  const deckIds = getOrderedDeckIds(state.selectedDeckIds);
-  if (!deckIds.length) return;
-
-  const deckMetas = deckIds
-    .map((id) => state.manifest.find((deck) => deck.id === id))
-    .filter(Boolean);
-  if (!deckMetas.length) {
-    showSnackbar('Selected decks are unavailable right now.');
-    return;
-  }
-
-  cancelCardTransition();
-
-  let deckDataList;
-  try {
-    deckDataList = await Promise.all(deckMetas.map((meta) => ensureDeckData(meta)));
-  } catch (error) {
-    console.error(error);
-    showSnackbar('Unable to open one of the selected decks right now.');
-    return;
-  }
-
-  const cards = deckDataList.flatMap((deck) => deck.cards || []);
-  if (!cards.length) {
-    state.unfilteredCards = [];
-    state.cards = [];
-    state.index = 0;
-    state.side = 'front';
-    state.currentDeckId = null;
-    state.currentDeckTitle = '';
-    state.currentDeckBaseDescription = '';
-    updateDeckDescription();
-    updateInterfaceForSelection();
-    showSnackbar('The selected decks do not contain any cards yet.');
-    return;
-  }
-
-  const combinedTitle =
-    deckDataList.length === 1 ? deckDataList[0].title : `Combined deck (${deckDataList.length} decks)`;
-
-  state.currentDeckId = deckIds.length === 1 ? deckIds[0] : `combo:${deckIds.join('+')}`;
-  state.currentDeckTitle = combinedTitle;
-  state.unfilteredCards = cards;
-  state.cards = cards;
-  state.index = 0;
-  state.side = 'front';
-
-  const description =
-    deckDataList.length === 1
-      ? deckDataList[0].description
-      : buildCombinedDescription(
-          deckDataList.map((deck) => deck.title),
-          cards.length
-        );
-
-  updateDeckHeader({
-    title: combinedTitle,
-    description
-  });
-  applyCardFilters();
-  showSnackbar(
-    `Loaded ${deckDataList.length} deck${deckDataList.length > 1 ? 's' : ''} (${cards.length} card${cards.length === 1 ? '' : 's'}).`
-  );
-}
-
-function buildCombinedDescription(titles, cardCount) {
-  if (!titles.length) {
-    return `Studying ${cardCount} card${cardCount === 1 ? '' : 's'}.`;
-  }
-  const preview = titles.slice(0, 3);
-  const remainder = titles.length - preview.length;
-  let description = `Studying ${cardCount} card${cardCount === 1 ? '' : 's'} from ${formatList(preview)}`;
-  if (remainder > 0) {
-    description += `, plus ${remainder} more deck${remainder > 1 ? 's' : ''}`;
-  }
-  return `${description}.`;
-}
-
-function formatList(items) {
-  if (!items.length) return '';
-  if (items.length === 1) return items[0];
-  if (items.length === 2) return `${items[0]} and ${items[1]}`;
-  return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
-}
-
-function getOrderedDeckIds(source) {
-  const ids = Array.isArray(source) ? source : Array.from(source);
-  const lookup = new Set(ids);
-  return state.manifest.filter((deck) => lookup.has(deck.id)).map((deck) => deck.id);
-}
-
-async function ensureDeckData(deckMeta) {
-  if (!deckMeta) throw new Error('Deck metadata missing');
-  let deckData = state.deckCache.get(deckMeta.id);
-  if (!deckData) {
-    deckData = await loadJson(`decks/${deckMeta.file}`);
-    state.deckCache.set(deckMeta.id, deckData);
-  }
-  return deckData;
-}
-
-function handlePresetSave(event) {
-  event.preventDefault();
-  if (!elements.presetName) return;
-  const name = elements.presetName.value.trim();
-  if (!name) {
-    showSnackbar('Enter a name for your preset.');
-    return;
-  }
-  const deckIds = getOrderedDeckIds(state.selectedDeckIds);
-  if (!deckIds.length) {
-    showSnackbar('Select at least one deck before saving a preset.');
-    return;
-  }
-
-  const normalizedName = name.toLowerCase();
-  const existingIndex = state.customPresets.findIndex((preset) => preset.name.toLowerCase() === normalizedName);
-  const preset = { name, deckIds, isDefault: false };
-  if (existingIndex >= 0) {
-    state.customPresets[existingIndex] = preset;
-    showSnackbar(`Updated preset "${name}".`);
-  } else {
-    const conflictsWithDefault = state.defaultPresets.some(
-      (preset) => preset.name.toLowerCase() === normalizedName
-    );
-    if (conflictsWithDefault) {
-      showSnackbar('A default preset already uses that name. Choose a different name.');
+    const manifest = await loadJson('decks/manifest.json');
+    if (!Array.isArray(manifest)) {
+      state.manifest = [];
+      state.phrases = [];
       return;
     }
-    state.customPresets.push(preset);
-    showSnackbar(`Saved preset "${name}".`);
-  }
-  refreshPresetCollections();
-  persistPresets();
-  if (elements.presetForm) {
-    elements.presetForm.reset();
+    state.manifest = manifest;
+    const phraseMap = new Map();
+    const deckPhraseMap = new Map();
+    const tagLookup = new Map();
+    const phrases = [];
+
+    for (const deckMeta of manifest) {
+      if (!deckMeta || typeof deckMeta.file !== 'string') continue;
+      let deckData;
+      try {
+        deckData = await loadJson(`decks/${deckMeta.file}`);
+      } catch (error) {
+        console.error(`Unable to load ${deckMeta.file}`, error);
+        continue;
+      }
+      const cards = Array.isArray(deckData?.cards) ? deckData.cards : [];
+      const deckId = deckMeta.id;
+      const phraseIdsForDeck = [];
+      cards.forEach((card, index) => {
+        const id = `${deckId}-${index}`;
+        const tags = normalizeTags(card?.tags);
+        tags.forEach((tag) => {
+          const normalized = normalizeTagName(tag);
+          if (!tagLookup.has(normalized)) {
+            tagLookup.set(normalized, tag);
+          }
+        });
+        const phrase = {
+          id,
+          english: card?.english || '',
+          romaji: card?.romaji || '',
+          japanese: card?.japanese || '',
+          tags,
+          usefulness: typeof card?.usefulness === 'number' ? card.usefulness : null,
+          sourceDeckId: deckId,
+          searchText: [card?.english || '', card?.romaji || '', card?.japanese || '', tags.join(' ')]
+            .join(' ')
+            .toLowerCase(),
+          normalizedTags: new Set(tags.map((tag) => normalizeTagName(tag)))
+        };
+        phrases.push(phrase);
+        phraseMap.set(id, phrase);
+        phraseIdsForDeck.push(id);
+      });
+      deckPhraseMap.set(deckId, phraseIdsForDeck);
+    }
+
+    state.phrases = phrases;
+    state.filteredPhrases = phrases.slice();
+    state.phraseMap = phraseMap;
+    state.deckPhraseMap = deckPhraseMap;
+    state.tags = Array.from(tagLookup.entries())
+      .map(([normalized, original]) => ({ normalized, original }))
+      .sort((a, b) => a.original.localeCompare(b.original, undefined, { sensitivity: 'base' }));
+  } catch (error) {
+    console.error(error);
+    showSnackbar('Unable to load phrases. Try using a modern browser or a simple web server.');
   }
 }
 
-function renderPresets() {
+function normalizeTags(input) {
+  if (Array.isArray(input)) {
+    return input.map((tag) => String(tag || '').trim()).filter(Boolean);
+  }
+  if (typeof input === 'string') {
+    const trimmed = input.trim();
+    return trimmed ? [trimmed] : [];
+  }
+  return [];
+}
+
+function normalizeTagName(tag) {
+  return String(tag || '').trim().toLowerCase();
+}
+
+function createAllPhrasesDeck() {
+  if (!state.phrases.length) return null;
+  return {
+    name: 'All Phrases',
+    phraseIds: state.phrases.map((phrase) => phrase.id),
+    isDefault: true
+  };
+}
+
+function getPhraseIdsForDeckIds(deckIds) {
+  const result = [];
+  const seen = new Set();
+  if (!Array.isArray(deckIds)) return result;
+  deckIds.forEach((deckId) => {
+    const list = state.deckPhraseMap.get(deckId);
+    if (!Array.isArray(list)) return;
+    list.forEach((phraseId) => {
+      if (!seen.has(phraseId) && state.phraseMap.has(phraseId)) {
+        seen.add(phraseId);
+        result.push(phraseId);
+      }
+    });
+  });
+  return result;
+}
+
+async function loadDefaultDecks() {
+  try {
+    const defaults = await loadJson('decks/default-presets.json');
+    if (!Array.isArray(defaults)) {
+      const fallback = createAllPhrasesDeck();
+      state.defaultDecks = fallback ? [fallback] : [];
+      return;
+    }
+    const decks = defaults
+      .map((entry) => {
+        if (!entry || typeof entry.name !== 'string') return null;
+        let phraseIds = [];
+        if (Array.isArray(entry.phraseIds)) {
+          phraseIds = entry.phraseIds.filter((id) => state.phraseMap.has(id));
+        } else if (Array.isArray(entry.deckIds)) {
+          phraseIds = getPhraseIdsForDeckIds(entry.deckIds);
+        } else if (entry.type === 'all') {
+          phraseIds = state.phrases.map((phrase) => phrase.id);
+        }
+        const unique = Array.from(new Set(phraseIds));
+        if (!unique.length) return null;
+        return { name: entry.name, phraseIds: unique, isDefault: true };
+      })
+      .filter(Boolean);
+    if (!decks.length) {
+      const fallback = createAllPhrasesDeck();
+      if (fallback) decks.push(fallback);
+    }
+    state.defaultDecks = decks;
+  } catch (error) {
+    console.warn('Unable to load default decks.', error);
+    const fallback = createAllPhrasesDeck();
+    state.defaultDecks = fallback ? [fallback] : [];
+  }
+}
+
+function loadDecksFromStorage() {
+  state.customDecks = [];
+  if (!('localStorage' in window)) return;
+  try {
+    const raw = window.localStorage.getItem(DECK_STORAGE_KEY);
+    if (!raw) return;
+    const stored = JSON.parse(raw);
+    if (!Array.isArray(stored)) return;
+    state.customDecks = stored
+      .map((entry) => {
+        if (!entry || typeof entry.name !== 'string' || !Array.isArray(entry.phraseIds)) {
+          return null;
+        }
+        const phraseIds = entry.phraseIds.filter((id) => state.phraseMap.has(id));
+        if (!phraseIds.length) return null;
+        return { name: entry.name, phraseIds, isDefault: false };
+      })
+      .filter(Boolean);
+  } catch (error) {
+    console.warn('Unable to load decks from storage.', error);
+    state.customDecks = [];
+  }
+}
+
+function refreshDeckCollections() {
+  sortDeckList(state.defaultDecks);
+  sortDeckList(state.customDecks);
+  state.decks = [...state.defaultDecks, ...state.customDecks];
+  renderDecks();
+}
+function sortDeckList(list) {
+  list.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+}
+
+function renderDecks() {
   if (!elements.presetList) return;
   elements.presetList.innerHTML = '';
-  if (!state.presets.length) {
+  if (!state.decks.length) {
     const empty = document.createElement('div');
     empty.className = 'preset-empty';
-    empty.textContent = 'No presets saved yet.';
+    empty.textContent = 'No decks saved yet.';
     elements.presetList.appendChild(empty);
     return;
   }
 
-  state.presets.forEach((preset) => {
+  state.decks.forEach((deck) => {
     const item = document.createElement('div');
     item.className = 'preset-item';
-    if (preset.isDefault) {
+    if (deck.isDefault) {
       item.classList.add('is-default');
     }
 
@@ -583,20 +330,19 @@ function renderPresets() {
 
     const name = document.createElement('div');
     name.className = 'preset-name';
-    name.textContent = preset.name;
+    name.textContent = deck.name;
+    nameRow.appendChild(name);
 
-    nameRow.append(name);
-
-    if (preset.isDefault) {
+    if (deck.isDefault) {
       const badge = document.createElement('span');
       badge.className = 'preset-badge';
       badge.textContent = 'Default';
-      nameRow.append(badge);
+      nameRow.appendChild(badge);
     }
 
     const count = document.createElement('div');
     count.className = 'preset-count';
-    count.textContent = `${preset.deckIds.length} deck${preset.deckIds.length === 1 ? '' : 's'}`;
+    count.textContent = `${deck.phraseIds.length} phrase${deck.phraseIds.length === 1 ? '' : 's'}`;
 
     details.append(nameRow, count);
 
@@ -607,18 +353,18 @@ function renderPresets() {
     loadButton.type = 'button';
     loadButton.className = 'pill-button primary small';
     loadButton.textContent = 'Load';
-    loadButton.addEventListener('click', () => applyPreset(preset));
+    loadButton.addEventListener('click', () => applyDeck(deck));
 
     const deleteButton = document.createElement('button');
     deleteButton.type = 'button';
     deleteButton.className = 'pill-button outline small';
     deleteButton.textContent = 'Delete';
-    if (preset.isDefault) {
+    if (deck.isDefault) {
       deleteButton.disabled = true;
       deleteButton.setAttribute('aria-disabled', 'true');
-      deleteButton.title = 'Default presets cannot be deleted.';
+      deleteButton.title = 'Default decks cannot be deleted.';
     } else {
-      deleteButton.addEventListener('click', () => removePreset(preset.name));
+      deleteButton.addEventListener('click', () => removeDeck(deck.name));
     }
 
     actions.append(loadButton, deleteButton);
@@ -627,132 +373,632 @@ function renderPresets() {
   });
 }
 
-function applyPreset(preset) {
-  const deckIds = getOrderedDeckIds(preset.deckIds);
-  if (!deckIds.length) {
-    showSnackbar('That preset no longer matches any decks.');
+function applyDeck(deck) {
+  if (!deck || !Array.isArray(deck.phraseIds)) {
+    showSnackbar('That deck is no longer available.');
     return;
   }
-  state.selectedDeckIds = new Set(deckIds);
-  renderDeckList();
+  const phraseIds = deck.phraseIds.filter((id) => state.phraseMap.has(id));
+  if (!phraseIds.length) {
+    showSnackbar('That deck is empty right now.');
+    return;
+  }
+  state.selectedPhraseIds = new Set(phraseIds);
   updateSelectionControls();
-  studySelectedDecks();
+  updatePhraseListSelectionState();
+  state.currentDeckName = deck.name;
+  studySelectedPhrases({ deckName: deck.name });
+  showSnackbar(`Loaded deck "${deck.name}".`);
 }
 
-function removePreset(name) {
-  const index = state.customPresets.findIndex((preset) => preset.name === name);
+function removeDeck(name) {
+  const index = state.customDecks.findIndex((deck) => deck.name === name);
   if (index === -1) {
-    showSnackbar('Default presets cannot be deleted.');
+    showSnackbar('Default decks cannot be deleted.');
     return;
   }
-  state.customPresets.splice(index, 1);
-  refreshPresetCollections();
-  persistPresets();
-  showSnackbar(`Deleted preset "${name}".`);
+  state.customDecks.splice(index, 1);
+  refreshDeckCollections();
+  persistDecks();
+  showSnackbar(`Deleted deck "${name}".`);
 }
 
-function sortPresetList(list) {
-  list.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
-}
-
-function refreshPresetCollections() {
-  sortPresetList(state.defaultPresets);
-  sortPresetList(state.customPresets);
-  state.presets = [...state.defaultPresets, ...state.customPresets];
-  renderPresets();
-}
-
-function loadPresetsFromStorage() {
-  state.customPresets = [];
-  if (!('localStorage' in window)) return;
-  try {
-    const raw = window.localStorage.getItem(PRESET_STORAGE_KEY);
-    if (!raw) return;
-    const stored = JSON.parse(raw);
-    if (!Array.isArray(stored)) return;
-    const validIds = new Set(state.manifest.map((deck) => deck.id));
-    state.customPresets = stored
-      .filter((preset) => preset && typeof preset.name === 'string' && Array.isArray(preset.deckIds))
-      .map((preset) => ({
-        name: preset.name,
-        deckIds: preset.deckIds.filter((id) => validIds.has(id)),
-        isDefault: false
-      }))
-      .filter((preset) => preset.deckIds.length);
-  } catch (error) {
-    console.warn('Unable to load presets from storage.', error);
-    state.customPresets = [];
+function handleDeckSave(event) {
+  event.preventDefault();
+  if (!elements.presetName) return;
+  const name = elements.presetName.value.trim();
+  if (!name) {
+    showSnackbar('Enter a name for your deck.');
+    return;
   }
-}
+  const phraseIds = Array.from(state.selectedPhraseIds);
+  if (!phraseIds.length) {
+    showSnackbar('Select at least one phrase before saving a deck.');
+    return;
+  }
 
-async function loadDefaultPresets() {
-  try {
-    const defaults = await loadJson('decks/default-presets.json');
-    if (!Array.isArray(defaults)) {
-      state.defaultPresets = [];
+  const normalizedName = name.toLowerCase();
+  const existingIndex = state.customDecks.findIndex((deck) => deck.name.toLowerCase() === normalizedName);
+  const deck = { name, phraseIds, isDefault: false };
+  if (existingIndex >= 0) {
+    state.customDecks[existingIndex] = deck;
+    showSnackbar(`Updated deck "${name}".`);
+  } else {
+    const conflictsWithDefault = state.defaultDecks.some(
+      (preset) => preset.name.toLowerCase() === normalizedName
+    );
+    if (conflictsWithDefault) {
+      showSnackbar('A default deck already uses that name. Choose a different name.');
       return;
     }
-    const validIds = new Set(state.manifest.map((deck) => deck.id));
-    state.defaultPresets = defaults
-      .filter((preset) => preset && typeof preset.name === 'string' && Array.isArray(preset.deckIds))
-      .map((preset) => ({
-        name: preset.name,
-        deckIds: preset.deckIds.filter((id) => validIds.has(id)),
-        isDefault: true
-      }))
-      .filter((preset) => preset.deckIds.length);
-  } catch (error) {
-    console.warn('Unable to load default presets.', error);
-    state.defaultPresets = [];
+    state.customDecks.push(deck);
+    showSnackbar(`Saved deck "${name}".`);
+  }
+  refreshDeckCollections();
+  persistDecks();
+  if (elements.presetForm) {
+    elements.presetForm.reset();
   }
 }
 
-function persistPresets() {
+function persistDecks() {
   if (!('localStorage' in window)) return;
   try {
-    const payload = state.customPresets.map((preset) => ({
-      name: preset.name,
-      deckIds: preset.deckIds
+    const payload = state.customDecks.map((deck) => ({
+      name: deck.name,
+      phraseIds: deck.phraseIds
     }));
-    window.localStorage.setItem(PRESET_STORAGE_KEY, JSON.stringify(payload));
+    window.localStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(payload));
     state.presetSaveFailed = false;
   } catch (error) {
-    console.warn('Unable to save presets.', error);
+    console.warn('Unable to save decks.', error);
     if (!state.presetSaveFailed) {
-      showSnackbar('Unable to save presets in this browser.');
+      showSnackbar('Unable to save decks in this browser.');
     }
     state.presetSaveFailed = true;
   }
 }
 
+function handlePhraseFilterInput(event) {
+  const value = event?.target?.value ?? '';
+  setFilterTokensFromInput(value);
+  applyPhraseFilter();
+}
+
+function setFilterTokensFromInput(value) {
+  state.filterQuery = value;
+  const rawTokens = parseFilterQuery(value);
+  state.filterTokens = rawTokens
+    .map((token) => {
+      if (token.type === 'tag') {
+        const normalized = normalizeTagName(token.value);
+        if (!normalized) return null;
+        const display = state.tags.find((tag) => tag.normalized === normalized)?.original || token.value.trim();
+        return { type: 'tag', value: display, normalized };
+      }
+      const trimmed = token.value.trim();
+      if (!trimmed) return null;
+      return { type: 'text', value: trimmed, normalized: trimmed.toLowerCase() };
+    })
+    .filter(Boolean);
+  updateTagSelectionStates();
+}
+
+function parseFilterQuery(query) {
+  const tokens = [];
+  let current = '';
+  let inQuotes = false;
+  let quoteChar = '';
+  for (let i = 0; i < query.length; i += 1) {
+    const char = query[i];
+    if (inQuotes) {
+      if (char === quoteChar) {
+        inQuotes = false;
+      } else {
+        current += char;
+      }
+    } else if (char === '"' || char === "'") {
+      inQuotes = true;
+      quoteChar = char;
+    } else if (/\s/.test(char)) {
+      if (current) {
+        tokens.push(current);
+        current = '';
+      }
+    } else {
+      current += char;
+    }
+  }
+  if (current) {
+    tokens.push(current);
+  }
+  return tokens
+    .map((token) => {
+      if (token.startsWith('#')) {
+        return { type: 'tag', value: token.slice(1) };
+      }
+      return { type: 'text', value: token };
+    })
+    .filter(Boolean);
+}
+
+function tokensToString(tokens) {
+  return tokens
+    .map((token) => {
+      if (!token || !token.value) return '';
+      if (token.type === 'tag') {
+        return formatTagToken(token.value);
+      }
+      return /\s/.test(token.value) ? `"${token.value}"` : token.value;
+    })
+    .filter(Boolean)
+    .join(' ');
+}
+
+function formatTagToken(value) {
+  const trimmed = value.trim();
+  if (!trimmed) return '';
+  if (!/[\s"']/.test(trimmed)) {
+    return `#${trimmed}`;
+  }
+  if (!trimmed.includes('"')) {
+    return `#"${trimmed}"`;
+  }
+  if (!trimmed.includes("'")) {
+    return `#'${trimmed}'`;
+  }
+  const sanitized = trimmed.replace(/["']/g, '');
+  return `#'${sanitized}'`;
+}
+
+function applyPhraseFilter() {
+  const hasFilter = state.filterTokens.length > 0;
+  if (!state.showAllPhrases && !hasFilter) {
+    state.filteredPhrases = [];
+    renderPhraseList();
+    updatePhrasePanelVisibility();
+    return;
+  }
+
+  const tagFilters = state.filterTokens.filter((token) => token.type === 'tag');
+  const textFilters = state.filterTokens.filter((token) => token.type === 'text');
+
+  let phrases = state.phrases;
+  if (tagFilters.length || textFilters.length) {
+    phrases = phrases.filter((phrase) => {
+      if (tagFilters.length) {
+        for (const filter of tagFilters) {
+          if (!phrase.normalizedTags.has(filter.normalized)) {
+            return false;
+          }
+        }
+      }
+      if (textFilters.length) {
+        for (const filter of textFilters) {
+          if (!phrase.searchText.includes(filter.normalized)) {
+            return false;
+          }
+        }
+      }
+      return true;
+    });
+  } else if (state.showAllPhrases) {
+    phrases = state.phrases.slice();
+  }
+
+  state.filteredPhrases = phrases;
+  renderPhraseList();
+  updatePhrasePanelVisibility();
+}
+
+function renderPhraseList() {
+  if (!elements.phraseList) return;
+  elements.phraseList.innerHTML = '';
+  const shouldShow = state.showAllPhrases || state.filterTokens.length > 0;
+  if (!shouldShow) return;
+
+  if (!state.filteredPhrases.length) {
+    const empty = document.createElement('div');
+    empty.className = 'phrase-empty';
+    empty.textContent = 'No phrases match your filter yet.';
+    elements.phraseList.appendChild(empty);
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  state.filteredPhrases.forEach((phrase) => {
+    const item = document.createElement('details');
+    item.className = 'phrase-item';
+    item.dataset.phraseId = phrase.id;
+    item.open = true;
+    const isSelected = state.selectedPhraseIds.has(phrase.id);
+    if (isSelected) {
+      item.classList.add('is-selected');
+    }
+
+    const summary = document.createElement('summary');
+    summary.className = 'phrase-summary';
+
+    const summaryContent = document.createElement('div');
+    summaryContent.className = 'phrase-summary-content';
+
+    const english = document.createElement('div');
+    english.className = 'phrase-summary-english';
+    english.textContent = phrase.english;
+    summaryContent.appendChild(english);
+
+    if (phrase.japanese) {
+      const japanese = document.createElement('div');
+      japanese.className = 'phrase-summary-japanese';
+      japanese.textContent = phrase.japanese;
+      summaryContent.appendChild(japanese);
+    }
+
+    summary.appendChild(summaryContent);
+    item.appendChild(summary);
+
+    const body = document.createElement('div');
+    body.className = 'phrase-body';
+
+    if (phrase.romaji || phrase.japanese) {
+      const text = document.createElement('div');
+      text.className = 'phrase-text';
+      if (phrase.romaji) {
+        const romaji = document.createElement('div');
+        romaji.className = 'phrase-romaji';
+        romaji.textContent = phrase.romaji;
+        text.appendChild(romaji);
+      }
+      if (phrase.japanese) {
+        const japanese = document.createElement('div');
+        japanese.className = 'phrase-japanese';
+        japanese.textContent = phrase.japanese;
+        text.appendChild(japanese);
+      }
+      body.appendChild(text);
+    }
+
+    const meta = document.createElement('div');
+    meta.className = 'phrase-meta';
+
+    const tags = document.createElement('div');
+    tags.className = 'phrase-tags';
+    if (phrase.tags.length) {
+      phrase.tags.forEach((tag) => {
+        const chip = document.createElement('span');
+        chip.className = 'phrase-tag';
+        chip.textContent = `#${tag}`;
+        tags.appendChild(chip);
+      });
+    } else {
+      const none = document.createElement('span');
+      none.className = 'phrase-tag';
+      none.textContent = '#untagged';
+      tags.appendChild(none);
+    }
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'pill-button ghost small phrase-toggle';
+    toggle.dataset.action = 'toggle-selection';
+    toggle.textContent = isSelected ? 'Remove' : 'Add phrase';
+    if (isSelected) {
+      toggle.classList.add('is-remove');
+    }
+
+    meta.append(tags, toggle);
+    body.appendChild(meta);
+    item.appendChild(body);
+    fragment.appendChild(item);
+  });
+
+  elements.phraseList.appendChild(fragment);
+}
+
+function handlePhraseListClick(event) {
+  const button = event.target.closest('[data-action="toggle-selection"]');
+  if (!button) return;
+  const item = button.closest('.phrase-item');
+  if (!item) return;
+  const phraseId = item.dataset.phraseId;
+  if (!phraseId) return;
+  const isSelected = state.selectedPhraseIds.has(phraseId);
+  togglePhraseSelection(phraseId, !isSelected);
+}
+
+function togglePhraseSelection(phraseId, shouldSelect) {
+  if (!state.phraseMap.has(phraseId)) return;
+  if (shouldSelect) {
+    if (state.selectedPhraseIds.has(phraseId)) return;
+    state.selectedPhraseIds.add(phraseId);
+  } else {
+    if (!state.selectedPhraseIds.has(phraseId)) return;
+    state.selectedPhraseIds.delete(phraseId);
+  }
+  updateSelectionControls();
+  updateSinglePhraseSelectionState(phraseId);
+}
+
+function updateSelectionControls() {
+  if (!elements.selectionSummary) return;
+  const count = state.selectedPhraseIds.size;
+  if (!count) {
+    elements.selectionSummary.textContent = 'No phrases selected yet.';
+  } else {
+    const sample = Array.from(state.selectedPhraseIds)
+      .map((id) => state.phraseMap.get(id)?.english)
+      .filter(Boolean)
+      .slice(0, 3);
+    if (!sample.length) {
+      elements.selectionSummary.textContent = `${count} phrase${count === 1 ? '' : 's'} selected.`;
+    } else {
+      const remainder = count - sample.length;
+      let summary = `${count} phrase${count === 1 ? '' : 's'} selected: ${formatList(sample)}`;
+      if (remainder > 0) {
+        summary += `, plus ${remainder} more phrase${remainder === 1 ? '' : 's'}`;
+      }
+      elements.selectionSummary.textContent = `${summary}.`;
+    }
+  }
+  if (elements.studySelected) {
+    elements.studySelected.disabled = !count;
+  }
+  if (elements.clearSelection) {
+    elements.clearSelection.disabled = !count;
+  }
+}
+function studySelectedPhrases(options = {}) {
+  const phraseIds = Array.from(state.selectedPhraseIds);
+  if (!phraseIds.length) {
+    showSnackbar('Select at least one phrase before studying.');
+    return;
+  }
+  const cards = phraseIds.map((id) => state.phraseMap.get(id)).filter(Boolean);
+  if (!cards.length) {
+    showSnackbar('Selected phrases are unavailable right now.');
+    return;
+  }
+  cancelCardTransition();
+  cancelSpeech();
+  state.cards = cards;
+  state.index = 0;
+  state.side = 'front';
+  state.currentDeckName = options.deckName || 'Selected phrases';
+  updateStudyHeader();
+  updateInterfaceForSelection();
+  updateCardContent();
+}
+
+function clearSelection() {
+  if (!state.selectedPhraseIds.size) return;
+  state.selectedPhraseIds.clear();
+  updateSelectionControls();
+  updatePhraseListSelectionState();
+  showSnackbar('Selection cleared.');
+}
+
+function updatePhraseListSelectionState() {
+  if (!elements.phraseList) return;
+  elements.phraseList.querySelectorAll('.phrase-item').forEach((item) => {
+    const phraseId = item.dataset.phraseId;
+    if (!phraseId) return;
+    updateSinglePhraseSelectionState(phraseId);
+  });
+}
+
+function updateSinglePhraseSelectionState(phraseId) {
+  if (!elements.phraseList) return;
+  const item = elements.phraseList.querySelector(`.phrase-item[data-phrase-id="${phraseId}"]`);
+  if (!item) return;
+  const isSelected = state.selectedPhraseIds.has(phraseId);
+  item.classList.toggle('is-selected', isSelected);
+  const button = item.querySelector('[data-action="toggle-selection"]');
+  if (button) {
+    button.textContent = isSelected ? 'Remove' : 'Add phrase';
+    button.classList.toggle('is-remove', isSelected);
+  }
+}
+
+function updatePhrasePanelVisibility() {
+  if (!elements.phrasePanel || !elements.phraseList || !elements.phraseHint) return;
+  const shouldShow = state.showAllPhrases || state.filterTokens.length > 0;
+  elements.phrasePanel.classList.toggle('is-active', shouldShow);
+  elements.phraseHint.hidden = shouldShow;
+  elements.phraseList.hidden = !shouldShow;
+  if (elements.showAllPhrases) {
+    elements.showAllPhrases.textContent = state.showAllPhrases ? 'Hide list' : 'Show all';
+    elements.showAllPhrases.setAttribute('aria-pressed', String(state.showAllPhrases));
+  }
+}
+
+function handleShowAllToggle() {
+  state.showAllPhrases = !state.showAllPhrases;
+  if (state.showAllPhrases && !state.filterTokens.length) {
+    state.filteredPhrases = state.phrases.slice();
+  }
+  renderPhraseList();
+  updatePhrasePanelVisibility();
+}
+
+function renderTagList() {
+  if (!elements.tagList) return;
+  elements.tagList.innerHTML = '';
+  if (!state.tags.length) {
+    const empty = document.createElement('div');
+    empty.className = 'tag-chip';
+    empty.textContent = 'No tags available yet.';
+    empty.setAttribute('aria-disabled', 'true');
+    elements.tagList.appendChild(empty);
+    return;
+  }
+  const fragment = document.createDocumentFragment();
+  state.tags.forEach((tag) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'tag-chip';
+    button.dataset.tag = tag.original;
+    button.dataset.tagNormalized = tag.normalized;
+    button.textContent = `#${tag.original}`;
+    fragment.appendChild(button);
+  });
+  elements.tagList.appendChild(fragment);
+  updateTagSelectionStates();
+}
+
+function handleTagToggle(tagName) {
+  const normalized = normalizeTagName(tagName);
+  const tokens = [...state.filterTokens];
+  const existingIndex = tokens.findIndex((token) => token.type === 'tag' && token.normalized === normalized);
+  if (existingIndex >= 0) {
+    tokens.splice(existingIndex, 1);
+  } else {
+    tokens.push({ type: 'tag', value: tagName, normalized });
+  }
+  const nextValue = tokensToString(tokens);
+  if (elements.phraseFilter) {
+    elements.phraseFilter.value = nextValue;
+    elements.phraseFilter.focus();
+  }
+  setFilterTokensFromInput(nextValue);
+  applyPhraseFilter();
+}
+
+function updateTagSelectionStates() {
+  if (!elements.tagList) return;
+  const active = new Set(
+    state.filterTokens.filter((token) => token.type === 'tag').map((token) => token.normalized)
+  );
+  elements.tagList.querySelectorAll('.tag-chip').forEach((chip) => {
+    const normalized = chip.dataset.tagNormalized;
+    chip.classList.toggle('is-active', Boolean(normalized && active.has(normalized)));
+  });
+}
+
+function updateStudyHeader() {
+  if (!elements.deckTitle) return;
+  const title = state.currentDeckName || 'Study phrases';
+  elements.deckTitle.textContent = title;
+  updateDeckDescription();
+}
+
+function updateDeckDescription() {
+  if (!elements.deckDescription) return;
+  const count = state.cards.length;
+  if (!count) {
+    elements.deckDescription.textContent = state.currentDeckBaseDescription || '';
+    return;
+  }
+  elements.deckDescription.textContent = `Studying ${count} phrase${count === 1 ? '' : 's'}.`;
+}
+
+function updateInterfaceForSelection() {
+  const hasCards = state.cards.length > 0;
+  if (elements.deckProgress) {
+    elements.deckProgress.hidden = !hasCards;
+  }
+  if (elements.prevCard) {
+    elements.prevCard.disabled = !hasCards;
+  }
+  if (elements.nextCard) {
+    elements.nextCard.disabled = !hasCards;
+  }
+  if (elements.flipCard) {
+    elements.flipCard.disabled = !hasCards;
+  }
+  updateNavigationStates();
+  updateFlipLabel();
+  updateAudioState();
+  updateProgress();
+  if (!hasCards) {
+    cancelCardTransition();
+    if (elements.card) {
+      elements.card.dataset.side = 'front';
+    }
+    if (elements.cardFrontText) {
+      elements.cardFrontText.textContent = 'Select phrases to begin.';
+    }
+    if (elements.cardRomaji) {
+      elements.cardRomaji.textContent = 'ローマ字';
+    }
+    if (elements.cardJapanese) {
+      elements.cardJapanese.textContent = '日本語';
+    }
+  }
+  updateDeckDescription();
+}
+
 function updateCardContent() {
   const card = state.cards[state.index];
   if (!card) {
-    const hasDeckLoaded = state.unfilteredCards.length > 0;
-    elements.cardFrontText.textContent = hasDeckLoaded
-      ? 'No cards match the current filters yet.'
-      : 'Select decks to begin.';
-    elements.cardRomaji.textContent = 'ローマ字';
-    elements.cardJapanese.textContent = '日本語';
+    if (elements.cardFrontText) {
+      elements.cardFrontText.textContent = 'Select phrases to begin.';
+    }
+    if (elements.cardRomaji) {
+      elements.cardRomaji.textContent = 'ローマ字';
+    }
+    if (elements.cardJapanese) {
+      elements.cardJapanese.textContent = '日本語';
+    }
     setCardSide('front');
     updateNavigationStates();
     updateProgress();
     updateAudioState();
-    if (!hasDeckLoaded) {
-      updateInterfaceForSelection();
-    }
     return;
   }
-  elements.cardFrontText.textContent = card.english;
-  elements.cardRomaji.textContent = card.romaji;
-  elements.cardJapanese.textContent = card.japanese;
+  if (elements.cardFrontText) {
+    elements.cardFrontText.textContent = card.english;
+  }
+  if (elements.cardRomaji) {
+    elements.cardRomaji.textContent = card.romaji || '';
+  }
+  if (elements.cardJapanese) {
+    elements.cardJapanese.textContent = card.japanese || '';
+  }
   setCardSide('front');
   updateNavigationStates();
   updateProgress();
   updateAudioState();
 }
 
+function showNextCard() {
+  if (state.transitioning || state.index >= state.cards.length - 1) return;
+  beginCardTransition(1);
+}
+
+function showPreviousCard() {
+  if (state.transitioning || state.index <= 0) return;
+  beginCardTransition(-1);
+}
+
+function flipCardSide() {
+  if (!state.cards.length) return;
+  state.side = state.side === 'front' ? 'back' : 'front';
+  setCardSide(state.side);
+  updateFlipLabel();
+  updateAudioState();
+  if (state.side === 'back') {
+    speakCurrentCard(true);
+  }
+}
+
+function setCardSide(side) {
+  if (!elements.card) return;
+  if (side === 'front') {
+    elements.card.dataset.side = 'front';
+    state.side = 'front';
+  } else {
+    elements.card.dataset.side = 'back';
+    state.side = 'back';
+  }
+}
+
+function updateFlipLabel() {
+  if (!elements.flipCard) return;
+  elements.flipCard.textContent = state.side === 'front' ? 'Flip Card' : 'Show Front';
+}
+
 function updateNavigationStates() {
+  if (!elements.prevCard || !elements.nextCard) return;
   const count = state.cards.length;
   if (!count) {
     elements.prevCard.disabled = true;
@@ -760,83 +1006,36 @@ function updateNavigationStates() {
     return;
   }
   elements.prevCard.disabled = state.index === 0;
-  elements.nextCard.disabled = state.index === count - 1;
+  elements.nextCard.disabled = state.index >= count - 1;
 }
 
 function updateProgress() {
-  if (!state.cards.length) {
+  if (!elements.progressFill || !elements.progressCount) return;
+  const count = state.cards.length;
+  if (!count) {
     elements.progressFill.style.width = '0%';
-    elements.progressCount.textContent = '';
+    elements.progressCount.textContent = '0 of 0';
     return;
   }
-  const current = state.index + 1;
-  const total = state.cards.length;
-  const percent = Math.round((current / total) * 100);
-  elements.progressFill.style.width = `${percent}%`;
-  elements.progressCount.textContent = `Card ${current} of ${total}`;
+  const position = state.index + 1;
+  const percentage = Math.round((position / count) * 100);
+  elements.progressFill.style.width = `${percentage}%`;
+  elements.progressCount.textContent = `${position} of ${count}`;
 }
 
-function updateFlipLabel() {
-  elements.flipCard.textContent = state.side === 'back' ? 'Show English' : 'Show Japanese';
-}
-
-function flipCardSide() {
-  if (!state.cards.length || state.transitioning) return;
-  const nextSide = state.side === 'front' ? 'back' : 'front';
-  setCardSide(nextSide);
-}
-
-function setCardSide(side) {
-  state.side = side;
-  elements.card.dataset.side = side;
-  updateFlipLabel();
-  updateAudioState();
-  if (side === 'back') {
-    speakCurrentCard(true);
-  } else {
-    cancelSpeech();
-  }
-}
-
-function showPreviousCard() {
-  if (!state.cards.length || state.index === 0 || state.transitioning) return;
-  changeCard(state.index - 1);
-}
-
-function showNextCard() {
-  if (
-    !state.cards.length ||
-    state.index >= state.cards.length - 1 ||
-    state.transitioning
-  ) {
-    return;
-  }
-  changeCard(state.index + 1);
-}
-
-function changeCard(newIndex) {
-  if (state.transitioning || newIndex < 0 || newIndex >= state.cards.length) return;
-  setCardSide('front');
+function beginCardTransition(direction) {
+  if (!elements.cardInner) return;
   state.transitioning = true;
-  if (state.transitionTimer) {
-    clearTimeout(state.transitionTimer);
+  elements.cardInner.classList.add('is-fading');
+  state.transitionTimer = setTimeout(() => {
     state.transitionTimer = null;
-  }
-  if (!elements.cardInner) {
-    state.index = newIndex;
+    elements.cardInner.classList.remove('is-fading');
+    state.index += direction;
+    if (state.index < 0) state.index = 0;
+    if (state.index >= state.cards.length) state.index = state.cards.length - 1;
+    state.side = 'front';
     updateCardContent();
     state.transitioning = false;
-    return;
-  }
-  elements.cardInner.classList.add('is-fading');
-  state.transitionTimer = window.setTimeout(() => {
-    state.transitionTimer = null;
-    state.index = newIndex;
-    updateCardContent();
-    window.requestAnimationFrame(() => {
-      elements.cardInner.classList.remove('is-fading');
-      state.transitioning = false;
-    });
   }, CARD_TRANSITION_DURATION);
 }
 
@@ -849,24 +1048,6 @@ function cancelCardTransition() {
     elements.cardInner.classList.remove('is-fading');
   }
   state.transitioning = false;
-}
-
-function handleKeyboardShortcuts(event) {
-  const activeTag = event.target.tagName;
-  if (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || event.target.isContentEditable) {
-    return;
-  }
-  if (!state.cards.length) return;
-  if (event.key === 'ArrowLeft') {
-    event.preventDefault();
-    showPreviousCard();
-  } else if (event.key === 'ArrowRight') {
-    event.preventDefault();
-    showNextCard();
-  } else if (event.key === ' ') {
-    event.preventDefault();
-    flipCardSide();
-  }
 }
 
 function prepareSpeech() {
@@ -889,6 +1070,7 @@ function prepareSpeech() {
 
 function updateAudioState() {
   const canPlay = Boolean(state.cards.length && state.side === 'back' && state.speechSupported);
+  if (!elements.playAudio) return;
   elements.playAudio.disabled = !canPlay;
   elements.playAudio.setAttribute('aria-disabled', String(!canPlay));
 }
@@ -919,8 +1101,26 @@ function cancelSpeech() {
   window.speechSynthesis.cancel();
 }
 
+function handleKeyboardShortcuts(event) {
+  const activeTag = event.target.tagName;
+  if (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || event.target.isContentEditable) {
+    return;
+  }
+  if (!state.cards.length) return;
+  if (event.key === 'ArrowLeft') {
+    event.preventDefault();
+    showPreviousCard();
+  } else if (event.key === 'ArrowRight') {
+    event.preventDefault();
+    showNextCard();
+  } else if (event.key === ' ') {
+    event.preventDefault();
+    flipCardSide();
+  }
+}
+
 function showSnackbar(message) {
-  if (!message) return;
+  if (!message || !elements.snackbar) return;
   elements.snackbar.textContent = message;
   elements.snackbar.hidden = false;
   if (state.snackbarTimer) {
@@ -935,6 +1135,13 @@ function notifyOnce(message) {
   if (state.speechNotified) return;
   state.speechNotified = true;
   showSnackbar(message);
+}
+
+function formatList(items) {
+  if (!items.length) return '';
+  if (items.length === 1) return items[0];
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
 }
 
 async function loadJson(relativePath) {
@@ -958,13 +1165,6 @@ async function loadJsonFromModule(relativePath) {
   const normalized =
     relativePath.startsWith('./') || relativePath.startsWith('../') ? relativePath : `./${relativePath}`;
   const moduleUrl = new URL(normalized, import.meta.url).href;
-  try {
-    const module = await import(moduleUrl, { assert: { type: 'json' } });
-    return module.default;
-  } catch (error) {
-    console.error(`Module import failed for ${relativePath}.`, error);
-    throw new Error(
-      'Unable to read local JSON files. Please use a browser with JSON module support or serve the site over HTTP.'
-    );
-  }
+  const module = await import(moduleUrl, { assert: { type: 'json' } });
+  return module.default;
 }

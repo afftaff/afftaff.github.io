@@ -22,38 +22,51 @@
             <p>Learn useful phrases before your next adventure.</p>
           </div>
         </div>
-        <div class="deck-search">
-          <label class="deck-search-label" for="deck-filter">Filter decks</label>
-          <input type="search" id="deck-filter" placeholder="Search decks…" />
-        </div>
+        <section class="phrase-search">
+          <div class="phrase-search-header">
+            <label class="phrase-search-label" for="phrase-filter">Filter phrases</label>
+            <button id="show-all-phrases" type="button" class="pill-button ghost small">Show all</button>
+          </div>
+          <input
+            type="search"
+            id="phrase-filter"
+            placeholder="Type words or #tags to find phrases…"
+            autocomplete="off"
+          />
+          <p class="phrase-search-help">Click a tag to add it to your filter.</p>
+          <div class="tag-list" id="tag-list" aria-label="Available tags"></div>
+        </section>
+        <section class="phrase-panel" id="phrase-panel">
+          <div class="phrase-hint" id="phrase-hint">Start typing to browse phrases or choose Show all.</div>
+          <div class="phrase-list" id="phrase-list" role="list"></div>
+        </section>
         <section class="deck-selection-panel">
-          <div class="selection-summary" id="selection-summary">No decks selected yet.</div>
+          <div class="selection-summary" id="selection-summary">No phrases selected yet.</div>
           <div class="selection-actions">
             <button id="study-selected" type="button" class="pill-button primary" disabled>
-              Study selected decks
+              Study selected phrases
             </button>
             <button id="clear-selection" type="button" class="pill-button ghost" disabled>Clear</button>
           </div>
         </section>
         <section class="preset-panel">
           <div class="preset-header">
-            <h3>Presets</h3>
-            <p class="preset-help">Save frequently used deck combinations for quick access.</p>
+            <h3>Decks</h3>
+            <p class="preset-help">Save phrase selections as reusable decks.</p>
           </div>
           <div class="preset-list" id="preset-list"></div>
           <form id="preset-form" class="preset-form">
-            <label class="sr-only" for="preset-name">Preset name</label>
-            <input type="text" id="preset-name" name="preset-name" placeholder="Name this preset" autocomplete="off" />
-            <button type="submit" class="pill-button ghost small">Save preset</button>
+            <label class="sr-only" for="preset-name">Deck name</label>
+            <input type="text" id="preset-name" name="preset-name" placeholder="Name this deck" autocomplete="off" />
+            <button type="submit" class="pill-button ghost small">Save deck</button>
           </form>
         </section>
-        <nav class="deck-list" id="deck-list" aria-label="Deck list"></nav>
       </aside>
       <main class="main">
         <section class="deck-header" id="deck-header">
           <div class="deck-meta">
-            <h2 id="deck-title">Choose decks</h2>
-            <p id="deck-description">Pick one or more of the travel-focused decks to begin studying.</p>
+            <h2 id="deck-title">Study phrases</h2>
+            <p id="deck-description">Select phrases from the list to build a custom study session.</p>
           </div>
           <div class="deck-progress" id="deck-progress" hidden>
             <div class="progress-label">Progress</div>
@@ -63,29 +76,12 @@
             <div class="progress-count" id="progress-count"></div>
           </div>
         </section>
-        <section class="card-filters" id="card-filters" aria-label="Phrase filters">
-          <div class="card-filter">
-            <label for="card-search">Search phrases</label>
-            <input type="search" id="card-search" placeholder="Search English, 日本語, or tags" />
-          </div>
-          <div class="card-filter">
-            <label for="usefulness-filter">Minimum usefulness</label>
-            <select id="usefulness-filter">
-              <option value="">Any rating</option>
-              <option value="3">3+</option>
-              <option value="5">5+</option>
-              <option value="7">7+</option>
-              <option value="9">9+</option>
-            </select>
-          </div>
-          <button id="clear-card-filters" type="button" class="pill-button ghost small">Clear filters</button>
-        </section>
         <section class="card-stage" aria-live="polite">
           <div class="card" id="study-card" data-side="front">
             <div class="card-inner" id="card-inner">
               <article class="card-face card-front" aria-label="Card front">
                 <header>English phrase</header>
-                <p id="card-front-text">Select decks to begin.</p>
+                <p id="card-front-text">Select phrases to begin.</p>
               </article>
               <article class="card-face card-back" aria-label="Card back">
                 <header>Japanese phrase</header>
