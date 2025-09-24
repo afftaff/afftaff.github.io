@@ -1,10 +1,12 @@
 const elements = {
   phraseFilter: document.getElementById('phrase-filter'),
   showAllPhrases: document.getElementById('show-all-phrases'),
+  tagFilter: document.getElementById('tag-filter'),
   tagList: document.getElementById('tag-list'),
   phrasePanel: document.getElementById('phrase-panel'),
   phraseList: document.getElementById('phrase-list'),
   phraseHint: document.getElementById('phrase-hint'),
+  usefulnessFilter: document.getElementById('usefulness-filter'),
   selectionSummary: document.getElementById('selection-summary'),
   studySelected: document.getElementById('study-selected'),
   clearSelection: document.getElementById('clear-selection'),
@@ -34,9 +36,11 @@ const state = {
   phraseMap: new Map(),
   deckPhraseMap: new Map(),
   tags: [],
+  tagFilterQuery: '',
   filterTokens: [],
   filterQuery: '',
   showAllPhrases: false,
+  usefulnessFilter: '0',
   filteredPhrases: [],
   selectedPhraseIds: new Set(),
   defaultDecks: [],
@@ -68,6 +72,12 @@ async function init() {
   loadDecksFromStorage();
   refreshDeckCollections();
   renderTagList();
+  if (elements.tagFilter) {
+    elements.tagFilter.value = state.tagFilterQuery;
+  }
+  if (elements.usefulnessFilter) {
+    elements.usefulnessFilter.value = state.usefulnessFilter;
+  }
   const initialQuery = elements.phraseFilter?.value ?? '';
   setFilterTokensFromInput(initialQuery);
   applyPhraseFilter();
@@ -88,6 +98,9 @@ function attachEventListeners() {
   if (elements.showAllPhrases) {
     elements.showAllPhrases.addEventListener('click', handleShowAllToggle);
   }
+  if (elements.tagFilter) {
+    elements.tagFilter.addEventListener('input', handleTagFilterInput);
+  }
   if (elements.tagList) {
     elements.tagList.addEventListener('click', (event) => {
       const button = event.target.closest('.tag-chip');
@@ -97,6 +110,9 @@ function attachEventListeners() {
         handleTagToggle(tagName);
       }
     });
+  }
+  if (elements.usefulnessFilter) {
+    elements.usefulnessFilter.addEventListener('change', handleUsefulnessFilterChange);
   }
   if (elements.phraseList) {
     elements.phraseList.addEventListener('click', handlePhraseListClick);
@@ -465,6 +481,21 @@ function handlePhraseFilterInput(event) {
   applyPhraseFilter();
 }
 
+function handleTagFilterInput(event) {
+  const value = event?.target?.value ?? '';
+  state.tagFilterQuery = value;
+  if (elements.tagList) {
+    elements.tagList.scrollTop = 0;
+  }
+  renderTagList();
+}
+
+function handleUsefulnessFilterChange(event) {
+  const value = event?.target?.value ?? '0';
+  state.usefulnessFilter = String(value);
+  applyPhraseFilter();
+}
+
 function setFilterTokensFromInput(value) {
   state.filterQuery = value;
   const rawTokens = parseFilterQuery(value);
@@ -552,7 +583,12 @@ function formatTagToken(value) {
 }
 
 function applyPhraseFilter() {
-  const hasFilter = state.filterTokens.length > 0;
+  const hasTokenFilters = state.filterTokens.length > 0;
+  const minUsefulness = Number(state.usefulnessFilter);
+  const filterForUnrated = state.usefulnessFilter === 'unrated';
+  const filterForMin = !Number.isNaN(minUsefulness) && minUsefulness > 0;
+  const hasUsefulnessFilter = filterForMin || filterForUnrated;
+  const hasFilter = hasTokenFilters || hasUsefulnessFilter;
   if (!state.showAllPhrases && !hasFilter) {
     state.filteredPhrases = [];
     renderPhraseList();
@@ -564,13 +600,12 @@ function applyPhraseFilter() {
   const textFilters = state.filterTokens.filter((token) => token.type === 'text');
 
   let phrases = state.phrases;
-  if (tagFilters.length || textFilters.length) {
+  if (tagFilters.length || textFilters.length || hasUsefulnessFilter) {
     phrases = phrases.filter((phrase) => {
       if (tagFilters.length) {
-        for (const filter of tagFilters) {
-          if (!phrase.normalizedTags.has(filter.normalized)) {
-            return false;
-          }
+        const matchesTag = tagFilters.some((filter) => phrase.normalizedTags.has(filter.normalized));
+        if (!matchesTag) {
+          return false;
         }
       }
       if (textFilters.length) {
@@ -578,6 +613,15 @@ function applyPhraseFilter() {
           if (!phrase.searchText.includes(filter.normalized)) {
             return false;
           }
+        }
+      }
+      if (filterForUnrated) {
+        if (typeof phrase.usefulness === 'number') {
+          return false;
+        }
+      } else if (filterForMin) {
+        if (typeof phrase.usefulness !== 'number' || phrase.usefulness < minUsefulness) {
+          return false;
         }
       }
       return true;
@@ -594,7 +638,9 @@ function applyPhraseFilter() {
 function renderPhraseList() {
   if (!elements.phraseList) return;
   elements.phraseList.innerHTML = '';
-  const shouldShow = state.showAllPhrases || state.filterTokens.length > 0;
+  const hasTokenFilters = state.filterTokens.length > 0;
+  const hasUsefulnessFilter = state.usefulnessFilter !== '0';
+  const shouldShow = state.showAllPhrases || hasTokenFilters || hasUsefulnessFilter;
   if (!shouldShow) return;
 
   if (!state.filteredPhrases.length) {
@@ -661,6 +707,19 @@ function renderPhraseList() {
     const meta = document.createElement('div');
     meta.className = 'phrase-meta';
 
+    const metaDetails = document.createElement('div');
+    metaDetails.className = 'phrase-meta-details';
+
+    const usefulness = document.createElement('div');
+    usefulness.className = 'phrase-usefulness';
+    if (typeof phrase.usefulness === 'number') {
+      usefulness.textContent = `Traveler usability: ${phrase.usefulness}/10`;
+    } else {
+      usefulness.textContent = 'Traveler usability: Unrated';
+      usefulness.classList.add('is-unrated');
+    }
+    metaDetails.appendChild(usefulness);
+
     const tags = document.createElement('div');
     tags.className = 'phrase-tags';
     if (phrase.tags.length) {
@@ -676,6 +735,7 @@ function renderPhraseList() {
       none.textContent = '#untagged';
       tags.appendChild(none);
     }
+    metaDetails.appendChild(tags);
 
     const toggle = document.createElement('button');
     toggle.type = 'button';
@@ -686,7 +746,7 @@ function renderPhraseList() {
       toggle.classList.add('is-remove');
     }
 
-    meta.append(tags, toggle);
+    meta.append(metaDetails, toggle);
     body.appendChild(meta);
     item.appendChild(body);
     fragment.appendChild(item);
@@ -801,7 +861,9 @@ function updateSinglePhraseSelectionState(phraseId) {
 
 function updatePhrasePanelVisibility() {
   if (!elements.phrasePanel || !elements.phraseList || !elements.phraseHint) return;
-  const shouldShow = state.showAllPhrases || state.filterTokens.length > 0;
+  const hasTokenFilters = state.filterTokens.length > 0;
+  const hasUsefulnessFilter = state.usefulnessFilter !== '0';
+  const shouldShow = state.showAllPhrases || hasTokenFilters || hasUsefulnessFilter;
   elements.phrasePanel.classList.toggle('is-active', shouldShow);
   elements.phraseHint.hidden = shouldShow;
   elements.phraseList.hidden = !shouldShow;
@@ -813,11 +875,14 @@ function updatePhrasePanelVisibility() {
 
 function handleShowAllToggle() {
   state.showAllPhrases = !state.showAllPhrases;
-  if (state.showAllPhrases && !state.filterTokens.length) {
-    state.filteredPhrases = state.phrases.slice();
+  const hasFilters = state.filterTokens.length > 0 || state.usefulnessFilter !== '0';
+  if (!hasFilters) {
+    state.filteredPhrases = state.showAllPhrases ? state.phrases.slice() : [];
+    renderPhraseList();
+    updatePhrasePanelVisibility();
+    return;
   }
-  renderPhraseList();
-  updatePhrasePanelVisibility();
+  applyPhraseFilter();
 }
 
 function renderTagList() {
@@ -825,14 +890,27 @@ function renderTagList() {
   elements.tagList.innerHTML = '';
   if (!state.tags.length) {
     const empty = document.createElement('div');
-    empty.className = 'tag-chip';
+    empty.className = 'tag-empty';
     empty.textContent = 'No tags available yet.';
     empty.setAttribute('aria-disabled', 'true');
     elements.tagList.appendChild(empty);
     return;
   }
+  const query = state.tagFilterQuery.trim().toLowerCase();
+  const visibleTags = query
+    ? state.tags.filter((tag) =>
+        tag.original.toLowerCase().includes(query) || tag.normalized.includes(query)
+      )
+    : state.tags;
+  if (!visibleTags.length) {
+    const empty = document.createElement('div');
+    empty.className = 'tag-empty';
+    empty.textContent = 'No tags match your search yet.';
+    elements.tagList.appendChild(empty);
+    return;
+  }
   const fragment = document.createDocumentFragment();
-  state.tags.forEach((tag) => {
+  visibleTags.forEach((tag) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'tag-chip';

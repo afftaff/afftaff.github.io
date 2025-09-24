@@ -146,7 +146,14 @@ body {
 .phrase-search {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
+}
+
+.tag-filter-group,
+.usefulness-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .phrase-search-header {
@@ -163,7 +170,9 @@ body {
   color: rgba(248, 250, 252, 0.55);
 }
 
-#phrase-filter {
+#tag-filter,
+#phrase-filter,
+#usefulness-filter {
   border: none;
   border-radius: 12px;
   padding: 10px 14px;
@@ -172,7 +181,34 @@ body {
   color: var(--text-inverse);
 }
 
+#tag-filter::placeholder,
 #phrase-filter::placeholder {
+  color: rgba(248, 250, 252, 0.55);
+}
+
+#usefulness-filter {
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  padding-right: 40px;
+  appearance: none;
+  cursor: pointer;
+}
+
+#usefulness-filter option {
+  color: var(--text-primary);
+}
+
+.usefulness-filter {
+  position: relative;
+}
+
+.usefulness-filter::after {
+  content: '▾';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 0.75rem;
   color: rgba(248, 250, 252, 0.55);
 }
 
@@ -191,6 +227,8 @@ body {
   background: rgba(15, 23, 42, 0.3);
   max-height: 200px;
   overflow-y: auto;
+  align-items: flex-start;
+  align-content: flex-start;
 }
 
 .tag-chip {
@@ -203,6 +241,16 @@ body {
   color: rgba(248, 250, 252, 0.85);
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease, border 0.2s ease;
+}
+
+.tag-empty {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.4);
+  color: rgba(248, 250, 252, 0.75);
+  font-size: 0.8rem;
+  text-align: center;
 }
 
 .tag-chip:hover,
@@ -239,6 +287,7 @@ body {
   max-height: 360px;
   overflow-y: auto;
   padding-right: 4px;
+  align-items: stretch;
 }
 
 .phrase-panel.is-active .phrase-list {
@@ -263,6 +312,9 @@ body {
   color: var(--text-inverse);
   overflow: hidden;
   border: 1px solid transparent;
+  width: 100%;
+  box-sizing: border-box;
+  flex: 0 0 auto;
 }
 
 .phrase-item[open] {
@@ -338,15 +390,38 @@ body {
 .phrase-meta {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
+  align-items: flex-start;
+  gap: 12px;
   justify-content: space-between;
+}
+
+.phrase-meta-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.phrase-usefulness {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(165, 180, 252, 0.85);
+}
+
+.phrase-usefulness.is-unrated {
+  color: rgba(248, 250, 252, 0.6);
 }
 
 .phrase-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+}
+
+.phrase-toggle {
+  align-self: flex-start;
 }
 
 .phrase-tag {
