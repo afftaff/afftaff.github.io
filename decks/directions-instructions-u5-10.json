@@ -1,7 +1,7 @@
 {
   "id": "directions-instructions-u5-10",
   "title": "Directions: Instructions (Usefulness 5-10)",
-  "description": "Traveler usefulness 5-10/10 phrases for the Instructions subcategory within Directions. Includes 15 card(s).",
+  "description": "Traveler usefulness 5-10/10 phrases for the Instructions subcategory within Directions. Includes 14 card(s).",
   "cards": [
     {
       "english": "Go straight.",
@@ -72,11 +72,6 @@
       "english": "Then turn left at the third traffic signal.",
       "romaji": "Sanban-me no shingo wo hidari ni magarimasu.",
       "japanese": "三番目の信号を左に曲がります。"
-    },
-    {
-      "english": "Turn right at the dead end.",
-      "romaji": "Tsuki atari de migi ni magaru.",
-      "japanese": "突き当たりで右に曲がる。"
     }
   ]
 }

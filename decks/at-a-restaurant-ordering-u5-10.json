@@ -1,7 +1,7 @@
 {
   "id": "at-a-restaurant-ordering-u5-10",
   "title": "At a Restaurant: Ordering (Usefulness 5-10)",
-  "description": "Traveler usefulness 5-10/10 phrases for the Ordering subcategory within At a Restaurant. Includes 17 card(s).",
+  "description": "Traveler usefulness 5-10/10 phrases for the Ordering subcategory within At a Restaurant. Includes 15 card(s).",
   "cards": [
     {
       "english": "Please give me this.",
@@ -17,11 +17,6 @@
       "english": "What do you recommend?",
       "romaji": "Nani ga o-susume desu ka.",
       "japanese": "何がおすすめですか。"
-    },
-    {
-      "english": "What do you recommend?",
-      "romaji": "O-susume wa nan desu ka.",
-      "japanese": "おすすめは何ですか？"
     },
     {
       "english": "Tempura, please.",
@@ -72,11 +67,6 @@
       "english": "Your order is?",
       "romaji": "Go-chumon wa?",
       "japanese": "ご注文は？"
-    },
-    {
-      "english": "Would you like rice or bread?",
-      "romaji": "Raisu to pan, dochira ga ii desu ka.",
-      "japanese": "ライスとパン、どちらがいいですか。"
     },
     {
       "english": "Start with your drink order, please.",

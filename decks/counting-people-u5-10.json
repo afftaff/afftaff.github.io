@@ -1,7 +1,7 @@
 {
   "id": "counting-people-u5-10",
   "title": "Counting: People (Usefulness 5-10)",
-  "description": "Traveler usefulness 5-10/10 phrases for the People subcategory within Counting. Includes 15 card(s).",
+  "description": "Traveler usefulness 5-10/10 phrases for the People subcategory within Counting. Includes 14 card(s).",
   "cards": [
     {
       "english": "How many people are in your party?",
@@ -27,11 +27,6 @@
       "english": "One person.",
       "romaji": "Ichi mei.",
       "japanese": "一名。"
-    },
-    {
-      "english": "Two people.",
-      "romaji": "Ni mei.",
-      "japanese": "二名。"
     },
     {
       "english": "Three people.",

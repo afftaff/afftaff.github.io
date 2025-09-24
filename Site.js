@@ -28,6 +28,8 @@ const state = {
   manifest: [],
   filtered: [],
   selectedDeckIds: new Set(),
+  defaultPresets: [],
+  customPresets: [],
   presets: [],
   deckCache: new Map(),
   currentDeckId: null,
@@ -52,8 +54,9 @@ init();
 async function init() {
   await loadManifest();
   loadPresetsFromStorage();
+  await loadDefaultPresets();
+  refreshPresetCollections();
   applyFilter('');
-  renderPresets();
   attachEventListeners();
   prepareSpeech();
   updateInterfaceForSelection();
@@ -132,6 +135,9 @@ function renderDeckList() {
     const option = document.createElement('label');
     option.className = 'deck-button deck-option';
     option.dataset.deckId = deck.id;
+    if (deck.description) {
+      option.title = deck.description;
+    }
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
@@ -145,12 +151,33 @@ function renderDeckList() {
 
     const content = document.createElement('div');
     content.className = 'deck-option-content';
-    content.innerHTML = `<h3>${deck.title}</h3><p>${deck.description}</p>`;
+
+    const title = document.createElement('div');
+    title.className = 'deck-option-title';
+    title.textContent = deck.title;
+
+    content.appendChild(title);
+
+    const cardCount = getDeckCardCount(deck);
+    if (cardCount !== null) {
+      const count = document.createElement('div');
+      count.className = 'deck-option-count';
+      count.textContent = `${cardCount} card${cardCount === 1 ? '' : 's'}`;
+      content.appendChild(count);
+    }
 
     option.append(checkbox, content);
     option.classList.toggle('is-selected', checkbox.checked);
     elements.deckList.appendChild(option);
   });
+}
+
+function getDeckCardCount(deck) {
+  if (!deck || !deck.description) return null;
+  const match = deck.description.match(/Includes (\d+) card/);
+  if (!match) return null;
+  const count = Number.parseInt(match[1], 10);
+  return Number.isNaN(count) ? null : count;
 }
 
 function updateDeckHeader(deckData) {
@@ -339,18 +366,25 @@ function handlePresetSave(event) {
     return;
   }
 
-  const existingIndex = state.presets.findIndex((preset) => preset.name.toLowerCase() === name.toLowerCase());
-  const preset = { name, deckIds };
+  const normalizedName = name.toLowerCase();
+  const existingIndex = state.customPresets.findIndex((preset) => preset.name.toLowerCase() === normalizedName);
+  const preset = { name, deckIds, isDefault: false };
   if (existingIndex >= 0) {
-    state.presets[existingIndex] = preset;
+    state.customPresets[existingIndex] = preset;
     showSnackbar(`Updated preset "${name}".`);
   } else {
-    state.presets.push(preset);
+    const conflictsWithDefault = state.defaultPresets.some(
+      (preset) => preset.name.toLowerCase() === normalizedName
+    );
+    if (conflictsWithDefault) {
+      showSnackbar('A default preset already uses that name. Choose a different name.');
+      return;
+    }
+    state.customPresets.push(preset);
     showSnackbar(`Saved preset "${name}".`);
   }
-  sortPresets();
+  refreshPresetCollections();
   persistPresets();
-  renderPresets();
   if (elements.presetForm) {
     elements.presetForm.reset();
   }
@@ -370,19 +404,34 @@ function renderPresets() {
   state.presets.forEach((preset) => {
     const item = document.createElement('div');
     item.className = 'preset-item';
+    if (preset.isDefault) {
+      item.classList.add('is-default');
+    }
 
     const details = document.createElement('div');
     details.className = 'preset-details';
+
+    const nameRow = document.createElement('div');
+    nameRow.className = 'preset-name-row';
 
     const name = document.createElement('div');
     name.className = 'preset-name';
     name.textContent = preset.name;
 
+    nameRow.append(name);
+
+    if (preset.isDefault) {
+      const badge = document.createElement('span');
+      badge.className = 'preset-badge';
+      badge.textContent = 'Default';
+      nameRow.append(badge);
+    }
+
     const count = document.createElement('div');
     count.className = 'preset-count';
     count.textContent = `${preset.deckIds.length} deck${preset.deckIds.length === 1 ? '' : 's'}`;
 
-    details.append(name, count);
+    details.append(nameRow, count);
 
     const actions = document.createElement('div');
     actions.className = 'preset-actions';
@@ -397,7 +446,13 @@ function renderPresets() {
     deleteButton.type = 'button';
     deleteButton.className = 'pill-button outline small';
     deleteButton.textContent = 'Delete';
-    deleteButton.addEventListener('click', () => removePreset(preset.name));
+    if (preset.isDefault) {
+      deleteButton.disabled = true;
+      deleteButton.setAttribute('aria-disabled', 'true');
+      deleteButton.title = 'Default presets cannot be deleted.';
+    } else {
+      deleteButton.addEventListener('click', () => removePreset(preset.name));
+    }
 
     actions.append(loadButton, deleteButton);
     item.append(details, actions);
@@ -418,19 +473,30 @@ function applyPreset(preset) {
 }
 
 function removePreset(name) {
-  const index = state.presets.findIndex((preset) => preset.name === name);
-  if (index === -1) return;
-  state.presets.splice(index, 1);
+  const index = state.customPresets.findIndex((preset) => preset.name === name);
+  if (index === -1) {
+    showSnackbar('Default presets cannot be deleted.');
+    return;
+  }
+  state.customPresets.splice(index, 1);
+  refreshPresetCollections();
   persistPresets();
-  renderPresets();
   showSnackbar(`Deleted preset "${name}".`);
 }
 
-function sortPresets() {
-  state.presets.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+function sortPresetList(list) {
+  list.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+}
+
+function refreshPresetCollections() {
+  sortPresetList(state.defaultPresets);
+  sortPresetList(state.customPresets);
+  state.presets = [...state.defaultPresets, ...state.customPresets];
+  renderPresets();
 }
 
 function loadPresetsFromStorage() {
+  state.customPresets = [];
   if (!('localStorage' in window)) return;
   try {
     const raw = window.localStorage.getItem(PRESET_STORAGE_KEY);
@@ -438,24 +504,50 @@ function loadPresetsFromStorage() {
     const stored = JSON.parse(raw);
     if (!Array.isArray(stored)) return;
     const validIds = new Set(state.manifest.map((deck) => deck.id));
-    state.presets = stored
+    state.customPresets = stored
       .filter((preset) => preset && typeof preset.name === 'string' && Array.isArray(preset.deckIds))
       .map((preset) => ({
         name: preset.name,
-        deckIds: preset.deckIds.filter((id) => validIds.has(id))
+        deckIds: preset.deckIds.filter((id) => validIds.has(id)),
+        isDefault: false
       }))
       .filter((preset) => preset.deckIds.length);
-    sortPresets();
   } catch (error) {
     console.warn('Unable to load presets from storage.', error);
-    state.presets = [];
+    state.customPresets = [];
+  }
+}
+
+async function loadDefaultPresets() {
+  try {
+    const defaults = await loadJson('decks/default-presets.json');
+    if (!Array.isArray(defaults)) {
+      state.defaultPresets = [];
+      return;
+    }
+    const validIds = new Set(state.manifest.map((deck) => deck.id));
+    state.defaultPresets = defaults
+      .filter((preset) => preset && typeof preset.name === 'string' && Array.isArray(preset.deckIds))
+      .map((preset) => ({
+        name: preset.name,
+        deckIds: preset.deckIds.filter((id) => validIds.has(id)),
+        isDefault: true
+      }))
+      .filter((preset) => preset.deckIds.length);
+  } catch (error) {
+    console.warn('Unable to load default presets.', error);
+    state.defaultPresets = [];
   }
 }
 
 function persistPresets() {
   if (!('localStorage' in window)) return;
   try {
-    window.localStorage.setItem(PRESET_STORAGE_KEY, JSON.stringify(state.presets));
+    const payload = state.customPresets.map((preset) => ({
+      name: preset.name,
+      deckIds: preset.deckIds
+    }));
+    window.localStorage.setItem(PRESET_STORAGE_KEY, JSON.stringify(payload));
     state.presetSaveFailed = false;
   } catch (error) {
     console.warn('Unable to save presets.', error);

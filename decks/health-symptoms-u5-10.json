@@ -1,17 +1,12 @@
 {
   "id": "health-symptoms-u5-10",
   "title": "Health: Symptoms (Usefulness 5-10)",
-  "description": "Traveler usefulness 5-10/10 phrases for the Symptoms subcategory within Health. Includes 5 card(s).",
+  "description": "Traveler usefulness 5-10/10 phrases for the Symptoms subcategory within Health. Includes 4 card(s).",
   "cards": [
     {
       "english": "Do you have diarrhea?",
       "romaji": "Geri shite imasu ka?",
       "japanese": "下痢していますか？"
-    },
-    {
-      "english": "Do you have diarrhea?",
-      "romaji": "Geri shite imasu ka.",
-      "japanese": "下痢していますか。"
     },
     {
       "english": "I have a fever.",
