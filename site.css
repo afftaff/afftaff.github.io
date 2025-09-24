@@ -93,6 +93,10 @@ body {
   font-size: 0.8rem;
 }
 
+.pill-button.primary.small {
+  box-shadow: 0 12px 24px rgba(79, 70, 229, 0.28);
+}
+
 .app-shell {
   min-height: 100vh;
   display: flex;
@@ -462,11 +466,13 @@ body {
 
 .selection-actions {
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
 }
 
 .selection-actions .pill-button {
-  flex: 1;
+  flex: 0 0 auto;
 }
 
 .preset-header {
