@@ -2,13 +2,13 @@
   {
     "id": "essential-verbs",
     "title": "Essential Verbs",
-    "description": "Core Japanese verbs for everyday communication. Includes 160 card(s).",
+    "description": "Core Japanese verbs for everyday communication with verb class tags. Includes 160 card(s).",
     "file": "essential-verbs.json"
   },
   {
     "id": "travel-phrases",
     "title": "Travel Phrase Collection",
-    "description": "Comprehensive travel phrases with 1137 card(s) and 315 tags for filtering.",
+    "description": "Comprehensive travel phrases with 1294 card(s) and 318 tags for filtering.",
     "file": "travel-phrases.json"
   }
 ]

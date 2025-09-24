@@ -1,807 +1,1927 @@
 {
   "id": "essential-verbs",
   "title": "Essential Verbs",
-  "description": "Core Japanese verbs for everyday communication. Includes 160 card(s).",
+  "description": "Core Japanese verbs for everyday communication with verb class tags. Includes 160 card(s).",
   "cards": [
     {
       "english": "add",
       "romaji": "tasu",
-      "japanese": "足す / たす"
+      "japanese": "足す / たす",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "answer",
       "romaji": "kotaeru",
-      "japanese": "答える / こたえる"
+      "japanese": "答える / こたえる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "arrive",
       "romaji": "tsuku",
-      "japanese": "着く / つく"
+      "japanese": "着く / つく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "bathe, take a shower",
       "romaji": "abiru",
-      "japanese": "浴びる / あびる"
+      "japanese": "浴びる / あびる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "be",
       "romaji": "iru",
-      "japanese": "居る / いる"
+      "japanese": "居る / いる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "be able",
       "romaji": "dekiru",
-      "japanese": "出来る / できる"
+      "japanese": "出来る / できる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "be born",
       "romaji": "umareru",
-      "japanese": "生まれる / うまれる"
+      "japanese": "生まれる / うまれる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "be cured, healed",
       "romaji": "naoru",
-      "japanese": "直る / なおる"
+      "japanese": "直る / なおる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "be defeated, lose a game",
       "romaji": "makeru",
-      "japanese": "負ける / まける"
+      "japanese": "負ける / まける",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "be different, wrong",
       "romaji": "chigau",
-      "japanese": "違う / ちがう"
+      "japanese": "違う / ちがう",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "be enough, suffient",
       "romaji": "tariru",
-      "japanese": "足りる / たりる"
+      "japanese": "足りる / たりる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "be found",
       "romaji": "mitsukaru",
-      "japanese": "見つかる / みつかる"
+      "japanese": "見つかる / みつかる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "be glad, pleased",
       "romaji": "yorokobu",
-      "japanese": "喜ぶ"
+      "japanese": "喜ぶ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "be in trouble",
       "romaji": "komaru",
-      "japanese": "困る / こまる"
+      "japanese": "困る / こまる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "be missing, vanish",
       "romaji": "nakunaru",
-      "japanese": "無くなる / なくなる"
+      "japanese": "無くなる / なくなる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "be visible, able to see",
       "romaji": "mieru",
-      "japanese": "見える / みえる"
+      "japanese": "見える / みえる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "become",
       "romaji": "naru",
-      "japanese": "なる"
+      "japanese": "なる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "become crowded",
       "romaji": "komu",
-      "japanese": "込む / こむ"
+      "japanese": "込む / こむ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "become wet",
       "romaji": "nureru",
-      "japanese": "濡れる / ぬれる"
+      "japanese": "濡れる / ぬれる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "begin",
       "romaji": "hajimeru",
-      "japanese": "始める / はじめる"
+      "japanese": "始める / はじめる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "begin",
       "romaji": "hajimaru",
-      "japanese": "始まる / はじまる"
+      "japanese": "始まる / はじまる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "bloom",
       "romaji": "saku",
-      "japanese": "咲く / さく"
+      "japanese": "咲く / さく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "blow, wipe",
       "romaji": "fuku",
-      "japanese": "吹く / ふく"
+      "japanese": "吹く / ふく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "board, ride on",
       "romaji": "noru",
-      "japanese": "乗る / のる"
+      "japanese": "乗る / のる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "borrow, rent",
       "romaji": "kariru",
-      "japanese": "借りる / かりる"
+      "japanese": "借りる / かりる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "build",
       "romaji": "tateru",
-      "japanese": "立てる / たてる"
+      "japanese": "立てる / たてる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "buy",
       "romaji": "kau",
-      "japanese": "買う / かう"
+      "japanese": "買う / かう",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "call",
       "romaji": "yobu",
-      "japanese": "呼ぶ / よぶ"
+      "japanese": "呼ぶ / よぶ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "check, investigate",
       "romaji": "shiraberu",
-      "japanese": "調べる / しらべる"
+      "japanese": "調べる / しらべる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "choose, select",
       "romaji": "erabu",
-      "japanese": "選ぶ / えらぶ"
+      "japanese": "選ぶ / えらぶ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "clear up, tidy up",
       "romaji": "hareru",
-      "japanese": "晴れる / はれる"
+      "japanese": "晴れる / はれる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "climb",
       "romaji": "noboru",
-      "japanese": "登る / のぼる"
+      "japanese": "登る / のぼる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "close, be closed",
       "romaji": "shimaru",
-      "japanese": "閉まる / しまる"
+      "japanese": "閉まる / しまる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "come",
       "romaji": "kuru",
-      "japanese": "来る / くる"
+      "japanese": "来る / くる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "come/go (humble)",
       "romaji": "mairu",
-      "japanese": "参る / まいる"
+      "japanese": "参る / まいる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "continue, follow",
       "romaji": "tsuzuku",
-      "japanese": "続く / つづく"
+      "japanese": "続く / つづく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "continue, proceed",
       "romaji": "tsuzukeru",
-      "japanese": "続ける / つづける"
+      "japanese": "続ける / つづける",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "cross",
       "romaji": "wataru",
-      "japanese": "渡る / わたる"
+      "japanese": "渡る / わたる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "cry",
       "romaji": "naku",
-      "japanese": "泣く / なく"
+      "japanese": "泣く / なく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "cut",
       "romaji": "kiru",
-      "japanese": "切る / きる"
+      "japanese": "切る / きる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "decide, choose",
       "romaji": "kimeru",
-      "japanese": "決める"
+      "japanese": "決める",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "die",
       "romaji": "shinu",
-      "japanese": "死ぬ / しぬ"
+      "japanese": "死ぬ / しぬ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "do, give",
       "romaji": "yaru",
-      "japanese": "やる"
+      "japanese": "やる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "do, make",
       "romaji": "suru",
-      "japanese": "する"
+      "japanese": "する",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "drink",
       "romaji": "nomu",
-      "japanese": "飲む / のむ"
+      "japanese": "飲む / のむ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "eat",
       "romaji": "taberu",
-      "japanese": "食べる / たべる"
+      "japanese": "食べる / たべる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "end",
       "romaji": "owaru",
-      "japanese": "終わる / おわる"
+      "japanese": "終わる / おわる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "enjoy, have fun",
       "romaji": "tanoshimu",
-      "japanese": "楽しむ / たのしむ"
+      "japanese": "楽しむ / たのしむ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "enter",
       "romaji": "hairu",
-      "japanese": "入る / はいる"
+      "japanese": "入る / はいる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "exchange",
       "romaji": "torikaeru",
-      "japanese": "取り換える / とりかえる"
+      "japanese": "取り換える / とりかえる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "extract, take out",
       "romaji": "dasu",
-      "japanese": "出す / だす"
+      "japanese": "出す / だす",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "fall down, collapse",
       "romaji": "taoreru",
-      "japanese": "倒れる / たおれる"
+      "japanese": "倒れる / たおれる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "fall from the sky",
       "romaji": "furu",
-      "japanese": "降る / ふる"
+      "japanese": "降る / ふる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "fall, drop, hang",
       "romaji": "sagaru",
-      "japanese": "下がる / さがる"
+      "japanese": "下がる / さがる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "find",
       "romaji": "mitsukeru",
-      "japanese": "見つける / みつける"
+      "japanese": "見つける / みつける",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "fish",
       "romaji": "tsuru",
-      "japanese": "釣る / つる"
+      "japanese": "釣る / つる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "forget",
       "romaji": "wasureru",
-      "japanese": "忘れる / わすれる"
+      "japanese": "忘れる / わすれる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "form a line, equal",
       "romaji": "narabu",
-      "japanese": "並ぶ / ならぶ"
+      "japanese": "並ぶ / ならぶ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "get off, go down",
       "romaji": "oriru",
-      "japanese": "降りる / おりる"
+      "japanese": "降りる / おりる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "get tired",
       "romaji": "tsukareru",
-      "japanese": "疲れる / つかれる"
+      "japanese": "疲れる / つかれる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "get up",
       "romaji": "okiru",
-      "japanese": "起きる / おきる"
+      "japanese": "起きる / おきる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "give",
       "romaji": "ageru",
-      "japanese": "あげる"
+      "japanese": "あげる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "give back, return (something to someone)",
       "romaji": "kaesu",
-      "japanese": "返す / かえす"
+      "japanese": "返す / かえす",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "go",
       "romaji": "iku",
-      "japanese": "行く / いく"
+      "japanese": "行く / いく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "go forward, advance",
       "romaji": "susumu",
-      "japanese": "進む / すすむ"
+      "japanese": "進む / すすむ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "go out",
       "romaji": "deru",
-      "japanese": "出る / でる"
+      "japanese": "出る / でる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "go out, leave home",
       "romaji": "dekakeru",
-      "japanese": "出かける / でかける"
+      "japanese": "出かける / でかける",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "go round",
       "romaji": "mawaru",
-      "japanese": "回る / まわる"
+      "japanese": "回る / まわる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "go up, rise",
       "romaji": "agaru",
-      "japanese": "上がる / あがる"
+      "japanese": "上がる / あがる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "greet, meet, welcome",
       "romaji": "mukaeru",
-      "japanese": "迎える / むかえる"
+      "japanese": "迎える / むかえる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "hand over",
       "romaji": "watasu",
-      "japanese": "渡す / わたす"
+      "japanese": "渡す / わたす",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "hang, sit, telephone, risk",
       "romaji": "kakeru",
-      "japanese": "掛ける / かける"
+      "japanese": "掛ける / かける",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "have, exist",
       "romaji": "aru",
-      "japanese": "有る / ある"
+      "japanese": "有る / ある",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "have, hold, own",
       "romaji": "motsu",
-      "japanese": "持つ / もつ"
+      "japanese": "持つ / もつ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "help",
       "romaji": "tasukeru",
-      "japanese": "助ける / たすける"
+      "japanese": "助ける / たすける",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "inhale, sip, smoke",
       "romaji": "suu",
-      "japanese": "吸う / すう"
+      "japanese": "吸う / すう",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "jump, fly",
       "romaji": "tobu",
-      "japanese": "飛ぶ / とぶ"
+      "japanese": "飛ぶ / とぶ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "know",
       "romaji": "shiru",
-      "japanese": "知る / しる"
+      "japanese": "知る / しる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "laugh",
       "romaji": "warau",
-      "japanese": "笑う / わらう"
+      "japanese": "笑う / わらう",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "lead",
       "romaji": "tsureru",
-      "japanese": "連れる / つれる"
+      "japanese": "連れる / つれる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "learn",
       "romaji": "narau",
-      "japanese": "習う / ならう"
+      "japanese": "習う / ならう",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "lend",
       "romaji": "kasu",
-      "japanese": "貸す / かす"
+      "japanese": "貸す / かす",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "line up, list, arrange in order",
       "romaji": "naraberu",
-      "japanese": "並べる / ならべる"
+      "japanese": "並べる / ならべる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "listen",
       "romaji": "kiku",
-      "japanese": "聞く / きく"
+      "japanese": "聞く / きく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "live, reside",
       "romaji": "sumu",
-      "japanese": "住む / すむ"
+      "japanese": "住む / すむ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "look",
       "romaji": "miru",
-      "japanese": "見る / みる"
+      "japanese": "見る / みる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "lower, hang",
       "romaji": "sageru",
-      "japanese": "下げる / さげる"
+      "japanese": "下げる / さげる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "make a mistake",
       "romaji": "machigaeru",
-      "japanese": "間違える / まちがえる"
+      "japanese": "間違える / まちがえる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "make a noise, be rowdy",
       "romaji": "sawagu",
-      "japanese": "騒ぐ / さわぐ"
+      "japanese": "騒ぐ / さわぐ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "make, build, create",
       "romaji": "tsukuru",
-      "japanese": "作る / つくる"
+      "japanese": "作る / つくる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "meet",
       "romaji": "au",
-      "japanese": "会う / あう"
+      "japanese": "会う / あう",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "need",
       "romaji": "iru",
-      "japanese": "要る / いる"
+      "japanese": "要る / いる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "notify",
       "romaji": "shiraseru",
-      "japanese": "知らせる / しらせる"
+      "japanese": "知らせる / しらせる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "open",
       "romaji": "akeru",
-      "japanese": "開ける / あける"
+      "japanese": "開ける / あける",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "open, become vacant",
       "romaji": "aku",
-      "japanese": "開く / あく"
+      "japanese": "開く / あく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "paint",
       "romaji": "nuru",
-      "japanese": "塗る / ぬる"
+      "japanese": "塗る / ぬる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "part, separate from, be divided, divorced",
       "romaji": "wakareru",
-      "japanese": "別れる / わかれる"
+      "japanese": "別れる / わかれる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "pass, exceed",
       "romaji": "sugiru",
-      "japanese": "過ぎる / すぎる"
+      "japanese": "過ぎる / すぎる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "pay",
       "romaji": "harau",
-      "japanese": "払う / はらう"
+      "japanese": "払う / はらう",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "play",
       "romaji": "asobu",
-      "japanese": "遊ぶ / あそぶ"
+      "japanese": "遊ぶ / あそぶ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "point out, sting, stab",
       "romaji": "sasu",
-      "japanese": "刺す / さす"
+      "japanese": "刺す / さす",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "polish",
       "romaji": "migaku",
-      "japanese": "磨く / みがく"
+      "japanese": "磨く / みがく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "praise",
       "romaji": "homeru",
-      "japanese": "褒める / ほめる"
+      "japanese": "褒める / ほめる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "pull",
       "romaji": "hiku",
-      "japanese": "引く / ひく"
+      "japanese": "引く / ひく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "push, press",
       "romaji": "osu",
-      "japanese": "押す / おす"
+      "japanese": "押す / おす",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "put in, let in",
       "romaji": "ireru",
-      "japanese": "入れる / いれる"
+      "japanese": "入れる / いれる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "put on, wear (on feet or legs - trousers/shoes etc)",
       "romaji": "haku",
-      "japanese": "履く / はく"
+      "japanese": "履く / はく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "put, place",
       "romaji": "oku",
-      "japanese": "置く / おく"
+      "japanese": "置く / おく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "read",
       "romaji": "yomu",
-      "japanese": "読む / よむ"
+      "japanese": "読む / よむ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "receive, get",
       "romaji": "morau",
-      "japanese": "貰う / もらう"
+      "japanese": "貰う / もらう",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "remember, learn",
       "romaji": "oboeru",
-      "japanese": "覚える / おぼえる"
+      "japanese": "覚える / おぼえる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "repair, cure",
       "romaji": "naosu",
-      "japanese": "直す / なおす"
+      "japanese": "直す / なおす",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "request, order, ask favour",
       "romaji": "tanomu",
-      "japanese": "頼む / たのむ"
+      "japanese": "頼む / たのむ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "rest, sleep",
       "romaji": "yasumu",
-      "japanese": "休む / やすむ"
+      "japanese": "休む / やすむ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "return, go home",
       "romaji": "kaeru",
-      "japanese": "帰る / かえる"
+      "japanese": "帰る / かえる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "run",
       "romaji": "hashiru",
-      "japanese": "走る / はしる"
+      "japanese": "走る / はしる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "run, canter, gallop",
       "romaji": "kakeru",
-      "japanese": "かける"
+      "japanese": "かける",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "say",
       "romaji": "iu",
-      "japanese": "言う / いう"
+      "japanese": "言う / いう",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "scold, tell off",
       "romaji": "shikaru",
-      "japanese": "叱る / しかる"
+      "japanese": "叱る / しかる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "search for",
       "romaji": "sagasu",
-      "japanese": "探す / さがす"
+      "japanese": "探す / さがす",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "sell",
       "romaji": "uru",
-      "japanese": "売る / うる"
+      "japanese": "売る / うる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "send, see off",
       "romaji": "okuru",
-      "japanese": "送る / おくる"
+      "japanese": "送る / おくる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "show",
       "romaji": "miseru",
-      "japanese": "見せる / みせる"
+      "japanese": "見せる / みせる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "shut",
       "romaji": "shimeru",
-      "japanese": "閉める / しめる"
+      "japanese": "閉める / しめる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "sing",
       "romaji": "utau",
-      "japanese": "歌う / うたう"
+      "japanese": "歌う / うたう",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "sit",
       "romaji": "suwaru",
-      "japanese": "座る / すわる"
+      "japanese": "座る / すわる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "sleep, go to bed",
       "romaji": "neru",
-      "japanese": "寝る / ねる"
+      "japanese": "寝る / ねる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "slip",
       "romaji": "suberu",
-      "japanese": "滑る / すべる"
+      "japanese": "滑る / すべる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "speak",
       "romaji": "hanasu",
-      "japanese": "話す / はなす"
+      "japanese": "話す / はなす",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "stand up",
       "romaji": "tatsu",
-      "japanese": "立つ"
+      "japanese": "立つ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "steal",
       "romaji": "nusumu",
-      "japanese": "盗む / ぬすむ"
+      "japanese": "盗む / ぬすむ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "stick, put something on",
       "romaji": "haru",
-      "japanese": "張る / はる"
+      "japanese": "張る / はる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "stop",
       "romaji": "tomaru",
-      "japanese": "止まる / とまる"
+      "japanese": "止まる / とまる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "stop, fasten",
       "romaji": "tomeru",
-      "japanese": "止める / とめる"
+      "japanese": "止める / とめる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "stop, give up, resign",
       "romaji": "yameru",
-      "japanese": "止める / やめる"
+      "japanese": "止める / やめる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "swim",
       "romaji": "oyogu",
-      "japanese": "泳ぐ / およぐ"
+      "japanese": "泳ぐ / およぐ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "take off, remove (shoes, clothes)",
       "romaji": "nugu",
-      "japanese": "脱ぐ / ぬぐ"
+      "japanese": "脱ぐ / ぬぐ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "take, begin, be hanging",
       "romaji": "kakaru",
-      "japanese": "掛かる / かかる"
+      "japanese": "掛かる / かかる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "take, steal",
       "romaji": "toru",
-      "japanese": "取る / とる"
+      "japanese": "取る / とる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "teach, show",
       "romaji": "oshieru",
-      "japanese": "教える / おしえる"
+      "japanese": "教える / おしえる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "think",
       "romaji": "omou",
-      "japanese": "思う / おもう"
+      "japanese": "思う / おもう",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "throw away",
       "romaji": "nageru",
-      "japanese": "投げる / なげる"
+      "japanese": "投げる / なげる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "throw away",
       "romaji": "suteru",
-      "japanese": "捨てる / すてる"
+      "japanese": "捨てる / すてる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "to rear, to bring up",
       "romaji": "sodateru",
-      "japanese": "育てる / そだてる"
+      "japanese": "育てる / そだてる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "touch or feel (with hands)",
       "romaji": "sawaru",
-      "japanese": "触る / さわる"
+      "japanese": "触る / さわる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "turn off, erase",
       "romaji": "kesu",
-      "japanese": "消す / けす"
+      "japanese": "消す / けす",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "turn on, light",
       "romaji": "tsukeru",
-      "japanese": "点ける / つける"
+      "japanese": "点ける / つける",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "turn, bend",
       "romaji": "magaru",
-      "japanese": "曲がる / まがる"
+      "japanese": "曲がる / まがる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "understand",
       "romaji": "wakaru",
-      "japanese": "分かる / わかる"
+      "japanese": "分かる / わかる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "use, operate",
       "romaji": "tsukau",
-      "japanese": "使う / つかう"
+      "japanese": "使う / つかう",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "vanish, go out, be extinguished",
       "romaji": "kieru",
-      "japanese": "消える / きえる"
+      "japanese": "消える / きえる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "wait",
       "romaji": "matsu",
-      "japanese": "待つ / まつ"
+      "japanese": "待つ / まつ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "walk",
       "romaji": "aruku",
-      "japanese": "歩く / あるく"
+      "japanese": "歩く / あるく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "wash",
       "romaji": "arau",
-      "japanese": "洗う / あらう"
+      "japanese": "洗う / あらう",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "wear",
       "romaji": "kiru",
-      "japanese": "着る / きる"
+      "japanese": "着る / きる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "wear (on your head), put on",
       "romaji": "kaburu",
-      "japanese": "被る / かぶる"
+      "japanese": "被る / かぶる",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "work",
       "romaji": "hataraku",
-      "japanese": "働く / はたらく"
+      "japanese": "働く / はたらく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "work for",
       "romaji": "tsutomeru",
-      "japanese": "勤める / つとめる"
+      "japanese": "勤める / つとめる",
+      "class": 2,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 2 (Ichidan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "wrap",
       "romaji": "tsutsumu",
-      "japanese": "包む / つつむ"
+      "japanese": "包む / つつむ",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     },
     {
       "english": "write",
       "romaji": "kaku",
-      "japanese": "書く / かく"
+      "japanese": "書く / かく",
+      "class": 1,
+      "tags": [
+        "Vocabulary",
+        "Essential Verbs",
+        "Verb Class 1 (Godan)"
+      ],
+      "usefulness": 6
     }
   ]
 }
