@@ -1,7 +1,7 @@
 {
   "id": "at-the-hotel-amenities-u5-10",
   "title": "At the Hotel: Amenities (Usefulness 5-10)",
-  "description": "Traveler usefulness 5-10/10 phrases for the Amenities subcategory within At the Hotel. Includes 7 card(s).",
+  "description": "Traveler usefulness 5-10/10 phrases for the Amenities subcategory within At the Hotel. Includes 5 card(s).",
   "cards": [
     {
       "english": "Do you have a power converter?",
@@ -17,16 +17,6 @@
       "english": "Do you have power converters?",
       "romaji": "Denryoku henkanki wa arimasu ka?",
       "japanese": "電力変換器はありますか？"
-    },
-    {
-      "english": "Do you have a hair dryer?",
-      "romaji": "Doraiya wa arimasu ka?",
-      "japanese": "ドライヤーはありますか？"
-    },
-    {
-      "english": "Do you have an iron?",
-      "romaji": "Airon wa arimasu ka.",
-      "japanese": "アイロンはありますか？"
     },
     {
       "english": "Do you have an iron?",

@@ -1,7 +1,7 @@
 {
   "id": "health-pain-ailments-u5-10",
   "title": "Health: Pain / Ailments (Usefulness 5-10)",
-  "description": "Traveler usefulness 5-10/10 phrases for the Pain / Ailments subcategory within Health. Includes 7 card(s).",
+  "description": "Traveler usefulness 5-10/10 phrases for the Pain / Ailments subcategory within Health. Includes 6 card(s).",
   "cards": [
     {
       "english": "My stomach hurts.",
@@ -17,11 +17,6 @@
       "english": "I have a headache.",
       "romaji": "Atama ga itai desu.",
       "japanese": "頭が痛いです。"
-    },
-    {
-      "english": "I have a headache.",
-      "romaji": "Zutsu ga shimasu.",
-      "japanese": "頭痛がします。"
     },
     {
       "english": "I have a sore throat.",

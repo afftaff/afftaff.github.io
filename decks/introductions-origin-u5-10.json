@@ -1,7 +1,7 @@
 {
   "id": "introductions-origin-u5-10",
   "title": "Introductions: Origin (Usefulness 5-10)",
-  "description": "Traveler usefulness 5-10/10 phrases for the Origin subcategory within Introductions. Includes 8 card(s).",
+  "description": "Traveler usefulness 5-10/10 phrases for the Origin subcategory within Introductions. Includes 7 card(s).",
   "cards": [
     {
       "english": "I'm from Tokyo.",
@@ -22,11 +22,6 @@
       "english": "I am from XXX.",
       "romaji": "XXX shusshin desu.",
       "japanese": "XXX出身です。"
-    },
-    {
-      "english": "I'm from Tokyo.",
-      "romaji": "Shusshin wa T ky desu.",
-      "japanese": "出身は東京です。"
     },
     {
       "english": "My hometown is Tokyo.",

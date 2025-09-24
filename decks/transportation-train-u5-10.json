@@ -1,7 +1,7 @@
 {
   "id": "transportation-train-u5-10",
   "title": "Transportation: Train (Usefulness 5-10)",
-  "description": "Traveler usefulness 5-10/10 phrases for the Train subcategory within Transportation. Includes 7 card(s).",
+  "description": "Traveler usefulness 5-10/10 phrases for the Train subcategory within Transportation. Includes 6 card(s).",
   "cards": [
     {
       "english": "Where is the ticket gate?",
@@ -12,11 +12,6 @@
       "english": "Will this train go to Tokyo Station?",
       "romaji": "Tokyo eki made ikimasu ka?",
       "japanese": "東京駅まで行きますか？"
-    },
-    {
-      "english": "The next station is Osaka.",
-      "romaji": "Tsugi no eki wa Osaka desu.",
-      "japanese": "次の駅は大阪です。"
     },
     {
       "english": "The next station is Osaka.",

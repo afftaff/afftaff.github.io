@@ -1,17 +1,12 @@
 {
   "id": "food-identification-u5-10",
   "title": "Food: Identification (Usefulness 5-10)",
-  "description": "Traveler usefulness 5-10/10 phrases for the Identification subcategory within Food. Includes 3 card(s).",
+  "description": "Traveler usefulness 5-10/10 phrases for the Identification subcategory within Food. Includes 2 card(s).",
   "cards": [
     {
       "english": "This is meat.",
       "romaji": "Kore wa niku desu.",
       "japanese": "これは肉です。"
-    },
-    {
-      "english": "Milk and cheese are dairy products.",
-      "romaji": "Gyunyu to chizu wa nyuseihin desu.",
-      "japanese": "牛乳とチーズは乳製品です。"
     },
     {
       "english": "Milk and cheese are dairy products.",

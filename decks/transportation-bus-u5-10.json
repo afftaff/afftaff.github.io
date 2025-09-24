@@ -1,7 +1,7 @@
 {
   "id": "transportation-bus-u5-10",
   "title": "Transportation: Bus (Usefulness 5-10)",
-  "description": "Traveler usefulness 5-10/10 phrases for the Bus subcategory within Transportation. Includes 7 card(s).",
+  "description": "Traveler usefulness 5-10/10 phrases for the Bus subcategory within Transportation. Includes 6 card(s).",
   "cards": [
     {
       "english": "Where is the bus stop?",
@@ -27,11 +27,6 @@
       "english": "Is Narita Airport the next stop?",
       "romaji": "Narita kuko wa tsugi desu ka?",
       "japanese": "成田空港は次ですか？"
-    },
-    {
-      "english": "I'll get off at the next bus stop.",
-      "romaji": "Watashi wa, tsugi no basutei de orimasu.",
-      "japanese": "私は、次のバス停で降ります。"
     },
     {
       "english": "For long-distance journeys, all-day and all-night buses are also available.",

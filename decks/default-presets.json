@@ -1,0 +1,607 @@
+[
+  {
+    "name": "Politeness & Gratitude",
+    "deckIds": [
+      "apologies-for-lateness-u5-10",
+      "apologies-formal-u5-10",
+      "apologies-general-u5-10",
+      "apologies-reassurance-u5-10",
+      "polite-expressions-apology-u5-10",
+      "polite-expressions-getting-attention-u5-10",
+      "polite-expressions-getting-attention-apology-u5-10",
+      "polite-expressions-offering-u5-10",
+      "polite-expressions-requests-u5-10",
+      "gratitude-expressing-thanks-u5-10",
+      "gratitude-expressing-thanks-casual-u5-10",
+      "gratitude-expressing-thanks-formal-u5-10",
+      "gratitude-responding-to-thanks-u5-10",
+      "gratitude-thanking-for-past-actions-u5-10",
+      "farewells-casual-u5-10",
+      "farewells-formal-u5-10",
+      "farewells-general-u5-10",
+      "common-phrases-desires-u5-10",
+      "common-phrases-identification-u5-10",
+      "common-phrases-ownership-u5-10",
+      "common-phrases-suggestions-u5-10"
+    ]
+  },
+  {
+    "name": "Greetings & Introductions",
+    "deckIds": [
+      "greetings-formal-u5-10",
+      "greetings-general-u5-10",
+      "greetings-responding-u5-10",
+      "greetings-time-of-day-u5-10",
+      "greetings-well-being-u5-10",
+      "introductions-confirmation-u5-10",
+      "introductions-formal-u5-10",
+      "introductions-initial-meeting-u5-10",
+      "introductions-name-u5-10",
+      "introductions-name-formal-u5-10",
+      "introductions-origin-u5-10",
+      "introductions-personal-information-u5-10",
+      "social-communication-u5-10",
+      "social-contact-info-u5-10",
+      "social-making-plans-u5-10",
+      "social-photos-u5-10",
+      "feelings-physical-state-u5-10",
+      "small-talk-weather-u5-10"
+    ]
+  },
+  {
+    "name": "Nightlife Connections",
+    "deckIds": [
+      "entertainment-bars-izakaya-u5-10",
+      "entertainment-karaoke-u5-10",
+      "entertainment-manga-cafe-u5-10",
+      "social-communication-u5-10",
+      "social-contact-info-u5-10",
+      "social-making-plans-u5-10",
+      "social-photos-u5-10",
+      "requests-casual-u5-10",
+      "requests-food-and-drink-u5-10",
+      "requests-formal-u5-10",
+      "requests-general-u5-10",
+      "requests-information-u5-10",
+      "requests-items-u5-10",
+      "requests-offering-u5-10",
+      "preferences-asking-u5-10",
+      "preferences-dislikes-u5-10",
+      "preferences-likes-u5-10"
+    ]
+  },
+  {
+    "name": "Communication Lifelines",
+    "deckIds": [
+      "communication-help-asking-for-assistance-u5-10",
+      "communication-help-getting-attention-u5-10",
+      "communication-help-lack-of-understanding-u5-10",
+      "communication-help-language-ability-u5-10",
+      "communication-help-pace-u5-10",
+      "communication-help-repetition-u5-10",
+      "language-help-ability-u5-10",
+      "language-help-comprehension-u5-10",
+      "language-help-meaning-u5-10",
+      "language-help-reading-u5-10",
+      "language-help-translation-u5-10",
+      "language-help-writing-u5-10",
+      "information-asking-for-assistance-u5-10",
+      "information-at-a-restaurant-u5-10"
+    ]
+  },
+  {
+    "name": "Questions & Responses",
+    "deckIds": [
+      "questions-asking-for-permission-u5-10",
+      "questions-comprehension-u5-10",
+      "questions-food-and-drink-u5-10",
+      "questions-identification-u5-10",
+      "questions-identity-u5-10",
+      "questions-language-u5-10",
+      "questions-location-u5-10",
+      "questions-opinion-u5-10",
+      "questions-ownership-u5-10",
+      "questions-personal-information-u5-10",
+      "questions-preferences-u5-10",
+      "questions-services-u5-10",
+      "questions-time-events-u5-10",
+      "common-responses-agreement-u5-10",
+      "common-responses-basic-answers-u5-10",
+      "common-responses-comprehension-u5-10",
+      "common-responses-disagreement-correction-u5-10",
+      "common-responses-negation-inability-u5-10",
+      "common-responses-reassurance-u5-10",
+      "common-responses-well-being-u5-10"
+    ]
+  },
+  {
+    "name": "Requests & Preferences",
+    "deckIds": [
+      "requests-casual-u5-10",
+      "requests-food-and-drink-u5-10",
+      "requests-formal-u5-10",
+      "requests-general-u5-10",
+      "requests-information-u5-10",
+      "requests-items-u5-10",
+      "requests-offering-u5-10",
+      "preferences-asking-u5-10",
+      "preferences-dislikes-u5-10",
+      "preferences-likes-u5-10",
+      "polite-expressions-apology-u5-10",
+      "polite-expressions-getting-attention-u5-10",
+      "polite-expressions-getting-attention-apology-u5-10",
+      "polite-expressions-offering-u5-10",
+      "polite-expressions-requests-u5-10"
+    ]
+  },
+  {
+    "name": "Navigation Basics",
+    "deckIds": [
+      "directions-instructions-u5-10",
+      "directions-locations-u5-10",
+      "directions-transportation-u5-10",
+      "directions-using-landmarks-u5-10",
+      "asking-for-directions-locations-u5-10",
+      "asking-for-directions-transportation-u5-10",
+      "travel-distance-u5-10",
+      "travel-documents-u5-10",
+      "travel-routes-u5-10",
+      "location-asking-u5-10",
+      "location-prepositions-u5-10"
+    ]
+  },
+  {
+    "name": "Transit Logistics",
+    "deckIds": [
+      "transportation-air-travel-u5-10",
+      "transportation-airport-u5-10",
+      "transportation-bus-u5-10",
+      "transportation-buying-tickets-u5-10",
+      "transportation-fares-u5-10",
+      "transportation-general-u5-10",
+      "transportation-taxi-u5-10",
+      "transportation-tickets-u5-10",
+      "transportation-train-u5-10",
+      "business-hours-closing-u5-10",
+      "business-hours-opening-u5-10"
+    ]
+  },
+  {
+    "name": "Counting & Comparisons",
+    "deckIds": [
+      "counting-food-and-drink-u5-10",
+      "counting-objects-u5-10",
+      "counting-people-u5-10",
+      "comparisons-size-u5-10",
+      "comparisons-speed-u5-10"
+    ]
+  },
+  {
+    "name": "Time & Schedules",
+    "deckIds": [
+      "telling-time-asking-the-time-u5-10",
+      "telling-time-duration-u5-10",
+      "telling-time-hours-u5-10",
+      "telling-time-relative-time-u5-10",
+      "telling-time-schedules-u5-10",
+      "telling-time-stating-the-time-u5-10",
+      "telling-time-vocabulary-u5-10",
+      "making-plans-scheduling-u5-10"
+    ]
+  },
+  {
+    "name": "Hotel & Concierge",
+    "deckIds": [
+      "at-the-hotel-amenities-u5-10",
+      "at-the-hotel-food-u5-10",
+      "at-the-hotel-room-features-u5-10",
+      "at-the-hotel-services-u5-10",
+      "renting-cell-phone-u5-10",
+      "information-asking-for-assistance-u5-10",
+      "information-at-a-restaurant-u5-10",
+      "lost-and-found-claiming-an-item-u5-10",
+      "lost-and-found-description-u5-10",
+      "lost-and-found-finding-the-office-u5-10",
+      "lost-and-found-inquiries-u5-10",
+      "lost-and-found-location-u5-10",
+      "lost-and-found-reporting-a-loss-u5-10"
+    ]
+  },
+  {
+    "name": "Postal & Practicalities",
+    "deckIds": [
+      "postal-service-describing-contents-u5-10",
+      "postal-service-questions-u5-10",
+      "postal-service-sending-items-u5-10",
+      "money-exchange-asking-the-rate-u5-10",
+      "money-exchange-making-a-request-u5-10",
+      "money-costs-and-fares-u5-10",
+      "money-currency-u5-10",
+      "money-numbers-u5-10",
+      "money-stating-price-u5-10",
+      "money-transportation-cards-u5-10",
+      "business-hours-closing-u5-10",
+      "business-hours-opening-u5-10"
+    ]
+  },
+  {
+    "name": "Shopping Essentials",
+    "deckIds": [
+      "shopping-asking-price-u5-10",
+      "shopping-buying-items-u5-10",
+      "shopping-clothing-u5-10",
+      "shopping-convenience-store-u5-10",
+      "shopping-finding-items-u5-10",
+      "shopping-food-u5-10",
+      "shopping-free-items-u5-10",
+      "shopping-general-u5-10",
+      "shopping-and-money-asking-prices-u5-10",
+      "shopping-and-money-bargaining-u5-10",
+      "shopping-and-money-business-hours-u5-10",
+      "shopping-and-money-commenting-on-price-u5-10",
+      "shopping-and-money-currency-exchange-u5-10",
+      "shopping-and-money-paying-u5-10",
+      "shopping-and-money-prices-u5-10",
+      "shopping-and-money-stating-price-u5-10",
+      "clothing-traditional-u5-10"
+    ]
+  },
+  {
+    "name": "Market Interactions",
+    "deckIds": [
+      "shopping-and-restaurants-buying-tickets-u5-10",
+      "shopping-and-restaurants-farewell-to-customers-u5-10",
+      "shopping-and-restaurants-greeting-customers-u5-10",
+      "shopping-and-restaurants-making-a-selection-u5-10",
+      "shopping-and-restaurants-ordering-u5-10",
+      "shopping-and-restaurants-paying-the-bill-u5-10",
+      "shopping-and-restaurants-thanking-customers-u5-10",
+      "money-costs-and-fares-u5-10",
+      "money-currency-u5-10",
+      "money-numbers-u5-10",
+      "money-stating-price-u5-10",
+      "money-transportation-cards-u5-10",
+      "money-exchange-asking-the-rate-u5-10",
+      "money-exchange-making-a-request-u5-10"
+    ]
+  },
+  {
+    "name": "Dining Out",
+    "deckIds": [
+      "at-a-restaurant-after-the-meal-u5-10",
+      "at-a-restaurant-asking-for-permission-u5-10",
+      "at-a-restaurant-asking-for-recommendations-u5-10",
+      "at-a-restaurant-before-the-meal-u5-10",
+      "at-a-restaurant-getting-attention-u5-10",
+      "at-a-restaurant-greeting-and-seating-u5-10",
+      "at-a-restaurant-ordering-u5-10",
+      "at-a-restaurant-paying-the-bill-u5-10",
+      "at-a-restaurant-stating-preferences-u5-10",
+      "shopping-and-restaurants-buying-tickets-u5-10",
+      "shopping-and-restaurants-farewell-to-customers-u5-10",
+      "shopping-and-restaurants-greeting-customers-u5-10",
+      "shopping-and-restaurants-making-a-selection-u5-10",
+      "shopping-and-restaurants-ordering-u5-10",
+      "shopping-and-restaurants-paying-the-bill-u5-10",
+      "shopping-and-restaurants-thanking-customers-u5-10"
+    ]
+  },
+  {
+    "name": "Dietary Support",
+    "deckIds": [
+      "dietary-needs-allergies-u5-10",
+      "dietary-needs-asking-about-ingredients-u5-10",
+      "dietary-needs-requests-u5-10",
+      "dietary-needs-restrictions-u5-10",
+      "dietary-needs-vegetarianism-u5-10",
+      "dietary-needs-vocabulary-u5-10",
+      "health-allergies-illness-u5-10",
+      "health-allergies-symptoms-u5-10",
+      "health-allergies-vocabulary-u5-10"
+    ]
+  },
+  {
+    "name": "Food Adventures",
+    "deckIds": [
+      "food-asking-about-experience-u5-10",
+      "food-asking-how-to-eat-u5-10",
+      "food-condiments-u5-10",
+      "food-descriptions-u5-10",
+      "food-desires-u5-10",
+      "food-drinks-u5-10",
+      "food-identification-u5-10",
+      "food-instructions-u5-10",
+      "food-local-specialties-u5-10",
+      "food-preferences-u5-10"
+    ]
+  },
+  {
+    "name": "Health Essentials",
+    "deckIds": [
+      "health-ailments-u5-10",
+      "health-allergies-u5-10",
+      "health-general-u5-10",
+      "health-illness-u5-10",
+      "health-locations-u5-10",
+      "health-medical-assistance-u5-10",
+      "health-pain-ailments-u5-10",
+      "health-symptoms-u5-10",
+      "health-pharmacy-medicine-u5-10"
+    ]
+  },
+  {
+    "name": "Body Focus",
+    "deckIds": [
+      "health-body-parts-ailments-u5-10",
+      "health-body-parts-face-u5-10",
+      "health-body-parts-injury-u5-10",
+      "health-body-parts-location-u5-10",
+      "health-body-parts-pain-u5-10",
+      "health-body-parts-sensations-u5-10"
+    ]
+  },
+  {
+    "name": "Emergency Response",
+    "deckIds": [
+      "emergency-actions-u5-10",
+      "emergency-calling-for-help-u5-10",
+      "emergency-earthquake-u5-10",
+      "emergency-evacuation-u5-10",
+      "emergency-fire-u5-10",
+      "emergency-preparedness-u5-10",
+      "emergency-providing-information-u5-10",
+      "emergency-tsunami-u5-10",
+      "rules-prohibitions-u5-10",
+      "health-pharmacy-medicine-u5-10"
+    ]
+  },
+  {
+    "name": "Connected Traveler",
+    "deckIds": [
+      "internet-and-technology-access-u5-10",
+      "internet-and-technology-internet-cafe-u5-10",
+      "internet-and-technology-login-u5-10",
+      "internet-and-technology-vocabulary-u5-10",
+      "internet-and-technology-wifi-u5-10",
+      "communication-help-asking-for-assistance-u5-10",
+      "communication-help-getting-attention-u5-10",
+      "communication-help-lack-of-understanding-u5-10",
+      "communication-help-language-ability-u5-10",
+      "communication-help-pace-u5-10",
+      "communication-help-repetition-u5-10",
+      "travel-distance-u5-10",
+      "travel-documents-u5-10",
+      "travel-routes-u5-10"
+    ]
+  },
+  {
+    "name": "Service Errands",
+    "deckIds": [
+      "postal-service-describing-contents-u5-10",
+      "postal-service-questions-u5-10",
+      "postal-service-sending-items-u5-10",
+      "lost-and-found-claiming-an-item-u5-10",
+      "lost-and-found-description-u5-10",
+      "lost-and-found-finding-the-office-u5-10",
+      "lost-and-found-inquiries-u5-10",
+      "lost-and-found-location-u5-10",
+      "lost-and-found-reporting-a-loss-u5-10",
+      "information-asking-for-assistance-u5-10",
+      "information-at-a-restaurant-u5-10"
+    ]
+  },
+  {
+    "name": "Customer Care",
+    "deckIds": [
+      "shopping-and-restaurants-buying-tickets-u5-10",
+      "shopping-and-restaurants-farewell-to-customers-u5-10",
+      "shopping-and-restaurants-greeting-customers-u5-10",
+      "shopping-and-restaurants-making-a-selection-u5-10",
+      "shopping-and-restaurants-ordering-u5-10",
+      "shopping-and-restaurants-paying-the-bill-u5-10",
+      "shopping-and-restaurants-thanking-customers-u5-10",
+      "polite-expressions-apology-u5-10",
+      "polite-expressions-getting-attention-u5-10",
+      "polite-expressions-getting-attention-apology-u5-10",
+      "polite-expressions-offering-u5-10",
+      "polite-expressions-requests-u5-10",
+      "requests-casual-u5-10",
+      "requests-food-and-drink-u5-10",
+      "requests-formal-u5-10",
+      "requests-general-u5-10",
+      "requests-information-u5-10",
+      "requests-items-u5-10",
+      "requests-offering-u5-10"
+    ]
+  },
+  {
+    "name": "Vocabulary: Food Staples",
+    "deckIds": [
+      "vocabulary-food-u5-10"
+    ]
+  },
+  {
+    "name": "Vocabulary: Places & Routes",
+    "deckIds": [
+      "vocabulary-places-and-things-u5-10"
+    ]
+  },
+  {
+    "name": "Vocabulary: Concepts & Expressions",
+    "deckIds": [
+      "vocabulary-concepts-u5-10",
+      "vocabulary-exclamations-u5-10",
+      "vocabulary-animals-u5-10",
+      "nature-plants-u5-10",
+      "weather-temperature-u5-10"
+    ]
+  },
+  {
+    "name": "Vocabulary: Action Verbs",
+    "deckIds": [
+      "vocabulary-verbs-u5-10"
+    ]
+  },
+  {
+    "name": "Vocabulary: Descriptive Language",
+    "deckIds": [
+      "descriptions-aesthetics-u5-10",
+      "descriptions-color-clothing-u5-10",
+      "descriptions-color-nature-u5-10",
+      "descriptions-places-u5-10",
+      "vocabulary-adjectives-u5-10"
+    ]
+  },
+  {
+    "name": "Vocabulary: Everyday Items",
+    "deckIds": [
+      "vocabulary-other-u5-10"
+    ]
+  },
+  {
+    "name": "Vocabulary: People Skills",
+    "deckIds": [
+      "introductions-confirmation-u5-10",
+      "introductions-formal-u5-10",
+      "introductions-initial-meeting-u5-10",
+      "introductions-name-u5-10",
+      "introductions-name-formal-u5-10",
+      "introductions-origin-u5-10",
+      "introductions-personal-information-u5-10",
+      "social-communication-u5-10",
+      "social-contact-info-u5-10",
+      "social-making-plans-u5-10",
+      "social-photos-u5-10",
+      "vocabulary-people-u5-10"
+    ]
+  },
+  {
+    "name": "Vocabulary: Number Sense",
+    "deckIds": [
+      "counting-people-u5-10",
+      "counting-food-and-drink-u5-10",
+      "counting-objects-u5-10"
+    ]
+  },
+  {
+    "name": "Travel Paperwork",
+    "deckIds": [
+      "travel-distance-u5-10",
+      "travel-documents-u5-10",
+      "travel-routes-u5-10",
+      "postal-service-describing-contents-u5-10",
+      "postal-service-questions-u5-10",
+      "postal-service-sending-items-u5-10",
+      "money-exchange-asking-the-rate-u5-10",
+      "money-exchange-making-a-request-u5-10",
+      "business-hours-closing-u5-10",
+      "business-hours-opening-u5-10"
+    ]
+  },
+  {
+    "name": "Hospital Visit Prep",
+    "deckIds": [
+      "health-ailments-u5-10",
+      "health-allergies-u5-10",
+      "health-general-u5-10",
+      "health-illness-u5-10",
+      "health-locations-u5-10",
+      "health-medical-assistance-u5-10",
+      "health-pain-ailments-u5-10",
+      "health-symptoms-u5-10",
+      "health-pharmacy-medicine-u5-10",
+      "health-allergies-illness-u5-10",
+      "health-allergies-symptoms-u5-10",
+      "health-allergies-vocabulary-u5-10"
+    ]
+  },
+  {
+    "name": "Medical Emergencies",
+    "deckIds": [
+      "emergency-actions-u5-10",
+      "emergency-calling-for-help-u5-10",
+      "emergency-earthquake-u5-10",
+      "emergency-evacuation-u5-10",
+      "emergency-fire-u5-10",
+      "emergency-preparedness-u5-10",
+      "emergency-providing-information-u5-10",
+      "emergency-tsunami-u5-10",
+      "health-pharmacy-medicine-u5-10",
+      "communication-help-asking-for-assistance-u5-10",
+      "communication-help-getting-attention-u5-10",
+      "communication-help-lack-of-understanding-u5-10",
+      "communication-help-language-ability-u5-10",
+      "communication-help-pace-u5-10",
+      "communication-help-repetition-u5-10"
+    ]
+  },
+  {
+    "name": "Safety Briefings",
+    "deckIds": [
+      "emergency-actions-u5-10",
+      "emergency-calling-for-help-u5-10",
+      "emergency-earthquake-u5-10",
+      "emergency-evacuation-u5-10",
+      "emergency-fire-u5-10",
+      "emergency-preparedness-u5-10",
+      "emergency-providing-information-u5-10",
+      "emergency-tsunami-u5-10",
+      "communication-help-asking-for-assistance-u5-10",
+      "communication-help-getting-attention-u5-10",
+      "communication-help-lack-of-understanding-u5-10",
+      "communication-help-language-ability-u5-10",
+      "communication-help-pace-u5-10",
+      "communication-help-repetition-u5-10"
+    ]
+  },
+  {
+    "name": "Transit Tickets",
+    "deckIds": [
+      "transportation-air-travel-u5-10",
+      "transportation-airport-u5-10",
+      "transportation-bus-u5-10",
+      "transportation-buying-tickets-u5-10",
+      "transportation-fares-u5-10",
+      "transportation-general-u5-10",
+      "transportation-taxi-u5-10",
+      "transportation-tickets-u5-10",
+      "transportation-train-u5-10",
+      "money-exchange-asking-the-rate-u5-10",
+      "money-exchange-making-a-request-u5-10"
+    ]
+  },
+  {
+    "name": "Dining Requests",
+    "deckIds": [
+      "at-a-restaurant-ordering-u5-10",
+      "at-a-restaurant-stating-preferences-u5-10",
+      "dietary-needs-requests-u5-10",
+      "preferences-likes-u5-10",
+      "preferences-dislikes-u5-10"
+    ]
+  },
+  {
+    "name": "Guided Tours",
+    "deckIds": [
+      "directions-instructions-u5-10",
+      "directions-locations-u5-10",
+      "directions-transportation-u5-10",
+      "directions-using-landmarks-u5-10",
+      "information-asking-for-assistance-u5-10",
+      "information-at-a-restaurant-u5-10"
+    ]
+  },
+  {
+    "name": "Local Services",
+    "deckIds": [
+      "postal-service-describing-contents-u5-10",
+      "postal-service-questions-u5-10",
+      "postal-service-sending-items-u5-10",
+      "renting-cell-phone-u5-10",
+      "money-exchange-asking-the-rate-u5-10",
+      "money-exchange-making-a-request-u5-10",
+      "information-asking-for-assistance-u5-10",
+      "information-at-a-restaurant-u5-10"
+    ]
+  }
+]
