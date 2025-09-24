@@ -9,6 +9,7 @@ const elements = {
   usefulnessFilter: document.getElementById('usefulness-filter'),
   selectionSummary: document.getElementById('selection-summary'),
   studySelected: document.getElementById('study-selected'),
+  addFiltered: document.getElementById('add-filtered'),
   clearSelection: document.getElementById('clear-selection'),
   presetList: document.getElementById('preset-list'),
   presetForm: document.getElementById('preset-form'),
@@ -119,6 +120,9 @@ function attachEventListeners() {
   }
   if (elements.studySelected) {
     elements.studySelected.addEventListener('click', () => studySelectedPhrases());
+  }
+  if (elements.addFiltered) {
+    elements.addFiltered.addEventListener('click', addFilteredPhrasesToSelection);
   }
   if (elements.clearSelection) {
     elements.clearSelection.addEventListener('click', () => clearSelection());
@@ -593,6 +597,7 @@ function applyPhraseFilter() {
     state.filteredPhrases = [];
     renderPhraseList();
     updatePhrasePanelVisibility();
+    updateAddFilteredButtonState();
     return;
   }
 
@@ -633,6 +638,7 @@ function applyPhraseFilter() {
   state.filteredPhrases = phrases;
   renderPhraseList();
   updatePhrasePanelVisibility();
+  updateAddFilteredButtonState();
 }
 
 function renderPhraseList() {
@@ -806,6 +812,16 @@ function updateSelectionControls() {
   if (elements.clearSelection) {
     elements.clearSelection.disabled = !count;
   }
+  updateAddFilteredButtonState();
+}
+
+function updateAddFilteredButtonState() {
+  if (!elements.addFiltered) return;
+  const hasAvailable = state.filteredPhrases.some(
+    (phrase) => state.phraseMap.has(phrase.id) && !state.selectedPhraseIds.has(phrase.id)
+  );
+  elements.addFiltered.disabled = !hasAvailable;
+  elements.addFiltered.setAttribute('aria-disabled', String(!hasAvailable));
 }
 function studySelectedPhrases(options = {}) {
   const phraseIds = Array.from(state.selectedPhraseIds);
@@ -827,6 +843,28 @@ function studySelectedPhrases(options = {}) {
   updateStudyHeader();
   updateInterfaceForSelection();
   updateCardContent();
+}
+
+function addFilteredPhrasesToSelection() {
+  if (!state.filteredPhrases.length) {
+    showSnackbar('No filtered phrases to add right now.');
+    return;
+  }
+  let addedCount = 0;
+  state.filteredPhrases.forEach((phrase) => {
+    if (!phrase || !state.phraseMap.has(phrase.id)) return;
+    if (state.selectedPhraseIds.has(phrase.id)) return;
+    state.selectedPhraseIds.add(phrase.id);
+    addedCount += 1;
+  });
+  if (!addedCount) {
+    showSnackbar('All filtered phrases are already selected.');
+    updateAddFilteredButtonState();
+    return;
+  }
+  updateSelectionControls();
+  updatePhraseListSelectionState();
+  showSnackbar(`Added ${addedCount} filtered phrase${addedCount === 1 ? '' : 's'} to your selection.`);
 }
 
 function clearSelection() {
@@ -880,6 +918,7 @@ function handleShowAllToggle() {
     state.filteredPhrases = state.showAllPhrases ? state.phrases.slice() : [];
     renderPhraseList();
     updatePhrasePanelVisibility();
+    updateAddFilteredButtonState();
     return;
   }
   applyPhraseFilter();
