@@ -235,6 +235,13 @@ body {
   min-width: 0;
 }
 
+.preset-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
 .preset-name {
   font-size: 0.95rem;
   font-weight: 600;
@@ -245,6 +252,18 @@ body {
 .preset-count {
   font-size: 0.8rem;
   color: rgba(248, 250, 252, 0.65);
+}
+
+.preset-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(129, 140, 248, 0.25);
+  color: rgba(248, 250, 252, 0.8);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .preset-actions {
@@ -287,7 +306,7 @@ body {
 
 .deck-list {
   display: grid;
-  gap: 10px;
+  gap: 6px;
 }
 
 .deck-empty {
@@ -302,15 +321,15 @@ body {
   text-align: left;
   background: rgba(15, 23, 42, 0.35);
   border: 1px solid transparent;
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: 12px;
+  padding: 8px 10px;
   color: inherit;
   font: inherit;
   cursor: pointer;
   transition: transform 0.2s ease, border 0.2s ease, background 0.3s ease;
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  align-items: center;
+  gap: 8px;
 }
 
 .deck-button:hover,
@@ -326,22 +345,34 @@ body {
 }
 
 .deck-option input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  margin: 4px 0 0;
+  width: 16px;
+  height: 16px;
+  margin: 0;
   accent-color: var(--accent);
   flex-shrink: 0;
 }
 
-.deck-option-content h3 {
-  margin: 0 0 6px;
-  font-size: 1.05rem;
+.deck-option-content {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
 }
 
-.deck-option-content p {
+.deck-option-title {
   margin: 0;
-  font-size: 0.85rem;
-  color: rgba(248, 250, 252, 0.75);
+  font-size: 0.9rem;
+  font-weight: 600;
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.deck-option-count {
+  font-size: 0.7rem;
+  color: rgba(248, 250, 252, 0.65);
+  flex-shrink: 0;
 }
 
 .sidebar .pill-button.ghost {

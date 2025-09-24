@@ -1,7 +1,7 @@
 {
   "id": "shopping-and-money-asking-prices-u5-10",
   "title": "Shopping & Money: Asking Prices (Usefulness 5-10)",
-  "description": "Traveler usefulness 5-10/10 phrases for the Asking Prices subcategory within Shopping & Money. Includes 4 card(s).",
+  "description": "Traveler usefulness 5-10/10 phrases for the Asking Prices subcategory within Shopping & Money. Includes 3 card(s).",
   "cards": [
     {
       "english": "How much?",
@@ -17,11 +17,6 @@
       "english": "How much is that?",
       "romaji": "Sore wa ikura desu ka?",
       "japanese": "それはいくらですか？"
-    },
-    {
-      "english": "How much?",
-      "romaji": "Ikura?",
-      "japanese": "いくら？"
     }
   ]
 }

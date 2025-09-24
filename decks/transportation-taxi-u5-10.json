@@ -1,7 +1,7 @@
 {
   "id": "transportation-taxi-u5-10",
   "title": "Transportation: Taxi (Usefulness 5-10)",
-  "description": "Traveler usefulness 5-10/10 phrases for the Taxi subcategory within Transportation. Includes 6 card(s).",
+  "description": "Traveler usefulness 5-10/10 phrases for the Taxi subcategory within Transportation. Includes 5 card(s).",
   "cards": [
     {
       "english": "Where is the taxi stand?",
@@ -12,11 +12,6 @@
       "english": "I would like to go to Tokyo Station.",
       "romaji": "Tokyo eki e onegai shimasu.",
       "japanese": "東京駅へお願いします。"
-    },
-    {
-      "english": "Where is the taxi stand?",
-      "romaji": "Takushi noriba wa doko desu ka?",
-      "japanese": "タクシー乗り場はどこですか？"
     },
     {
       "english": "Where is the taxi terminal?",

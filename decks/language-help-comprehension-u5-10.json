@@ -1,7 +1,7 @@
 {
   "id": "language-help-comprehension-u5-10",
   "title": "Language Help: Comprehension (Usefulness 5-10)",
-  "description": "Traveler usefulness 5-10/10 phrases for the Comprehension subcategory within Language Help. Includes 4 card(s).",
+  "description": "Traveler usefulness 5-10/10 phrases for the Comprehension subcategory within Language Help. Includes 3 card(s).",
   "cards": [
     {
       "english": "Do you understand English?",
@@ -12,11 +12,6 @@
       "english": "I don't understand what you mean.",
       "romaji": "Imi ga wakarimasen.",
       "japanese": "意味が分かりません。"
-    },
-    {
-      "english": "Do you understand English?",
-      "romaji": "Eigo ga wakarimasu ka.",
-      "japanese": "英語が分かりますか。"
     },
     {
       "english": "I don't understand Japanese.",

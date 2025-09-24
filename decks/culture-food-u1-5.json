@@ -1,7 +1,7 @@
 {
   "id": "culture-food-u1-5",
   "title": "Culture: Food (Usefulness 1-5)",
-  "description": "Traveler usefulness 1-5/10 phrases for the Food subcategory within Culture. Includes 38 card(s).",
+  "description": "Traveler usefulness 1-5/10 phrases for the Food subcategory within Culture. Includes 33 card(s).",
   "cards": [
     {
       "english": "Traditionally people in West Japan enjoy tempura with salt, whereas people in East Japan dip it in a special sauce.",
@@ -79,19 +79,9 @@
       "japanese": "手作りの味噌汁は、家庭によって味が違います。"
     },
     {
-      "english": "Tempura is a Japanese dish.",
-      "romaji": "Tenpura wa nihon no ry.ri desu.",
-      "japanese": "天ぷらは日本の料理です。"
-    },
-    {
       "english": "Curry and rice is usually served on one plate, and consists of curry, white rice and special pickles called \"fukushinzuke\".",
       "romaji": "Kar. raisu wa, hitotsu no o-sara ni gohan, kar., fukujinzuke o moritukemasu.",
       "japanese": "カレーライスは、一つのお皿にご飯、カレー、福神漬けを盛り付けます。"
-    },
-    {
-      "english": "Traditionally people in West Japan enjoy tempura with salt, whereas people in East Japan dip it in a special sauce.",
-      "romaji": "Nishi Nihon de wa tempura o shio de tabemasu ga, higashi Nihon de wa tentsuyu ni tsukete tabemasu.",
-      "japanese": "西日本では天ぷらを塩で食べますが、東日本では天つゆにつけて食べます。"
     },
     {
       "english": "In winter, Japanese people enjoy hotpot dishes by sharing food in one big pot with family members.",
@@ -169,24 +159,9 @@
       "japanese": "梅干しは、通常ライスと一緒に食べられ、おにぎりの中身としても代表的な材料です。"
     },
     {
-      "english": "Cut mochi is enjoyed either grilled or cooked.",
-      "romaji": "Kirimochi wa yaitari ry.ri shitari shite tabemasu.",
-      "japanese": "切り餅は焼いたり料理したりして食べます。"
-    },
-    {
       "english": "Since matcha powder melts easily, it's enjoyed in various ways, such as mixed into vanilla ice cream and in matcha pound cake.",
       "romaji": "matcha no kona wa tokeyasui node, banira aisu to mazetari, matcha paundo k.ki ni shiy. shitari, iroirona h.h. de tanoshimemasu.",
       "japanese": "抹茶の粉は溶けやすいので、バニラアイスと混ぜたり、抹茶パウンドケーキに使用したり、色々な方法で楽しめます。"
-    },
-    {
-      "english": "There are glutinous rice-pounding events held locally in Japan on New Year's Day.",
-      "romaji": "O-sh.gatsu ni wa, chiiki de mochitsuki taikai ga okonawaremasu.",
-      "japanese": "お正月には、地域で餅つき大会が行われます。"
-    },
-    {
-      "english": "Sweet bean jelly is very sweet, so it goes well with a bitter green tea called \"matcha.\"",
-      "romaji": "Y.kan wa, totemo amai no de nigai matcha to yoku aimasu.",
-      "japanese": "羊羹は、とても甘いので苦い抹茶とよく合います。"
     },
     {
       "english": "A typical Japanese snack is senbei and green tea.",
