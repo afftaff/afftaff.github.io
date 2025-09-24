@@ -1,0 +1,807 @@
+{
+  "id": "essential-verbs",
+  "title": "Essential Verbs",
+  "description": "Core Japanese verbs for everyday communication. Includes 160 card(s).",
+  "cards": [
+    {
+      "english": "add",
+      "romaji": "tasu",
+      "japanese": "足す / たす"
+    },
+    {
+      "english": "answer",
+      "romaji": "kotaeru",
+      "japanese": "答える / こたえる"
+    },
+    {
+      "english": "arrive",
+      "romaji": "tsuku",
+      "japanese": "着く / つく"
+    },
+    {
+      "english": "bathe, take a shower",
+      "romaji": "abiru",
+      "japanese": "浴びる / あびる"
+    },
+    {
+      "english": "be",
+      "romaji": "iru",
+      "japanese": "居る / いる"
+    },
+    {
+      "english": "be able",
+      "romaji": "dekiru",
+      "japanese": "出来る / できる"
+    },
+    {
+      "english": "be born",
+      "romaji": "umareru",
+      "japanese": "生まれる / うまれる"
+    },
+    {
+      "english": "be cured, healed",
+      "romaji": "naoru",
+      "japanese": "直る / なおる"
+    },
+    {
+      "english": "be defeated, lose a game",
+      "romaji": "makeru",
+      "japanese": "負ける / まける"
+    },
+    {
+      "english": "be different, wrong",
+      "romaji": "chigau",
+      "japanese": "違う / ちがう"
+    },
+    {
+      "english": "be enough, suffient",
+      "romaji": "tariru",
+      "japanese": "足りる / たりる"
+    },
+    {
+      "english": "be found",
+      "romaji": "mitsukaru",
+      "japanese": "見つかる / みつかる"
+    },
+    {
+      "english": "be glad, pleased",
+      "romaji": "yorokobu",
+      "japanese": "喜ぶ"
+    },
+    {
+      "english": "be in trouble",
+      "romaji": "komaru",
+      "japanese": "困る / こまる"
+    },
+    {
+      "english": "be missing, vanish",
+      "romaji": "nakunaru",
+      "japanese": "無くなる / なくなる"
+    },
+    {
+      "english": "be visible, able to see",
+      "romaji": "mieru",
+      "japanese": "見える / みえる"
+    },
+    {
+      "english": "become",
+      "romaji": "naru",
+      "japanese": "なる"
+    },
+    {
+      "english": "become crowded",
+      "romaji": "komu",
+      "japanese": "込む / こむ"
+    },
+    {
+      "english": "become wet",
+      "romaji": "nureru",
+      "japanese": "濡れる / ぬれる"
+    },
+    {
+      "english": "begin",
+      "romaji": "hajimeru",
+      "japanese": "始める / はじめる"
+    },
+    {
+      "english": "begin",
+      "romaji": "hajimaru",
+      "japanese": "始まる / はじまる"
+    },
+    {
+      "english": "bloom",
+      "romaji": "saku",
+      "japanese": "咲く / さく"
+    },
+    {
+      "english": "blow, wipe",
+      "romaji": "fuku",
+      "japanese": "吹く / ふく"
+    },
+    {
+      "english": "board, ride on",
+      "romaji": "noru",
+      "japanese": "乗る / のる"
+    },
+    {
+      "english": "borrow, rent",
+      "romaji": "kariru",
+      "japanese": "借りる / かりる"
+    },
+    {
+      "english": "build",
+      "romaji": "tateru",
+      "japanese": "立てる / たてる"
+    },
+    {
+      "english": "buy",
+      "romaji": "kau",
+      "japanese": "買う / かう"
+    },
+    {
+      "english": "call",
+      "romaji": "yobu",
+      "japanese": "呼ぶ / よぶ"
+    },
+    {
+      "english": "check, investigate",
+      "romaji": "shiraberu",
+      "japanese": "調べる / しらべる"
+    },
+    {
+      "english": "choose, select",
+      "romaji": "erabu",
+      "japanese": "選ぶ / えらぶ"
+    },
+    {
+      "english": "clear up, tidy up",
+      "romaji": "hareru",
+      "japanese": "晴れる / はれる"
+    },
+    {
+      "english": "climb",
+      "romaji": "noboru",
+      "japanese": "登る / のぼる"
+    },
+    {
+      "english": "close, be closed",
+      "romaji": "shimaru",
+      "japanese": "閉まる / しまる"
+    },
+    {
+      "english": "come",
+      "romaji": "kuru",
+      "japanese": "来る / くる"
+    },
+    {
+      "english": "come/go (humble)",
+      "romaji": "mairu",
+      "japanese": "参る / まいる"
+    },
+    {
+      "english": "continue, follow",
+      "romaji": "tsuzuku",
+      "japanese": "続く / つづく"
+    },
+    {
+      "english": "continue, proceed",
+      "romaji": "tsuzukeru",
+      "japanese": "続ける / つづける"
+    },
+    {
+      "english": "cross",
+      "romaji": "wataru",
+      "japanese": "渡る / わたる"
+    },
+    {
+      "english": "cry",
+      "romaji": "naku",
+      "japanese": "泣く / なく"
+    },
+    {
+      "english": "cut",
+      "romaji": "kiru",
+      "japanese": "切る / きる"
+    },
+    {
+      "english": "decide, choose",
+      "romaji": "kimeru",
+      "japanese": "決める"
+    },
+    {
+      "english": "die",
+      "romaji": "shinu",
+      "japanese": "死ぬ / しぬ"
+    },
+    {
+      "english": "do, give",
+      "romaji": "yaru",
+      "japanese": "やる"
+    },
+    {
+      "english": "do, make",
+      "romaji": "suru",
+      "japanese": "する"
+    },
+    {
+      "english": "drink",
+      "romaji": "nomu",
+      "japanese": "飲む / のむ"
+    },
+    {
+      "english": "eat",
+      "romaji": "taberu",
+      "japanese": "食べる / たべる"
+    },
+    {
+      "english": "end",
+      "romaji": "owaru",
+      "japanese": "終わる / おわる"
+    },
+    {
+      "english": "enjoy, have fun",
+      "romaji": "tanoshimu",
+      "japanese": "楽しむ / たのしむ"
+    },
+    {
+      "english": "enter",
+      "romaji": "hairu",
+      "japanese": "入る / はいる"
+    },
+    {
+      "english": "exchange",
+      "romaji": "torikaeru",
+      "japanese": "取り換える / とりかえる"
+    },
+    {
+      "english": "extract, take out",
+      "romaji": "dasu",
+      "japanese": "出す / だす"
+    },
+    {
+      "english": "fall down, collapse",
+      "romaji": "taoreru",
+      "japanese": "倒れる / たおれる"
+    },
+    {
+      "english": "fall from the sky",
+      "romaji": "furu",
+      "japanese": "降る / ふる"
+    },
+    {
+      "english": "fall, drop, hang",
+      "romaji": "sagaru",
+      "japanese": "下がる / さがる"
+    },
+    {
+      "english": "find",
+      "romaji": "mitsukeru",
+      "japanese": "見つける / みつける"
+    },
+    {
+      "english": "fish",
+      "romaji": "tsuru",
+      "japanese": "釣る / つる"
+    },
+    {
+      "english": "forget",
+      "romaji": "wasureru",
+      "japanese": "忘れる / わすれる"
+    },
+    {
+      "english": "form a line, equal",
+      "romaji": "narabu",
+      "japanese": "並ぶ / ならぶ"
+    },
+    {
+      "english": "get off, go down",
+      "romaji": "oriru",
+      "japanese": "降りる / おりる"
+    },
+    {
+      "english": "get tired",
+      "romaji": "tsukareru",
+      "japanese": "疲れる / つかれる"
+    },
+    {
+      "english": "get up",
+      "romaji": "okiru",
+      "japanese": "起きる / おきる"
+    },
+    {
+      "english": "give",
+      "romaji": "ageru",
+      "japanese": "あげる"
+    },
+    {
+      "english": "give back, return (something to someone)",
+      "romaji": "kaesu",
+      "japanese": "返す / かえす"
+    },
+    {
+      "english": "go",
+      "romaji": "iku",
+      "japanese": "行く / いく"
+    },
+    {
+      "english": "go forward, advance",
+      "romaji": "susumu",
+      "japanese": "進む / すすむ"
+    },
+    {
+      "english": "go out",
+      "romaji": "deru",
+      "japanese": "出る / でる"
+    },
+    {
+      "english": "go out, leave home",
+      "romaji": "dekakeru",
+      "japanese": "出かける / でかける"
+    },
+    {
+      "english": "go round",
+      "romaji": "mawaru",
+      "japanese": "回る / まわる"
+    },
+    {
+      "english": "go up, rise",
+      "romaji": "agaru",
+      "japanese": "上がる / あがる"
+    },
+    {
+      "english": "greet, meet, welcome",
+      "romaji": "mukaeru",
+      "japanese": "迎える / むかえる"
+    },
+    {
+      "english": "hand over",
+      "romaji": "watasu",
+      "japanese": "渡す / わたす"
+    },
+    {
+      "english": "hang, sit, telephone, risk",
+      "romaji": "kakeru",
+      "japanese": "掛ける / かける"
+    },
+    {
+      "english": "have, exist",
+      "romaji": "aru",
+      "japanese": "有る / ある"
+    },
+    {
+      "english": "have, hold, own",
+      "romaji": "motsu",
+      "japanese": "持つ / もつ"
+    },
+    {
+      "english": "help",
+      "romaji": "tasukeru",
+      "japanese": "助ける / たすける"
+    },
+    {
+      "english": "inhale, sip, smoke",
+      "romaji": "suu",
+      "japanese": "吸う / すう"
+    },
+    {
+      "english": "jump, fly",
+      "romaji": "tobu",
+      "japanese": "飛ぶ / とぶ"
+    },
+    {
+      "english": "know",
+      "romaji": "shiru",
+      "japanese": "知る / しる"
+    },
+    {
+      "english": "laugh",
+      "romaji": "warau",
+      "japanese": "笑う / わらう"
+    },
+    {
+      "english": "lead",
+      "romaji": "tsureru",
+      "japanese": "連れる / つれる"
+    },
+    {
+      "english": "learn",
+      "romaji": "narau",
+      "japanese": "習う / ならう"
+    },
+    {
+      "english": "lend",
+      "romaji": "kasu",
+      "japanese": "貸す / かす"
+    },
+    {
+      "english": "line up, list, arrange in order",
+      "romaji": "naraberu",
+      "japanese": "並べる / ならべる"
+    },
+    {
+      "english": "listen",
+      "romaji": "kiku",
+      "japanese": "聞く / きく"
+    },
+    {
+      "english": "live, reside",
+      "romaji": "sumu",
+      "japanese": "住む / すむ"
+    },
+    {
+      "english": "look",
+      "romaji": "miru",
+      "japanese": "見る / みる"
+    },
+    {
+      "english": "lower, hang",
+      "romaji": "sageru",
+      "japanese": "下げる / さげる"
+    },
+    {
+      "english": "make a mistake",
+      "romaji": "machigaeru",
+      "japanese": "間違える / まちがえる"
+    },
+    {
+      "english": "make a noise, be rowdy",
+      "romaji": "sawagu",
+      "japanese": "騒ぐ / さわぐ"
+    },
+    {
+      "english": "make, build, create",
+      "romaji": "tsukuru",
+      "japanese": "作る / つくる"
+    },
+    {
+      "english": "meet",
+      "romaji": "au",
+      "japanese": "会う / あう"
+    },
+    {
+      "english": "need",
+      "romaji": "iru",
+      "japanese": "要る / いる"
+    },
+    {
+      "english": "notify",
+      "romaji": "shiraseru",
+      "japanese": "知らせる / しらせる"
+    },
+    {
+      "english": "open",
+      "romaji": "akeru",
+      "japanese": "開ける / あける"
+    },
+    {
+      "english": "open, become vacant",
+      "romaji": "aku",
+      "japanese": "開く / あく"
+    },
+    {
+      "english": "paint",
+      "romaji": "nuru",
+      "japanese": "塗る / ぬる"
+    },
+    {
+      "english": "part, separate from, be divided, divorced",
+      "romaji": "wakareru",
+      "japanese": "別れる / わかれる"
+    },
+    {
+      "english": "pass, exceed",
+      "romaji": "sugiru",
+      "japanese": "過ぎる / すぎる"
+    },
+    {
+      "english": "pay",
+      "romaji": "harau",
+      "japanese": "払う / はらう"
+    },
+    {
+      "english": "play",
+      "romaji": "asobu",
+      "japanese": "遊ぶ / あそぶ"
+    },
+    {
+      "english": "point out, sting, stab",
+      "romaji": "sasu",
+      "japanese": "刺す / さす"
+    },
+    {
+      "english": "polish",
+      "romaji": "migaku",
+      "japanese": "磨く / みがく"
+    },
+    {
+      "english": "praise",
+      "romaji": "homeru",
+      "japanese": "褒める / ほめる"
+    },
+    {
+      "english": "pull",
+      "romaji": "hiku",
+      "japanese": "引く / ひく"
+    },
+    {
+      "english": "push, press",
+      "romaji": "osu",
+      "japanese": "押す / おす"
+    },
+    {
+      "english": "put in, let in",
+      "romaji": "ireru",
+      "japanese": "入れる / いれる"
+    },
+    {
+      "english": "put on, wear (on feet or legs - trousers/shoes etc)",
+      "romaji": "haku",
+      "japanese": "履く / はく"
+    },
+    {
+      "english": "put, place",
+      "romaji": "oku",
+      "japanese": "置く / おく"
+    },
+    {
+      "english": "read",
+      "romaji": "yomu",
+      "japanese": "読む / よむ"
+    },
+    {
+      "english": "receive, get",
+      "romaji": "morau",
+      "japanese": "貰う / もらう"
+    },
+    {
+      "english": "remember, learn",
+      "romaji": "oboeru",
+      "japanese": "覚える / おぼえる"
+    },
+    {
+      "english": "repair, cure",
+      "romaji": "naosu",
+      "japanese": "直す / なおす"
+    },
+    {
+      "english": "request, order, ask favour",
+      "romaji": "tanomu",
+      "japanese": "頼む / たのむ"
+    },
+    {
+      "english": "rest, sleep",
+      "romaji": "yasumu",
+      "japanese": "休む / やすむ"
+    },
+    {
+      "english": "return, go home",
+      "romaji": "kaeru",
+      "japanese": "帰る / かえる"
+    },
+    {
+      "english": "run",
+      "romaji": "hashiru",
+      "japanese": "走る / はしる"
+    },
+    {
+      "english": "run, canter, gallop",
+      "romaji": "kakeru",
+      "japanese": "かける"
+    },
+    {
+      "english": "say",
+      "romaji": "iu",
+      "japanese": "言う / いう"
+    },
+    {
+      "english": "scold, tell off",
+      "romaji": "shikaru",
+      "japanese": "叱る / しかる"
+    },
+    {
+      "english": "search for",
+      "romaji": "sagasu",
+      "japanese": "探す / さがす"
+    },
+    {
+      "english": "sell",
+      "romaji": "uru",
+      "japanese": "売る / うる"
+    },
+    {
+      "english": "send, see off",
+      "romaji": "okuru",
+      "japanese": "送る / おくる"
+    },
+    {
+      "english": "show",
+      "romaji": "miseru",
+      "japanese": "見せる / みせる"
+    },
+    {
+      "english": "shut",
+      "romaji": "shimeru",
+      "japanese": "閉める / しめる"
+    },
+    {
+      "english": "sing",
+      "romaji": "utau",
+      "japanese": "歌う / うたう"
+    },
+    {
+      "english": "sit",
+      "romaji": "suwaru",
+      "japanese": "座る / すわる"
+    },
+    {
+      "english": "sleep, go to bed",
+      "romaji": "neru",
+      "japanese": "寝る / ねる"
+    },
+    {
+      "english": "slip",
+      "romaji": "suberu",
+      "japanese": "滑る / すべる"
+    },
+    {
+      "english": "speak",
+      "romaji": "hanasu",
+      "japanese": "話す / はなす"
+    },
+    {
+      "english": "stand up",
+      "romaji": "tatsu",
+      "japanese": "立つ"
+    },
+    {
+      "english": "steal",
+      "romaji": "nusumu",
+      "japanese": "盗む / ぬすむ"
+    },
+    {
+      "english": "stick, put something on",
+      "romaji": "haru",
+      "japanese": "張る / はる"
+    },
+    {
+      "english": "stop",
+      "romaji": "tomaru",
+      "japanese": "止まる / とまる"
+    },
+    {
+      "english": "stop, fasten",
+      "romaji": "tomeru",
+      "japanese": "止める / とめる"
+    },
+    {
+      "english": "stop, give up, resign",
+      "romaji": "yameru",
+      "japanese": "止める / やめる"
+    },
+    {
+      "english": "swim",
+      "romaji": "oyogu",
+      "japanese": "泳ぐ / およぐ"
+    },
+    {
+      "english": "take off, remove (shoes, clothes)",
+      "romaji": "nugu",
+      "japanese": "脱ぐ / ぬぐ"
+    },
+    {
+      "english": "take, begin, be hanging",
+      "romaji": "kakaru",
+      "japanese": "掛かる / かかる"
+    },
+    {
+      "english": "take, steal",
+      "romaji": "toru",
+      "japanese": "取る / とる"
+    },
+    {
+      "english": "teach, show",
+      "romaji": "oshieru",
+      "japanese": "教える / おしえる"
+    },
+    {
+      "english": "think",
+      "romaji": "omou",
+      "japanese": "思う / おもう"
+    },
+    {
+      "english": "throw away",
+      "romaji": "nageru",
+      "japanese": "投げる / なげる"
+    },
+    {
+      "english": "throw away",
+      "romaji": "suteru",
+      "japanese": "捨てる / すてる"
+    },
+    {
+      "english": "to rear, to bring up",
+      "romaji": "sodateru",
+      "japanese": "育てる / そだてる"
+    },
+    {
+      "english": "touch or feel (with hands)",
+      "romaji": "sawaru",
+      "japanese": "触る / さわる"
+    },
+    {
+      "english": "turn off, erase",
+      "romaji": "kesu",
+      "japanese": "消す / けす"
+    },
+    {
+      "english": "turn on, light",
+      "romaji": "tsukeru",
+      "japanese": "点ける / つける"
+    },
+    {
+      "english": "turn, bend",
+      "romaji": "magaru",
+      "japanese": "曲がる / まがる"
+    },
+    {
+      "english": "understand",
+      "romaji": "wakaru",
+      "japanese": "分かる / わかる"
+    },
+    {
+      "english": "use, operate",
+      "romaji": "tsukau",
+      "japanese": "使う / つかう"
+    },
+    {
+      "english": "vanish, go out, be extinguished",
+      "romaji": "kieru",
+      "japanese": "消える / きえる"
+    },
+    {
+      "english": "wait",
+      "romaji": "matsu",
+      "japanese": "待つ / まつ"
+    },
+    {
+      "english": "walk",
+      "romaji": "aruku",
+      "japanese": "歩く / あるく"
+    },
+    {
+      "english": "wash",
+      "romaji": "arau",
+      "japanese": "洗う / あらう"
+    },
+    {
+      "english": "wear",
+      "romaji": "kiru",
+      "japanese": "着る / きる"
+    },
+    {
+      "english": "wear (on your head), put on",
+      "romaji": "kaburu",
+      "japanese": "被る / かぶる"
+    },
+    {
+      "english": "work",
+      "romaji": "hataraku",
+      "japanese": "働く / はたらく"
+    },
+    {
+      "english": "work for",
+      "romaji": "tsutomeru",
+      "japanese": "勤める / つとめる"
+    },
+    {
+      "english": "wrap",
+      "romaji": "tsutsumu",
+      "japanese": "包む / つつむ"
+    },
+    {
+      "english": "write",
+      "romaji": "kaku",
+      "japanese": "書く / かく"
+    }
+  ]
+}
