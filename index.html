@@ -63,6 +63,23 @@
             <div class="progress-count" id="progress-count"></div>
           </div>
         </section>
+        <section class="card-filters" id="card-filters" aria-label="Phrase filters">
+          <div class="card-filter">
+            <label for="card-search">Search phrases</label>
+            <input type="search" id="card-search" placeholder="Search English, 日本語, or tags" />
+          </div>
+          <div class="card-filter">
+            <label for="usefulness-filter">Minimum usefulness</label>
+            <select id="usefulness-filter">
+              <option value="">Any rating</option>
+              <option value="3">3+</option>
+              <option value="5">5+</option>
+              <option value="7">7+</option>
+              <option value="9">9+</option>
+            </select>
+          </div>
+          <button id="clear-card-filters" type="button" class="pill-button ghost small">Clear filters</button>
+        </section>
         <section class="card-stage" aria-live="polite">
           <div class="card" id="study-card" data-side="front">
             <div class="card-inner" id="card-inner">

@@ -1,153 +1,117 @@
 #!/usr/bin/env python3
-"""Generate flashcard deck JSON files from phrases.tsv.
-
-This script groups phrases by category, subcategory, and traveler usefulness
-and produces a JSON deck for each grouping. It also creates an updated
-manifest so the front-end can enumerate all decks.
-"""
+"""Generate flashcard deck JSON files from the phrases directory."""
 
 from __future__ import annotations
 
 import csv
 import json
 import re
-from collections import defaultdict
 from pathlib import Path
-from typing import Any, Dict, List, Set, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 ROOT = Path(__file__).parent
-TSV_PATH = ROOT / "phrases.tsv"
+PHRASES_DIR = ROOT / "phrases"
 DECKS_DIR = ROOT / "decks"
 MANIFEST_PATH = DECKS_DIR / "manifest.json"
 DEFAULT_PRESETS_PATH = DECKS_DIR / "default-presets.json"
+GENERATED_DECK_ID = "travel-phrases"
 
+# Supported input formats for phrase files. The key is the file extension,
+# the value is the delimiter used when parsing the file with ``csv``.
+PHRASE_FORMATS: Dict[str, str] = {
+    ".tsv": "\t",
+    ".csv": ",",
+}
 
-def slugify(text: str) -> str:
-    """Create a filesystem-safe slug from the provided text."""
-    normalized = text.strip().lower()
-    # Replace ampersands with a readable alternative.
-    normalized = normalized.replace("&", " and ")
-    slug = re.sub(r"[^a-z0-9]+", "-", normalized)
-    slug = re.sub(r"-+", "-", slug)
-    return slug.strip("-")
-
-
-USEFULNESS_BUCKETS: Tuple[Tuple[str, int, int], ...] = (
-    ("1-5", 1, 5),
-    ("5-10", 5, 10),
+DEFAULT_PRESETS: Sequence[Dict[str, Any]] = (
+    {"name": "All Travel Phrases", "deckIds": [GENERATED_DECK_ID]},
 )
 
-DEFAULT_PRESETS_SPEC: List[Dict[str, Any]] = [
-    {"name": "Politeness & Gratitude", "categories": ["Apologies", "Polite Expressions", "Gratitude", "Farewells", "Common Phrases"]},
-    {"name": "Greetings & Introductions", "categories": ["Greetings", "Introductions", "Social", "Feelings", "Small Talk"]},
-    {"name": "Nightlife Connections", "categories": ["Entertainment", "Social", "Requests", "Preferences"]},
-    {"name": "Communication Lifelines", "categories": ["Communication Help", "Language Help", "Information"]},
-    {"name": "Questions & Responses", "categories": ["Questions", "Common Responses"]},
-    {"name": "Requests & Preferences", "categories": ["Requests", "Preferences", "Polite Expressions"]},
-    {"name": "Navigation Basics", "categories": ["Directions", "Asking for Directions", "Travel", "Location"]},
-    {"name": "Transit Logistics", "categories": ["Transportation", "Business Hours"]},
-    {"name": "Counting & Comparisons", "categories": ["Counting", "Comparisons"]},
-    {"name": "Time & Schedules", "categories": ["Telling Time", "Making Plans"]},
-    {"name": "Hotel & Concierge", "categories": ["At the Hotel", "Renting", "Information", "Lost & Found"]},
-    {"name": "Postal & Practicalities", "categories": ["Postal Service", "Money Exchange", "Money", "Business Hours"]},
-    {"name": "Shopping Essentials", "categories": ["Shopping", "Shopping & Money", "Clothing"]},
-    {"name": "Market Interactions", "categories": ["Shopping & Restaurants", "Money", "Money Exchange"]},
-    {"name": "Dining Out", "categories": ["At a Restaurant", "Shopping & Restaurants"]},
-    {"name": "Dietary Support", "categories": ["Dietary Needs", "Health (Allergies)"]},
-    {"name": "Food Adventures", "categories": ["Food"]},
-    {"name": "Health Essentials", "categories": ["Health", "Health (Pharmacy)"]},
-    {"name": "Body Focus", "categories": ["Health (Body Parts)"]},
-    {"name": "Emergency Response", "categories": ["Emergency", "Rules", "Health (Pharmacy)"]},
-    {"name": "Connected Traveler", "categories": ["Internet & Technology", "Communication Help", "Travel"]},
-    {"name": "Service Errands", "categories": ["Postal Service", "Lost & Found", "Information"]},
-    {"name": "Customer Care", "categories": ["Shopping & Restaurants", "Polite Expressions", "Requests"]},
-    {"name": "Vocabulary: Food Staples", "decks": ["vocabulary-food-u5-10"]},
-    {"name": "Vocabulary: Places & Routes", "decks": ["vocabulary-places-and-things-u5-10"]},
-    {
-        "name": "Vocabulary: Concepts & Expressions",
-        "decks": [
-            "vocabulary-concepts-u5-10",
-            "vocabulary-exclamations-u5-10",
-            "vocabulary-animals-u5-10",
-            "nature-plants-u5-10",
-            "weather-temperature-u5-10",
-        ],
-    },
-    {"name": "Vocabulary: Action Verbs", "decks": ["vocabulary-verbs-u5-10"]},
-    {
-        "name": "Vocabulary: Descriptive Language",
-        "categories": ["Descriptions"],
-        "decks": ["vocabulary-adjectives-u5-10"],
-    },
-    {"name": "Vocabulary: Everyday Items", "decks": ["vocabulary-other-u5-10"]},
-    {
-        "name": "Vocabulary: People Skills",
-        "categories": ["Introductions", "Social"],
-        "decks": ["vocabulary-people-u5-10"],
-    },
-    {
-        "name": "Vocabulary: Number Sense",
-        "decks": ["counting-people-u5-10", "counting-food-and-drink-u5-10", "counting-objects-u5-10"],
-    },
-    {"name": "Travel Paperwork", "categories": ["Travel", "Postal Service", "Money Exchange", "Business Hours"]},
-    {
-        "name": "Hospital Visit Prep",
-        "categories": ["Health", "Health (Pharmacy)", "Health (Allergies)"],
-    },
-    {
-        "name": "Medical Emergencies",
-        "categories": ["Emergency", "Health (Pharmacy)", "Communication Help"],
-    },
-    {"name": "Safety Briefings", "categories": ["Emergency", "Communication Help"]},
-    {"name": "Transit Tickets", "categories": ["Transportation", "Money Exchange"]},
-    {
-        "name": "Dining Requests",
-        "decks": [
-            "at-a-restaurant-ordering-u5-10",
-            "at-a-restaurant-stating-preferences-u5-10",
-            "dietary-needs-requests-u5-10",
-            "preferences-likes-u5-10",
-            "preferences-dislikes-u5-10",
-        ],
-    },
-    {"name": "Guided Tours", "categories": ["Directions", "Information"]},
-    {"name": "Local Services", "categories": ["Postal Service", "Renting", "Money Exchange", "Information"]},
-]
+
+def discover_phrase_files() -> List[Path]:
+    """Return all CSV/TSV phrase files within the phrases directory."""
+
+    if not PHRASES_DIR.exists():
+        return []
+
+    files: List[Path] = []
+    for path in PHRASES_DIR.iterdir():
+        if not path.is_file():
+            continue
+        if path.suffix.lower() in PHRASE_FORMATS:
+            files.append(path)
+    return sorted(files)
 
 
-def load_phrases() -> Dict[Tuple[str, str, int], List[Dict[str, str]]]:
-    """Read the TSV file and group rows by category/subcategory/usefulness."""
-    groupings: Dict[Tuple[str, str, int], List[Dict[str, str]]] = defaultdict(list)
-    with TSV_PATH.open("r", encoding="utf-8", newline="") as handle:
-        reader = csv.DictReader(handle, delimiter="\t")
-        for row in reader:
-            category = row["Category"].strip()
-            subcategory = row["Subcategory"].strip()
-            usefulness_raw = row["Traveler Usefulness (1-10)"].strip()
-            english = row["English"].strip()
-            romaji = row["Romanji"].strip()
-            japanese = row["Japanese"].strip()
+def parse_tags(raw: str) -> List[str]:
+    """Normalize the tag column into a list of unique tags."""
 
-            if not category or not subcategory or not usefulness_raw:
-                # Skip malformed entries while keeping generation robust.
-                continue
-
-            try:
-                usefulness = int(usefulness_raw)
-            except ValueError:
-                # Ignore rows with a non-numeric usefulness rating.
-                continue
-
-            key = (category, subcategory, usefulness)
-            groupings[key].append({
-                "english": english,
-                "romaji": romaji,
-                "japanese": japanese,
-            })
-    return groupings
+    tags: List[str] = []
+    seen: Set[str] = set()
+    for piece in re.split(r"[;,]", raw or ""):
+        tag = piece.strip()
+        if not tag:
+            continue
+        normalized = tag.lower()
+        if normalized in seen:
+            continue
+        seen.add(normalized)
+        tags.append(tag)
+    return tags
 
 
-def normalize_card_key(card: Dict[str, str]) -> Tuple[str, ...]:
+def load_phrases() -> List[Dict[str, Any]]:
+    """Read every phrase file and return a combined list of cards."""
+
+    cards: List[Dict[str, Any]] = []
+    files = discover_phrase_files()
+    for path in files:
+        delimiter = PHRASE_FORMATS[path.suffix.lower()]
+        with path.open("r", encoding="utf-8", newline="") as handle:
+            reader = csv.DictReader(handle, delimiter=delimiter)
+            fieldnames = reader.fieldnames or []
+            missing: Set[str] = {
+                column
+                for column in (
+                    "Tags",
+                    "Traveler Usefulness (1-10)",
+                    "English",
+                    "Romanji",
+                    "Japanese",
+                )
+                if column not in fieldnames
+            }
+            if missing:
+                raise SystemExit(
+                    f"{path.name} is missing required column(s): {', '.join(sorted(missing))}"
+                )
+            for row in reader:
+                usefulness_raw = (row.get("Traveler Usefulness (1-10)") or "").strip()
+                if not usefulness_raw:
+                    continue
+
+                try:
+                    usefulness = int(usefulness_raw)
+                except ValueError:
+                    continue
+
+                card = {
+                    "english": (row.get("English") or "").strip(),
+                    "romaji": (row.get("Romanji") or "").strip(),
+                    "japanese": (row.get("Japanese") or "").strip(),
+                    "tags": parse_tags(row.get("Tags", "")),
+                    "usefulness": usefulness,
+                }
+
+                if not card["english"] and not card["japanese"] and not card["romaji"]:
+                    continue
+
+                cards.append(card)
+
+    return cards
+
+
+def normalize_card_key(card: Dict[str, Any]) -> Tuple[str, ...]:
     """Build a normalization key so duplicate phrases can be removed."""
 
     def normalize_latin(text: str) -> str:
@@ -175,21 +139,54 @@ def normalize_card_key(card: Dict[str, str]) -> Tuple[str, ...]:
     return ("fallback",) + fallback
 
 
-def deduplicate_cards(cards: List[Dict[str, str]]) -> List[Dict[str, str]]:
-    """Remove duplicate cards while preserving the original order."""
+def merge_tags(existing: Iterable[str], additional: Iterable[str]) -> List[str]:
+    """Return a stable list of tags with duplicates removed."""
 
-    seen = set()
-    unique_cards: List[Dict[str, str]] = []
+    combined: List[str] = []
+    seen: Set[str] = set()
+    for source in (existing, additional):
+        for tag in source:
+            normalized = tag.lower()
+            if normalized in seen:
+                continue
+            seen.add(normalized)
+            combined.append(tag)
+    return combined
+
+
+def deduplicate_cards(cards: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Remove duplicate cards while merging metadata and preserving order."""
+
+    seen: Dict[Tuple[str, ...], Dict[str, Any]] = {}
+    unique_cards: List[Dict[str, Any]] = []
     for card in cards:
         key = normalize_card_key(card)
-        if key in seen:
+        existing = seen.get(key)
+        if existing:
+            existing_tags = existing.get("tags", []) or []
+            new_tags = card.get("tags", []) or []
+            existing["tags"] = merge_tags(existing_tags, new_tags)
+
+            existing_usefulness = existing.get("usefulness")
+            new_usefulness = card.get("usefulness")
+            if isinstance(new_usefulness, int):
+                if not isinstance(existing_usefulness, int) or new_usefulness > existing_usefulness:
+                    existing["usefulness"] = new_usefulness
             continue
-        seen.add(key)
-        unique_cards.append(card)
+
+        normalized_card = {
+            "english": card.get("english", ""),
+            "romaji": card.get("romaji", ""),
+            "japanese": card.get("japanese", ""),
+            "tags": list(card.get("tags", []) or []),
+            "usefulness": card.get("usefulness"),
+        }
+        seen[key] = normalized_card
+        unique_cards.append(normalized_card)
     return unique_cards
 
 
-def write_deck(deck_id: str, title: str, description: str, cards: List[Dict[str, str]]) -> None:
+def write_deck(deck_id: str, title: str, description: str, cards: List[Dict[str, Any]]) -> None:
     deck_path = DECKS_DIR / f"{deck_id}.json"
     deck_data = {
         "id": deck_id,
@@ -200,107 +197,85 @@ def write_deck(deck_id: str, title: str, description: str, cards: List[Dict[str,
     deck_path.write_text(json.dumps(deck_data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-
-def write_default_presets(
-    category_map: Dict[str, List[str]],
-    available_decks: Set[str]
-) -> None:
-    resolved: List[Dict[str, Any]] = []
-    for spec in DEFAULT_PRESETS_SPEC:
-        name = spec.get("name")
-        if not name:
+def write_default_presets(available_decks: Set[str]) -> None:
+    presets: List[Dict[str, Any]] = []
+    for preset in DEFAULT_PRESETS:
+        deck_ids = [deck_id for deck_id in preset.get("deckIds", []) if deck_id in available_decks]
+        if not deck_ids:
             continue
-
-        deck_ids: List[str] = []
-        for category in spec.get("categories", []):
-            deck_ids.extend(category_map.get(category, []))
-        deck_ids.extend(spec.get("decks", []))
-
-        unique: List[str] = []
-        seen: Set[str] = set()
-        for deck_id in deck_ids:
-            if deck_id in seen or deck_id not in available_decks:
-                continue
-            seen.add(deck_id)
-            unique.append(deck_id)
-
-        if not unique:
-            continue
-
-        resolved.append({"name": name, "deckIds": unique})
+        presets.append({"name": preset["name"], "deckIds": deck_ids})
 
     DEFAULT_PRESETS_PATH.write_text(
-        json.dumps(resolved, ensure_ascii=False, indent=2) + "\n",
+        json.dumps(presets, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
 
 
-def main() -> None:
-    groupings = load_phrases()
+def summarize_tags(cards: Sequence[Dict[str, Any]]) -> Tuple[int, List[str]]:
+    """Return the number of unique tags and the sorted tag list."""
 
-    if not groupings:
-        raise SystemExit("No phrases were loaded from the TSV file.")
+    tags: Set[str] = set()
+    for card in cards:
+        for tag in card.get("tags", []) or []:
+            tags.add(tag)
+    sorted_tags = sorted(tags, key=lambda value: value.lower())
+    return len(tags), sorted_tags
+
+
+def load_deck_metadata(deck_path: Path) -> Optional[Dict[str, str]]:
+    """Read the deck JSON and return manifest metadata."""
+
+    try:
+        data = json.loads(deck_path.read_text(encoding="utf-8"))
+    except Exception as error:  # pragma: no cover - defensive logging
+        raise SystemExit(f"Unable to read deck file {deck_path.name}: {error}")
+
+    deck_id = data.get("id") or deck_path.stem
+    title = data.get("title") or deck_path.stem.replace("-", " ").title()
+    description = data.get("description") or ""
+    return {
+        "id": deck_id,
+        "title": title,
+        "description": description,
+        "file": deck_path.name,
+    }
+
+
+def main() -> None:
+    phrases = load_phrases()
+
+    if not phrases:
+        raise SystemExit("No phrases were loaded from the phrases directory.")
 
     DECKS_DIR.mkdir(exist_ok=True)
 
-    # Remove existing deck files (except for the manifest, which we'll replace).
-    for path in DECKS_DIR.glob("*.json"):
-        if path == MANIFEST_PATH:
-            continue
-        path.unlink()
+    deduped_cards = deduplicate_cards(phrases)
+    total_tags, _ = summarize_tags(deduped_cards)
 
-    manifest_entries = []
-    category_map: Dict[str, List[str]] = defaultdict(list)
+    deck_title = "Travel Phrase Collection"
+    deck_description = (
+        f"Comprehensive travel phrases with {len(deduped_cards)} card(s)"
+        f" and {total_tags} tag{'s' if total_tags != 1 else ''} for filtering."
+    )
+
+    write_deck(GENERATED_DECK_ID, deck_title, deck_description, deduped_cards)
+
+    manifest_entries: List[Dict[str, str]] = []
     available_decks: Set[str] = set()
 
-    bucket_lookup = {label: (lower, upper) for label, lower, upper in USEFULNESS_BUCKETS}
-    bucket_order = {label: index for index, (label, *_rest) in enumerate(USEFULNESS_BUCKETS)}
-
-    combined: Dict[Tuple[str, str, str], List[Dict[str, str]]] = defaultdict(list)
-
-    for category, subcategory, usefulness in sorted(
-        groupings,
-        key=lambda item: (item[0].lower(), item[1].lower(), -item[2]),
-    ):
-        cards = groupings[(category, subcategory, usefulness)]
-        for label, lower, upper in USEFULNESS_BUCKETS:
-            if lower <= usefulness <= upper:
-                combined[(category, subcategory, label)].extend(cards)
-
-    for category, subcategory, label in sorted(
-        combined,
-        key=lambda item: (
-            item[0].lower(),
-            item[1].lower(),
-            bucket_order.get(item[2], len(USEFULNESS_BUCKETS)),
-        ),
-    ):
-        cards = deduplicate_cards(combined[(category, subcategory, label)])
-        if not cards:
+    for path in sorted(DECKS_DIR.glob("*.json")):
+        if path.name in {MANIFEST_PATH.name, DEFAULT_PRESETS_PATH.name}:
             continue
+        metadata = load_deck_metadata(path)
+        if not metadata:
+            continue
+        manifest_entries.append(metadata)
+        available_decks.add(metadata["id"])
 
-        lower, upper = bucket_lookup[label]
-        deck_slug = f"{slugify(category)}-{slugify(subcategory)}-u{label}"
-        title = f"{category}: {subcategory} (Usefulness {label})"
-        description = (
-            f"Traveler usefulness {lower}-{upper}/10 phrases for the {subcategory} subcategory"
-            f" within {category}. Includes {len(cards)} card(s)."
-        )
-
-        write_deck(deck_slug, title, description, cards)
-        available_decks.add(deck_slug)
-        if label == "5-10":
-            category_map[category].append(deck_slug)
-
-        manifest_entries.append({
-            "id": deck_slug,
-            "title": title,
-            "description": description,
-            "file": f"{deck_slug}.json",
-        })
+    manifest_entries.sort(key=lambda entry: entry["title"].lower())
 
     MANIFEST_PATH.write_text(json.dumps(manifest_entries, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    write_default_presets(category_map, available_decks)
+    write_default_presets(available_decks)
 
 
 if __name__ == "__main__":

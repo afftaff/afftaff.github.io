@@ -424,6 +424,56 @@ body {
   border: 1px solid var(--border-subtle);
 }
 
+.card-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.card-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: min(280px, 100%);
+}
+
+.card-filter label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.card-filter input,
+.card-filter select {
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-filter input:focus,
+.card-filter select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+}
+
+.card-filters .pill-button {
+  margin-left: auto;
+}
+
+.card-filters.is-disabled {
+  opacity: 0.55;
+}
+
+.card-filters.is-disabled .card-filter input,
+.card-filters.is-disabled .card-filter select,
+.card-filters.is-disabled .pill-button {
+  pointer-events: none;
+}
+
 .progress-label {
   text-transform: uppercase;
   font-size: 0.7rem;

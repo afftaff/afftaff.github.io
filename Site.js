@@ -14,6 +14,10 @@ const elements = {
   cardFrontText: document.getElementById('card-front-text'),
   cardRomaji: document.getElementById('card-romaji'),
   cardJapanese: document.getElementById('card-japanese'),
+  cardFilters: document.getElementById('card-filters'),
+  cardSearch: document.getElementById('card-search'),
+  usefulnessFilter: document.getElementById('usefulness-filter'),
+  clearCardFilters: document.getElementById('clear-card-filters'),
   presetList: document.getElementById('preset-list'),
   presetForm: document.getElementById('preset-form'),
   presetName: document.getElementById('preset-name'),
@@ -34,6 +38,12 @@ const state = {
   deckCache: new Map(),
   currentDeckId: null,
   currentDeckTitle: '',
+  currentDeckBaseDescription: '',
+  unfilteredCards: [],
+  cardFilters: {
+    search: '',
+    minUsefulness: null
+  },
   cards: [],
   index: 0,
   side: 'front',
@@ -52,6 +62,7 @@ const PRESET_STORAGE_KEY = 'travel-japanese-presets';
 init();
 
 async function init() {
+  state.currentDeckBaseDescription = elements.deckDescription?.textContent || '';
   await loadManifest();
   loadPresetsFromStorage();
   await loadDefaultPresets();
@@ -92,6 +103,18 @@ function attachEventListeners() {
   elements.flipCard.addEventListener('click', flipCardSide);
   elements.playAudio.addEventListener('click', () => speakCurrentCard(false));
 
+  if (elements.cardSearch) {
+    elements.cardSearch.addEventListener('input', handleCardSearchChange);
+  }
+
+  if (elements.usefulnessFilter) {
+    elements.usefulnessFilter.addEventListener('change', handleUsefulnessFilterChange);
+  }
+
+  if (elements.clearCardFilters) {
+    elements.clearCardFilters.addEventListener('click', resetCardFilters);
+  }
+
   document.addEventListener('keydown', handleKeyboardShortcuts);
 }
 
@@ -119,6 +142,136 @@ function applyFilter(query) {
   }
   renderDeckList();
   updateSelectionControls();
+}
+
+function handleCardSearchChange(event) {
+  state.cardFilters.search = event?.target?.value ?? '';
+  applyCardFilters();
+}
+
+function handleUsefulnessFilterChange(event) {
+  const value = event?.target?.value ?? '';
+  const parsed = Number.parseInt(value, 10);
+  state.cardFilters.minUsefulness = Number.isNaN(parsed) ? null : parsed;
+  applyCardFilters();
+}
+
+function resetCardFilters() {
+  if (!state.unfilteredCards.length) return;
+  const hadFilters = state.cardFilters.search || state.cardFilters.minUsefulness !== null;
+  state.cardFilters.search = '';
+  state.cardFilters.minUsefulness = null;
+  if (elements.cardSearch) {
+    elements.cardSearch.value = '';
+  }
+  if (elements.usefulnessFilter) {
+    elements.usefulnessFilter.value = '';
+  }
+  if (hadFilters) {
+    applyCardFilters();
+  } else {
+    updateFilterControls();
+  }
+}
+
+function applyCardFilters(options = {}) {
+  const { preserveIndex = false } = options;
+  if (!state.unfilteredCards.length) {
+    state.cards = [];
+    state.index = 0;
+    state.side = 'front';
+    updateDeckDescription();
+    updateFilterControls();
+    updateInterfaceForSelection();
+    updateCardContent();
+    return;
+  }
+
+  const search = state.cardFilters.search.trim().toLowerCase();
+  const minUsefulness =
+    typeof state.cardFilters.minUsefulness === 'number' ? state.cardFilters.minUsefulness : null;
+
+  const filtered = state.unfilteredCards.filter((card) => {
+    if (minUsefulness !== null) {
+      const usefulness = Number.parseInt(card.usefulness, 10);
+      if (Number.isNaN(usefulness) || usefulness < minUsefulness) {
+        return false;
+      }
+    }
+    if (!search) {
+      return true;
+    }
+    return cardMatchesQuery(card, search);
+  });
+
+  state.cards = filtered;
+  if (!preserveIndex || state.index >= filtered.length) {
+    state.index = 0;
+  }
+  state.side = 'front';
+  updateDeckDescription();
+  updateFilterControls();
+  updateInterfaceForSelection();
+  updateCardContent();
+}
+
+function cardMatchesQuery(card, normalizedQuery) {
+  if (!card) return false;
+  const haystack = [];
+  if (typeof card.english === 'string') haystack.push(card.english);
+  if (typeof card.romaji === 'string') haystack.push(card.romaji);
+  if (typeof card.japanese === 'string') haystack.push(card.japanese);
+  if (Array.isArray(card.tags) && card.tags.length) {
+    haystack.push(card.tags.join(' '));
+  } else if (typeof card.tags === 'string') {
+    haystack.push(card.tags);
+  }
+  return haystack.some((text) => text && text.toLowerCase().includes(normalizedQuery));
+}
+
+function updateDeckDescription() {
+  if (!elements.deckDescription) return;
+  const base = state.currentDeckBaseDescription || '';
+  const total = state.unfilteredCards.length;
+  const filtered = state.cards.length;
+  let description = base;
+
+  if (total) {
+    let extra = '';
+    if (!filtered) {
+      extra = 'No cards match the current filters yet.';
+    } else if (filtered < total) {
+      extra = `Showing ${filtered} of ${total} card${total === 1 ? '' : 's'} after filtering.`;
+    }
+    if (extra) {
+      description = base ? `${base} ${extra}` : extra;
+    }
+  }
+
+  elements.deckDescription.textContent = description;
+}
+
+function updateFilterControls() {
+  const hasDeck = state.unfilteredCards.length > 0;
+  if (elements.cardFilters) {
+    elements.cardFilters.classList.toggle('is-disabled', !hasDeck);
+  }
+  if (elements.cardSearch) {
+    elements.cardSearch.disabled = !hasDeck;
+    elements.cardSearch.value = hasDeck ? state.cardFilters.search : '';
+  }
+  if (elements.usefulnessFilter) {
+    elements.usefulnessFilter.disabled = !hasDeck;
+    const value = hasDeck && typeof state.cardFilters.minUsefulness === 'number'
+      ? String(state.cardFilters.minUsefulness)
+      : '';
+    elements.usefulnessFilter.value = value;
+  }
+  if (elements.clearCardFilters) {
+    const hasFilters =
+      Boolean(state.cardFilters.search.trim()) || typeof state.cardFilters.minUsefulness === 'number';
+    elements.clearCardFilters.disabled = !hasDeck || !hasFilters;
+  }
 }
 
 function renderDeckList() {
@@ -182,26 +335,33 @@ function getDeckCardCount(deck) {
 
 function updateDeckHeader(deckData) {
   elements.deckTitle.textContent = deckData.title;
-  elements.deckDescription.textContent = deckData.description || '';
-  elements.deckProgress.hidden = !state.cards.length;
+  state.currentDeckBaseDescription = deckData.description || '';
+  updateDeckDescription();
 }
 
 function updateInterfaceForSelection() {
-  const hasDeck = state.cards.length > 0;
-  elements.prevCard.disabled = !hasDeck;
-  elements.nextCard.disabled = !hasDeck;
-  elements.flipCard.disabled = !hasDeck;
+  const hasCards = state.cards.length > 0;
+  const hasDeckLoaded = state.unfilteredCards.length > 0;
+  if (elements.deckProgress) {
+    elements.deckProgress.hidden = !hasCards;
+  }
+  elements.prevCard.disabled = !hasCards;
+  elements.nextCard.disabled = !hasCards;
+  elements.flipCard.disabled = !hasCards;
   updateNavigationStates();
   updateFlipLabel();
   updateAudioState();
   updateProgress();
-  if (!hasDeck) {
+  if (!hasCards) {
     cancelCardTransition();
     elements.card.dataset.side = 'front';
-    elements.cardFrontText.textContent = 'Select decks to begin.';
-    elements.cardRomaji.textContent = 'ローマ字';
-    elements.cardJapanese.textContent = '日本語';
+    if (!hasDeckLoaded) {
+      elements.cardFrontText.textContent = 'Select decks to begin.';
+      elements.cardRomaji.textContent = 'ローマ字';
+      elements.cardJapanese.textContent = '日本語';
+    }
   }
+  updateFilterControls();
 }
 
 function toggleDeckSelection(deckId, isSelected) {
@@ -282,7 +442,14 @@ async function studySelectedDecks() {
 
   const cards = deckDataList.flatMap((deck) => deck.cards || []);
   if (!cards.length) {
+    state.unfilteredCards = [];
     state.cards = [];
+    state.index = 0;
+    state.side = 'front';
+    state.currentDeckId = null;
+    state.currentDeckTitle = '';
+    state.currentDeckBaseDescription = '';
+    updateDeckDescription();
     updateInterfaceForSelection();
     showSnackbar('The selected decks do not contain any cards yet.');
     return;
@@ -293,6 +460,7 @@ async function studySelectedDecks() {
 
   state.currentDeckId = deckIds.length === 1 ? deckIds[0] : `combo:${deckIds.join('+')}`;
   state.currentDeckTitle = combinedTitle;
+  state.unfilteredCards = cards;
   state.cards = cards;
   state.index = 0;
   state.side = 'front';
@@ -309,8 +477,7 @@ async function studySelectedDecks() {
     title: combinedTitle,
     description
   });
-  updateInterfaceForSelection();
-  updateCardContent();
+  applyCardFilters();
   showSnackbar(
     `Loaded ${deckDataList.length} deck${deckDataList.length > 1 ? 's' : ''} (${cards.length} card${cards.length === 1 ? '' : 's'}).`
   );
@@ -561,7 +728,19 @@ function persistPresets() {
 function updateCardContent() {
   const card = state.cards[state.index];
   if (!card) {
-    updateInterfaceForSelection();
+    const hasDeckLoaded = state.unfilteredCards.length > 0;
+    elements.cardFrontText.textContent = hasDeckLoaded
+      ? 'No cards match the current filters yet.'
+      : 'Select decks to begin.';
+    elements.cardRomaji.textContent = 'ローマ字';
+    elements.cardJapanese.textContent = '日本語';
+    setCardSide('front');
+    updateNavigationStates();
+    updateProgress();
+    updateAudioState();
+    if (!hasDeckLoaded) {
+      updateInterfaceForSelection();
+    }
     return;
   }
   elements.cardFrontText.textContent = card.english;
