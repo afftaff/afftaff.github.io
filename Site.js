@@ -1210,6 +1210,8 @@ function performCardTransition(callback) {
     elements.cardInner.classList.remove('is-fading');
     callback();
     state.transitioning = false;
+    updateFeedbackButtonsState();
+    updateRemoveCardState();
   }, CARD_TRANSITION_DURATION);
 }
 
@@ -1222,6 +1224,175 @@ function cancelCardTransition() {
     elements.cardInner.classList.remove('is-fading');
   }
   state.transitioning = false;
+  updateFeedbackButtonsState();
+  updateRemoveCardState();
+}
+
+function gradeCurrentCard(grade, options = {}) {
+  if (state.transitioning) return;
+  const cardId = state.currentCardId;
+  if (!cardId) return;
+
+  cancelSpeech();
+
+  const queueBefore = state.queue.slice();
+  const progress = state.cardProgress.get(cardId) || { stage: 0, lapses: 0, reviews: 0 };
+  const historyEntry = {
+    id: cardId,
+    queueBefore,
+    prevStage: progress.stage,
+    prevLapses: progress.lapses,
+    prevReviews: progress.reviews,
+    prevCompleted: state.completedCards.has(cardId)
+  };
+
+  state.cardProgress.set(cardId, progress);
+  progress.reviews += 1;
+
+  if (state.queue[0] === cardId) {
+    state.queue.shift();
+  } else {
+    const index = state.queue.indexOf(cardId);
+    if (index >= 0) {
+      state.queue.splice(index, 1);
+    }
+  }
+
+  let markComplete = false;
+  let reinsertionOffset = 0;
+
+  switch (grade) {
+    case 'again':
+      progress.stage = 0;
+      progress.lapses += 1;
+      reinsertionOffset = 1;
+      break;
+    case 'hard':
+      progress.stage = Math.max(progress.stage, 1);
+      reinsertionOffset = 3;
+      break;
+    case 'easy':
+      progress.stage = Math.max(progress.stage + 2, 3);
+      markComplete = true;
+      break;
+    case 'good':
+    default:
+      progress.stage = Math.min(progress.stage + 1, 3);
+      if (progress.stage >= 2) {
+        markComplete = true;
+      } else {
+        reinsertionOffset = 5;
+      }
+      break;
+  }
+
+  if (markComplete) {
+    state.completedCards.add(cardId);
+  } else {
+    state.completedCards.delete(cardId);
+    const position = Math.min(reinsertionOffset, state.queue.length);
+    state.queue.splice(position, 0, cardId);
+  }
+
+  state.history.push(historyEntry);
+
+  performCardTransition(() => {
+    state.currentCardId = state.queue[0] ?? null;
+    state.side = 'front';
+    updateCardContent();
+  });
+
+  if (!options?.triggeredByNext && grade === 'again') {
+    showSnackbar('We\'ll show that card again shortly.');
+  } else if (!options?.triggeredByNext && markComplete && grade === 'easy') {
+    showSnackbar('Marked as easy!');
+  }
+}
+
+function restorePreviousCard() {
+  if (!state.history.length) return;
+  const entry = state.history.pop();
+  const progress = state.cardProgress.get(entry.id) || { stage: 0, lapses: 0, reviews: 0 };
+  progress.stage = entry.prevStage;
+  progress.lapses = entry.prevLapses;
+  progress.reviews = entry.prevReviews;
+  state.cardProgress.set(entry.id, progress);
+
+  if (entry.prevCompleted) {
+    state.completedCards.add(entry.id);
+  } else {
+    state.completedCards.delete(entry.id);
+  }
+
+  state.queue = entry.queueBefore.slice();
+  state.currentCardId = state.queue[0] ?? null;
+  state.side = 'front';
+  cancelSpeech();
+  cancelCardTransition();
+  updateCardContent();
+  showSnackbar('Reverted to previous card.');
+}
+
+function handleRemoveCurrentCard() {
+  if (state.transitioning) return;
+  const card = getCurrentCard();
+  if (!card) {
+    showSnackbar('No card selected to remove.');
+    return;
+  }
+  if (!isCurrentDeckCustom()) {
+    showSnackbar('Load one of your saved decks to remove cards.');
+    return;
+  }
+  const deckIndex = state.customDecks.findIndex((deck) => deck.name === state.currentDeckName);
+  if (deckIndex === -1) {
+    showSnackbar('Only custom decks can be modified.');
+    return;
+  }
+  const deck = state.customDecks[deckIndex];
+  const phraseIndex = deck.phraseIds.indexOf(card.id);
+  if (phraseIndex === -1) {
+    showSnackbar('This card is no longer part of the deck.');
+    return;
+  }
+
+  deck.phraseIds.splice(phraseIndex, 1);
+  state.selectedPhraseIds.delete(card.id);
+  removeCardFromSession(card.id);
+
+  if (!deck.phraseIds.length) {
+    showSnackbar(`Removed "${card.english}". The deck is now empty.`);
+  } else {
+    showSnackbar(`Removed "${card.english}" from "${deck.name}".`);
+  }
+
+  refreshDeckCollections();
+  persistDecks();
+  updateSelectionControls();
+  updatePhraseListSelectionState();
+}
+
+function removeCardFromSession(cardId) {
+  cancelCardTransition();
+  cancelSpeech();
+  state.cards = state.cards.filter((card) => card.id !== cardId);
+  state.cardLookup.delete(cardId);
+  state.queue = state.queue.filter((id) => id !== cardId);
+  state.history = state.history
+    .filter((entry) => entry.id !== cardId)
+    .map((entry) => ({
+      ...entry,
+      queueBefore: entry.queueBefore.filter((id) => id !== cardId)
+    }));
+  state.completedCards.delete(cardId);
+  state.cardProgress.delete(cardId);
+  state.sessionTotal = state.cards.length;
+  if (state.currentCardId === cardId) {
+    state.currentCardId = state.queue[0] ?? null;
+    state.side = 'front';
+  }
+  updateInterfaceForSelection();
+  updateCardContent();
 }
 
 function gradeCurrentCard(grade, options = {}) {
