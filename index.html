@@ -127,8 +127,26 @@
             <button id="prev-card" type="button" class="pill-button ghost" disabled>Previous</button>
             <button id="flip-card" type="button" class="pill-button primary" disabled>Flip Card</button>
             <button id="next-card" type="button" class="pill-button ghost" disabled>Next</button>
+            <button id="remove-card" type="button" class="pill-button outline" disabled>Remove from deck</button>
           </div>
-          <div class="card-hotkeys">Tip: Use ← Back • Space Flip • → Next.</div>
+          <div class="card-feedback" id="card-feedback">
+            <p class="card-feedback-label">How well did you recall it?</p>
+            <div class="card-feedback-buttons">
+              <button id="grade-again" type="button" class="pill-button ghost small" disabled aria-disabled="true">
+                Again
+              </button>
+              <button id="grade-hard" type="button" class="pill-button ghost small" disabled aria-disabled="true">
+                Hard
+              </button>
+              <button id="grade-good" type="button" class="pill-button primary small" disabled aria-disabled="true">
+                Good
+              </button>
+              <button id="grade-easy" type="button" class="pill-button outline small" disabled aria-disabled="true">
+                Easy
+              </button>
+            </div>
+          </div>
+          <div class="card-hotkeys">Tip: ← Back • Space Flip • → Good • 1/2/3/4 = Again/Hard/Good/Easy.</div>
         </section>
       </main>
     </div>

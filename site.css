@@ -831,15 +831,49 @@ body {
   display: flex;
   gap: 16px;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .card-actions .pill-button {
   padding: 12px 26px;
 }
 
+.card-feedback {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.card-feedback.is-active {
+  opacity: 1;
+}
+
+.card-feedback-label {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.card-feedback-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card-feedback-buttons .pill-button {
+  min-width: 96px;
+}
+
 .card-hotkeys {
   font-size: 0.9rem;
   color: var(--text-muted);
+  text-align: center;
 }
 
 .snackbar {

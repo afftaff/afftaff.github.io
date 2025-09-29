@@ -28,6 +28,12 @@ const elements = {
   prevCard: document.getElementById('prev-card'),
   nextCard: document.getElementById('next-card'),
   flipCard: document.getElementById('flip-card'),
+  removeCard: document.getElementById('remove-card'),
+  feedbackPanel: document.getElementById('card-feedback'),
+  gradeAgain: document.getElementById('grade-again'),
+  gradeHard: document.getElementById('grade-hard'),
+  gradeGood: document.getElementById('grade-good'),
+  gradeEasy: document.getElementById('grade-easy'),
   snackbar: document.getElementById('snackbar')
 };
 
@@ -50,7 +56,13 @@ const state = {
   currentDeckName: '',
   currentDeckBaseDescription: '',
   cards: [],
-  index: 0,
+  cardLookup: new Map(),
+  queue: [],
+  history: [],
+  cardProgress: new Map(),
+  completedCards: new Set(),
+  sessionTotal: 0,
+  currentCardId: null,
   side: 'front',
   speechSupported: 'speechSynthesis' in window,
   voice: null,
@@ -141,6 +153,21 @@ function attachEventListeners() {
   }
   if (elements.playAudio) {
     elements.playAudio.addEventListener('click', () => speakCurrentCard(false));
+  }
+  if (elements.removeCard) {
+    elements.removeCard.addEventListener('click', handleRemoveCurrentCard);
+  }
+  if (elements.gradeAgain) {
+    elements.gradeAgain.addEventListener('click', () => gradeCurrentCard('again'));
+  }
+  if (elements.gradeHard) {
+    elements.gradeHard.addEventListener('click', () => gradeCurrentCard('hard'));
+  }
+  if (elements.gradeGood) {
+    elements.gradeGood.addEventListener('click', () => gradeCurrentCard('good'));
+  }
+  if (elements.gradeEasy) {
+    elements.gradeEasy.addEventListener('click', () => gradeCurrentCard('easy'));
   }
   document.addEventListener('keydown', handleKeyboardShortcuts);
 }
@@ -837,7 +864,15 @@ function studySelectedPhrases(options = {}) {
   cancelCardTransition();
   cancelSpeech();
   state.cards = cards;
-  state.index = 0;
+  state.cardLookup = new Map(cards.map((card) => [card.id, card]));
+  state.queue = cards.map((card) => card.id);
+  state.history = [];
+  state.cardProgress = new Map(
+    cards.map((card) => [card.id, { stage: 0, lapses: 0, reviews: 0 }])
+  );
+  state.completedCards = new Set();
+  state.sessionTotal = cards.length;
+  state.currentCardId = state.queue[0] ?? null;
   state.side = 'front';
   state.currentDeckName = options.deckName || 'Selected phrases';
   updateStudyHeader();
@@ -1000,7 +1035,7 @@ function updateStudyHeader() {
 
 function updateDeckDescription() {
   if (!elements.deckDescription) return;
-  const count = state.cards.length;
+  const count = state.sessionTotal;
   if (!count) {
     elements.deckDescription.textContent = state.currentDeckBaseDescription || '';
     return;
@@ -1009,9 +1044,10 @@ function updateDeckDescription() {
 }
 
 function updateInterfaceForSelection() {
-  const hasCards = state.cards.length > 0;
+  const hasCards = Boolean(state.currentCardId);
+  const hasSession = state.sessionTotal > 0;
   if (elements.deckProgress) {
-    elements.deckProgress.hidden = !hasCards;
+    elements.deckProgress.hidden = !(hasCards || hasSession);
   }
   if (elements.prevCard) {
     elements.prevCard.disabled = !hasCards;
@@ -1025,6 +1061,8 @@ function updateInterfaceForSelection() {
   updateNavigationStates();
   updateFlipLabel();
   updateAudioState();
+  updateFeedbackButtonsState();
+  updateRemoveCardState();
   updateProgress();
   if (!hasCards) {
     cancelCardTransition();
@@ -1032,34 +1070,46 @@ function updateInterfaceForSelection() {
       elements.card.dataset.side = 'front';
     }
     if (elements.cardFrontText) {
-      elements.cardFrontText.textContent = 'Select phrases to begin.';
+      elements.cardFrontText.textContent = hasSession
+        ? 'Session complete! Great job.'
+        : 'Select phrases to begin.';
     }
     if (elements.cardRomaji) {
-      elements.cardRomaji.textContent = 'ローマ字';
+      elements.cardRomaji.textContent = hasSession ? '' : 'ローマ字';
     }
     if (elements.cardJapanese) {
-      elements.cardJapanese.textContent = '日本語';
+      elements.cardJapanese.textContent = hasSession ? '' : '日本語';
     }
   }
   updateDeckDescription();
 }
 
+function getCurrentCard() {
+  if (!state.currentCardId) return null;
+  return state.cardLookup.get(state.currentCardId) || null;
+}
+
 function updateCardContent() {
-  const card = state.cards[state.index];
+  const card = getCurrentCard();
   if (!card) {
+    const hasSession = state.sessionTotal > 0;
     if (elements.cardFrontText) {
-      elements.cardFrontText.textContent = 'Select phrases to begin.';
+      elements.cardFrontText.textContent = hasSession
+        ? 'Session complete! Great job.'
+        : 'Select phrases to begin.';
     }
     if (elements.cardRomaji) {
-      elements.cardRomaji.textContent = 'ローマ字';
+      elements.cardRomaji.textContent = hasSession ? '' : 'ローマ字';
     }
     if (elements.cardJapanese) {
-      elements.cardJapanese.textContent = '日本語';
+      elements.cardJapanese.textContent = hasSession ? '' : '日本語';
     }
     setCardSide('front');
     updateNavigationStates();
     updateProgress();
     updateAudioState();
+    updateFeedbackButtonsState();
+    updateRemoveCardState();
     return;
   }
   if (elements.cardFrontText) {
@@ -1075,24 +1125,26 @@ function updateCardContent() {
   updateNavigationStates();
   updateProgress();
   updateAudioState();
+  updateRemoveCardState();
 }
 
 function showNextCard() {
-  if (state.transitioning || state.index >= state.cards.length - 1) return;
-  beginCardTransition(1);
+  if (state.transitioning) return;
+  gradeCurrentCard('good', { triggeredByNext: true });
 }
 
 function showPreviousCard() {
-  if (state.transitioning || state.index <= 0) return;
-  beginCardTransition(-1);
+  if (state.transitioning) return;
+  restorePreviousCard();
 }
 
 function flipCardSide() {
-  if (!state.cards.length) return;
+  if (!state.currentCardId) return;
   state.side = state.side === 'front' ? 'back' : 'front';
   setCardSide(state.side);
   updateFlipLabel();
   updateAudioState();
+  updateFeedbackButtonsState();
   if (state.side === 'back') {
     speakCurrentCard(true);
   }
@@ -1107,6 +1159,7 @@ function setCardSide(side) {
     elements.card.dataset.side = 'back';
     state.side = 'back';
   }
+  updateFeedbackButtonsState();
 }
 
 function updateFlipLabel() {
@@ -1116,42 +1169,46 @@ function updateFlipLabel() {
 
 function updateNavigationStates() {
   if (!elements.prevCard || !elements.nextCard) return;
-  const count = state.cards.length;
-  if (!count) {
-    elements.prevCard.disabled = true;
-    elements.nextCard.disabled = true;
-    return;
-  }
-  elements.prevCard.disabled = state.index === 0;
-  elements.nextCard.disabled = state.index >= count - 1;
+  const hasCard = Boolean(state.currentCardId);
+  const canGoBack = hasCard && state.history.length > 0;
+  elements.prevCard.disabled = !canGoBack;
+  elements.prevCard.setAttribute('aria-disabled', String(!canGoBack));
+  elements.nextCard.disabled = !hasCard;
+  elements.nextCard.setAttribute('aria-disabled', String(!hasCard));
 }
 
 function updateProgress() {
   if (!elements.progressFill || !elements.progressCount) return;
-  const count = state.cards.length;
-  if (!count) {
+  const total = state.sessionTotal || 0;
+  if (!total) {
     elements.progressFill.style.width = '0%';
     elements.progressCount.textContent = '0 of 0';
     return;
   }
-  const position = state.index + 1;
-  const percentage = Math.round((position / count) * 100);
+  const seenIds = new Set(state.history.map((entry) => entry.id));
+  if (state.currentCardId) {
+    seenIds.add(state.currentCardId);
+  }
+  const completed = Math.min(state.completedCards.size, total);
+  const position = Math.max(completed, Math.min(seenIds.size, total));
+  const percentage = Math.round(((position || 0) / total) * 100);
   elements.progressFill.style.width = `${percentage}%`;
-  elements.progressCount.textContent = `${position} of ${count}`;
+  elements.progressCount.textContent = `${position} of ${total}`;
 }
 
-function beginCardTransition(direction) {
-  if (!elements.cardInner) return;
+function performCardTransition(callback) {
+  if (!elements.cardInner) {
+    callback();
+    return;
+  }
   state.transitioning = true;
+  updateFeedbackButtonsState();
+  updateRemoveCardState();
   elements.cardInner.classList.add('is-fading');
   state.transitionTimer = setTimeout(() => {
     state.transitionTimer = null;
     elements.cardInner.classList.remove('is-fading');
-    state.index += direction;
-    if (state.index < 0) state.index = 0;
-    if (state.index >= state.cards.length) state.index = state.cards.length - 1;
-    state.side = 'front';
-    updateCardContent();
+    callback();
     state.transitioning = false;
   }, CARD_TRANSITION_DURATION);
 }
@@ -1165,6 +1222,173 @@ function cancelCardTransition() {
     elements.cardInner.classList.remove('is-fading');
   }
   state.transitioning = false;
+}
+
+function gradeCurrentCard(grade, options = {}) {
+  if (state.transitioning) return;
+  const cardId = state.currentCardId;
+  if (!cardId) return;
+
+  cancelSpeech();
+
+  const queueBefore = state.queue.slice();
+  const progress = state.cardProgress.get(cardId) || { stage: 0, lapses: 0, reviews: 0 };
+  const historyEntry = {
+    id: cardId,
+    queueBefore,
+    prevStage: progress.stage,
+    prevLapses: progress.lapses,
+    prevReviews: progress.reviews,
+    prevCompleted: state.completedCards.has(cardId)
+  };
+
+  state.cardProgress.set(cardId, progress);
+  progress.reviews += 1;
+
+  if (state.queue[0] === cardId) {
+    state.queue.shift();
+  } else {
+    const index = state.queue.indexOf(cardId);
+    if (index >= 0) {
+      state.queue.splice(index, 1);
+    }
+  }
+
+  let markComplete = false;
+  let reinsertionOffset = 0;
+
+  switch (grade) {
+    case 'again':
+      progress.stage = 0;
+      progress.lapses += 1;
+      reinsertionOffset = 1;
+      break;
+    case 'hard':
+      progress.stage = Math.max(progress.stage, 1);
+      reinsertionOffset = 3;
+      break;
+    case 'easy':
+      progress.stage = Math.max(progress.stage + 2, 3);
+      markComplete = true;
+      break;
+    case 'good':
+    default:
+      progress.stage = Math.min(progress.stage + 1, 3);
+      if (progress.stage >= 2) {
+        markComplete = true;
+      } else {
+        reinsertionOffset = 5;
+      }
+      break;
+  }
+
+  if (markComplete) {
+    state.completedCards.add(cardId);
+  } else {
+    state.completedCards.delete(cardId);
+    const position = Math.min(reinsertionOffset, state.queue.length);
+    state.queue.splice(position, 0, cardId);
+  }
+
+  state.history.push(historyEntry);
+
+  performCardTransition(() => {
+    state.currentCardId = state.queue[0] ?? null;
+    state.side = 'front';
+    updateCardContent();
+  });
+
+  if (!options?.triggeredByNext && grade === 'again') {
+    showSnackbar('We\'ll show that card again shortly.');
+  } else if (!options?.triggeredByNext && markComplete && grade === 'easy') {
+    showSnackbar('Marked as easy!');
+  }
+}
+
+function restorePreviousCard() {
+  if (!state.history.length) return;
+  const entry = state.history.pop();
+  const progress = state.cardProgress.get(entry.id) || { stage: 0, lapses: 0, reviews: 0 };
+  progress.stage = entry.prevStage;
+  progress.lapses = entry.prevLapses;
+  progress.reviews = entry.prevReviews;
+  state.cardProgress.set(entry.id, progress);
+
+  if (entry.prevCompleted) {
+    state.completedCards.add(entry.id);
+  } else {
+    state.completedCards.delete(entry.id);
+  }
+
+  state.queue = entry.queueBefore.slice();
+  state.currentCardId = state.queue[0] ?? null;
+  state.side = 'front';
+  cancelSpeech();
+  cancelCardTransition();
+  updateCardContent();
+  showSnackbar('Reverted to previous card.');
+}
+
+function handleRemoveCurrentCard() {
+  if (state.transitioning) return;
+  const card = getCurrentCard();
+  if (!card) {
+    showSnackbar('No card selected to remove.');
+    return;
+  }
+  if (!isCurrentDeckCustom()) {
+    showSnackbar('Load one of your saved decks to remove cards.');
+    return;
+  }
+  const deckIndex = state.customDecks.findIndex((deck) => deck.name === state.currentDeckName);
+  if (deckIndex === -1) {
+    showSnackbar('Only custom decks can be modified.');
+    return;
+  }
+  const deck = state.customDecks[deckIndex];
+  const phraseIndex = deck.phraseIds.indexOf(card.id);
+  if (phraseIndex === -1) {
+    showSnackbar('This card is no longer part of the deck.');
+    return;
+  }
+
+  deck.phraseIds.splice(phraseIndex, 1);
+  state.selectedPhraseIds.delete(card.id);
+  removeCardFromSession(card.id);
+
+  if (!deck.phraseIds.length) {
+    showSnackbar(`Removed "${card.english}". The deck is now empty.`);
+  } else {
+    showSnackbar(`Removed "${card.english}" from "${deck.name}".`);
+  }
+
+  refreshDeckCollections();
+  persistDecks();
+  updateSelectionControls();
+  updatePhraseListSelectionState();
+}
+
+function removeCardFromSession(cardId) {
+  cancelCardTransition();
+  cancelSpeech();
+  state.cards = state.cards.filter((card) => card.id !== cardId);
+  state.cardLookup.delete(cardId);
+  state.queue = state.queue.filter((id) => id !== cardId);
+  state.history = state.history
+    .filter((entry) => entry.id !== cardId)
+    .map((entry) => ({
+      ...entry,
+      queueBefore: entry.queueBefore.filter((id) => id !== cardId)
+    }));
+  state.completedCards.delete(cardId);
+  state.cardProgress.delete(cardId);
+  state.sessionTotal = state.cards.length;
+  if (state.currentCardId === cardId) {
+    state.currentCardId = state.queue[0] ?? null;
+    state.side = 'front';
+  }
+  updateInterfaceForSelection();
+  updateCardContent();
 }
 
 function prepareSpeech() {
@@ -1186,10 +1410,46 @@ function prepareSpeech() {
 }
 
 function updateAudioState() {
-  const canPlay = Boolean(state.cards.length && state.side === 'back' && state.speechSupported);
+  const card = getCurrentCard();
+  const canPlay = Boolean(card && card.japanese && state.side === 'back' && state.speechSupported);
   if (!elements.playAudio) return;
   elements.playAudio.disabled = !canPlay;
   elements.playAudio.setAttribute('aria-disabled', String(!canPlay));
+}
+
+function updateFeedbackButtonsState() {
+  const hasCard = Boolean(state.currentCardId);
+  const canGrade = hasCard && state.side === 'back' && !state.transitioning;
+  const buttons = [elements.gradeAgain, elements.gradeHard, elements.gradeGood, elements.gradeEasy];
+  buttons.forEach((button) => {
+    if (button) {
+      button.disabled = !canGrade;
+      button.setAttribute('aria-disabled', String(!canGrade));
+    }
+  });
+  if (elements.feedbackPanel) {
+    elements.feedbackPanel.hidden = !hasCard;
+    elements.feedbackPanel.classList.toggle('is-active', canGrade);
+  }
+}
+
+function isCurrentDeckCustom() {
+  if (!state.currentDeckName) return false;
+  return state.customDecks.some((deck) => deck.name === state.currentDeckName);
+}
+
+function updateRemoveCardState() {
+  if (!elements.removeCard) return;
+  const canModify = Boolean(state.currentCardId) && isCurrentDeckCustom() && !state.transitioning;
+  elements.removeCard.disabled = !canModify;
+  elements.removeCard.setAttribute('aria-disabled', String(!canModify));
+  if (!canModify && elements.removeCard) {
+    elements.removeCard.title = isCurrentDeckCustom()
+      ? 'Select a card to remove.'
+      : 'Load one of your saved decks to remove cards.';
+  } else if (elements.removeCard) {
+    elements.removeCard.title = 'Remove this card from the loaded deck.';
+  }
 }
 
 function speakCurrentCard(autoTriggered) {
@@ -1199,7 +1459,7 @@ function speakCurrentCard(autoTriggered) {
     }
     return;
   }
-  const card = state.cards[state.index];
+  const card = getCurrentCard();
   if (!card) return;
   const synth = window.speechSynthesis;
   cancelSpeech();
@@ -1223,7 +1483,8 @@ function handleKeyboardShortcuts(event) {
   if (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || event.target.isContentEditable) {
     return;
   }
-  if (!state.cards.length) return;
+  if (state.transitioning) return;
+  if (!state.currentCardId) return;
   if (event.key === 'ArrowLeft') {
     event.preventDefault();
     showPreviousCard();
@@ -1233,6 +1494,18 @@ function handleKeyboardShortcuts(event) {
   } else if (event.key === ' ') {
     event.preventDefault();
     flipCardSide();
+  } else if (state.side === 'back' && event.key === '1') {
+    event.preventDefault();
+    gradeCurrentCard('again');
+  } else if (state.side === 'back' && event.key === '2') {
+    event.preventDefault();
+    gradeCurrentCard('hard');
+  } else if (state.side === 'back' && event.key === '3') {
+    event.preventDefault();
+    gradeCurrentCard('good');
+  } else if (state.side === 'back' && event.key === '4') {
+    event.preventDefault();
+    gradeCurrentCard('easy');
   }
 }
 
