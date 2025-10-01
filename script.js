@@ -623,7 +623,8 @@ const dom = {
   assignSelected: document.querySelector('#assignSelected'),
   removeSelected: document.querySelector('#removeSelected'),
   voiceSelect: document.querySelector('#voiceSelect'),
-  englishVoiceSelect: document.querySelector('#englishVoiceSelect'),
+  romajiSpeakButton: document.querySelector('#cardBack .speak[data-target="romaji"]'),
+  japaneseSpeakButton: document.querySelector('#cardBack .speak[data-target="japanese"]'),
   speakButtons: document.querySelectorAll('.speak')
 };
 
@@ -849,6 +850,12 @@ function clearSession(message) {
   dom.cardFront.textContent = '';
   dom.cardBackRomaji.textContent = '';
   dom.cardBackJapanese.textContent = '';
+  if (dom.romajiSpeakButton) {
+    dom.romajiSpeakButton.disabled = true;
+  }
+  if (dom.japaneseSpeakButton) {
+    dom.japaneseSpeakButton.disabled = true;
+  }
   dom.cardTags.textContent = '';
   dom.flipCard.disabled = true;
   dom.answerPanel.hidden = true;
@@ -884,9 +891,20 @@ function showCurrentCard() {
   const card = cardMap.get(entry.cardId);
   dom.cardDisplay.dataset.cardId = entry.cardId;
   dom.cardDisplay.classList.remove('show-back');
-  dom.cardFront.textContent = card.english;
-  dom.cardBackRomaji.textContent = card.romaji;
-  dom.cardBackJapanese.textContent = card.japanese;
+  const englishText = card.english ?? '';
+  const romajiText = (card.romaji ?? '').trim();
+  const japaneseText = (card.japanese ?? '').trim();
+
+  dom.cardFront.textContent = englishText;
+  dom.cardBackRomaji.textContent = romajiText;
+  dom.cardBackJapanese.textContent = japaneseText;
+  const canSpeak = 'speechSynthesis' in window;
+  if (dom.romajiSpeakButton) {
+    dom.romajiSpeakButton.disabled = !canSpeak || !romajiText;
+  }
+  if (dom.japaneseSpeakButton) {
+    dom.japaneseSpeakButton.disabled = !canSpeak || !japaneseText;
+  }
   dom.cardTags.textContent = card.tags.join(' · ');
   dom.flipCard.disabled = false;
   dom.answerPanel.hidden = true;
@@ -955,7 +973,6 @@ function endSession() {
 function handleVoiceOptions() {
   if (!('speechSynthesis' in window)) {
     dom.voiceSelect.disabled = true;
-    dom.englishVoiceSelect.disabled = true;
     dom.speakButtons.forEach((btn) => btn.setAttribute('disabled', 'disabled'));
     return;
   }
@@ -963,10 +980,9 @@ function handleVoiceOptions() {
   const updateVoices = () => {
     const voices = window.speechSynthesis.getVoices();
     const jaVoices = voices.filter((voice) => voice.lang.toLowerCase().startsWith('ja'));
-    const enVoices = voices.filter((voice) => voice.lang.toLowerCase().startsWith('en'));
 
     dom.voiceSelect.innerHTML = '';
-    dom.englishVoiceSelect.innerHTML = '';
+    dom.voiceSelect.disabled = !jaVoices.length;
 
     const createOption = (voice) => {
       const option = document.createElement('option');
@@ -975,47 +991,41 @@ function handleVoiceOptions() {
       return option;
     };
 
-    const populate = (select, list, preferred) => {
-      if (!list.length) {
-        const option = document.createElement('option');
-        option.textContent = 'No voices detected';
-        option.value = '';
-        option.disabled = true;
-        option.selected = true;
-        select.appendChild(option);
-        return;
-      }
-      list.forEach((voice) => {
-        const option = createOption(voice);
-        if (voice.name === preferred) {
-          option.selected = true;
-        }
-        select.appendChild(option);
-      });
-    };
+    if (!jaVoices.length) {
+      const option = document.createElement('option');
+      option.textContent = 'No voices detected';
+      option.value = '';
+      option.disabled = true;
+      option.selected = true;
+      dom.voiceSelect.appendChild(option);
+      return;
+    }
 
-    populate(dom.voiceSelect, jaVoices, stored.jaVoice);
-    populate(dom.englishVoiceSelect, enVoices, stored.enVoice);
+    jaVoices.forEach((voice) => {
+      const option = createOption(voice);
+      if (voice.name === stored.jaVoice) {
+        option.selected = true;
+      }
+      dom.voiceSelect.appendChild(option);
+    });
   };
 
   updateVoices();
   window.speechSynthesis.addEventListener('voiceschanged', updateVoices);
 
-  const handleSelection = () => {
+  dom.voiceSelect.addEventListener('change', () => {
     const selection = {
-      jaVoice: dom.voiceSelect.value || null,
-      enVoice: dom.englishVoiceSelect.value || null
+      jaVoice: dom.voiceSelect.value || null
     };
     saveJSON(STORAGE_KEYS.voices, selection);
-  };
-
-  dom.voiceSelect.addEventListener('change', handleSelection);
-  dom.englishVoiceSelect.addEventListener('change', handleSelection);
+  });
 }
 
 function speakText(text, { lang, preferredName }) {
   if (!('speechSynthesis' in window) || !text) return;
-  const utterance = new SpeechSynthesisUtterance(text);
+  const content = text.trim();
+  if (!content) return;
+  const utterance = new SpeechSynthesisUtterance(content);
   utterance.lang = lang;
   const voices = window.speechSynthesis.getVoices();
   if (preferredName) {
@@ -1032,16 +1042,17 @@ function setupSpeechButtons() {
   if (!('speechSynthesis' in window)) return;
   dom.speakButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      const cardId = dom.cardDisplay.dataset.cardId;
-      if (!cardId) return;
-      const card = cardMap.get(cardId);
+      const target = button.dataset.target;
+      if (!target) return;
       const stored = loadJSON(STORAGE_KEYS.voices) ?? {};
-      if (button.dataset.target === 'english') {
-        speakText(card.english, { lang: 'en-US', preferredName: stored.enVoice });
-      } else {
-        const speechText = card.japanese || card.romaji;
-        speakText(speechText, { lang: 'ja-JP', preferredName: stored.jaVoice });
+      let speechText = '';
+      if (target === 'romaji') {
+        speechText = dom.cardBackRomaji.textContent;
+      } else if (target === 'japanese') {
+        speechText = dom.cardBackJapanese.textContent;
       }
+      if (!speechText) return;
+      speakText(speechText, { lang: 'ja-JP', preferredName: stored.jaVoice });
     });
   });
 }

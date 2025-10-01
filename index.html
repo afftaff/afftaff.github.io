@@ -30,14 +30,28 @@
           <div class="card-face front" id="cardFront">
             <div class="card-label">Prompt</div>
             <div class="card-content english"></div>
-            <button class="speak" data-target="english" title="Hear this in English">🔊</button>
           </div>
           <div class="card-face back" id="cardBack">
             <div class="card-label">Answer</div>
-            <div class="card-content romaji"></div>
-            <div class="card-content japanese"></div>
+            <div class="card-pronunciation">
+              <div class="pronunciation-line">
+                <div class="card-content romaji"></div>
+                <button
+                  class="speak"
+                  data-target="romaji"
+                  title="Hear the romaji pronunciation"
+                >🔊</button>
+              </div>
+              <div class="pronunciation-line">
+                <div class="card-content japanese"></div>
+                <button
+                  class="speak"
+                  data-target="japanese"
+                  title="Hear this in Japanese"
+                >🔊</button>
+              </div>
+            </div>
             <div class="card-tags"></div>
-            <button class="speak" data-target="japanese" title="Hear this in Japanese">🔊</button>
           </div>
         </div>
         <button id="flipCard" class="secondary" disabled>Flip Card</button>
@@ -105,10 +119,6 @@
         <div class="field">
           <label for="voiceSelect">Japanese voice</label>
           <select id="voiceSelect"></select>
-        </div>
-        <div class="field">
-          <label for="englishVoiceSelect">English voice</label>
-          <select id="englishVoiceSelect"></select>
         </div>
         <p class="hint">If no voices appear, try clicking anywhere or refreshing after enabling text-to-speech in your browser.</p>
       </section>
