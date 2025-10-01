@@ -512,11 +512,13 @@ function getReviewQueue(deckId) {
     }
   });
   due.sort((a, b) => a.due - b.due);
-  fresh.sort((a, b) => {
-    const cardA = cardMap.get(a.cardId);
-    const cardB = cardMap.get(b.cardId);
-    return cardA.english.localeCompare(cardB.english);
-  });
+    fresh.sort((a, b) => {
+      const cardA = cardMap.get(a.cardId);
+      const cardB = cardMap.get(b.cardId);
+      const englishA = cardA?.english ?? '';
+      const englishB = cardB?.english ?? '';
+      return englishA.localeCompare(englishB);
+    });
   return [...due, ...fresh];
 }
 
