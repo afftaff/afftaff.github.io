@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Japanese Anki-Style Trainer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="title-group">
+      <h1>Japanese Anki-Style Trainer</h1>
+      <p class="tagline">Study smarter with spaced repetition and curated decks.</p>
+    </div>
+    <div class="controls">
+      <label for="deckSelect">Deck</label>
+      <select id="deckSelect"></select>
+      <button id="startReview" class="primary">Start Review</button>
+      <button id="resetState" class="ghost">Reset Progress</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="review-area" aria-live="polite">
+      <div class="card-shell">
+        <div class="card" id="cardDisplay">
+          <div class="card-face front" id="cardFront">
+            <div class="card-label">Prompt</div>
+            <div class="card-content english"></div>
+            <button class="speak" data-target="english" title="Hear this in English">🔊</button>
+          </div>
+          <div class="card-face back" id="cardBack">
+            <div class="card-label">Answer</div>
+            <div class="card-content romaji"></div>
+            <div class="card-content japanese"></div>
+            <div class="card-tags"></div>
+            <button class="speak" data-target="japanese" title="Hear this in Japanese">🔊</button>
+          </div>
+        </div>
+        <button id="flipCard" class="secondary" disabled>Flip Card</button>
+      </div>
+      <div class="answer-panel" id="answerPanel" hidden>
+        <p class="next-label">How did you do?</p>
+        <div class="grade-buttons">
+          <button class="grade again" data-grade="again">Again<br><span class="grade-hint">(short interval)</span></button>
+          <button class="grade hard" data-grade="hard">Hard<br><span class="grade-hint">(longer)</span></button>
+          <button class="grade good" data-grade="good">Good<br><span class="grade-hint">(default)</span></button>
+          <button class="grade easy" data-grade="easy">Easy<br><span class="grade-hint">(much later)</span></button>
+        </div>
+        <div class="up-next" id="nextInfo"></div>
+      </div>
+      <div class="session-summary" id="sessionSummary" hidden></div>
+    </section>
+
+    <aside class="side-panel">
+      <section class="panel" id="deckOverview">
+        <header>
+          <h2>Deck Overview</h2>
+        </header>
+        <div class="deck-list" id="deckList"></div>
+      </section>
+
+      <section class="panel" id="deckManager">
+        <header>
+          <h2>Deck Manager</h2>
+        </header>
+        <div class="manager-controls">
+          <div class="field">
+            <label for="newDeckName">Create new deck</label>
+            <div class="field-inline">
+              <input id="newDeckName" type="text" placeholder="e.g. Travel Focus" />
+              <button id="addDeck" class="primary small">Add</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="deckOrder">Reorder decks</label>
+            <div class="deck-order" id="deckOrder"></div>
+          </div>
+          <details class="assignment">
+            <summary>Card assignment</summary>
+            <div class="field">
+              <label for="assignmentDeckSelect">Choose deck</label>
+              <select id="assignmentDeckSelect"></select>
+            </div>
+            <div class="field">
+              <label for="cardSearch">Filter cards</label>
+              <input id="cardSearch" type="search" placeholder="Search English, romaji, tags" />
+            </div>
+            <div class="card-browser" id="cardBrowser"></div>
+            <div class="assignment-actions">
+              <button id="assignSelected" class="primary small">Add to deck</button>
+              <button id="removeSelected" class="ghost small">Remove from deck</button>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="panel" id="voiceSettings">
+        <header>
+          <h2>Voice Settings</h2>
+        </header>
+        <div class="field">
+          <label for="voiceSelect">Japanese voice</label>
+          <select id="voiceSelect"></select>
+        </div>
+        <div class="field">
+          <label for="englishVoiceSelect">English voice</label>
+          <select id="englishVoiceSelect"></select>
+        </div>
+        <p class="hint">If no voices appear, try clicking anywhere or refreshing after enabling text-to-speech in your browser.</p>
+      </section>
+    </aside>
+  </main>
+
+  <template id="deckListItem">
+    <article class="deck-card">
+      <header>
+        <h3></h3>
+        <div class="deck-actions">
+          <button class="ghost small rename">Rename</button>
+          <button class="ghost small delete">Delete</button>
+        </div>
+      </header>
+      <p class="deck-meta"></p>
+      <p class="deck-status"></p>
+    </article>
+  </template>
+
+  <template id="deckOrderItem">
+    <div class="order-item">
+      <span class="name"></span>
+      <div class="order-buttons">
+        <button class="ghost small move-up" title="Move up">▲</button>
+        <button class="ghost small move-down" title="Move down">▼</button>
+      </div>
+    </div>
+  </template>
+
+  <template id="cardBrowserItem">
+    <label class="card-row">
+      <input type="checkbox" />
+      <span class="english"></span>
+      <span class="romaji"></span>
+      <span class="tags"></span>
+      <span class="badge" hidden>In deck</span>
+    </label>
+  </template>
+
+  <script src="script.js" type="module"></script>
+</body>
+</html>
