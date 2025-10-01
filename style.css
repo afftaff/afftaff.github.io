@@ -136,6 +136,29 @@ main {
   padding-top: 0.75rem;
 }
 
+.card-pronunciation {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pronunciation-line {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.pronunciation-line .card-content {
+  flex: 1 1 auto;
+}
+
+.pronunciation-line .speak {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.1rem;
+}
+
 .card.show-back .card-face.back {
   display: flex;
 }
