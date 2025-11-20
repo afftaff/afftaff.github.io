@@ -105,7 +105,8 @@
       padding: 14px;
     }
     .detail-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
-    .reveal-block {
+    .reveal-block { perspective: 1200px; }
+    .reveal-block .flip-inner {
       position: relative;
       background: #0b1120;
       border: 1px solid var(--border);
@@ -113,22 +114,29 @@
       padding: 10px 12px;
       cursor: pointer;
       overflow: hidden;
+      transform-style: preserve-3d;
+      transition: transform 0.65s ease;
+      min-height: 110px;
+      box-shadow: 0 12px 26px rgba(0,0,0,0.25);
     }
-    .reveal-block .label,
-    .reveal-block .value,
-    .reveal-block button.sound { position: relative; z-index: 1; }
-    .reveal-block .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-    .reveal-block .value { font-size: 18px; font-weight: 600; margin-top: 4px; }
-    .reveal-block.masked .value { color: transparent; }
-    .reveal-block.masked::after {
-      content: '';
+    .reveal-block.revealed .flip-inner { transform: rotateY(180deg); }
+    .reveal-block .face {
       position: absolute;
       inset: 0;
-      background: #020617;
-      opacity: 0.85;
-      z-index: 0;
+      display: grid;
+      align-content: space-between;
+      backface-visibility: hidden;
+      gap: 8px;
     }
-    .reveal-block button.sound { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 6px 8px; cursor: pointer; }
+    .reveal-block .face .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .reveal-block .face .value { font-size: 18px; font-weight: 600; margin-top: 4px; }
+    .reveal-block .face.front { justify-items: start; }
+    .reveal-block .face.front .value { color: rgba(226,232,240,0.55); }
+    .reveal-block .face.front .pill-hint { padding: 6px 10px; background: rgba(59,130,246,0.1); border: 1px dashed rgba(59,130,246,0.35); border-radius: 20px; color: #bfdbfe; font-weight: 600; font-size: 13px; justify-self: flex-start; }
+    .reveal-block .face.back { transform: rotateY(180deg); }
+    .reveal-block button.sound { justify-self: flex-end; background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 6px 8px; cursor: pointer; }
+    .reveal-block.highlight .flip-inner { border-color: rgba(56,189,248,0.6); box-shadow: 0 12px 30px rgba(56,189,248,0.18); }
+    .reveal-block.highlight .face.front { color: #bae6fd; }
     .actions { display: flex; gap: 12px; margin: 16px 0 6px; flex-wrap: wrap; }
     .secondary { background: transparent; color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; cursor: pointer; }
     .grades { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
@@ -189,9 +197,6 @@
             </div>
           </div>
         </div>
-        <div class="actions">
-          <button class="secondary" id="flip">Flip card</button>
-        </div>
         <div class="grades hidden" id="gradeRow">
           <button class="grade-btn grade-again" data-offset="2" data-action="again">Again</button>
           <button class="grade-btn grade-hard" data-offset="5" data-action="hard">Hard</button>
@@ -223,7 +228,6 @@
     const taglineEl = document.getElementById('tagline');
     const backEl = document.getElementById('back');
     const detailGrid = document.getElementById('detailGrid');
-    const flipBtn = document.getElementById('flip');
     const gradeRow = document.getElementById('gradeRow');
     const queueInfo = document.getElementById('queueInfo');
     const deckSizeEl = document.getElementById('deckSize');
@@ -288,9 +292,9 @@
       const isFrenchPrompt = currentStyle === 'fr-en';
       promptEl.textContent = isFrenchPrompt ? card.word : (card.meaning_en || card.word);
       taglineEl.textContent = isFrenchPrompt ? 'What does this mean in English?' : 'How do you say this in French?';
-      backEl.classList.add('hidden');
-      gradeRow.classList.add('hidden');
-      flipBtn.disabled = false;
+      backEl.classList.remove('hidden');
+      gradeRow.classList.remove('hidden');
+      buildDetailBlocks(card);
       updateMeta();
     }
 
@@ -305,45 +309,61 @@
       const blocks = [];
 
       if (isFrenchPrompt) {
-        blocks.push(createBlock('Meaning', card.meaning_en || '—', false, true));
-        blocks.push(createBlock('English word', card.meaning_en || card.word, true));
+        blocks.push(createBlock('Meaning', card.meaning_en || '—', true));
         blocks.push(createPronBlock(card));
-        blocks.push(createBlock('Gender', card.gender || '—', true));
-        blocks.push(createBlock('Part of speech', card.pos || '—', true));
+        blocks.push(createBlock('Gender', card.gender || '—'));
+        blocks.push(createBlock('Part of speech', card.pos || '—'));
       } else {
-        blocks.push(createBlock('French word', card.word, false, true));
+        blocks.push(createBlock('French word', card.word, true));
         blocks.push(createPronBlock(card));
-        blocks.push(createBlock('Gender', card.gender || '—', true));
-        blocks.push(createBlock('Part of speech', card.pos || '—', true));
+        blocks.push(createBlock('Gender', card.gender || '—'));
+        blocks.push(createBlock('Part of speech', card.pos || '—'));
       }
       detailGrid.innerHTML = '';
       blocks.forEach(b => detailGrid.appendChild(b));
     }
 
-    function createBlock(label, value, masked = false, highlightMeaning = false) {
+    function revealTile(tile) {
+      tile.classList.add('revealed');
+      tile.classList.remove('masked');
+    }
+
+    function createBlock(label, value, highlightMeaning = false) {
       const div = document.createElement('div');
-      div.className = 'reveal-block' + (masked ? ' masked' : '');
-      div.tabIndex = masked ? 0 : -1;
-      if (!masked) {
-        div.style.cursor = 'default';
-      }
-      const labelEl = document.createElement('div');
-      labelEl.className = 'label';
-      labelEl.textContent = label;
-      const valueEl = document.createElement('div');
-      valueEl.className = 'value';
-      valueEl.textContent = value;
-      div.append(labelEl, valueEl);
+      div.className = 'reveal-block masked' + (highlightMeaning ? ' highlight' : '');
+      div.tabIndex = 0;
 
-      if (highlightMeaning) {
-        div.style.border = '1px solid rgba(56,189,248,0.5)';
-        div.style.background = 'rgba(56,189,248,0.08)';
-      }
+      const inner = document.createElement('div');
+      inner.className = 'flip-inner';
 
-      if (masked) {
-        div.addEventListener('click', () => div.classList.remove('masked'));
-        div.addEventListener('keypress', (e) => { if (e.key === 'Enter') div.classList.remove('masked'); });
-      }
+      const front = document.createElement('div');
+      front.className = 'face front';
+      const frontLabel = document.createElement('div');
+      frontLabel.className = 'label';
+      frontLabel.textContent = label;
+      const frontValue = document.createElement('div');
+      frontValue.className = 'value';
+      frontValue.textContent = 'Tap to reveal';
+      const hint = document.createElement('div');
+      hint.className = 'pill-hint';
+      hint.textContent = 'Spin to see';
+      front.append(frontLabel, frontValue, hint);
+
+      const back = document.createElement('div');
+      back.className = 'face back';
+      const backLabel = document.createElement('div');
+      backLabel.className = 'label';
+      backLabel.textContent = label;
+      const backValue = document.createElement('div');
+      backValue.className = 'value';
+      backValue.textContent = value;
+      back.append(backLabel, backValue);
+
+      inner.append(front, back);
+      div.append(inner);
+
+      div.addEventListener('click', () => revealTile(div));
+      div.addEventListener('keypress', (e) => { if (e.key === 'Enter') revealTile(div); });
       return div;
     }
 
@@ -351,6 +371,26 @@
       const pron = card.pronunciation;
       const container = document.createElement('div');
       container.className = 'reveal-block masked';
+      container.tabIndex = 0;
+
+      const inner = document.createElement('div');
+      inner.className = 'flip-inner';
+
+      const front = document.createElement('div');
+      front.className = 'face front';
+      const frontLabel = document.createElement('div');
+      frontLabel.className = 'label';
+      frontLabel.textContent = 'Pronunciation';
+      const frontValue = document.createElement('div');
+      frontValue.className = 'value';
+      frontValue.textContent = 'Tap to reveal';
+      const hint = document.createElement('div');
+      hint.className = 'pill-hint';
+      hint.textContent = 'Spin to see';
+      front.append(frontLabel, frontValue, hint);
+
+      const back = document.createElement('div');
+      back.className = 'face back';
       const label = document.createElement('div');
       label.className = 'label';
       label.textContent = 'Pronunciation';
@@ -365,17 +405,14 @@
         e.stopPropagation();
         speak(card.word);
       });
-      container.append(label, value, btn);
-      container.addEventListener('click', () => container.classList.remove('masked'));
-      container.addEventListener('keypress', (e) => { if (e.key === 'Enter') container.classList.remove('masked'); });
-      return container;
-    }
+      back.append(label, value, btn);
 
-    function flipCard() {
-      if (!currentCard) return;
-      backEl.classList.remove('hidden');
-      gradeRow.classList.remove('hidden');
-      buildDetailBlocks(currentCard);
+      inner.append(front, back);
+      container.append(inner);
+
+      container.addEventListener('click', () => revealTile(container));
+      container.addEventListener('keypress', (e) => { if (e.key === 'Enter') revealTile(container); });
+      return container;
     }
 
     function gradeCard(action, offset) {
@@ -398,9 +435,8 @@
     }
 
     document.getElementById('startSession').addEventListener('click', startSession);
-    flipBtn.addEventListener('click', flipCard);
     document.getElementById('revealAll').addEventListener('click', () => {
-      detailGrid.querySelectorAll('.reveal-block.masked').forEach(el => el.classList.remove('masked'));
+      detailGrid.querySelectorAll('.reveal-block.masked').forEach(el => revealTile(el));
     });
     speakBtn.addEventListener('click', () => currentCard && speak(currentCard.word));
     gradeRow.addEventListener('click', (e) => {
