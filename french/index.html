@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>French Study Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --accent: #10b981;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2937;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(16,185,129,0.08), transparent 25%),
+                  radial-gradient(circle at 80% 0%, rgba(59,130,246,0.08), transparent 25%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+    }
+    .card {
+      background: linear-gradient(145deg, #0b1224, #0d1429);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 680px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      letter-spacing: -0.02em;
+    }
+    p { margin: 0 0 20px; color: var(--muted); }
+    .menu {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    a.menu-link {
+      background: #0b1120;
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: 12px;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    a.menu-link:hover, a.menu-link:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(16,185,129,0.6);
+      box-shadow: 0 12px 30px rgba(16,185,129,0.15);
+    }
+    .menu-link span {
+      display: block;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    .menu-link small { color: var(--muted); }
+    .arrow {
+      font-size: 18px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>French Study Hub</h1>
+    <p>Jump into the new flashcard experience tailored for French vocabulary.</p>
+    <div class="menu">
+      <a class="menu-link" href="./flashcards.html">
+        <div>
+          <span>Flashcards</span>
+          <small>Spaced repetition with IPA + audio</small>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
