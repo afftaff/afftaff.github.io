@@ -134,11 +134,14 @@
       padding: 16px;
       background: #0d162a;
       transform-style: preserve-3d;
+      transition: opacity 0.35s ease;
     }
     .reveal-block .face .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
     .reveal-block .face .value { font-size: 22px; font-weight: 700; margin-top: 4px; }
     .reveal-block .face.front .value { color: rgba(226,232,240,0.7); }
-    .reveal-block .face.back { transform: rotateY(180deg); }
+    .reveal-block .face.back { transform: rotateY(180deg); opacity: 0; }
+    .reveal-block.revealed .face.front { opacity: 0; }
+    .reveal-block.revealed .face.back { opacity: 1; }
     .reveal-block button.sound { justify-self: flex-end; background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 6px 8px; cursor: pointer; }
     .reveal-block.highlight .flip-inner { border-color: rgba(56,189,248,0.6); box-shadow: 0 12px 30px rgba(56,189,248,0.18); }
     .reveal-block.highlight .face.front { color: #bae6fd; }
