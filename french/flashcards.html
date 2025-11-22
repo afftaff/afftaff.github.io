@@ -152,6 +152,12 @@
     .reveal-block button.sound { justify-self: flex-end; background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 6px 8px; cursor: pointer; }
     .reveal-block.highlight .flip-inner { border-color: rgba(56,189,248,0.6); box-shadow: 0 12px 30px rgba(56,189,248,0.18); }
     .reveal-block.highlight .face.front { color: #bae6fd; }
+    .reveal-block .subtext { margin-top: 8px; font-size: 14px; color: rgba(148,163,184,0.8); font-weight: 600; }
+    .reveal-block.mini { min-height: 0; }
+    .reveal-block.mini .flip-inner { min-height: 0; padding: 12px; }
+    .reveal-block.mini .face .value { font-size: 16px; line-height: 1.4; }
+    .mini-line { display: flex; gap: 6px; align-items: center; justify-content: flex-start; }
+    .mini-line .label { color: rgba(148,163,184,0.9); font-weight: 600; font-size: 12px; }
     .actions { display: flex; gap: 12px; margin: 16px 0 6px; flex-wrap: wrap; }
     .secondary { background: transparent; color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; cursor: pointer; }
     .grades { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
@@ -167,6 +173,9 @@
     .stat { display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--muted); }
     .stat strong { color: var(--text); }
     .hidden { display: none; }
+    .conjugation-wrapper { display: flex; flex-direction: column; gap: 8px; }
+    .conjugation-title { color: var(--muted); font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase; }
+    .conjugation-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
   </style>
 </head>
 <body>
@@ -184,11 +193,14 @@
         <label for="styleSelect">Card style</label>
         <select id="styleSelect">
           <option value="fr-en">French → English</option>
+          <option value="fr-en-pos">French → English (POS inline)</option>
           <option value="en-fr">English → French</option>
+          <option value="en-fr-pos">English → French (POS inline)</option>
+          <option value="verb-conj">Verb conjugations</option>
         </select>
       </div>
       <div class="control">
-        <label for="deckSelect">Deck (50 cards each)</label>
+        <label for="deckSelect">Deck (50 cards each, plus verbs)</label>
         <select id="deckSelect"></select>
       </div>
       <div class="control">
@@ -235,9 +247,18 @@
     const pronUrl = '../French/pronuncations.json';
 
     let cards = [];
+    let verbDeck = [];
     let queue = [];
     let currentCard = null;
     let currentStyle = 'fr-en';
+
+    const styleLabels = {
+      'fr-en': 'French → English',
+      'fr-en-pos': 'French → English (POS inline)',
+      'en-fr': 'English → French',
+      'en-fr-pos': 'English → French (POS inline)',
+      'verb-conj': 'French verbs + conjugations'
+    };
 
     const promptEl = document.getElementById('prompt');
     const taglineEl = document.getElementById('tagline');
@@ -261,6 +282,7 @@
       cards = words
         .map(entry => ({ ...entry, pronunciation: pronMap.get(entry.rank) || null }))
         .sort((a, b) => a.rank - b.rank);
+      verbDeck = cards.filter(entry => entry.pos === 'verb' && entry.conjugations);
       populateDecks(cards.length);
     }
 
@@ -276,17 +298,34 @@
         opt.textContent = `Deck ${i + 1} (ranks ${start}-${end})`;
         deckSelect.appendChild(opt);
       }
+
+      if (verbDeck.length) {
+        const verbOpt = document.createElement('option');
+        verbOpt.value = 'verbs';
+        verbOpt.textContent = `Verb deck (${verbDeck.length} cards)`;
+        deckSelect.appendChild(verbOpt);
+      }
     }
 
     function startSession() {
-      const deckIndex = parseInt(document.getElementById('deckSelect').value, 10) || 0;
+      const deckSelect = document.getElementById('deckSelect');
+      const deckValue = deckSelect.value;
       currentStyle = document.getElementById('styleSelect').value;
-      const start = deckIndex * 50;
-      const slice = cards.slice(start, start + 50);
-      queue = [...slice];
+      const useVerbDeck = currentStyle === 'verb-conj' || deckValue === 'verbs';
+
+      if (useVerbDeck) {
+        queue = [...verbDeck];
+        deckSelect.value = 'verbs';
+      } else {
+        const deckIndex = parseInt(deckValue, 10) || 0;
+        const start = deckIndex * 50;
+        const slice = cards.slice(start, start + 50);
+        queue = [...slice];
+      }
+
       currentCard = null;
       deckSizeEl.textContent = queue.length;
-      styleLabel.textContent = currentStyle === 'fr-en' ? 'French → English' : 'English → French';
+      styleLabel.textContent = styleLabels[currentStyle] || 'Custom';
       nextCard();
     }
 
@@ -305,9 +344,21 @@
     }
 
     function renderCard(card) {
-      const isFrenchPrompt = currentStyle === 'fr-en';
-      promptEl.textContent = isFrenchPrompt ? card.word : (card.meaning_en || card.word);
-      taglineEl.textContent = isFrenchPrompt ? 'What does this mean in English?' : 'How do you say this in French?';
+      const isFrenchPrompt = ['fr-en', 'fr-en-pos', 'verb-conj'].includes(currentStyle);
+      const isEnglishPrompt = ['en-fr', 'en-fr-pos'].includes(currentStyle);
+
+      if (isFrenchPrompt) {
+        promptEl.textContent = card.word;
+        taglineEl.textContent = currentStyle === 'verb-conj'
+          ? 'Reveal the meaning and conjugations.'
+          : 'What does this mean in English?';
+      } else if (isEnglishPrompt) {
+        promptEl.textContent = card.meaning_en || card.word;
+        taglineEl.textContent = 'How do you say this in French?';
+      } else {
+        promptEl.textContent = card.word;
+        taglineEl.textContent = '';
+      }
       backEl.classList.remove('hidden');
       gradeRow.classList.remove('hidden');
       buildDetailBlocks(card);
@@ -321,19 +372,26 @@
     }
 
     function buildDetailBlocks(card) {
-      const isFrenchPrompt = currentStyle === 'fr-en';
+      const isFrenchPrompt = ['fr-en', 'fr-en-pos', 'verb-conj'].includes(currentStyle);
+      const isEnglishPrompt = ['en-fr', 'en-fr-pos'].includes(currentStyle);
+      const inlinePos = currentStyle === 'fr-en-pos' || currentStyle === 'en-fr-pos' || currentStyle === 'verb-conj';
       const blocks = [];
 
-      if (isFrenchPrompt) {
-        blocks.push(createBlock('Meaning', card.meaning_en || '—', true));
+      if (currentStyle === 'verb-conj') {
+        blocks.push(createBlock('Meaning', card.meaning_en || '—', { highlightMeaning: true, subText: card.pos || '' }));
+        blocks.push(createPronBlock(card));
+        blocks.push(createConjugationBlock(card));
+      } else if (isFrenchPrompt) {
+        blocks.push(createBlock('Meaning', card.meaning_en || '—', { highlightMeaning: true, subText: inlinePos ? (card.pos || '') : '' }));
         blocks.push(createPronBlock(card));
         blocks.push(createBlock('Gender', card.gender || '—'));
-        blocks.push(createBlock('Part of speech', card.pos || '—'));
-      } else {
-        blocks.push(createBlock('French word', card.word, true));
+        if (!inlinePos) blocks.push(createBlock('Part of speech', card.pos || '—'));
+      } else if (isEnglishPrompt) {
+        blocks.push(createBlock('French word', card.word, { highlightMeaning: true, subText: inlinePos ? (card.pos || '') : '' }));
         blocks.push(createPronBlock(card));
         blocks.push(createBlock('Gender', card.gender || '—'));
-        blocks.push(createBlock('Part of speech', card.pos || '—'));
+        if (!inlinePos) blocks.push(createBlock('Part of speech', card.pos || '—'));
+        blocks.push(createBlock('English meaning', card.meaning_en || '—'));
       }
       detailGrid.innerHTML = '';
       blocks.forEach(b => detailGrid.appendChild(b));
@@ -344,9 +402,11 @@
       tile.classList.remove('masked');
     }
 
-    function createBlock(label, value, highlightMeaning = false) {
+    function createBlock(label, value, options = {}) {
+      const { highlightMeaning = false, subText = '', allowHtml = false, size = 'regular' } = options;
       const div = document.createElement('div');
-      div.className = 'reveal-block masked' + (highlightMeaning ? ' highlight' : '');
+      const sizeClass = size === 'mini' ? ' mini' : '';
+      div.className = 'reveal-block masked' + (highlightMeaning ? ' highlight' : '') + sizeClass;
       div.tabIndex = 0;
 
       const inner = document.createElement('div');
@@ -369,7 +429,17 @@
       backLabel.textContent = label;
       const backValue = document.createElement('div');
       backValue.className = 'value';
-      backValue.textContent = value;
+      if (allowHtml) {
+        backValue.innerHTML = value;
+      } else {
+        backValue.textContent = value;
+      }
+      if (subText) {
+        const sub = document.createElement('div');
+        sub.className = 'subtext';
+        sub.textContent = subText;
+        backValue.append(sub);
+      }
       back.append(backLabel, backValue);
 
       inner.append(front, back);
@@ -423,6 +493,100 @@
       container.addEventListener('click', () => revealTile(container));
       container.addEventListener('keypress', (e) => { if (e.key === 'Enter') revealTile(container); });
       return container;
+    }
+
+    function createConjugationBlock(card) {
+      const container = document.createElement('div');
+      container.className = 'conjugation-wrapper';
+
+      const title = document.createElement('div');
+      title.className = 'conjugation-title';
+      title.textContent = 'Conjugations';
+
+      const grid = document.createElement('div');
+      grid.className = 'conjugation-grid';
+
+      const conjugations = card.conjugations;
+      if (!conjugations) {
+        grid.append(createBlock('Conjugations', '—', { size: 'mini' }));
+      } else {
+        Object.entries(conjugations).forEach(([tense, forms]) => {
+          const lines = buildConjugationLines(forms);
+          const miniCard = createMiniConjugationCard(formatTenseLabel(tense), lines);
+          grid.append(miniCard);
+        });
+      }
+
+      container.append(title, grid);
+      return container;
+    }
+
+    function formatTenseLabel(tenseKey) {
+      const map = {
+        infinitive: 'Infinitive',
+        present: 'Présent',
+        imparfait: 'Imparfait',
+        futur_simple: 'Futur simple',
+        passe_compose: 'Passé composé',
+        conditionnel_present: 'Conditionnel présent',
+        subjonctif_present: 'Subjonctif présent',
+        participe_passe: 'Participe passé'
+      };
+      return map[tenseKey] || tenseKey.replace(/_/g, ' ');
+    }
+
+    function formatPersonLabel(label) {
+      const map = {
+        je: 'je',
+        tu: 'tu',
+        il_elle_on: 'il/elle/on',
+        nous: 'nous',
+        vous: 'vous',
+        ils_elles: 'ils/elles',
+        auxiliary: 'Auxiliary',
+        participe_passe: 'Participe passé',
+        pattern: 'Pattern'
+      };
+      return map[label] || label.replace(/_/g, ' ');
+    }
+
+    function buildConjugationLines(forms) {
+      if (typeof forms === 'string') {
+        return [{ value: forms }];
+      }
+      if (!forms) return [];
+      return Object.entries(forms).map(([label, value]) => ({
+        label: formatPersonLabel(label),
+        value
+      }));
+    }
+
+    function createMiniConjugationCard(title, lines) {
+      const card = createBlock(title, '', { size: 'mini' });
+      const backValue = card.querySelector('.face.back .value');
+
+      backValue.textContent = '';
+
+      if (!lines.length) {
+        backValue.textContent = '—';
+      } else {
+        lines.forEach((line) => {
+          const row = document.createElement('div');
+          row.className = 'mini-line';
+          if (line.label) {
+            const lbl = document.createElement('span');
+            lbl.className = 'label';
+            lbl.textContent = line.label;
+            row.append(lbl);
+          }
+          const val = document.createElement('span');
+          val.textContent = line.value;
+          row.append(val);
+          backValue.append(row);
+        });
+      }
+
+      return card;
     }
 
     function gradeCard(action, offset) {
