@@ -381,14 +381,22 @@
         const meaningSubtexts = [];
         if (card.lemma) meaningSubtexts.push(card.lemma);
         if (card.pos) meaningSubtexts.push(card.pos);
-        blocks.push(createBlock('Meaning', card.meaning_en || '—', { highlightMeaning: true, subTexts: meaningSubtexts }));
+        const combinedMeaningSubtexts = meaningSubtexts.filter(Boolean);
+        const joinedMeaningSubtext = combinedMeaningSubtexts.length > 1
+          ? combinedMeaningSubtexts.join(' | ')
+          : combinedMeaningSubtexts[0];
+        blocks.push(createBlock('Meaning', card.meaning_en || '—', { highlightMeaning: true, subTexts: joinedMeaningSubtext ? [joinedMeaningSubtext] : [] }));
         blocks.push(createPronBlock(card));
         blocks.push(createConjugationBlock(card));
       } else if (isFrenchPrompt) {
         const meaningSubtexts = [];
         if (card.lemma) meaningSubtexts.push(card.lemma);
         if (inlinePos && card.pos) meaningSubtexts.push(card.pos);
-        blocks.push(createBlock('Meaning', card.meaning_en || '—', { highlightMeaning: true, subTexts: meaningSubtexts }));
+        const combinedMeaningSubtexts = meaningSubtexts.filter(Boolean);
+        const joinedMeaningSubtext = combinedMeaningSubtexts.length > 1
+          ? combinedMeaningSubtexts.join(' | ')
+          : combinedMeaningSubtexts[0];
+        blocks.push(createBlock('Meaning', card.meaning_en || '—', { highlightMeaning: true, subTexts: joinedMeaningSubtext ? [joinedMeaningSubtext] : [] }));
         blocks.push(createPronBlock(card));
         blocks.push(createBlock('Gender', card.gender || '—'));
         if (!inlinePos) blocks.push(createBlock('Part of speech', card.pos || '—'));
