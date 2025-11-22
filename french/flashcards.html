@@ -378,11 +378,17 @@
       const blocks = [];
 
       if (currentStyle === 'verb-conj') {
-        blocks.push(createBlock('Meaning', card.meaning_en || '—', { highlightMeaning: true, subText: card.pos || '' }));
+        const meaningSubtexts = [];
+        if (card.lemma) meaningSubtexts.push(card.lemma);
+        if (card.pos) meaningSubtexts.push(card.pos);
+        blocks.push(createBlock('Meaning', card.meaning_en || '—', { highlightMeaning: true, subTexts: meaningSubtexts }));
         blocks.push(createPronBlock(card));
         blocks.push(createConjugationBlock(card));
       } else if (isFrenchPrompt) {
-        blocks.push(createBlock('Meaning', card.meaning_en || '—', { highlightMeaning: true, subText: inlinePos ? (card.pos || '') : '' }));
+        const meaningSubtexts = [];
+        if (card.lemma) meaningSubtexts.push(card.lemma);
+        if (inlinePos && card.pos) meaningSubtexts.push(card.pos);
+        blocks.push(createBlock('Meaning', card.meaning_en || '—', { highlightMeaning: true, subTexts: meaningSubtexts }));
         blocks.push(createPronBlock(card));
         blocks.push(createBlock('Gender', card.gender || '—'));
         if (!inlinePos) blocks.push(createBlock('Part of speech', card.pos || '—'));
@@ -403,7 +409,16 @@
     }
 
     function createBlock(label, value, options = {}) {
-      const { highlightMeaning = false, subText = '', allowHtml = false, size = 'regular' } = options;
+      const {
+        highlightMeaning = false,
+        subText = '',
+        subTexts = null,
+        allowHtml = false,
+        size = 'regular'
+      } = options;
+      const subtextItems = Array.isArray(subTexts)
+        ? subTexts.filter(Boolean)
+        : (subText ? [subText] : []);
       const div = document.createElement('div');
       const sizeClass = size === 'mini' ? ' mini' : '';
       div.className = 'reveal-block masked' + (highlightMeaning ? ' highlight' : '') + sizeClass;
@@ -434,12 +449,12 @@
       } else {
         backValue.textContent = value;
       }
-      if (subText) {
+      subtextItems.forEach((text) => {
         const sub = document.createElement('div');
         sub.className = 'subtext';
-        sub.textContent = subText;
+        sub.textContent = text;
         backValue.append(sub);
-      }
+      });
       back.append(backLabel, backValue);
 
       inner.append(front, back);
