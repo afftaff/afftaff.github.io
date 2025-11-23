@@ -307,7 +307,7 @@
 
   <script>
     /* --- State & DOM Elements --- */
-    const storageKey = 'frenchFlashcards-HTML-v1';
+    const storageKey = 'frenchFlashcards-Fixed-v2';
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -372,11 +372,11 @@
       renderList();
     }
 
-    /* --- PARSING LOGIC (DOM BASED) --- */
+    /* --- NEW PARSING LOGIC (Linear Scan) --- */
 
     async function lookupWord(term) {
       const cleanTerm = term.trim();
-      // Use action=parse to get the rendered HTML. This ensures templates like {{fr-IPA}} are calculated.
+      // We use action=parse to get the final HTML
       const url = `https://en.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(cleanTerm)}&prop=text&format=json&origin=*&redirects=1`;
       
       const res = await fetch(url);
@@ -387,7 +387,6 @@
       }
 
       const htmlContent = data.parse.text['*'];
-      // If it redirected, use the destination title
       const actualTerm = data.parse.title || cleanTerm;
       
       return extractWordDataFromHTML(htmlContent, actualTerm);
@@ -397,129 +396,113 @@
       const parser = new DOMParser();
       const doc = parser.parseFromString(htmlString, 'text/html');
 
-      // 1. Find the "French" Section
-      // Wiktionary HTML structure: <h2 id="French">French</h2> (or wrapped in .mw-heading)
-      // We iterate through elements to capture everything between "French" header and the next language header.
+      // Get the main content container (usually .mw-parser-output)
+      const root = doc.querySelector('.mw-parser-output') || doc.body;
+      const children = Array.from(root.children);
+
+      let inFrenchSection = false;
+      let currentPos = null;
       
-      let startNode = null;
-      const allHeaders = doc.querySelectorAll('h2');
-      
-      for (let h2 of allHeaders) {
-        if (h2.textContent.includes('French')) {
-          startNode = h2.closest('.mw-heading') || h2; // Handle modern MediaWiki wrapper
-          break;
-        }
-      }
-
-      if (!startNode) throw new Error('No French entry found for this word.');
-
-      // Collect French Nodes
-      const frenchNodes = [];
-      let currentNode = startNode.nextElementSibling;
-      
-      while (currentNode) {
-        // Check if we hit the next language section (H2)
-        if (currentNode.tagName === 'H2' || currentNode.querySelector('h2')) {
-          break;
-        }
-        frenchNodes.push(currentNode);
-        currentNode = currentNode.nextElementSibling;
-      }
-
-      // Create a temporary container to query strictly within French data
-      const container = document.createElement('div');
-      frenchNodes.forEach(n => container.appendChild(n.cloneNode(true)));
-
-      // 2. Extract IPA
-      // We look for elements with class "IPA". 
-      // Wiktionary usually outputs: <span class="IPA">/dwa/</span> or <span class="IPA">[dwa]</span>
-      let ipa = '...';
-      const ipaEl = container.querySelector('.IPA');
-      if (ipaEl) {
-        // Remove slashes or brackets for cleaner display
-        ipa = ipaEl.textContent.trim().replace(/^[\/\[]|[\/\]]$/g, '');
-      }
-
-      // 3. Extract POS, Gender, and Definitions
-      const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Pronoun', 'Numeral', 'Article', 'Determiner'];
-      let bestPos = '';
+      let bestPos = null;
       let bestDefs = [];
-      let gender = '';
+      let foundIPA = '';
+      let foundGender = '';
 
-      // Headers for POS are usually H3 or H4
-      const sectionHeaders = container.querySelectorAll('h3, h4');
+      const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Pronoun', 'Numeral', 'Article', 'Determiner'];
 
-      for (let header of sectionHeaders) {
-        // Remove "[edit]" text
-        const posText = header.textContent.replace(/\[edit\]/g, '').trim();
+      // LINEAR SCAN: Walk through every element in order
+      for (const el of children) {
+        
+        // 1. Check for Headers (H2, H3, H4)
+        // Note: Wiktionary wraps headers in <div class="mw-heading"> now.
+        // We check if 'el' is a header, or if it *contains* a header.
+        let headerEl = el.matches('h2, h3, h4') ? el : el.querySelector('h2, h3, h4');
+        
+        if (headerEl) {
+          const level = headerEl.tagName;
+          const text = headerEl.textContent.replace(/\[edit\]/g, '').trim();
 
-        if (validPOS.includes(posText)) {
-          // Definitions are in the Ordered List (<ol>) immediately following
-          let sibling = header.nextElementSibling;
-          
-          // Skip potential info boxes or styles until we find the list
-          while(sibling && sibling.tagName !== 'OL' && !['H2','H3','H4'].includes(sibling.tagName)) {
-            sibling = sibling.nextElementSibling;
-          }
-
-          if (sibling && sibling.tagName === 'OL') {
-            // Found definitions
-            const items = sibling.querySelectorAll(':scope > li');
-            const currentDefs = [];
-
-            items.forEach(li => {
-              // Clone to safely manipulate
-              const clone = li.cloneNode(true);
-              
-              // Remove nested lists (synonyms, derived terms usually in <ul> inside <li>)
-              const nestedLists = clone.querySelectorAll('ul, dl, ol');
-              nestedLists.forEach(n => n.remove());
-
-              // Extract pure text
-              let defText = clone.textContent.trim();
-              
-              // Filter out "Usage notes" or empty definitions
-              if (defText && !defText.toLowerCase().startsWith('usage notes')) {
-                currentDefs.push({ text: defText, example: null });
-              }
-            });
-
-            if (currentDefs.length > 0) {
-              if (!bestPos) {
-                bestPos = posText;
-                bestDefs = currentDefs;
-                
-                // Try to find gender in the paragraph usually preceding the <ol> (the headword line)
-                // Look for <span class="gender">
-                const headwordLine = header.nextElementSibling; 
-                // Traverse a few siblings to find headword line
-                let temp = header.nextElementSibling;
-                while(temp && temp !== sibling) {
-                  const gSpan = temp.querySelector('.gender');
-                  if (gSpan) {
-                    gender = gSpan.textContent.trim();
-                  }
-                  temp = temp.nextElementSibling;
-                }
-              }
-              // We prioritize the first valid POS we find, or Nouns if we want specific logic
+          if (level === 'H2') {
+            // If we see a Language Header
+            if (text === 'French') {
+              inFrenchSection = true;
+            } else {
+              // If we were in French and hit another language (e.g., "Portuguese"), STOP.
+              if (inFrenchSection) break; 
             }
           }
+          
+          // If we are in French, check for POS headers (H3/H4)
+          if (inFrenchSection && (level === 'H3' || level === 'H4')) {
+             if (validPOS.includes(text)) {
+               // If we already found definitions for a previous POS (e.g. we found Noun, now seeing Verb),
+               // we usually stop and prefer the first one, OR we could overwrite. 
+               // Let's stick to the first valid one found to keep it simple.
+               if (bestDefs.length > 0) break; 
+               currentPos = text;
+             } else {
+               // Reset POS if we hit a non-POS header (like "Etymology" or "Pronunciation")
+               // unless it's a sub-header.
+               if (!['Conjugation', 'Derived terms', 'Related terms'].includes(text)) {
+                 currentPos = null;
+               }
+             }
+          }
+        }
+
+        if (!inFrenchSection) continue;
+
+        // 2. Capture IPA
+        // IPA can appear anywhere in the section.
+        if (!foundIPA) {
+          const ipaEl = el.querySelector('.IPA');
+          if (ipaEl) {
+             foundIPA = ipaEl.textContent.trim().replace(/^[\/\[]|[\/\]]$/g, '');
+          }
+        }
+
+        // 3. Capture Gender (from Paragraphs under a POS header)
+        if (currentPos && el.tagName === 'P') {
+          const genderEl = el.querySelector('.gender');
+          if (genderEl && !foundGender) {
+            foundGender = genderEl.textContent.trim();
+          }
+        }
+
+        // 4. Capture Definitions (Ordered Lists under a POS header)
+        if (currentPos && el.tagName === 'OL') {
+           const items = el.querySelectorAll(':scope > li');
+           items.forEach(li => {
+             // Clone to clean up
+             const clone = li.cloneNode(true);
+             // Remove nested lists (synonyms/derived terms)
+             clone.querySelectorAll('ul, ol, dl').forEach(n => n.remove());
+             
+             const defText = clone.textContent.trim();
+             if (defText && !defText.toLowerCase().startsWith('usage notes')) {
+               bestDefs.push({ text: defText, example: null });
+             }
+           });
+
+           if (bestDefs.length > 0) {
+             bestPos = currentPos;
+             // We found our definitions! The loop will likely break at the next header.
+           }
         }
       }
 
-      if (!bestDefs.length) throw new Error('No definitions found.');
+      if (!bestDefs.length) throw new Error('No definitions found (or not a French entry).');
 
-      // Format POS with Gender
+      // Format POS string
       let posDisplay = bestPos;
-      if (gender) posDisplay += ` (${gender})`;
+      if (foundGender) posDisplay += ` (${foundGender})`;
 
       return {
         id: Date.now(),
         term: term,
-        ipa: ipa,
-        pos: posDisplay,
-        definitions: bestDefs.slice(0, 5) // Limit to top 5
+        ipa: foundIPA || '...',
+        pos: posDisplay || 'Word',
+        definitions: bestDefs.slice(0, 5)
       };
     }
 
@@ -641,7 +624,7 @@
     }
 
     window.playAudio = (text, e) => {
-      e.stopPropagation(); // Prevent card from flipping back when clicking button
+      e.stopPropagation();
       if ('speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'fr-FR';
@@ -658,7 +641,6 @@
       const term = dom.input.value;
       if (!term) return;
 
-      // Check duplicates
       if (deck.some(c => c.term.toLowerCase() === term.toLowerCase())) {
         setStatus('Word already in deck', 'error');
         return;
