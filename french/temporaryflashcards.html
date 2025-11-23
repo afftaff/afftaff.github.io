@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Temporary French Flashcards</title>
+  <title>French Flashcards</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
@@ -12,7 +12,7 @@
       --bg: #0b1120;
       --panel: #0f172a;
       --accent: #22c55e;
-      --accent-2: #38bdf8;
+      --accent-hover: #16a34a;
       --text: #e2e8f0;
       --muted: #94a3b8;
       --border: #1f2937;
@@ -30,19 +30,13 @@
     }
     header {
       padding: 24px 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
       border-bottom: 1px solid var(--border);
       background: rgba(15,23,42,0.8);
       position: sticky;
       top: 0;
       backdrop-filter: blur(8px);
-      z-index: 2;
+      z-index: 10;
     }
-    header a { color: var(--muted); text-decoration: none; font-weight: 600; }
-    header a:hover { color: var(--text); }
     main { max-width: 1200px; margin: 0 auto; padding: 28px; display: grid; gap: 18px; grid-template-columns: 2fr 1fr; }
     @media (max-width: 1024px) { main { grid-template-columns: 1fr; } }
     h1 { margin: 0 0 10px; letter-spacing: -0.02em; }
@@ -55,11 +49,8 @@
       padding: 20px;
       box-shadow: 0 12px 30px rgba(0,0,0,0.35);
     }
-    .panel header { padding: 0; border: none; background: none; position: static; backdrop-filter: none; }
-    .panel header h2 { margin: 0 0 6px; }
-    .panel header p { margin: 0; }
-
-    .field { margin-bottom: 14px; }
+    .panel header { padding: 0; border: none; background: none; margin-bottom: 20px; }
+    
     label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
     input[type="text"] {
       width: 100%;
@@ -69,431 +60,453 @@
       background: #0b1224;
       color: var(--text);
       font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
     }
-    input[type="text"]::placeholder { color: #64748b; }
-    button.primary {
+    input[type="text"]:focus { border-color: var(--accent); }
+
+    button {
       border: none;
-      background: linear-gradient(135deg, var(--accent), #16a34a);
-      color: #0b1120;
       padding: 12px 14px;
       border-radius: 10px;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
     }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    button.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+      color: #0b1120;
+    }
+    button.primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(34,197,94,0.3); }
+
     button.secondary {
       border: 1px solid var(--border);
       background: transparent;
       color: var(--text);
-      padding: 12px 14px;
-      border-radius: 10px;
-      font-weight: 700;
-      cursor: pointer;
     }
-    button.ghost {
-      border: 1px dashed var(--border);
-      background: rgba(255,255,255,0.03);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    button:disabled { opacity: 0.6; cursor: not-allowed; }
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    button.secondary:hover:not(:disabled) { background: rgba(255,255,255,0.05); }
 
-    .deck-list { display: grid; gap: 12px; margin-top: 16px; }
+    button.ghost {
+      background: transparent;
+      color: var(--muted);
+      padding: 8px 12px;
+    }
+    button.ghost:hover { color: #fca5a5; background: rgba(255,0,0,0.1); }
+
+    .input-group { display: flex; gap: 10px; }
+    .actions { display: flex; gap: 10px; margin-top: 15px; align-items: center; }
+
+    /* List Styles */
+    .deck-list { display: grid; gap: 12px; margin-top: 16px; max-height: 600px; overflow-y: auto; padding-right: 5px; }
     .word-row {
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 14px;
       background: #0b1224;
-      display: grid;
-      gap: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
-    .word-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .word-head h3 { margin: 0; font-size: 20px; }
-    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.35); color: #bae6fd; font-weight: 600; font-size: 13px; }
-    .tags { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-    .definition-list { margin: 8px 0 0; padding-left: 18px; color: var(--text); }
+    .word-head { display: flex; align-items: center; justify-content: space-between; }
+    .word-head h3 { margin: 0; font-size: 18px; color: var(--accent); }
+    .tags { display: flex; gap: 8px; }
+    .pill { 
+      padding: 4px 10px; 
+      border-radius: 20px; 
+      background: rgba(255,255,255,0.05); 
+      font-size: 12px; 
+      color: var(--muted); 
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .definition-list { margin: 0; padding-left: 20px; font-size: 14px; color: #cbd5e1; }
     .definition-list li { margin-bottom: 4px; }
-    .muted { color: var(--muted); font-size: 14px; }
 
-    .card-shell { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 18px; }
+    /* Flashcard Styles */
+    .card-shell { perspective: 1000px; margin: 20px 0; }
     .card {
       background: var(--card);
       border-radius: 14px;
-      padding: 20px 20px 16px;
+      padding: 30px;
       border: 1px solid var(--border);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
-      min-height: 260px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       position: relative;
-      overflow: hidden;
-      display: grid;
-      gap: 12px;
     }
-    .card .label { font-size: 12px; letter-spacing: 0.05em; color: var(--muted); text-transform: uppercase; }
-    .card .prompt { font-size: 36px; margin: 0; }
-    .card .ipa { color: var(--muted); font-weight: 600; }
-    .card .defs { color: var(--text); }
-    .card .defs li { margin-bottom: 6px; }
-    .card .hint { color: var(--muted); font-size: 13px; }
-    .stack-meta { display: flex; align-items: center; justify-content: space-between; color: var(--muted); margin-top: 10px; }
-    .sound-btn { border: 1px solid var(--border); background: rgba(255,255,255,0.06); color: var(--text); padding: 8px 10px; border-radius: 8px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
-
-    .status { margin-top: 8px; color: var(--muted); min-height: 20px; }
-    .notice { padding: 10px 12px; border-radius: 10px; background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.35); color: #bae6fd; }
+    .card .label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
+    .card .prompt { font-size: 42px; margin: 0 0 10px; color: white; }
+    .card .ipa { color: var(--accent); font-family: monospace; font-size: 18px; margin-bottom: 20px; }
+    .card .pos { font-style: italic; color: var(--muted); margin-bottom: 15px; }
+    
+    .card .defs { text-align: left; width: 100%; color: #e2e8f0; font-size: 16px; border-top: 1px solid var(--border); padding-top: 20px; }
+    .card .defs li { margin-bottom: 8px; }
+    
+    .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: auto; }
+    .full-width { grid-column: span 2; }
+    
+    .status-msg { margin-top: 10px; font-size: 13px; min-height: 20px; color: var(--muted); }
   </style>
 </head>
 <body>
+
   <header>
-    <div>
-      <div style="font-weight:700;">Temporary French Flashcards</div>
-      <small style="color: var(--muted);">Ad-hoc deck built from live Wiktionary lookups</small>
-    </div>
-    <a href="./index.html">← Back to menu</a>
+    <div style="font-weight:700; font-size: 20px;">🇫🇷 French Flashcards</div>
+    <small style="color: var(--muted);">Powered by Wiktionary API</small>
   </header>
+
   <main>
-    <section class="panel" aria-labelledby="builder-heading">
+    <!-- Left Panel: Builder -->
+    <section class="panel">
       <header>
-        <h1 id="builder-heading">Build your deck</h1>
-        <p>Add any French word or expression. We will fetch IPA, audio (when available), and definitions from Wiktionary.</p>
+        <h1>Build Deck</h1>
+        <p>Enter a French word to auto-fetch definitions and IPA.</p>
       </header>
-      <form id="addForm" class="field" autocomplete="off">
-        <label for="wordInput">French word</label>
-        <div class="actions">
-          <input id="wordInput" name="word" type="text" placeholder="e.g. étudier" required />
-          <button type="submit" class="primary">Add to deck</button>
+
+      <form id="addForm">
+        <label for="wordInput">Add a word</label>
+        <div class="input-group">
+          <input id="wordInput" type="text" placeholder="e.g. chien, manger, beau..." required autocomplete="off" />
+          <button type="submit" class="primary">Add</button>
         </div>
+        <div class="status-msg" id="status"></div>
       </form>
-      <div class="actions" style="margin: 10px 0 4px;">
-        <button id="startDeck" class="secondary" disabled>Play deck</button>
-        <button id="clearDeck" class="ghost" disabled>Clear all</button>
-        <span class="muted" id="countLabel"></span>
+
+      <div class="actions">
+        <button id="startDeck" class="secondary" disabled>▶ Play Deck</button>
+        <button id="clearDeck" class="ghost" disabled>Clear All</button>
+        <span id="countLabel" style="margin-left: auto; font-size: 14px; color: var(--muted);">0 cards</span>
       </div>
-      <div class="status" id="status"></div>
-      <div id="deckList" class="deck-list" aria-live="polite"></div>
+
+      <div id="deckList" class="deck-list"></div>
     </section>
 
-    <section class="panel" aria-labelledby="quiz-heading">
+    <!-- Right Panel: Quiz -->
+    <section class="panel">
       <header>
-        <h2 id="quiz-heading">Quiz</h2>
-        <p>Cards are shown in random order. Tap to flip and reveal definitions.</p>
+        <h2>Quiz Mode</h2>
+        <p id="progressLabel">0 / 0</p>
       </header>
+      
       <div class="card-shell">
-        <div class="card" id="quizCard" aria-live="polite">
+        <div class="card" id="quizCard">
           <div class="label">Prompt</div>
-          <h3 class="prompt" id="cardWord">Add some words to begin</h3>
+          <h3 class="prompt" id="cardWord">Start adding words</h3>
           <div class="ipa" id="cardIpa"></div>
-          <div class="hint" id="cardPos"></div>
-          <div class="defs" id="cardDefs"></div>
-          <div class="actions">
-            <button class="sound-btn" id="playAudio" disabled>🔊 Hear pronunciation</button>
-            <button class="sound-btn" id="flipCard" disabled>⟳ Flip</button>
-            <button class="sound-btn" id="nextCard" disabled>Next →</button>
-          </div>
-          <div class="stack-meta" id="stackMeta"></div>
+          <div class="pos" id="cardPos"></div>
+          <div id="cardContent"></div> 
         </div>
       </div>
-      <p class="notice">Audio comes from Wiktionary when available. If none exists, the site falls back to your browser's French text-to-speech voice.</p>
+
+      <div class="card-actions">
+        <button class="secondary full-width" id="playAudio" disabled>🔊 Pronunciation</button>
+        <button class="primary" id="flipCard" disabled>Flip Card</button>
+        <button class="secondary" id="nextCard" disabled>Next →</button>
+      </div>
     </section>
   </main>
 
   <script>
-    const storageKey = 'tempFrenchFlashcards-v1';
-    const statusEl = document.getElementById('status');
-    const deckListEl = document.getElementById('deckList');
-    const wordInput = document.getElementById('wordInput');
-    const startDeckBtn = document.getElementById('startDeck');
-    const clearDeckBtn = document.getElementById('clearDeck');
-    const countLabel = document.getElementById('countLabel');
-    const playAudioBtn = document.getElementById('playAudio');
-    const flipBtn = document.getElementById('flipCard');
-    const nextBtn = document.getElementById('nextCard');
-    const cardWord = document.getElementById('cardWord');
-    const cardIpa = document.getElementById('cardIpa');
-    const cardDefs = document.getElementById('cardDefs');
-    const cardPos = document.getElementById('cardPos');
-    const stackMeta = document.getElementById('stackMeta');
+    /* --- State & DOM Elements --- */
+    const storageKey = 'tempFrenchFlashcards-v2';
+    const dom = {
+      status: document.getElementById('status'),
+      list: document.getElementById('deckList'),
+      input: document.getElementById('wordInput'),
+      startBtn: document.getElementById('startDeck'),
+      clearBtn: document.getElementById('clearDeck'),
+      count: document.getElementById('countLabel'),
+      audioBtn: document.getElementById('playAudio'),
+      flipBtn: document.getElementById('flipCard'),
+      nextBtn: document.getElementById('nextCard'),
+      cardWord: document.getElementById('cardWord'),
+      cardIpa: document.getElementById('cardIpa'),
+      cardPos: document.getElementById('cardPos'),
+      cardContent: document.getElementById('cardContent'),
+      progress: document.getElementById('progressLabel')
+    };
 
     let deck = loadDeck();
     let quizQueue = [];
     let quizIndex = 0;
-    let showingBack = false;
+    let isFlipped = false;
+
+    /* --- Core Data Functions --- */
 
     function loadDeck() {
       try {
         const raw = localStorage.getItem(storageKey);
-        if (!raw) return [];
-        const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) ? parsed : [];
-      } catch (err) {
-        console.error('Failed to parse deck', err);
-        return [];
-      }
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) { return []; }
     }
 
     function saveDeck() {
       localStorage.setItem(storageKey, JSON.stringify(deck));
-      renderDeck();
+      renderList();
     }
 
-    function setStatus(message, tone = 'muted') {
-      statusEl.textContent = message;
-      statusEl.style.color = tone === 'error' ? '#fca5a5' : 'var(--muted)';
-    }
-
-    function renderDeck() {
-      deckListEl.innerHTML = '';
-      if (!deck.length) {
-        deckListEl.innerHTML = '<p class="muted">No words yet. Add a French word to start building your deck.</p>';
-        startDeckBtn.disabled = true;
-        clearDeckBtn.disabled = true;
-        countLabel.textContent = '';
-        return;
-      }
-
-      deck.forEach((entry, index) => {
-        const row = document.createElement('article');
-        row.className = 'word-row';
-        const head = document.createElement('div');
-        head.className = 'word-head';
-        const title = document.createElement('h3');
-        title.textContent = entry.term;
-        const meta = document.createElement('div');
-        meta.className = 'tags';
-        if (entry.ipa) {
-          const pill = document.createElement('span');
-          pill.className = 'pill';
-          pill.textContent = entry.ipa;
-          meta.appendChild(pill);
-        }
-        if (entry.partOfSpeech) {
-          const pill = document.createElement('span');
-          pill.className = 'pill';
-          pill.textContent = entry.partOfSpeech;
-          meta.appendChild(pill);
-        }
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'ghost';
-        deleteBtn.textContent = 'Delete';
-        deleteBtn.addEventListener('click', () => {
-          deck.splice(index, 1);
-          saveDeck();
-          setStatus(`Removed “${entry.term}”`);
-        });
-        head.append(title, meta, deleteBtn);
-        row.appendChild(head);
-
-        const defList = document.createElement('ul');
-        defList.className = 'definition-list';
-        (entry.definitions || []).forEach(def => {
-          const li = document.createElement('li');
-          li.textContent = def;
-          defList.appendChild(li);
-        });
-        if (!entry.definitions || !entry.definitions.length) {
-          const empty = document.createElement('p');
-          empty.className = 'muted';
-          empty.textContent = 'No definitions found.';
-          row.appendChild(empty);
-        } else {
-          row.appendChild(defList);
-        }
-        deckListEl.appendChild(row);
-      });
-
-      startDeckBtn.disabled = false;
-      clearDeckBtn.disabled = false;
-      countLabel.textContent = `${deck.length} card${deck.length === 1 ? '' : 's'}`;
-    }
-
-    async function fetchJson(url) {
-      const response = await fetch(url, { headers: { accept: 'application/json' } });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      return response.json();
-    }
+    /* --- Wiktionary Parsing Logic (The Important Part) --- */
 
     function cleanWikiText(text) {
       if (!text) return '';
-      let cleaned = text
-        .replace(/^#\s*/, '')
-        .replace(/{{[^{}]*}}/g, '')
-        .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, '$2')
-        .replace(/\[\[([^\]]+)\]\]/g, '$1')
-        .replace(/''+/g, '')
-        .replace(/\(\s*\)/g, '')
-        .replace(/\s+/g, ' ')
+      let cleaned = text;
+
+      // 1. Recursively remove templates {{...}} 
+      // This handles nested templates like {{lb|fr|{{syn|...}}}}
+      let old;
+      do {
+        old = cleaned;
+        cleaned = cleaned.replace(/{{[^{}]+}}/g, '');
+      } while (cleaned !== old);
+
+      cleaned = cleaned
+        .replace(/^#\s*/, '') // Remove definition bullet points
+        .replace(/\[\[(?:[^|\]]*\|)?([^\]]+)\]\]/g, '$1') // Resolve [[link|text]] or [[text]] to just "text"
+        .replace(/'''?/g, '') // Remove bold/italic markup
+        .replace(/\(\s*\)/g, '') // Remove empty parentheses left behind
+        .replace(/\s+/g, ' ') // Collapse extra spaces
         .trim();
+
       return cleaned;
     }
 
-    function extractFrenchSection(content) {
-      const match = content.match(/==French==([\s\S]*?)(\n==[^=]|$)/);
-      return match ? match[1] : '';
+    function extractFrenchSection(fullText) {
+      // Find content between ==French== and the next language header
+      const match = fullText.match(/==\s*French\s*==([\s\S]*?)(\n==[^=]|$)/);
+      return match ? match[1] : null;
     }
 
-    function parsePartOfSpeech(section) {
-      const posMatch = section.match(/===([^=]+)===/);
-      return posMatch ? posMatch[1].trim() : '';
-    }
+    function parsePartOfSpeech(frenchText) {
+      // Priority 1: Find standard grammar headers (Noun, Verb, etc.)
+      const standardMatch = frenchText.match(/===\s*(Noun|Verb|Adjective|Adverb|Preposition|Pronoun|Conjunction|Interjection|Phrase|Expression)\s*===/i);
+      if (standardMatch) return standardMatch[1];
 
-    function parseIpa(section) {
-      const ipaMatch = section.match(/{{IPA\|fr\|([^}|]+)\|?/);
-      if (ipaMatch) return ipaMatch[1].replace(/\//g, '').trim();
-      const frIpaMatch = section.match(/\/(?:[^\n\/]{2,})\//);
-      return frIpaMatch ? frIpaMatch[0].replace(/\//g, '') : '';
-    }
-
-    function parseDefinitions(section) {
-      const defs = [];
-      const lines = section.split('\n');
-      lines.forEach(line => {
-        if (line.startsWith('# ') && !line.startsWith('#:')) {
-          const cleaned = cleanWikiText(line);
-          if (cleaned) defs.push(cleaned);
+      // Priority 2: Find ANY header that isn't metadata (Etymology, Pronunciation, etc.)
+      const ignoredHeaders = ['Etymology', 'Pronunciation', 'References', 'Further reading', 'Anagrams', 'See also', 'Usage notes', 'Alternative forms', 'Derived terms'];
+      const headers = [...frenchText.matchAll(/===\s*([^=]+)\s*===/g)];
+      
+      for (const h of headers) {
+        const title = h[1].trim();
+        // If the header title isn't in our ignore list, assume it's the part of speech
+        if (!ignoredHeaders.some(ignored => title.includes(ignored))) {
+          return title;
         }
-      });
-      return defs;
+      }
+      return ''; 
     }
 
-    async function lookupWiktionary(term) {
-      const normalized = term.trim();
-      if (!normalized) throw new Error('Please provide a word.');
+    function parseDefinitions(frenchText) {
+      const defs = [];
+      const lines = frenchText.split('\n');
+      
+      for (const line of lines) {
+        // We want lines starting with # but NOT #: (examples) or #* (quotes)
+        if (line.startsWith('#') && !line.startsWith('#:') && !line.startsWith('#*')) {
+          const cleaned = cleanWikiText(line);
+          // Only keep definitions that have actual text
+          if (cleaned.length > 2) {
+            defs.push(cleaned);
+          }
+        }
+      }
+      return defs.slice(0, 4); // Limit to top 4 definitions
+    }
 
-      const url = `https://en.wiktionary.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&format=json&titles=${encodeURIComponent(normalized)}&origin=*`;
-      const data = await fetchJson(url);
-      const page = data?.query?.pages ? Object.values(data.query.pages)[0] : null;
-      const raw = page?.revisions?.[0]?.slots?.main?.['*'] || page?.revisions?.[0]?.['*'];
-      if (!raw) throw new Error('No Wiktionary entry found.');
+    function parseIpa(frenchText) {
+      // Look for standard template {{IPA|fr|...}}
+      const match = frenchText.match(/{{IPA\|fr\|([^}|]+)/);
+      if (match) return match[1].replace(/\//g, '').trim();
+      
+      // Fallback: look for generic slashes /.../
+      const rawMatch = frenchText.match(/\/[^\n\/]{2,}\//);
+      return rawMatch ? rawMatch[0].replace(/\//g, '') : '';
+    }
 
-      const frenchSection = extractFrenchSection(raw);
-      if (!frenchSection) throw new Error('No French entry found on Wiktionary.');
+    async function lookupWord(term) {
+      const cleanTerm = term.trim();
+      // Using rvslots=main to fix the "Legacy format" warning
+      const url = `https://en.wiktionary.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&format=json&titles=${encodeURIComponent(cleanTerm)}&origin=*`;
+      
+      const res = await fetch(url);
+      const data = await res.json();
+      
+      const pages = data.query.pages;
+      const pageId = Object.keys(pages)[0];
+      const page = pages[pageId];
+
+      if (page.missing) throw new Error('Word not found on Wiktionary.');
+
+      // Extract raw Wikitext
+      const rawContent = page.revisions?.[0]?.slots?.main?.['*'];
+      if (!rawContent) throw new Error('No content available.');
+
+      const frenchSection = extractFrenchSection(rawContent);
+      if (!frenchSection) throw new Error('No "French" entry found for this word.');
 
       const definitions = parseDefinitions(frenchSection);
-      if (!definitions.length) throw new Error('No definitions found in French entry.');
+      if (definitions.length === 0) throw new Error('No definitions found.');
 
       return {
-        term: normalized,
+        id: Date.now(),
+        term: page.title, // Use canonical title
         ipa: parseIpa(frenchSection),
-        audio: '',
-        partOfSpeech: parsePartOfSpeech(frenchSection),
-        definitions
+        pos: parsePartOfSpeech(frenchSection),
+        definitions: definitions
       };
     }
 
-    document.getElementById('addForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const term = wordInput.value.trim();
-      if (!term) return;
-      setStatus('Looking up Wiktionary…');
-      try {
-        const existing = deck.find(d => d.term.toLowerCase() === term.toLowerCase());
-        if (existing) throw new Error('That word is already in your deck.');
-        const card = await lookupWiktionary(term);
-        deck.push(card);
-        saveDeck();
-        setStatus(`Added “${card.term}” with ${card.definitions.length || 'no'} definitions.`);
-        wordInput.value = '';
-      } catch (err) {
-        console.error(err);
-        setStatus(err.message || 'Lookup failed. Please try again.', 'error');
-      }
-    });
+    /* --- UI Logic --- */
 
-    startDeckBtn.addEventListener('click', () => {
-      if (!deck.length) return;
-      quizQueue = shuffle([...deck]);
-      quizIndex = 0;
-      showingBack = false;
-      flipBtn.disabled = false;
-      nextBtn.disabled = false;
-      playAudioBtn.disabled = false;
-      renderQuizCard();
-    });
+    function setStatus(msg, type = 'normal') {
+      dom.status.textContent = msg;
+      dom.status.style.color = type === 'error' ? '#f87171' : '#94a3b8';
+    }
 
-    clearDeckBtn.addEventListener('click', () => {
-      if (!deck.length) return;
-      deck = [];
-      saveDeck();
-      setStatus('Cleared deck.');
-      resetQuiz();
-    });
+    function renderList() {
+      dom.list.innerHTML = '';
+      dom.count.textContent = `${deck.length} cards`;
+      
+      dom.startBtn.disabled = deck.length === 0;
+      dom.clearBtn.disabled = deck.length === 0;
 
-    flipBtn.addEventListener('click', () => {
-      if (!quizQueue.length) return;
-      showingBack = !showingBack;
-      renderQuizCard();
-    });
-
-    nextBtn.addEventListener('click', () => {
-      if (!quizQueue.length) return;
-      quizIndex = (quizIndex + 1) % quizQueue.length;
-      showingBack = false;
-      renderQuizCard();
-    });
-
-    playAudioBtn.addEventListener('click', () => {
-      if (!quizQueue.length) return;
-      const current = quizQueue[quizIndex];
-      if (current.audio) {
-        const audio = new Audio(current.audio);
-        audio.play();
-      } else if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(current.term);
-        utterance.lang = 'fr-FR';
-        speechSynthesis.speak(utterance);
-      }
-    });
-
-    function renderQuizCard() {
-      if (!quizQueue.length) {
-        cardWord.textContent = 'Add some words to begin';
-        cardIpa.textContent = '';
-        cardDefs.innerHTML = '';
-        cardPos.textContent = '';
-        stackMeta.textContent = '';
-        flipBtn.disabled = true;
-        nextBtn.disabled = true;
-        playAudioBtn.disabled = true;
+      if (deck.length === 0) {
+        dom.list.innerHTML = `<div style="text-align:center; color:var(--muted); padding:20px;">No cards yet.</div>`;
         return;
       }
+
+      deck.forEach((card, idx) => {
+        const row = document.createElement('div');
+        row.className = 'word-row';
+        
+        let defsHtml = card.definitions.map(d => `<li>${d}</li>`).join('');
+
+        row.innerHTML = `
+          <div class="word-head">
+            <h3>${card.term}</h3>
+            <button class="ghost" onclick="removeCard(${idx})">×</button>
+          </div>
+          <div class="tags">
+            ${card.ipa ? `<span class="pill">/${card.ipa}/</span>` : ''}
+            ${card.pos ? `<span class="pill">${card.pos}</span>` : ''}
+          </div>
+          <ul class="definition-list">${defsHtml}</ul>
+        `;
+        dom.list.appendChild(row);
+      });
+    }
+
+    window.removeCard = (index) => {
+      deck.splice(index, 1);
+      saveDeck();
+    };
+
+    /* --- Quiz Logic --- */
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function renderQuizCard() {
+      if (quizQueue.length === 0) return;
+      
       const card = quizQueue[quizIndex];
-      cardWord.textContent = card.term;
-      cardIpa.textContent = card.ipa ? `/${card.ipa}/` : '';
-      cardPos.textContent = card.partOfSpeech || '';
-      stackMeta.textContent = `${quizIndex + 1} / ${quizQueue.length}`;
-      if (showingBack) {
-        const list = document.createElement('ul');
-        list.className = 'defs';
-        (card.definitions && card.definitions.length ? card.definitions : ['No definition available']).forEach(def => {
-          const li = document.createElement('li');
-          li.textContent = def;
-          list.appendChild(li);
-        });
-        cardDefs.innerHTML = '';
-        cardDefs.appendChild(list);
+      dom.progress.textContent = `${quizIndex + 1} / ${quizQueue.length}`;
+      
+      dom.cardWord.textContent = card.term;
+      dom.cardIpa.textContent = card.ipa ? `/${card.ipa}/` : '';
+      dom.cardPos.textContent = card.pos || '';
+      
+      if (isFlipped) {
+        let html = '<ul class="defs" style="text-align:left; list-style:disc inside;">';
+        card.definitions.forEach(d => html += `<li>${d}</li>`);
+        html += '</ul>';
+        dom.cardContent.innerHTML = html;
+        dom.cardWord.style.opacity = '0.5';
       } else {
-        cardDefs.innerHTML = '<p class="hint">Flip to reveal definitions.</p>';
+        dom.cardContent.innerHTML = '<p style="color:var(--muted); margin-top:20px;">Tap Flip to see meaning</p>';
+        dom.cardWord.style.opacity = '1';
       }
     }
 
-    function resetQuiz() {
-      quizQueue = [];
+    /* --- Event Listeners --- */
+
+    document.getElementById('addForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const term = dom.input.value;
+      if (!term) return;
+
+      // Check duplicates
+      if (deck.some(c => c.term.toLowerCase() === term.toLowerCase())) {
+        setStatus('Word already in deck', 'error');
+        return;
+      }
+
+      setStatus('Fetching...');
+      try {
+        const card = await lookupWord(term);
+        deck.unshift(card); // Add to top
+        saveDeck();
+        dom.input.value = '';
+        setStatus(`Added: ${card.term}`);
+        setTimeout(() => setStatus(''), 3000);
+      } catch (err) {
+        setStatus(err.message, 'error');
+      }
+    });
+
+    dom.startBtn.addEventListener('click', () => {
+      quizQueue = shuffle([...deck]);
       quizIndex = 0;
-      showingBack = false;
+      isFlipped = false;
+      
+      dom.flipBtn.disabled = false;
+      dom.nextBtn.disabled = false;
+      dom.audioBtn.disabled = false;
+      
       renderQuizCard();
-    }
+    });
 
-    function shuffle(list) {
-      const copy = [...list];
-      for (let i = copy.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
+    dom.clearBtn.addEventListener('click', () => {
+      if(confirm('Delete all cards?')) {
+        deck = [];
+        saveDeck();
       }
-      return copy;
-    }
+    });
 
-    renderDeck();
-    renderQuizCard();
+    dom.flipBtn.addEventListener('click', () => {
+      if (!quizQueue.length) return;
+      isFlipped = !isFlipped;
+      renderQuizCard();
+    });
+
+    dom.nextBtn.addEventListener('click', () => {
+      if (!quizQueue.length) return;
+      isFlipped = false;
+      quizIndex = (quizIndex + 1) % quizQueue.length;
+      renderQuizCard();
+    });
+
+    dom.audioBtn.addEventListener('click', () => {
+      if (!quizQueue.length) return;
+      const text = quizQueue[quizIndex].term;
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'fr-FR';
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert('Browser text-to-speech not supported.');
+      }
+    });
+
+    // Init
+    renderList();
+
   </script>
 </body>
 </html>
