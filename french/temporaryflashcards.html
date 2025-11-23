@@ -97,7 +97,21 @@
     button.ghost:hover { color: #f87171; background: rgba(255,0,0,0.1); }
 
     .input-group { display: flex; gap: 10px; }
-    .actions { display: flex; gap: 10px; margin-top: 15px; align-items: center; }
+    
+    /* Accent Buttons */
+    .accent-row { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .accent-btn {
+      padding: 6px 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      font-size: 14px;
+      min-width: 32px;
+    }
+    .accent-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--muted); }
+
+    .actions { display: flex; gap: 10px; margin-top: 20px; align-items: center; }
 
     /* List Styles */
     .deck-list { display: grid; gap: 12px; margin-top: 16px; max-height: 600px; overflow-y: auto; padding-right: 5px; }
@@ -180,7 +194,7 @@
     <section class="panel">
       <header>
         <h1>Build Deck</h1>
-        <p>Enter a French word to auto-fetch definitions, IPA, and examples.</p>
+        <p>Enter a French word to auto-fetch definitions.</p>
       </header>
 
       <form id="addForm">
@@ -189,6 +203,9 @@
           <input id="wordInput" type="text" placeholder="e.g. plus, chien, manger..." required autocomplete="off" />
           <button type="submit" class="primary">Add</button>
         </div>
+        <!-- Accent Buttons Container -->
+        <div id="accentRow" class="accent-row"></div>
+        
         <div class="status-msg" id="status"></div>
       </form>
 
@@ -228,11 +245,12 @@
 
   <script>
     /* --- State & DOM Elements --- */
-    const storageKey = 'tempFrenchFlashcards-v5';
+    const storageKey = 'tempFrenchFlashcards-v6';
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
       input: document.getElementById('wordInput'),
+      accentRow: document.getElementById('accentRow'),
       startBtn: document.getElementById('startDeck'),
       clearBtn: document.getElementById('clearDeck'),
       count: document.getElementById('countLabel'),
@@ -250,6 +268,32 @@
     let quizQueue = [];
     let quizIndex = 0;
     let isFlipped = false;
+
+    /* --- Accent Button Logic --- */
+    const frenchAccents = ['é', 'è', 'à', 'ù', 'â', 'ê', 'î', 'ô', 'û', 'ç', 'œ', 'ë', 'ï', 'ü'];
+    
+    frenchAccents.forEach(char => {
+      const btn = document.createElement('button');
+      btn.textContent = char;
+      btn.type = 'button'; // Important: prevents form submission
+      btn.className = 'accent-btn';
+      
+      btn.addEventListener('click', () => {
+        const input = dom.input;
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        const text = input.value;
+        
+        // Insert character at cursor position
+        input.value = text.substring(0, start) + char + text.substring(end);
+        
+        // Move cursor to right after inserted character
+        input.selectionStart = input.selectionEnd = start + 1;
+        input.focus();
+      });
+      
+      dom.accentRow.appendChild(btn);
+    });
 
     /* --- Core Data Functions --- */
 
@@ -441,7 +485,7 @@
           </li>`;
         }).join('');
 
-        // Hiding definitions inside <details>
+        // Definitions hidden by details/summary
         row.innerHTML = `
           <div class="word-head">
             <h3>${card.term}</h3>
