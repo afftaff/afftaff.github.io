@@ -644,6 +644,22 @@
 
     /* --- AUDIO LOGIC (Simplified for Edge Support) --- */
 
+    let frenchVoice = null;
+
+    function loadFrenchVoice() {
+      if (!('speechSynthesis' in window)) return;
+
+      const voices = window.speechSynthesis.getVoices();
+      const match = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('fr'));
+      if (match) frenchVoice = match;
+    }
+
+    // Ensure voices are loaded (some browsers populate the list asynchronously)
+    if ('speechSynthesis' in window) {
+      loadFrenchVoice();
+      window.speechSynthesis.onvoiceschanged = loadFrenchVoice;
+    }
+
     // 1. Play Real Wiktionary Audio
     window.playRealAudio = (url, e) => {
       e.stopPropagation();
@@ -656,13 +672,13 @@
     window.playRobotAudio = (text, e) => {
       e.stopPropagation();
       if (!('speechSynthesis' in window)) return;
-      
+
       const utter = new SpeechSynthesisUtterance(text);
-      // Simply setting the lang allows Edge to pick the installed voice automatically
-      // This is safer than trying to find the voice object manually on page load
-      utter.lang = 'fr-FR'; 
+      // Prefer an explicit French voice to avoid English fallbacks
+      if (frenchVoice) utter.voice = frenchVoice;
+      utter.lang = 'fr-FR';
       utter.rate = 0.9;
-      
+
       window.speechSynthesis.cancel(); // Stop any previous speech
       window.speechSynthesis.speak(utter);
     };
