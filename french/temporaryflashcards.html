@@ -305,9 +305,9 @@
     </section>
   </main>
 
-  <script>
+<script>
     /* --- State & DOM Elements --- */
-    const storageKey = 'frenchFlashcards-Fixed-v2';
+    const storageKey = 'frenchFlashcards-Fixed-v3';
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -376,7 +376,6 @@
 
     async function lookupWord(term) {
       const cleanTerm = term.trim();
-      // We use action=parse to get the final HTML
       const url = `https://en.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(cleanTerm)}&prop=text&format=json&origin=*&redirects=1`;
       
       const res = await fetch(url);
@@ -396,7 +395,6 @@
       const parser = new DOMParser();
       const doc = parser.parseFromString(htmlString, 'text/html');
 
-      // Get the main content container (usually .mw-parser-output)
       const root = doc.querySelector('.mw-parser-output') || doc.body;
       const children = Array.from(root.children);
 
@@ -410,12 +408,7 @@
 
       const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Pronoun', 'Numeral', 'Article', 'Determiner'];
 
-      // LINEAR SCAN: Walk through every element in order
       for (const el of children) {
-        
-        // 1. Check for Headers (H2, H3, H4)
-        // Note: Wiktionary wraps headers in <div class="mw-heading"> now.
-        // We check if 'el' is a header, or if it *contains* a header.
         let headerEl = el.matches('h2, h3, h4') ? el : el.querySelector('h2, h3, h4');
         
         if (headerEl) {
@@ -423,26 +416,18 @@
           const text = headerEl.textContent.replace(/\[edit\]/g, '').trim();
 
           if (level === 'H2') {
-            // If we see a Language Header
             if (text === 'French') {
               inFrenchSection = true;
             } else {
-              // If we were in French and hit another language (e.g., "Portuguese"), STOP.
               if (inFrenchSection) break; 
             }
           }
           
-          // If we are in French, check for POS headers (H3/H4)
           if (inFrenchSection && (level === 'H3' || level === 'H4')) {
              if (validPOS.includes(text)) {
-               // If we already found definitions for a previous POS (e.g. we found Noun, now seeing Verb),
-               // we usually stop and prefer the first one, OR we could overwrite. 
-               // Let's stick to the first valid one found to keep it simple.
                if (bestDefs.length > 0) break; 
                currentPos = text;
              } else {
-               // Reset POS if we hit a non-POS header (like "Etymology" or "Pronunciation")
-               // unless it's a sub-header.
                if (!['Conjugation', 'Derived terms', 'Related terms'].includes(text)) {
                  currentPos = null;
                }
@@ -452,8 +437,6 @@
 
         if (!inFrenchSection) continue;
 
-        // 2. Capture IPA
-        // IPA can appear anywhere in the section.
         if (!foundIPA) {
           const ipaEl = el.querySelector('.IPA');
           if (ipaEl) {
@@ -461,7 +444,6 @@
           }
         }
 
-        // 3. Capture Gender (from Paragraphs under a POS header)
         if (currentPos && el.tagName === 'P') {
           const genderEl = el.querySelector('.gender');
           if (genderEl && !foundGender) {
@@ -469,13 +451,10 @@
           }
         }
 
-        // 4. Capture Definitions (Ordered Lists under a POS header)
         if (currentPos && el.tagName === 'OL') {
            const items = el.querySelectorAll(':scope > li');
            items.forEach(li => {
-             // Clone to clean up
              const clone = li.cloneNode(true);
-             // Remove nested lists (synonyms/derived terms)
              clone.querySelectorAll('ul, ol, dl').forEach(n => n.remove());
              
              const defText = clone.textContent.trim();
@@ -486,14 +465,12 @@
 
            if (bestDefs.length > 0) {
              bestPos = currentPos;
-             // We found our definitions! The loop will likely break at the next header.
            }
         }
       }
 
       if (!bestDefs.length) throw new Error('No definitions found (or not a French entry).');
 
-      // Format POS string
       let posDisplay = bestPos;
       if (foundGender) posDisplay += ` (${foundGender})`;
 
@@ -568,28 +545,22 @@
       const card = quizQueue[quizIndex];
       dom.progress.textContent = `${quizIndex + 1} / ${quizQueue.length}`;
       
-      // Build Definitions HTML
       let defsHtml = '<ul style="margin:0; padding-left:20px;">';
       card.definitions.forEach(d => {
         defsHtml += `<li>${d.text}</li>`;
       });
       defsHtml += '</ul>';
 
-      // Insert Quiz Layout
       dom.quizContainer.innerHTML = `
         <div class="quiz-prompt">${card.term}</div>
         
-        <!-- Meaning Box (Fade Reveal) -->
         <div class="def-box hidden" onclick="this.classList.remove('hidden')">
           <div class="def-content">
             ${defsHtml}
           </div>
         </div>
 
-        <!-- Bottom Mini Cards -->
         <div class="mini-cards">
-          
-          <!-- Grammar Card -->
           <div class="flip-card" onclick="this.classList.toggle('flipped')">
             <div class="flip-inner">
               <div class="flip-front">
@@ -604,7 +575,6 @@
             </div>
           </div>
 
-          <!-- Pronunciation Card -->
           <div class="flip-card" onclick="this.classList.toggle('flipped')">
             <div class="flip-inner">
               <div class="flip-front">
@@ -618,20 +588,49 @@
               </div>
             </div>
           </div>
-
         </div>
       `;
     }
 
+    /* --- FORCED FRENCH AUDIO LOGIC --- */
+    
+    // Pre-load voices to ensure they are available when clicked
+    let voices = [];
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = () => {
+            voices = window.speechSynthesis.getVoices();
+        };
+    }
+
     window.playAudio = (text, e) => {
       e.stopPropagation();
-      if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'fr-FR';
-        window.speechSynthesis.speak(utterance);
-      } else {
+      if (!('speechSynthesis' in window)) {
         alert('Browser text-to-speech not supported.');
+        return;
       }
+
+      // Ensure we have the latest voices
+      voices = window.speechSynthesis.getVoices();
+      
+      // Cancel any existing speech
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'fr-FR';
+      utterance.rate = 0.9; // Slightly slower for better pronunciation
+
+      // 1. Aggressively find a French voice
+      // We look for 'fr-FR' specifically, or 'fr_FR', or just anything starting with 'fr'
+      const frenchVoice = voices.find(v => v.lang === 'fr-FR' || v.lang === 'fr_FR') 
+                       || voices.find(v => v.lang.startsWith('fr'));
+
+      if (frenchVoice) {
+          utterance.voice = frenchVoice;
+      } else {
+          console.warn('No specific French voice found. Relying on lang property.');
+      }
+
+      window.speechSynthesis.speak(utterance);
     };
 
     /* --- Event Listeners --- */
@@ -682,6 +681,6 @@
 
     renderList();
 
-  </script>
+</script>
 </body>
 </html>
