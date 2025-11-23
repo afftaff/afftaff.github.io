@@ -263,13 +263,14 @@
     <section class="panel">
       <header>
         <h1>Build Deck</h1>
-        <p>Enter a French word to auto-fetch definitions.</p>
+        <p>Enter words separated by spaces to add multiple.</p>
       </header>
 
       <form id="addForm">
-        <label for="wordInput">Add a word</label>
+        <label for="wordInput">Add words</label>
         <div class="input-group">
-          <input id="wordInput" type="text" placeholder="e.g. dois, plus, chien..." required autocomplete="off" />
+          <!-- Updated placeholder to indicate multiple words feature -->
+          <input id="wordInput" type="text" placeholder="e.g. chat chien pomme (space separated)" required autocomplete="off" />
           <button type="submit" class="primary">Add</button>
         </div>
         <!-- Accent Buttons Container -->
@@ -324,7 +325,7 @@
     let deck = loadDeck();
     let quizQueue = [];
     let quizIndex = 0;
-    let voices = []; // Store voices globally
+    let voices = [];
 
     /* --- Accent Groups Logic --- */
     const accentGroups = [
@@ -373,7 +374,7 @@
       renderList();
     }
 
-    /* --- PARSING LOGIC (With Audio Scraping) --- */
+    /* --- PARSING LOGIC --- */
 
     async function lookupWord(term) {
       const cleanTerm = term.trim();
@@ -383,7 +384,7 @@
       const data = await res.json();
 
       if (data.error || !data.parse || !data.parse.text) {
-        throw new Error('Word not found on Wiktionary.');
+        throw new Error(`'${term}' not found`);
       }
 
       const htmlContent = data.parse.text['*'];
@@ -406,7 +407,7 @@
       let bestDefs = [];
       let foundIPA = '';
       let foundGender = '';
-      let foundAudio = ''; // New variable for real audio
+      let foundAudio = ''; 
 
       const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Pronoun', 'Numeral', 'Article', 'Determiner'];
 
@@ -439,7 +440,6 @@
 
         if (!inFrenchSection) continue;
 
-        // 1. Capture IPA
         if (!foundIPA) {
           const ipaEl = el.querySelector('.IPA');
           if (ipaEl) {
@@ -447,21 +447,17 @@
           }
         }
 
-        // 2. Capture Audio (mp3/ogg)
-        // Wiktionary audio is usually in <audio> tags or links within the French section
         if (!foundAudio) {
           const audioSource = el.querySelector('audio source[src*=".mp3"], audio source[src*=".ogg"]');
           if (audioSource) {
             let src = audioSource.getAttribute('src');
             if (src) {
-              // Fix relative protocol URLs (e.g., //upload.wikimedia...)
               if (src.startsWith('//')) src = 'https:' + src;
               foundAudio = src;
             }
           }
         }
 
-        // 3. Capture Gender
         if (currentPos && el.tagName === 'P') {
           const genderEl = el.querySelector('.gender');
           if (genderEl && !foundGender) {
@@ -469,7 +465,6 @@
           }
         }
 
-        // 4. Capture Definitions
         if (currentPos && el.tagName === 'OL') {
            const items = el.querySelectorAll(':scope > li');
            items.forEach(li => {
@@ -488,17 +483,17 @@
         }
       }
 
-      if (!bestDefs.length) throw new Error('No definitions found (or not a French entry).');
+      if (!bestDefs.length) throw new Error(`No defs found for '${term}'`);
 
       let posDisplay = bestPos;
       if (foundGender) posDisplay += ` (${foundGender})`;
 
       return {
-        id: Date.now(),
+        id: Date.now() + Math.random(), // Added random for batch adding unique IDs
         term: term,
         ipa: foundIPA || '...',
         pos: posDisplay || 'Word',
-        audio: foundAudio, // Save the real audio URL
+        audio: foundAudio, 
         definitions: bestDefs.slice(0, 5)
       };
     }
@@ -530,7 +525,6 @@
           return `<li>${d.text}</li>`;
         }).join('');
 
-        // Icon to show if we found real audio
         const audioIcon = card.audio ? '🎵' : '';
 
         row.innerHTML = `
@@ -574,9 +568,8 @@
       });
       defsHtml += '</ul>';
 
-      // Determine audio button styling based on whether we have a real file or fallback
       const audioSourceType = card.audio ? "Real Audio" : "Robot Voice";
-      const audioColor = card.audio ? "var(--accent)" : "#f59e0b"; // Green for Real, Orange for Robot
+      const audioColor = card.audio ? "var(--accent)" : "#f59e0b";
 
       dom.quizContainer.innerHTML = `
         <div class="quiz-prompt">${card.term}</div>
@@ -624,9 +617,8 @@
       `;
     }
 
-    /* --- AUDIO LOGIC (Real Audio Priority) --- */
+    /* --- AUDIO LOGIC --- */
 
-    // Initialize voices for fallback
     if ('speechSynthesis' in window) {
         window.speechSynthesis.onvoiceschanged = () => {
             voices = window.speechSynthesis.getVoices();
@@ -636,18 +628,14 @@
     window.playAudio = (audioUrl, text, e) => {
       e.stopPropagation();
 
-      // 1. Try Real Audio File first
       if (audioUrl && audioUrl !== 'undefined' && audioUrl !== '') {
           const audio = new Audio(audioUrl);
           audio.play().catch(err => {
               console.error("Audio play failed", err);
-              // If real audio fails, fallback to TTS
               speakText(text); 
           });
           return;
       }
-
-      // 2. Fallback to Robot Voice
       speakText(text);
     };
 
@@ -661,11 +649,9 @@
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
-      // FORCE French language code
       utterance.lang = 'fr-FR';
       utterance.rate = 0.8; 
 
-      // Search hard for a French voice
       const frVoice = voices.find(v => v.lang.includes('fr-FR') || v.lang.includes('fr_FR')) 
                    || voices.find(v => v.lang.startsWith('fr'));
 
@@ -676,29 +662,70 @@
       window.speechSynthesis.speak(utterance);
     }
 
-    /* --- Event Listeners --- */
+    /* --- EVENT LISTENERS (Updated for Batch Adding) --- */
 
     document.getElementById('addForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const term = dom.input.value;
-      if (!term) return;
+      
+      // 1. Get raw input and split by spaces (or tabs/newlines)
+      const rawInput = dom.input.value;
+      // This regex handles single or multiple spaces between words
+      const words = rawInput.trim().split(/\s+/).filter(w => w.length > 0);
 
-      if (deck.some(c => c.term.toLowerCase() === term.toLowerCase())) {
-        setStatus('Word already in deck', 'error');
-        return;
+      if (words.length === 0) return;
+
+      // Clear the input immediately
+      dom.input.value = '';
+      
+      let addedCount = 0;
+      let skippedCount = 0; // for duplicates
+      let errors = [];
+
+      // 2. Process each word sequentially
+      for (const term of words) {
+        // Local check for duplicates before network request
+        if (deck.some(c => c.term.toLowerCase() === term.toLowerCase())) {
+          skippedCount++;
+          continue;
+        }
+
+        setStatus(`Fetching: ${term}...`);
+        
+        try {
+          const card = await lookupWord(term);
+          deck.unshift(card); 
+          addedCount++;
+        } catch (err) {
+          console.error(err);
+          errors.push(term); // Log the specific word that failed
+        }
       }
 
-      setStatus('Fetching...');
-      try {
-        const card = await lookupWord(term);
-        deck.unshift(card); 
-        saveDeck();
-        dom.input.value = '';
-        setStatus(`Added: ${card.term}`);
-        setTimeout(() => setStatus(''), 3000);
-      } catch (err) {
-        setStatus(err.message, 'error');
-        console.error(err);
+      // 3. Save if we added anything
+      if (addedCount > 0) saveDeck();
+
+      // 4. Construct Status Message
+      let statusMsg = '';
+      
+      if (addedCount > 0) {
+        statusMsg += `Added ${addedCount} word${addedCount > 1 ? 's' : ''}. `;
+      }
+      
+      if (skippedCount > 0) {
+        statusMsg += `(${skippedCount} duplicates). `;
+      }
+
+      if (errors.length > 0) {
+        statusMsg += `Failed: ${errors.join(', ')}.`;
+        setStatus(statusMsg, 'error'); // Show as error color if some failed
+      } else {
+        setStatus(statusMsg);
+        // Clear success message after 4 seconds
+        setTimeout(() => setStatus(''), 4000);
+      }
+      
+      if (addedCount === 0 && skippedCount === 0 && errors.length === 0) {
+         setStatus('');
       }
     });
 
