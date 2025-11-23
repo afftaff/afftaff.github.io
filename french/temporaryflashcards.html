@@ -250,7 +250,7 @@
 
   <script>
     /* --- State & DOM Elements --- */
-    const storageKey = 'tempFrenchFlashcards-v8';
+    const storageKey = 'tempFrenchFlashcards-v9';
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -344,7 +344,6 @@
       let cleaned = text;
 
       // 1. Convert Form-of definitions to readable text
-      // Handles: {{infl of|fr|devoir|...}} -> Inflection of devoir
       cleaned = cleaned.replace(/{{(?:infl of|inflection of)\|[^|]+\|([^}|]+).*}}/gi, 'Inflection of $1');
       cleaned = cleaned.replace(/{{(?:plural of)\|[^|]+\|([^}|]+).*}}/gi, 'Plural of $1');
       cleaned = cleaned.replace(/{{(?:feminine of)\|[^|]+\|([^}|]+).*}}/gi, 'Feminine of $1');
@@ -377,19 +376,43 @@
     }
 
     function extractWordData(frenchText, term) {
-      // 1. IPA
+      // 1. IPA (Improved Logic)
       let ipa = '';
-      const ipaMatch = frenchText.match(/{{fr-IPA(?:\|([^}]+))?}}/); 
-      if (ipaMatch) {
-         if (ipaMatch[1]) {
-             ipa = ipaMatch[1];
-         } else {
-             const generic = frenchText.match(/{{IPA\|fr\|([^}|]+)/);
-             if (generic) ipa = generic[1].replace(/\//g, '');
+      
+      // A. Priority: Standard {{IPA|fr|...}} tag (contains the actual symbols)
+      const genericIpaMatch = frenchText.match(/{{IPA\|fr\|([^}]+)}}/);
+      if (genericIpaMatch) {
+          // genericIpaMatch[1] might be "/dwa/" or "/dwa/|/foo/"
+          const parts = genericIpaMatch[1].split('|');
+          for (const p of parts) {
+              const clean = p.trim();
+              // Look for something enclosed in / or [ ] that isn't a named param
+              if ((clean.startsWith('/') || clean.startsWith('[')) && !clean.includes('=')) {
+                  ipa = clean.replace(/\//g, '').replace(/\[|\]/g, ''); 
+                  break; 
+              }
+          }
+      }
+
+      // B. Fallback: {{fr-IPA}} (Only if step A failed)
+      // We must ignore garbage params like "pos=v", "qual=...", or "liaison"
+      if (!ipa) {
+         const frIpaMatch = frenchText.match(/{{fr-IPA(?:\|([^}]+))?}}/); 
+         if (frIpaMatch && frIpaMatch[1]) {
+             const parts = frIpaMatch[1].split('|');
+             for (const p of parts) {
+                 const clean = p.trim();
+                 // Ignore named params (=) and technical qualifiers (qual)
+                 if (!clean.includes('=') && !clean.includes('qual')) {
+                     // If the result is just the word itself (e.g. {{fr-IPA|ont}}), it's a respelling, not IPA.
+                     // But if it's different, it might be a phonetic respelling.
+                     if (clean !== term) {
+                         ipa = clean;
+                         break;
+                     }
+                 }
+             }
          }
-      } else {
-         const generic = frenchText.match(/{{IPA\|fr\|([^}|]+)/);
-         if (generic) ipa = generic[1].replace(/\//g, '');
       }
 
       // 2. POS & Defs & Examples
@@ -421,7 +444,6 @@
             line = line.trim();
             if (line.startsWith('#') && !line.startsWith('#:') && !line.startsWith('#*')) {
               const cleaned = cleanWikiText(line);
-              // Allow simple strings like "Inflection of..." even if short
               if (cleaned.length > 2 && !cleaned.toLowerCase().includes('usage notes')) {
                 if (currentDef) defs.push(currentDef);
                 currentDef = { text: cleaned, example: null };
@@ -457,7 +479,6 @@
 
     async function lookupWord(term) {
       const cleanTerm = term.trim();
-      // Using action=query to get the Wikitext (required for this parser)
       const url = `https://en.wiktionary.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&format=json&titles=${encodeURIComponent(cleanTerm)}&origin=*`;
       
       const res = await fetch(url);
