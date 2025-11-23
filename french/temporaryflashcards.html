@@ -155,7 +155,7 @@
     .definition-list li { margin-bottom: 8px; }
     .example-text { display: block; font-style: italic; color: var(--muted); font-size: 13px; margin-top: 2px; }
 
-    /* --- NEW QUIZ STYLES --- */
+    /* --- QUIZ STYLES --- */
     .quiz-container { display: flex; flex-direction: column; gap: 20px; }
     .quiz-prompt {
       text-align: center;
@@ -233,9 +233,8 @@
     
     .card-icon { font-size: 24px; margin-bottom: 8px; opacity: 0.5; }
     .card-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
-    .card-value { font-size: 20px; font-weight: 600; color: var(--accent); margin-bottom: 5px; }
+    .card-value { font-size: 18px; font-weight: 600; color: var(--accent); margin-bottom: 5px; }
     
-    /* Audio Button on card */
     .mini-audio-btn {
       background: rgba(34,197,94,0.1);
       border: 1px solid var(--accent);
@@ -272,9 +271,7 @@
           <input id="wordInput" type="text" placeholder="e.g. dois, plus, chien..." required autocomplete="off" />
           <button type="submit" class="primary">Add</button>
         </div>
-        <!-- Accent Buttons Container -->
         <div id="accentContainer" class="accent-container"></div>
-        
         <div class="status-msg" id="status"></div>
       </form>
 
@@ -294,7 +291,6 @@
         <p id="progressLabel">0 / 0</p>
       </header>
       
-      <!-- Quiz Content Area -->
       <div id="quizContainer" class="quiz-container">
         <p style="text-align:center; color:var(--muted); margin-top:40px;">Add words and click Play Deck to begin.</p>
       </div>
@@ -306,8 +302,7 @@
   </main>
 
   <script>
-    /* --- State & DOM Elements --- */
-    const storageKey = 'tempFrenchFlashcards-v10';
+    const storageKey = 'tempFrenchFlashcards-v11';
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -325,17 +320,11 @@
     let quizQueue = [];
     let quizIndex = 0;
 
-    /* --- Accent Groups Logic --- */
+    /* --- Accent Logic --- */
     const accentGroups = [
-      ['é', 'è', 'ê', 'ë'],      
-      ['à', 'â', 'æ', 'á'],      
-      ['î', 'ï', 'í'],           
-      ['ô', 'œ', 'ó'],           
-      ['ù', 'û', 'ü', 'ú'],      
-      ['ç', 'ñ'],                
-      ['«', '»']                 
+      ['é', 'è', 'ê', 'ë'], ['à', 'â', 'æ', 'á'], ['î', 'ï', 'í'], 
+      ['ô', 'œ', 'ó'], ['ù', 'û', 'ü', 'ú'], ['ç', 'ñ'], ['«', '»']
     ];
-    
     accentGroups.forEach(group => {
       const groupDiv = document.createElement('div');
       groupDiv.className = 'accent-group';
@@ -358,156 +347,108 @@
       dom.accentContainer.appendChild(groupDiv);
     });
 
-    /* --- Core Data Functions --- */
-
+    /* --- Core Functions --- */
     function loadDeck() {
-      try {
-        const raw = localStorage.getItem(storageKey);
-        return raw ? JSON.parse(raw) : [];
-      } catch (e) { return []; }
+      try { return JSON.parse(localStorage.getItem(storageKey)) || []; } catch { return []; }
     }
-
     function saveDeck() {
       localStorage.setItem(storageKey, JSON.stringify(deck));
       renderList();
     }
 
-    /* --- Wiktionary Parsing Logic --- */
+    /* --- HTML-Based Wiktionary Parsing (The Fix) --- */
+    async function lookupWord(term) {
+      const cleanTerm = term.trim();
+      // 'parse' action gives us the rendered HTML, so we don't have to guess templates
+      const url = `https://en.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(cleanTerm)}&prop=text&format=json&origin=*&redirects=1&disabletoc=1`;
 
-    function parseExample(text) {
-      const match = text.match(/{{ux[i]?\|[^|]+\|([^}|]+)(?:\|([^}|]+))?(?:\|.*)?}}/);
-      if (match) {
-        const french = match[1];
-        const english = match[2];
-        if (english && !english.includes('=')) {
-          return `${french} — ${english}`;
-        }
-        return french;
-      }
-      return cleanWikiText(text);
-    }
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.error || !data.parse) throw new Error('Word not found on Wiktionary.');
 
-    function cleanWikiText(text) {
-      if (!text) return '';
-      let cleaned = text;
+      const html = data.parse.text['*'];
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
 
-      // Convert Form-of definitions
-      cleaned = cleaned.replace(/{{(?:infl of|inflection of)\|[^|]+\|([^}|]+).*}}/gi, 'Inflection of $1');
-      cleaned = cleaned.replace(/{{(?:plural of)\|[^|]+\|([^}|]+).*}}/gi, 'Plural of $1');
-      cleaned = cleaned.replace(/{{(?:feminine of)\|[^|]+\|([^}|]+).*}}/gi, 'Feminine of $1');
-
-      // Preserve Context
-      cleaned = cleaned.replace(/{{(?:gl|gloss)\|([^}]+)}}/g, '($1)');
-      cleaned = cleaned.replace(/{{lb\|[a-z]+\|([^}]+)}}/g, '($1)');
-
-      // Remove other templates
-      let old;
-      do {
-        old = cleaned;
-        cleaned = cleaned.replace(/{{[^{}]+}}/g, ' ');
-      } while (cleaned !== old);
-
-      cleaned = cleaned
-        .replace(/^#\s*/, '')
-        .replace(/\[\[(?:[^|\]]*\|)?([^\]]+)\]\]/g, '$1')
-        .replace(/'''?/g, '')
-        .replace(/\(\s*\)/g, '')
-        .replace(/\s+/g, ' ')
-        .trim();
-
-      return cleaned;
-    }
-
-    function extractFrenchSection(fullText) {
-      const match = fullText.match(/==\s*French\s*==([\s\S]*?)(?:\n==[^=]|$)/);
-      return match ? match[1] : null;
-    }
-
-    function extractWordData(frenchText, term) {
-      // 1. IPA
-      let ipa = '';
-      const genericIpaMatch = frenchText.match(/{{IPA\|fr\|([^}]+)}}/);
-      if (genericIpaMatch) {
-          const parts = genericIpaMatch[1].split('|');
-          for (const p of parts) {
-              const clean = p.trim();
-              if ((clean.startsWith('/') || clean.startsWith('[')) && !clean.includes('=')) {
-                  ipa = clean.replace(/\//g, '').replace(/\[|\]/g, ''); 
-                  break; 
-              }
-          }
-      }
-      if (!ipa) {
-         const frIpaMatch = frenchText.match(/{{fr-IPA(?:\|([^}]+))?}}/); 
-         if (frIpaMatch && frIpaMatch[1]) {
-             const parts = frIpaMatch[1].split('|');
-             for (const p of parts) {
-                 const clean = p.trim();
-                 if (!clean.includes('=') && !clean.includes('qual')) {
-                     if (clean !== term) {
-                         ipa = clean;
-                         break;
-                     }
-                 }
-             }
-         }
-      }
-
-      // 2. POS & Defs & Gender Detection
-      const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Interjection', 'Pronoun', 'Article', 'Determiner'];
-      const headerRegex = /(={3,4})\s*([A-Za-z]+)\s*\1/g;
+      // 1. Locate French Section
+      const frenchHeader = doc.getElementById('French');
+      if (!frenchHeader) throw new Error('No "French" section found.');
       
+      let currentNode = frenchHeader.parentElement; // The H2 element
+      
+      let ipa = '';
       let bestPos = '';
       let bestDefs = [];
       let gender = '';
+      
+      const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Interjection', 'Pronoun', 'Article', 'Determiner', 'Numeral'];
 
-      let match;
-      while ((match = headerRegex.exec(frenchText)) !== null) {
-        const posType = match[2];
+      // 2. Walk through the HTML siblings
+      while (currentNode = currentNode.nextElementSibling) {
+        if (currentNode.tagName === 'H2') break; // Stop at next language
 
-        if (validPOS.includes(posType)) {
-          const startIndex = match.index + match[0].length;
-          const remainingText = frenchText.slice(startIndex);
-          const nextHeaderIndex = remainingText.search(/\n={3,5}/); 
-          
-          const blockContent = nextHeaderIndex === -1 
-            ? remainingText 
-            : remainingText.slice(0, nextHeaderIndex);
-
-          // Attempt to find gender in this block (e.g. {{fr-noun|m}})
-          if (!gender && posType === 'Noun') {
-            const genderMatch = blockContent.match(/{{fr-noun\|([mf][^}|]*)/);
-            if (genderMatch) {
-               gender = genderMatch[1].replace('-', ' '); // 'm-p' -> 'm p'
-            }
+        // Extract IPA (It's usually in a span with class "IPA")
+        if (!ipa) {
+          const ipaSpan = currentNode.querySelector('.IPA');
+          if (ipaSpan) {
+            // Clean brackets/slashes
+            ipa = ipaSpan.textContent.replace(/[\/\[\]]/g, '').trim();
           }
+        }
 
-          const lines = blockContent.split('\n');
-          const defs = [];
-          
-          let currentDef = null;
+        // Identify POS Section (H3, H4)
+        if (['H3', 'H4'].includes(currentNode.tagName)) {
+          const headerText = currentNode.textContent;
+          const foundPos = validPOS.find(p => headerText.includes(p));
 
-          for (let line of lines) {
-            line = line.trim();
-            if (line.startsWith('#') && !line.startsWith('#:') && !line.startsWith('#*')) {
-              const cleaned = cleanWikiText(line);
-              if (cleaned.length > 2 && !cleaned.toLowerCase().includes('usage notes')) {
-                if (currentDef) defs.push(currentDef);
-                currentDef = { text: cleaned, example: null };
+          if (foundPos) {
+            let sibling = currentNode.nextElementSibling;
+            const currentDefs = [];
+
+            // Walk until next header
+            while(sibling && !['H2', 'H3', 'H4'].includes(sibling.tagName)) {
+              
+              // Gender Detection (Usually in the paragraph immediately following POS header)
+              // Looks for <abbr title="masculine gender">m</abbr>
+              if (sibling.tagName === 'P' && !gender) {
+                const abbr = sibling.querySelector('abbr');
+                if (abbr) {
+                   if (abbr.textContent === 'm') gender = 'm';
+                   if (abbr.textContent === 'f') gender = 'f';
+                }
               }
-            }
-            else if (line.startsWith('#:') && currentDef) {
-              if (!currentDef.example) {
-                currentDef.example = parseExample(line.replace(/^#:\s*/, ''));
-              }
-            }
-          }
-          if (currentDef) defs.push(currentDef);
 
-          if (defs.length > 0) {
-            if (!bestPos) {
-              bestPos = posType;
-              bestDefs = defs;
+              // Definition Extraction <ol>
+              if (sibling.tagName === 'OL') {
+                const listItems = sibling.querySelectorAll('li');
+                listItems.forEach(li => {
+                  // Separate Definition vs Example
+                  // Examples are often in <ul>, <dl>, or .h-usage-example
+                  const clone = li.cloneNode(true);
+                  
+                  // Extract example first
+                  let example = null;
+                  const exampleNode = clone.querySelector('ul, dl, .h-usage-example');
+                  if (exampleNode) {
+                    example = exampleNode.textContent.trim();
+                    exampleNode.remove();
+                  }
+                  
+                  // Clean up definition text
+                  let defText = clone.textContent.trim();
+                  // Remove parens at start like "(transitive)" if excessive
+                  // But keep them if short. 
+                  if (defText.length > 2) {
+                     currentDefs.push({ text: defText, example: example });
+                  }
+                });
+              }
+              sibling = sibling.nextElementSibling;
+            }
+
+            if (currentDefs.length > 0 && !bestPos) {
+               bestPos = foundPos;
+               bestDefs = currentDefs;
             }
           }
         }
@@ -515,75 +456,31 @@
 
       if (!bestDefs.length) throw new Error('No definitions found.');
 
-      // Format POS string with gender if available
+      // Format POS
       let posDisplay = bestPos;
-      if (gender) {
-         if (gender.includes('m')) posDisplay += ' (m)';
-         else if (gender.includes('f')) posDisplay += ' (f)';
-      }
+      if (gender) posDisplay += ` (${gender})`;
 
       return {
         id: Date.now(),
-        term: term,
+        term: data.parse.title, // Use official title (handles case sensitivity)
         ipa: ipa,
         pos: posDisplay,
         definitions: bestDefs.slice(0, 5)
       };
     }
 
-    async function lookupWord(term) {
-      const cleanTerm = term.trim();
-      const url = `https://en.wiktionary.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&format=json&titles=${encodeURIComponent(cleanTerm)}&origin=*`;
-      
-      const res = await fetch(url);
-      const data = await res.json();
-      
-      const pages = data.query.pages;
-      const pageId = Object.keys(pages)[0];
-      const page = pages[pageId];
-
-      if (page.missing) throw new Error('Word not found on Wiktionary.');
-
-      const rawContent = page.revisions?.[0]?.slots?.main?.['*'];
-      if (!rawContent) throw new Error('No content available.');
-
-      const frenchSection = extractFrenchSection(rawContent);
-      if (!frenchSection) throw new Error('No "French" entry found.');
-
-      return extractWordData(frenchSection, page.title);
-    }
-
     /* --- UI Logic --- */
-
-    function setStatus(msg, type = 'normal') {
-      dom.status.textContent = msg;
-      dom.status.style.color = type === 'error' ? '#f87171' : '#94a3b8';
-    }
-
     function renderList() {
       dom.list.innerHTML = '';
       dom.count.textContent = `${deck.length} cards`;
-      
       dom.startBtn.disabled = deck.length === 0;
       dom.clearBtn.disabled = deck.length === 0;
-
-      if (deck.length === 0) {
-        dom.list.innerHTML = `<div style="text-align:center; color:var(--muted); padding:20px;">No cards yet.</div>`;
-        return;
-      }
 
       deck.forEach((card, idx) => {
         const row = document.createElement('div');
         row.className = 'word-row';
-        
-        let defsHtml = card.definitions.map(d => {
-          return `<li>
-            ${d.text}
-            ${d.example ? `<span class="example-text">"${d.example}"</span>` : ''}
-          </li>`;
-        }).join('');
+        let defsHtml = card.definitions.map(d => `<li>${d.text}</li>`).join('');
 
-        // Hiding IPA and POS inside definitions logic
         row.innerHTML = `
           <div class="word-head">
             <h3>${card.term}</h3>
@@ -592,7 +489,7 @@
           <details>
             <summary>Show Definitions</summary>
             <div style="margin-top:10px;">
-              <span class="pill">/${card.ipa}/</span>
+              ${card.ipa ? `<span class="pill">/${card.ipa}/</span>` : ''}
               <span class="pill">${card.pos}</span>
             </div>
             <ul class="definition-list">${defsHtml}</ul>
@@ -602,24 +499,11 @@
       });
     }
 
-    window.removeCard = (index) => {
-      deck.splice(index, 1);
-      saveDeck();
-    };
-
-    /* --- Quiz Logic --- */
-
-    function shuffle(array) {
-      return array.sort(() => Math.random() - 0.5);
-    }
-
     function renderQuizCard() {
-      if (quizQueue.length === 0) return;
-      
+      if (!quizQueue.length) return;
       const card = quizQueue[quizIndex];
       dom.progress.textContent = `${quizIndex + 1} / ${quizQueue.length}`;
       
-      // Build Definitions HTML
       let defsHtml = '<ul style="margin:0; padding-left:20px;">';
       card.definitions.forEach(d => {
         defsHtml += `<li>${d.text}`;
@@ -628,21 +512,14 @@
       });
       defsHtml += '</ul>';
 
-      // Insert New Quiz Layout
       dom.quizContainer.innerHTML = `
         <div class="quiz-prompt">${card.term}</div>
         
-        <!-- Meaning Box (Fade Reveal) -->
         <div class="def-box hidden" onclick="this.classList.remove('hidden')">
-          <div class="def-content">
-            ${defsHtml}
-          </div>
+          <div class="def-content">${defsHtml}</div>
         </div>
 
-        <!-- Bottom Mini Cards -->
         <div class="mini-cards">
-          
-          <!-- Grammar Card -->
           <div class="flip-card" onclick="this.classList.toggle('flipped')">
             <div class="flip-inner">
               <div class="flip-front">
@@ -652,12 +529,11 @@
               </div>
               <div class="flip-back">
                 <div class="card-title">Part of Speech</div>
-                <div class="card-value" style="font-size:16px">${card.pos || 'N/A'}</div>
+                <div class="card-value" style="font-size:16px">${card.pos}</div>
               </div>
             </div>
           </div>
 
-          <!-- Pronunciation Card -->
           <div class="flip-card" onclick="this.classList.toggle('flipped')">
             <div class="flip-inner">
               <div class="flip-front">
@@ -666,65 +542,47 @@
                 <div class="card-value">?</div>
               </div>
               <div class="flip-back">
-                <div class="card-value">/${card.ipa || '... '}/</div>
+                <div class="card-value">/${card.ipa}/</div>
                 <button class="mini-audio-btn" onclick="playAudio('${card.term}', event)">🔊</button>
               </div>
             </div>
           </div>
-
         </div>
       `;
     }
 
-    window.playAudio = (text, e) => {
-      e.stopPropagation(); // Prevent card from flipping back when clicking button
-      if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'fr-FR';
-        window.speechSynthesis.speak(utterance);
-      } else {
-        alert('Browser text-to-speech not supported.');
-      }
-    };
-
     /* --- Event Listeners --- */
-
     document.getElementById('addForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const term = dom.input.value;
       if (!term) return;
-
       if (deck.some(c => c.term.toLowerCase() === term.toLowerCase())) {
-        setStatus('Word already in deck', 'error');
+        dom.status.textContent = 'Word already in deck';
         return;
       }
-
-      setStatus('Fetching...');
+      dom.status.textContent = 'Fetching...';
       try {
         const card = await lookupWord(term);
         deck.unshift(card); 
         saveDeck();
         dom.input.value = '';
-        setStatus(`Added: ${card.term}`);
-        setTimeout(() => setStatus(''), 3000);
+        dom.status.textContent = `Added: ${card.term}`;
+        setTimeout(() => dom.status.textContent = '', 3000);
       } catch (err) {
-        setStatus(err.message, 'error');
+        dom.status.textContent = err.message;
         console.error(err);
       }
     });
 
     dom.startBtn.addEventListener('click', () => {
-      quizQueue = shuffle([...deck]);
+      quizQueue = deck.sort(() => Math.random() - 0.5);
       quizIndex = 0;
       dom.nextBtn.disabled = false;
       renderQuizCard();
     });
 
     dom.clearBtn.addEventListener('click', () => {
-      if(confirm('Delete all cards?')) {
-        deck = [];
-        saveDeck();
-      }
+      if(confirm('Delete all?')) { deck = []; saveDeck(); }
     });
 
     dom.nextBtn.addEventListener('click', () => {
@@ -733,8 +591,15 @@
       renderQuizCard();
     });
 
-    renderList();
+    window.removeCard = (i) => { deck.splice(i, 1); saveDeck(); };
+    window.playAudio = (text, e) => {
+      e.stopPropagation();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'fr-FR';
+      speechSynthesis.speak(u);
+    };
 
+    renderList();
   </script>
 </body>
 </html>
