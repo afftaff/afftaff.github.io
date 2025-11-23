@@ -312,103 +312,70 @@
       return response.json();
     }
 
-    function pickEntry(data) {
-      if (!data) return null;
-      if (Array.isArray(data)) return data[0];
-      if (data.fr?.length) return data.fr[0];
-      if (data.en?.length) return data.en[0];
-      const first = Object.values(data)[0];
-      return Array.isArray(first) ? first[0] : null;
+    function cleanWikiText(text) {
+      if (!text) return '';
+      let cleaned = text
+        .replace(/^#\s*/, '')
+        .replace(/{{[^{}]*}}/g, '')
+        .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, '$2')
+        .replace(/\[\[([^\]]+)\]\]/g, '$1')
+        .replace(/''+/g, '')
+        .replace(/\(\s*\)/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      return cleaned;
     }
 
-    function extractPronunciation(entry) {
-      const pronSources = [entry?.pronunciations, entry?.entries?.[0]?.pronunciations];
-      for (const source of pronSources) {
-        if (!Array.isArray(source)) continue;
-        const ipa = source.find(p => p.ipa)?.ipa || source[0]?.ipa;
-        const audio = source.find(p => p.audio)?.audio?.[0]?.url || source.find(p => p.audio)?.url || source[0]?.audio?.[0]?.url || source[0]?.url;
-        if (ipa || audio) {
-          return { ipa, audio };
-        }
-      }
-      return { ipa: entry?.ipa, audio: entry?.audio };
+    function extractFrenchSection(content) {
+      const match = content.match(/==French==([\s\S]*?)(\n==[^=]|$)/);
+      return match ? match[1] : '';
     }
 
-    function extractDefinitions(entry) {
+    function parsePartOfSpeech(section) {
+      const posMatch = section.match(/===([^=]+)===/);
+      return posMatch ? posMatch[1].trim() : '';
+    }
+
+    function parseIpa(section) {
+      const ipaMatch = section.match(/{{IPA\|fr\|([^}|]+)\|?/);
+      if (ipaMatch) return ipaMatch[1].replace(/\//g, '').trim();
+      const frIpaMatch = section.match(/\/(?:[^\n\/]{2,})\//);
+      return frIpaMatch ? frIpaMatch[0].replace(/\//g, '') : '';
+    }
+
+    function parseDefinitions(section) {
       const defs = [];
-      const collectFrom = candidate => {
-        if (!candidate) return;
-        if (Array.isArray(candidate)) {
-          candidate.forEach(item => {
-            if (typeof item === 'string') defs.push(item);
-            else if (item?.definition) defs.push(item.definition);
-            else if (item?.glosses?.length) defs.push(item.glosses[0]);
-          });
+      const lines = section.split('\n');
+      lines.forEach(line => {
+        if (line.startsWith('# ') && !line.startsWith('#:')) {
+          const cleaned = cleanWikiText(line);
+          if (cleaned) defs.push(cleaned);
         }
-      };
-
-      if (Array.isArray(entry?.definitions)) collectFrom(entry.definitions);
-      if (entry?.entries?.length) {
-        entry.entries.forEach(e => collectFrom(e?.definitions));
-        entry.entries.forEach(e => {
-          if (Array.isArray(e?.senses)) {
-            e.senses.forEach(s => {
-              if (s?.definition) defs.push(s.definition);
-              else if (s?.glosses?.length) defs.push(s.glosses[0]);
-            });
-          }
-        });
-      }
-      if (Array.isArray(entry?.senses)) {
-        entry.senses.forEach(s => {
-          if (s?.definition) defs.push(s.definition);
-          else if (s?.glosses?.length) defs.push(s.glosses[0]);
-        });
-      }
+      });
       return defs;
-    }
-
-    async function fetchExtract(term) {
-      try {
-        const url = `https://fr.wiktionary.org/w/api.php?action=query&prop=extracts&explaintext=1&exsentences=2&format=json&titles=${encodeURIComponent(term)}&origin=*`;
-        const data = await fetchJson(url);
-        const page = data?.query?.pages ? Object.values(data.query.pages)[0] : null;
-        if (page?.extract) return page.extract;
-      } catch (err) {
-        console.warn('Extract lookup failed', err);
-      }
-      return '';
     }
 
     async function lookupWiktionary(term) {
       const normalized = term.trim();
       if (!normalized) throw new Error('Please provide a word.');
 
-      const primaryUrl = `https://fr.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(normalized)}`;
-      const fallbackUrl = `https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(normalized)}`;
+      const url = `https://en.wiktionary.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&format=json&titles=${encodeURIComponent(normalized)}&origin=*`;
+      const data = await fetchJson(url);
+      const page = data?.query?.pages ? Object.values(data.query.pages)[0] : null;
+      const raw = page?.revisions?.[0]?.slots?.main?.['*'] || page?.revisions?.[0]?.['*'];
+      if (!raw) throw new Error('No Wiktionary entry found.');
 
-      let data;
-      try {
-        data = await fetchJson(primaryUrl);
-      } catch (err) {
-        console.warn('Primary lookup failed', err);
-        data = await fetchJson(fallbackUrl);
-      }
+      const frenchSection = extractFrenchSection(raw);
+      if (!frenchSection) throw new Error('No French entry found on Wiktionary.');
 
-      const entry = pickEntry(data);
-      if (!entry) throw new Error('No Wiktionary entry found.');
+      const definitions = parseDefinitions(frenchSection);
+      if (!definitions.length) throw new Error('No definitions found in French entry.');
 
-      const { ipa, audio } = extractPronunciation(entry);
-      const definitions = extractDefinitions(entry);
-      if (!definitions.length) {
-        const extra = await fetchExtract(normalized);
-        if (extra) definitions.push(extra);
-      }
       return {
         term: normalized,
-        ipa: ipa || '',
-        audio: audio || '',
-        partOfSpeech: entry.partOfSpeech || entry.part_of_speech || entry.partofspeech || '',
+        ipa: parseIpa(frenchSection),
+        audio: '',
+        partOfSpeech: parsePartOfSpeech(frenchSection),
         definitions
       };
     }
