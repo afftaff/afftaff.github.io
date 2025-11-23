@@ -1,0 +1,5750 @@
+[
+  {
+    "word": "ように",
+    "english": "like / as / in order to",
+    "romaji": "yōni",
+    "kana": "ように"
+  },
+  {
+    "word": "私は",
+    "english": "I (topic)",
+    "romaji": "watashi wa",
+    "kana": "わたしは"
+  },
+  {
+    "word": "彼の",
+    "english": "his",
+    "romaji": "kare no",
+    "kana": "かれの"
+  },
+  {
+    "word": "その",
+    "english": "that / the",
+    "romaji": "sono",
+    "kana": "その"
+  },
+  {
+    "word": "彼",
+    "english": "he",
+    "romaji": "kare",
+    "kana": "かれ"
+  },
+  {
+    "word": "た",
+    "english": "did / was (past tense auxiliary)",
+    "romaji": "ta",
+    "kana": "た"
+  },
+  {
+    "word": "ために",
+    "english": "for / for the sake of",
+    "romaji": "tame ni",
+    "kana": "ために"
+  },
+  {
+    "word": "上の",
+    "english": "on / above",
+    "romaji": "ue no",
+    "kana": "うえの"
+  },
+  {
+    "word": "アール",
+    "english": "are (phonetic)",
+    "romaji": "āru",
+    "kana": "アール"
+  },
+  {
+    "word": "とともに",
+    "english": "together with",
+    "romaji": "to tomoni",
+    "kana": "とともに"
+  },
+  {
+    "word": "彼ら",
+    "english": "they",
+    "romaji": "karera",
+    "kana": "かれら"
+  },
+  {
+    "word": "ある",
+    "english": "be / exist / have",
+    "romaji": "aru",
+    "kana": "ある"
+  },
+  {
+    "word": "アット",
+    "english": "at (phonetic)",
+    "romaji": "atto",
+    "kana": "アット"
+  },
+  {
+    "word": "一つ",
+    "english": "one",
+    "romaji": "hitotsu",
+    "kana": "ひとつ"
+  },
+  {
+    "word": "持っている",
+    "english": "have / holding",
+    "romaji": "motteiru",
+    "kana": "もっている"
+  },
+  {
+    "word": "この",
+    "english": "this",
+    "romaji": "kono",
+    "kana": "この"
+  },
+  {
+    "word": "から",
+    "english": "from",
+    "romaji": "kara",
+    "kana": "から"
+  },
+  {
+    "word": "バイ",
+    "english": "by (phonetic)",
+    "romaji": "bai",
+    "kana": "バイ"
+  },
+  {
+    "word": "ホット",
+    "english": "hot",
+    "romaji": "hotto",
+    "kana": "ホット"
+  },
+  {
+    "word": "言葉",
+    "english": "word / language",
+    "romaji": "kotoba",
+    "kana": "ことば"
+  },
+  {
+    "word": "しかし",
+    "english": "but / however",
+    "romaji": "shikashi",
+    "kana": "しかし"
+  },
+  {
+    "word": "何",
+    "english": "what",
+    "romaji": "nani",
+    "kana": "なに"
+  },
+  {
+    "word": "いくつかの",
+    "english": "some / several",
+    "romaji": "ikutsuka no",
+    "kana": "いくつかの"
+  },
+  {
+    "word": "です",
+    "english": "is / are / am (polite copula)",
+    "romaji": "desu",
+    "kana": "です"
+  },
+  {
+    "word": "それ",
+    "english": "it / that",
+    "romaji": "sore",
+    "kana": "それ"
+  },
+  {
+    "word": "あなた",
+    "english": "you",
+    "romaji": "anata",
+    "kana": "あなた"
+  },
+  {
+    "word": "または",
+    "english": "or",
+    "romaji": "matawa",
+    "kana": "または"
+  },
+  {
+    "word": "持っていた",
+    "english": "had",
+    "romaji": "motteita",
+    "kana": "もっていた"
+  },
+  {
+    "word": "インクルード",
+    "english": "include",
+    "romaji": "inkurūdo",
+    "kana": "インクルード"
+  },
+  {
+    "word": "の",
+    "english": "of / 's (possessive particle)",
+    "romaji": "no",
+    "kana": "の"
+  },
+  {
+    "word": "へ",
+    "english": "to (direction particle)",
+    "romaji": "e",
+    "kana": "へ"
+  },
+  {
+    "word": "そして",
+    "english": "and / then",
+    "romaji": "soshite",
+    "kana": "そして"
+  },
+  {
+    "word": "は",
+    "english": "topic marker (wa)",
+    "romaji": "wa",
+    "kana": "は"
+  },
+  {
+    "word": "で",
+    "english": "at / by / in",
+    "romaji": "de",
+    "kana": "で"
+  },
+  {
+    "word": "我々",
+    "english": "we",
+    "romaji": "wareware",
+    "kana": "われわれ"
+  },
+  {
+    "word": "缶",
+    "english": "can (container)",
+    "romaji": "kan",
+    "kana": "かん"
+  },
+  {
+    "word": "アウト",
+    "english": "out",
+    "romaji": "auto",
+    "kana": "アウト"
+  },
+  {
+    "word": "その他",
+    "english": "other",
+    "romaji": "sonota",
+    "kana": "そのた"
+  },
+  {
+    "word": "だった",
+    "english": "was / were",
+    "romaji": "datta",
+    "kana": "だった"
+  },
+  {
+    "word": "これ",
+    "english": "this",
+    "romaji": "kore",
+    "kana": "これ"
+  },
+  {
+    "word": "やる",
+    "english": "do",
+    "romaji": "yaru",
+    "kana": "やる"
+  },
+  {
+    "word": "それらの",
+    "english": "those / their",
+    "romaji": "sorera no",
+    "kana": "それらの"
+  },
+  {
+    "word": "時間",
+    "english": "time",
+    "romaji": "jikan",
+    "kana": "じかん"
+  },
+  {
+    "word": "もし",
+    "english": "if",
+    "romaji": "moshi",
+    "kana": "もし"
+  },
+  {
+    "word": "意志",
+    "english": "will / volition",
+    "romaji": "ishi",
+    "kana": "いし"
+  },
+  {
+    "word": "方法",
+    "english": "way / method",
+    "romaji": "hōhō",
+    "kana": "ほうほう"
+  },
+  {
+    "word": "前記",
+    "english": "said / aforementioned",
+    "romaji": "zenki",
+    "kana": "ぜんき"
+  },
+  {
+    "word": "それぞれ",
+    "english": "each",
+    "romaji": "sorezore",
+    "kana": "それぞれ"
+  },
+  {
+    "word": "言う",
+    "english": "say / tell",
+    "romaji": "iu",
+    "kana": "いう"
+  },
+  {
+    "word": "し",
+    "english": "and / does (polite verb suffix)",
+    "romaji": "shi",
+    "kana": "し"
+  },
+  {
+    "word": "セット",
+    "english": "set",
+    "romaji": "setto",
+    "kana": "セット"
+  },
+  {
+    "word": "個",
+    "english": "counter for objects",
+    "romaji": "ko",
+    "kana": "こ"
+  },
+  {
+    "word": "欲しい",
+    "english": "want",
+    "romaji": "hoshii",
+    "kana": "ほしい"
+  },
+  {
+    "word": "空気",
+    "english": "air",
+    "romaji": "kūki",
+    "kana": "くうき"
+  },
+  {
+    "word": "よく",
+    "english": "well / often",
+    "romaji": "yoku",
+    "kana": "よく"
+  },
+  {
+    "word": "また",
+    "english": "also / again",
+    "romaji": "mata",
+    "kana": "また"
+  },
+  {
+    "word": "遊ぶ",
+    "english": "play",
+    "romaji": "asobu",
+    "kana": "あそぶ"
+  },
+  {
+    "word": "小さい",
+    "english": "small / little",
+    "romaji": "chiisai",
+    "kana": "ちいさい"
+  },
+  {
+    "word": "終わり",
+    "english": "end",
+    "romaji": "owari",
+    "kana": "おわり"
+  },
+  {
+    "word": "置く",
+    "english": "put / place",
+    "romaji": "oku",
+    "kana": "おく"
+  },
+  {
+    "word": "ホーム",
+    "english": "home",
+    "romaji": "hōmu",
+    "kana": "ホーム"
+  },
+  {
+    "word": "読む",
+    "english": "read",
+    "romaji": "yomu",
+    "kana": "よむ"
+  },
+  {
+    "word": "手",
+    "english": "hand",
+    "romaji": "te",
+    "kana": "て"
+  },
+  {
+    "word": "ポート",
+    "english": "port",
+    "romaji": "pōto",
+    "kana": "ポート"
+  },
+  {
+    "word": "大きい",
+    "english": "big / large",
+    "romaji": "ōkii",
+    "kana": "おおきい"
+  },
+  {
+    "word": "スペル",
+    "english": "spell",
+    "romaji": "superu",
+    "kana": "スペル"
+  },
+  {
+    "word": "加える",
+    "english": "add",
+    "romaji": "kuwaeru",
+    "kana": "くわえる"
+  },
+  {
+    "word": "さらに",
+    "english": "even more / in addition",
+    "romaji": "sarani",
+    "kana": "さらに"
+  },
+  {
+    "word": "土地",
+    "english": "land",
+    "romaji": "tochi",
+    "kana": "とち"
+  },
+  {
+    "word": "ここに",
+    "english": "here",
+    "romaji": "koko ni",
+    "kana": "ここに"
+  },
+  {
+    "word": "しなければならない",
+    "english": "must",
+    "romaji": "shinakerebanaranai",
+    "kana": "しなければならない"
+  },
+  {
+    "word": "高い",
+    "english": "high / tall / expensive",
+    "romaji": "takai",
+    "kana": "たかい"
+  },
+  {
+    "word": "そのような",
+    "english": "such",
+    "romaji": "sonoyōna",
+    "kana": "そのような"
+  },
+  {
+    "word": "続く",
+    "english": "follow / continue",
+    "romaji": "tsuzuku",
+    "kana": "つづく"
+  },
+  {
+    "word": "行為",
+    "english": "act",
+    "romaji": "kōui",
+    "kana": "こうい"
+  },
+  {
+    "word": "なぜ",
+    "english": "why",
+    "romaji": "naze",
+    "kana": "なぜ"
+  },
+  {
+    "word": "頼む",
+    "english": "ask / request",
+    "romaji": "tanomu",
+    "kana": "たのむ"
+  },
+  {
+    "word": "人々",
+    "english": "people",
+    "romaji": "hitobito",
+    "kana": "ひとびと"
+  },
+  {
+    "word": "変更",
+    "english": "change",
+    "romaji": "henkō",
+    "kana": "へんこう"
+  },
+  {
+    "word": "行ってきました",
+    "english": "went (polite)",
+    "romaji": "ittekimashita",
+    "kana": "いってきました"
+  },
+  {
+    "word": "光",
+    "english": "light",
+    "romaji": "hikari",
+    "kana": "ひかり"
+  },
+  {
+    "word": "種類",
+    "english": "kind / type",
+    "romaji": "shurui",
+    "kana": "しゅるい"
+  },
+  {
+    "word": "オフ",
+    "english": "off",
+    "romaji": "ofu",
+    "kana": "オフ"
+  },
+  {
+    "word": "必要",
+    "english": "need / necessary",
+    "romaji": "hitsuyō",
+    "kana": "ひつよう"
+  },
+  {
+    "word": "家",
+    "english": "house",
+    "romaji": "ie",
+    "kana": "いえ"
+  },
+  {
+    "word": "絵",
+    "english": "picture",
+    "romaji": "e",
+    "kana": "え"
+  },
+  {
+    "word": "試す",
+    "english": "try",
+    "romaji": "tamesu",
+    "kana": "ためす"
+  },
+  {
+    "word": "私たち",
+    "english": "us / we",
+    "romaji": "watashitachi",
+    "kana": "わたしたち"
+  },
+  {
+    "word": "再び",
+    "english": "again",
+    "romaji": "futatabi",
+    "kana": "ふたたび"
+  },
+  {
+    "word": "動物",
+    "english": "animal",
+    "romaji": "dōbutsu",
+    "kana": "どうぶつ"
+  },
+  {
+    "word": "ポイント",
+    "english": "point",
+    "romaji": "pointo",
+    "kana": "ポイント"
+  },
+  {
+    "word": "母",
+    "english": "mother",
+    "romaji": "haha",
+    "kana": "はは"
+  },
+  {
+    "word": "世界",
+    "english": "world",
+    "romaji": "sekai",
+    "kana": "せかい"
+  },
+  {
+    "word": "近く",
+    "english": "near",
+    "romaji": "chikaku",
+    "kana": "ちかく"
+  },
+  {
+    "word": "ビルド",
+    "english": "build",
+    "romaji": "birudo",
+    "kana": "ビルド"
+  },
+  {
+    "word": "自己",
+    "english": "self",
+    "romaji": "jiko",
+    "kana": "じこ"
+  },
+  {
+    "word": "地球",
+    "english": "earth",
+    "romaji": "chikyū",
+    "kana": "ちきゅう"
+  },
+  {
+    "word": "父",
+    "english": "father",
+    "romaji": "chichi",
+    "kana": "ちち"
+  },
+  {
+    "word": "任意の",
+    "english": "any / arbitrary",
+    "romaji": "nin'i no",
+    "kana": "にんいの"
+  },
+  {
+    "word": "新しい",
+    "english": "new",
+    "romaji": "atarashii",
+    "kana": "あたらしい"
+  },
+  {
+    "word": "仕事",
+    "english": "work",
+    "romaji": "shigoto",
+    "kana": "しごと"
+  },
+  {
+    "word": "パート",
+    "english": "part",
+    "romaji": "pāto",
+    "kana": "パート"
+  },
+  {
+    "word": "取る",
+    "english": "take",
+    "romaji": "toru",
+    "kana": "とる"
+  },
+  {
+    "word": "ゲット",
+    "english": "get",
+    "romaji": "getto",
+    "kana": "ゲット"
+  },
+  {
+    "word": "場所",
+    "english": "place",
+    "romaji": "basho",
+    "kana": "ばしょ"
+  },
+  {
+    "word": "製",
+    "english": "made of / manufactured",
+    "romaji": "sei",
+    "kana": "せい"
+  },
+  {
+    "word": "暮らす",
+    "english": "live",
+    "romaji": "kurasu",
+    "kana": "くらす"
+  },
+  {
+    "word": "どこ",
+    "english": "where",
+    "romaji": "doko",
+    "kana": "どこ"
+  },
+  {
+    "word": "後に",
+    "english": "after",
+    "romaji": "ato ni",
+    "kana": "あとに"
+  },
+  {
+    "word": "バック",
+    "english": "back",
+    "romaji": "bakku",
+    "kana": "バック"
+  },
+  {
+    "word": "少し",
+    "english": "little / few",
+    "romaji": "sukoshi",
+    "kana": "すこし"
+  },
+  {
+    "word": "唯一の",
+    "english": "only",
+    "romaji": "yuiitsu no",
+    "kana": "ゆいいつの"
+  },
+  {
+    "word": "ラウンド",
+    "english": "round",
+    "romaji": "raundo",
+    "kana": "ラウンド"
+  },
+  {
+    "word": "男",
+    "english": "man",
+    "romaji": "otoko",
+    "kana": "おとこ"
+  },
+  {
+    "word": "年",
+    "english": "year",
+    "romaji": "toshi",
+    "kana": "とし"
+  },
+  {
+    "word": "来た",
+    "english": "came",
+    "romaji": "kita",
+    "kana": "きた"
+  },
+  {
+    "word": "ショー",
+    "english": "show",
+    "romaji": "shō",
+    "kana": "ショー"
+  },
+  {
+    "word": "すべての",
+    "english": "every / all",
+    "romaji": "subete no",
+    "kana": "すべての"
+  },
+  {
+    "word": "良い",
+    "english": "good",
+    "romaji": "yoi",
+    "kana": "よい"
+  },
+  {
+    "word": "私に",
+    "english": "to me",
+    "romaji": "watashi ni",
+    "kana": "わたしに"
+  },
+  {
+    "word": "与える",
+    "english": "give",
+    "romaji": "ataeru",
+    "kana": "あたえる"
+  },
+  {
+    "word": "私たちの",
+    "english": "our",
+    "romaji": "watashitachi no",
+    "kana": "わたしたちの"
+  },
+  {
+    "word": "下",
+    "english": "under",
+    "romaji": "shita",
+    "kana": "した"
+  },
+  {
+    "word": "名前",
+    "english": "name",
+    "romaji": "namae",
+    "kana": "なまえ"
+  },
+  {
+    "word": "非常に",
+    "english": "very",
+    "romaji": "hijō ni",
+    "kana": "ひじょうに"
+  },
+  {
+    "word": "スルー",
+    "english": "through",
+    "romaji": "surū",
+    "kana": "スルー"
+  },
+  {
+    "word": "ただ",
+    "english": "just / only",
+    "romaji": "tada",
+    "kana": "ただ"
+  },
+  {
+    "word": "フォーム",
+    "english": "form",
+    "romaji": "fōmu",
+    "kana": "フォーム"
+  },
+  {
+    "word": "文",
+    "english": "sentence",
+    "romaji": "bun",
+    "kana": "ぶん"
+  },
+  {
+    "word": "素晴らしい",
+    "english": "great",
+    "romaji": "subarashii",
+    "kana": "すばらしい"
+  },
+  {
+    "word": "思う",
+    "english": "think",
+    "romaji": "omou",
+    "kana": "おもう"
+  },
+  {
+    "word": "助け",
+    "english": "help",
+    "romaji": "tasuke",
+    "kana": "たすけ"
+  },
+  {
+    "word": "低い",
+    "english": "low",
+    "romaji": "hikui",
+    "kana": "ひくい"
+  },
+  {
+    "word": "ライン",
+    "english": "line",
+    "romaji": "rain",
+    "kana": "ライン"
+  },
+  {
+    "word": "異なる",
+    "english": "differ / different",
+    "romaji": "kotonaru",
+    "kana": "ことなる"
+  },
+  {
+    "word": "ターン",
+    "english": "turn",
+    "romaji": "tān",
+    "kana": "ターン"
+  },
+  {
+    "word": "原因",
+    "english": "cause",
+    "romaji": "gen'in",
+    "kana": "げんいん"
+  },
+  {
+    "word": "ずっと",
+    "english": "much / much more",
+    "romaji": "zutto",
+    "kana": "ずっと"
+  },
+  {
+    "word": "意味する",
+    "english": "mean",
+    "romaji": "imisuru",
+    "kana": "いみする"
+  },
+  {
+    "word": "前に",
+    "english": "before",
+    "romaji": "mae ni",
+    "kana": "まえに"
+  },
+  {
+    "word": "移動",
+    "english": "move",
+    "romaji": "idō",
+    "kana": "いどう"
+  },
+  {
+    "word": "権利",
+    "english": "right",
+    "romaji": "kenri",
+    "kana": "けんり"
+  },
+  {
+    "word": "男の子",
+    "english": "boy",
+    "romaji": "otokonoko",
+    "kana": "おとこのこ"
+  },
+  {
+    "word": "古い",
+    "english": "old",
+    "romaji": "furui",
+    "kana": "ふるい"
+  },
+  {
+    "word": "あまりに",
+    "english": "too",
+    "romaji": "amari ni",
+    "kana": "あまりに"
+  },
+  {
+    "word": "同じ",
+    "english": "same",
+    "romaji": "onaji",
+    "kana": "おなじ"
+  },
+  {
+    "word": "彼女",
+    "english": "she",
+    "romaji": "kanojo",
+    "kana": "かのじょ"
+  },
+  {
+    "word": "すべて",
+    "english": "all",
+    "romaji": "subete",
+    "kana": "すべて"
+  },
+  {
+    "word": "そこ",
+    "english": "there",
+    "romaji": "soko",
+    "kana": "そこ"
+  },
+  {
+    "word": "時",
+    "english": "when / time",
+    "romaji": "toki",
+    "kana": "とき"
+  },
+  {
+    "word": "アップ",
+    "english": "up",
+    "romaji": "appu",
+    "kana": "アップ"
+  },
+  {
+    "word": "使用",
+    "english": "use",
+    "romaji": "shiyō",
+    "kana": "しよう"
+  },
+  {
+    "word": "あなたの",
+    "english": "your",
+    "romaji": "anata no",
+    "kana": "あなたの"
+  },
+  {
+    "word": "道",
+    "english": "way / road",
+    "romaji": "michi",
+    "kana": "みち"
+  },
+  {
+    "word": "約",
+    "english": "about",
+    "romaji": "yaku",
+    "kana": "やく"
+  },
+  {
+    "word": "多くの",
+    "english": "many",
+    "romaji": "ōku no",
+    "kana": "おおくの"
+  },
+  {
+    "word": "その後",
+    "english": "then / after that",
+    "romaji": "sonogo",
+    "kana": "そのご"
+  },
+  {
+    "word": "それら",
+    "english": "them",
+    "romaji": "sorera",
+    "kana": "それら"
+  },
+  {
+    "word": "書く",
+    "english": "write",
+    "romaji": "kaku",
+    "kana": "かく"
+  },
+  {
+    "word": "でしょう",
+    "english": "would / will",
+    "romaji": "deshō",
+    "kana": "でしょう"
+  },
+  {
+    "word": "ような",
+    "english": "like",
+    "romaji": "yōna",
+    "kana": "ような"
+  },
+  {
+    "word": "そう",
+    "english": "so",
+    "romaji": "sō",
+    "kana": "そう"
+  },
+  {
+    "word": "これらの",
+    "english": "these",
+    "romaji": "korera no",
+    "kana": "これらの"
+  },
+  {
+    "word": "彼女の",
+    "english": "her",
+    "romaji": "kanojo no",
+    "kana": "かのじょの"
+  },
+  {
+    "word": "長い",
+    "english": "long",
+    "romaji": "nagai",
+    "kana": "ながい"
+  },
+  {
+    "word": "作る",
+    "english": "make",
+    "romaji": "tsukuru",
+    "kana": "つくる"
+  },
+  {
+    "word": "もの",
+    "english": "thing",
+    "romaji": "mono",
+    "kana": "もの"
+  },
+  {
+    "word": "見る",
+    "english": "see / look",
+    "romaji": "miru",
+    "kana": "みる"
+  },
+  {
+    "word": "彼に",
+    "english": "him",
+    "romaji": "kare ni",
+    "kana": "かれに"
+  },
+  {
+    "word": "二つ",
+    "english": "two",
+    "romaji": "futatsu",
+    "kana": "ふたつ"
+  },
+  {
+    "word": "があります",
+    "english": "has / there is",
+    "romaji": "ga arimasu",
+    "kana": "があります"
+  },
+  {
+    "word": "見える",
+    "english": "look / appear",
+    "romaji": "mieru",
+    "kana": "みえる"
+  },
+  {
+    "word": "日",
+    "english": "day",
+    "romaji": "hi",
+    "kana": "ひ"
+  },
+  {
+    "word": "可能性",
+    "english": "could / possibility",
+    "romaji": "kanōsei",
+    "kana": "かのうせい"
+  },
+  {
+    "word": "行く",
+    "english": "go",
+    "romaji": "iku",
+    "kana": "いく"
+  },
+  {
+    "word": "来る",
+    "english": "come",
+    "romaji": "kuru",
+    "kana": "くる"
+  },
+  {
+    "word": "やった",
+    "english": "did",
+    "romaji": "yatta",
+    "kana": "やった"
+  },
+  {
+    "word": "番号",
+    "english": "number",
+    "romaji": "bangō",
+    "kana": "ばんごう"
+  },
+  {
+    "word": "聞こえる",
+    "english": "sound / hear",
+    "romaji": "kikoeru",
+    "kana": "きこえる"
+  },
+  {
+    "word": "いいえ",
+    "english": "no",
+    "romaji": "iie",
+    "kana": "いいえ"
+  },
+  {
+    "word": "最も",
+    "english": "most",
+    "romaji": "mottomo",
+    "kana": "もっとも"
+  },
+  {
+    "word": "私の",
+    "english": "my",
+    "romaji": "watashi no",
+    "kana": "わたしの"
+  },
+  {
+    "word": "オーバー",
+    "english": "over",
+    "romaji": "ōbā",
+    "kana": "オーバー"
+  },
+  {
+    "word": "知っている",
+    "english": "know",
+    "romaji": "shitteiru",
+    "kana": "しっている"
+  },
+  {
+    "word": "水",
+    "english": "water",
+    "romaji": "mizu",
+    "kana": "みず"
+  },
+  {
+    "word": "比べて",
+    "english": "than / compared to",
+    "romaji": "kurabete",
+    "kana": "くらべて"
+  },
+  {
+    "word": "コール",
+    "english": "call",
+    "romaji": "kōru",
+    "kana": "コール"
+  },
+  {
+    "word": "最初の",
+    "english": "first",
+    "romaji": "saisho no",
+    "kana": "さいしょの"
+  },
+  {
+    "word": "誰",
+    "english": "who",
+    "romaji": "dare",
+    "kana": "だれ"
+  },
+  {
+    "word": "ダウン",
+    "english": "down",
+    "romaji": "daun",
+    "kana": "ダウン"
+  },
+  {
+    "word": "サイド",
+    "english": "side",
+    "romaji": "saido",
+    "kana": "サイド"
+  },
+  {
+    "word": "き",
+    "english": "tree",
+    "romaji": "ki",
+    "kana": "き"
+  },
+  {
+    "word": "今",
+    "english": "now",
+    "romaji": "ima",
+    "kana": "いま"
+  },
+  {
+    "word": "見つける",
+    "english": "find",
+    "romaji": "mitsukeru",
+    "kana": "みつける"
+  },
+  {
+    "word": "ヘッド",
+    "english": "head",
+    "romaji": "heddo",
+    "kana": "ヘッド"
+  },
+  {
+    "word": "スタンド",
+    "english": "stand",
+    "romaji": "sutando",
+    "kana": "スタンド"
+  },
+  {
+    "word": "独自の",
+    "english": "own",
+    "romaji": "dokuji no",
+    "kana": "どくじの"
+  },
+  {
+    "word": "ページ",
+    "english": "page",
+    "romaji": "pēji",
+    "kana": "ページ"
+  },
+  {
+    "word": "べき",
+    "english": "should",
+    "romaji": "beki",
+    "kana": "べき"
+  },
+  {
+    "word": "国",
+    "english": "country",
+    "romaji": "kuni",
+    "kana": "くに"
+  },
+  {
+    "word": "発見",
+    "english": "found / discovery",
+    "romaji": "hakken",
+    "kana": "はっけん"
+  },
+  {
+    "word": "答え",
+    "english": "answer",
+    "romaji": "kotae",
+    "kana": "こたえ"
+  },
+  {
+    "word": "学校",
+    "english": "school",
+    "romaji": "gakkō",
+    "kana": "がっこう"
+  },
+  {
+    "word": "成長する",
+    "english": "grow",
+    "romaji": "seichōsuru",
+    "kana": "せいちょうする"
+  },
+  {
+    "word": "研究",
+    "english": "study",
+    "romaji": "kenkyū",
+    "kana": "けんきゅう"
+  },
+  {
+    "word": "まだ",
+    "english": "still",
+    "romaji": "mada",
+    "kana": "まだ"
+  },
+  {
+    "word": "学ぶ",
+    "english": "learn",
+    "romaji": "manabu",
+    "kana": "まなぶ"
+  },
+  {
+    "word": "植物",
+    "english": "plant",
+    "romaji": "shokubutsu",
+    "kana": "しょくぶつ"
+  },
+  {
+    "word": "カバー",
+    "english": "cover",
+    "romaji": "kabā",
+    "kana": "カバー"
+  },
+  {
+    "word": "食品",
+    "english": "food",
+    "romaji": "shokuhin",
+    "kana": "しょくひん"
+  },
+  {
+    "word": "太陽",
+    "english": "sun",
+    "romaji": "taiyō",
+    "kana": "たいよう"
+  },
+  {
+    "word": "つの",
+    "english": "four / counter (generic)",
+    "romaji": "tsu no",
+    "kana": "つの"
+  },
+  {
+    "word": "間に",
+    "english": "between",
+    "romaji": "aida ni",
+    "kana": "あいだに"
+  },
+  {
+    "word": "状態",
+    "english": "state",
+    "romaji": "jōtai",
+    "kana": "じょうたい"
+  },
+  {
+    "word": "キープ",
+    "english": "keep",
+    "romaji": "kīpu",
+    "kana": "キープ"
+  },
+  {
+    "word": "目",
+    "english": "eye",
+    "romaji": "me",
+    "kana": "め"
+  },
+  {
+    "word": "ネバー",
+    "english": "never",
+    "romaji": "nebā",
+    "kana": "ネバー"
+  },
+  {
+    "word": "最後の",
+    "english": "last",
+    "romaji": "saigo no",
+    "kana": "さいごの"
+  },
+  {
+    "word": "てみましょう",
+    "english": "let's (try)",
+    "romaji": "temishō",
+    "kana": "てみましょう"
+  },
+  {
+    "word": "考え",
+    "english": "thought",
+    "romaji": "kangae",
+    "kana": "かんがえ"
+  },
+  {
+    "word": "街",
+    "english": "city",
+    "romaji": "machi",
+    "kana": "まち"
+  },
+  {
+    "word": "ツリー",
+    "english": "tree",
+    "romaji": "tsurī",
+    "kana": "ツリー"
+  },
+  {
+    "word": "クロス",
+    "english": "cross",
+    "romaji": "kurosu",
+    "kana": "クロス"
+  },
+  {
+    "word": "農場",
+    "english": "farm",
+    "romaji": "nōjō",
+    "kana": "のうじょう"
+  },
+  {
+    "word": "ハード",
+    "english": "hard",
+    "romaji": "hādo",
+    "kana": "ハード"
+  },
+  {
+    "word": "スタート",
+    "english": "start",
+    "romaji": "sutāto",
+    "kana": "スタート"
+  },
+  {
+    "word": "可能性がある",
+    "english": "might",
+    "romaji": "kanōsei ga aru",
+    "kana": "かのうせいがある"
+  },
+  {
+    "word": "物語",
+    "english": "story",
+    "romaji": "monogatari",
+    "kana": "ものがたり"
+  },
+  {
+    "word": "のこぎり",
+    "english": "saw (tool)",
+    "romaji": "nokogiri",
+    "kana": "のこぎり"
+  },
+  {
+    "word": "遠く",
+    "english": "far",
+    "romaji": "tōku",
+    "kana": "とおく"
+  },
+  {
+    "word": "海",
+    "english": "sea",
+    "romaji": "umi",
+    "kana": "うみ"
+  },
+  {
+    "word": "描く",
+    "english": "draw",
+    "romaji": "kaku",
+    "kana": "かく"
+  },
+  {
+    "word": "左",
+    "english": "left",
+    "romaji": "hidari",
+    "kana": "ひだり"
+  },
+  {
+    "word": "遅く",
+    "english": "late",
+    "romaji": "osoku",
+    "kana": "おそく"
+  },
+  {
+    "word": "ラン",
+    "english": "run",
+    "romaji": "ran",
+    "kana": "ラン"
+  },
+  {
+    "word": "ない",
+    "english": "don't / no",
+    "romaji": "nai",
+    "kana": "ない"
+  },
+  {
+    "word": "一方、",
+    "english": "while / on the other hand",
+    "romaji": "ippō",
+    "kana": "いっぽう"
+  },
+  {
+    "word": "プレス",
+    "english": "press",
+    "romaji": "puresu",
+    "kana": "プレス"
+  },
+  {
+    "word": "クローズ",
+    "english": "close",
+    "romaji": "kurōzu",
+    "kana": "クローズ"
+  },
+  {
+    "word": "夜",
+    "english": "night",
+    "romaji": "yoru",
+    "kana": "よる"
+  },
+  {
+    "word": "リアル",
+    "english": "real",
+    "romaji": "riaru",
+    "kana": "リアル"
+  },
+  {
+    "word": "生活",
+    "english": "life",
+    "romaji": "seikatsu",
+    "kana": "せいかつ"
+  },
+  {
+    "word": "少数",
+    "english": "few",
+    "romaji": "shōsū",
+    "kana": "しょうすう"
+  },
+  {
+    "word": "北",
+    "english": "north",
+    "romaji": "kita",
+    "kana": "きた"
+  },
+  {
+    "word": "ブック",
+    "english": "book",
+    "romaji": "bukku",
+    "kana": "ブック"
+  },
+  {
+    "word": "運ぶ",
+    "english": "carry",
+    "romaji": "hakobu",
+    "kana": "はこぶ"
+  },
+  {
+    "word": "かかった",
+    "english": "took",
+    "romaji": "kakatta",
+    "kana": "かかった"
+  },
+  {
+    "word": "科学",
+    "english": "science",
+    "romaji": "kagaku",
+    "kana": "かがく"
+  },
+  {
+    "word": "食べる",
+    "english": "eat",
+    "romaji": "taberu",
+    "kana": "たべる"
+  },
+  {
+    "word": "部屋",
+    "english": "room",
+    "romaji": "heya",
+    "kana": "へや"
+  },
+  {
+    "word": "友人",
+    "english": "friend",
+    "romaji": "yūjin",
+    "kana": "ゆうじん"
+  },
+  {
+    "word": "始まった",
+    "english": "began",
+    "romaji": "hajimatta",
+    "kana": "はじまった"
+  },
+  {
+    "word": "アイデア",
+    "english": "idea",
+    "romaji": "aidea",
+    "kana": "アイデア"
+  },
+  {
+    "word": "魚",
+    "english": "fish",
+    "romaji": "sakana",
+    "kana": "さかな"
+  },
+  {
+    "word": "山",
+    "english": "mountain",
+    "romaji": "yama",
+    "kana": "やま"
+  },
+  {
+    "word": "停止",
+    "english": "stop",
+    "romaji": "teishi",
+    "kana": "ていし"
+  },
+  {
+    "word": "一度",
+    "english": "once",
+    "romaji": "ichido",
+    "kana": "いちど"
+  },
+  {
+    "word": "ベース",
+    "english": "base",
+    "romaji": "bēsu",
+    "kana": "ベース"
+  },
+  {
+    "word": "聞く",
+    "english": "hear / listen",
+    "romaji": "kiku",
+    "kana": "きく"
+  },
+  {
+    "word": "馬",
+    "english": "horse",
+    "romaji": "uma",
+    "kana": "うま"
+  },
+  {
+    "word": "カット",
+    "english": "cut",
+    "romaji": "katto",
+    "kana": "カット"
+  },
+  {
+    "word": "確か",
+    "english": "sure",
+    "romaji": "tashika",
+    "kana": "たしか"
+  },
+  {
+    "word": "カラー",
+    "english": "color",
+    "romaji": "karā",
+    "kana": "カラー"
+  },
+  {
+    "word": "顔",
+    "english": "face",
+    "romaji": "kao",
+    "kana": "かお"
+  },
+  {
+    "word": "木材",
+    "english": "wood",
+    "romaji": "mokuzai",
+    "kana": "もくざい"
+  },
+  {
+    "word": "メイン",
+    "english": "main",
+    "romaji": "mein",
+    "kana": "メイン"
+  },
+  {
+    "word": "オープン",
+    "english": "open",
+    "romaji": "ōpun",
+    "kana": "オープン"
+  },
+  {
+    "word": "一緒に",
+    "english": "together",
+    "romaji": "issho ni",
+    "kana": "いっしょに"
+  },
+  {
+    "word": "次",
+    "english": "next",
+    "romaji": "tsugi",
+    "kana": "つぎ"
+  },
+  {
+    "word": "白",
+    "english": "white",
+    "romaji": "shiro",
+    "kana": "しろ"
+  },
+  {
+    "word": "子どもたち",
+    "english": "children",
+    "romaji": "kodomotachi",
+    "kana": "こどもたち"
+  },
+  {
+    "word": "始まる",
+    "english": "begin",
+    "romaji": "hajimaru",
+    "kana": "はじまる"
+  },
+  {
+    "word": "だ",
+    "english": "is (casual)",
+    "romaji": "da",
+    "kana": "だ"
+  },
+  {
+    "word": "歩く",
+    "english": "walk",
+    "romaji": "aruku",
+    "kana": "あるく"
+  },
+  {
+    "word": "例",
+    "english": "example",
+    "romaji": "rei",
+    "kana": "れい"
+  },
+  {
+    "word": "和らげる",
+    "english": "ease",
+    "romaji": "yawarageru",
+    "kana": "やわらげる"
+  },
+  {
+    "word": "紙",
+    "english": "paper",
+    "romaji": "kami",
+    "kana": "かみ"
+  },
+  {
+    "word": "グループ",
+    "english": "group",
+    "romaji": "gurūpu",
+    "kana": "グループ"
+  },
+  {
+    "word": "常に",
+    "english": "always",
+    "romaji": "tsune ni",
+    "kana": "つねに"
+  },
+  {
+    "word": "音楽",
+    "english": "music",
+    "romaji": "ongaku",
+    "kana": "おんがく"
+  },
+  {
+    "word": "両方",
+    "english": "both",
+    "romaji": "ryōhō",
+    "kana": "りょうほう"
+  },
+  {
+    "word": "マーク",
+    "english": "mark",
+    "romaji": "māku",
+    "kana": "マーク"
+  },
+  {
+    "word": "しばしば",
+    "english": "often",
+    "romaji": "shibashiba",
+    "kana": "しばしば"
+  },
+  {
+    "word": "手紙",
+    "english": "letter",
+    "romaji": "tegami",
+    "kana": "てがみ"
+  },
+  {
+    "word": "まで",
+    "english": "until",
+    "romaji": "made",
+    "kana": "まで"
+  },
+  {
+    "word": "マイル",
+    "english": "mile",
+    "romaji": "mairu",
+    "kana": "マイル"
+  },
+  {
+    "word": "川",
+    "english": "river",
+    "romaji": "kawa",
+    "kana": "かわ"
+  },
+  {
+    "word": "カー",
+    "english": "car",
+    "romaji": "kā",
+    "kana": "カー"
+  },
+  {
+    "word": "フィート",
+    "english": "feet",
+    "romaji": "fīto",
+    "kana": "フィート"
+  },
+  {
+    "word": "介護",
+    "english": "care / nursing",
+    "romaji": "kaigo",
+    "kana": "かいご"
+  },
+  {
+    "word": "第2",
+    "english": "second",
+    "romaji": "daini",
+    "kana": "だいに"
+  },
+  {
+    "word": "十分な",
+    "english": "enough",
+    "romaji": "jūbun na",
+    "kana": "じゅうぶんな"
+  },
+  {
+    "word": "平野",
+    "english": "plain",
+    "romaji": "heiya",
+    "kana": "へいや"
+  },
+  {
+    "word": "女の子",
+    "english": "girl",
+    "romaji": "onnanoko",
+    "kana": "おんなのこ"
+  },
+  {
+    "word": "いつもの",
+    "english": "usual",
+    "romaji": "itsumo no",
+    "kana": "いつもの"
+  },
+  {
+    "word": "若い",
+    "english": "young",
+    "romaji": "wakai",
+    "kana": "わかい"
+  },
+  {
+    "word": "レディー",
+    "english": "ready / lady",
+    "romaji": "redī",
+    "kana": "レディー"
+  },
+  {
+    "word": "上記",
+    "english": "above",
+    "romaji": "jōki",
+    "kana": "じょうき"
+  },
+  {
+    "word": "今までに",
+    "english": "ever",
+    "romaji": "imamade ni",
+    "kana": "いままでに"
+  },
+  {
+    "word": "赤",
+    "english": "red",
+    "romaji": "aka",
+    "kana": "あか"
+  },
+  {
+    "word": "リスト",
+    "english": "list",
+    "romaji": "risuto",
+    "kana": "リスト"
+  },
+  {
+    "word": "感じる",
+    "english": "feel",
+    "romaji": "kanjiru",
+    "kana": "かんじる"
+  },
+  {
+    "word": "トーク",
+    "english": "talk",
+    "romaji": "tōku",
+    "kana": "トーク"
+  },
+  {
+    "word": "鳥",
+    "english": "bird",
+    "romaji": "tori",
+    "kana": "とり"
+  },
+  {
+    "word": "すぐに",
+    "english": "soon",
+    "romaji": "sugu ni",
+    "kana": "すぐに"
+  },
+  {
+    "word": "ボディ",
+    "english": "body",
+    "romaji": "bodi",
+    "kana": "ボディ"
+  },
+  {
+    "word": "犬",
+    "english": "dog",
+    "romaji": "inu",
+    "kana": "いぬ"
+  },
+  {
+    "word": "家族",
+    "english": "family",
+    "romaji": "kazoku",
+    "kana": "かぞく"
+  },
+  {
+    "word": "ダイレクト",
+    "english": "direct",
+    "romaji": "dairekto",
+    "kana": "ダイレクト"
+  },
+  {
+    "word": "ポーズ",
+    "english": "pose / pause",
+    "romaji": "pōzu",
+    "kana": "ポーズ"
+  },
+  {
+    "word": "去る",
+    "english": "leave",
+    "romaji": "saru",
+    "kana": "さる"
+  },
+  {
+    "word": "歌",
+    "english": "song",
+    "romaji": "uta",
+    "kana": "うた"
+  },
+  {
+    "word": "測定",
+    "english": "measure",
+    "romaji": "sokutei",
+    "kana": "そくてい"
+  },
+  {
+    "word": "ドア",
+    "english": "door",
+    "romaji": "doa",
+    "kana": "ドア"
+  },
+  {
+    "word": "製品",
+    "english": "product",
+    "romaji": "seihin",
+    "kana": "せいひん"
+  },
+  {
+    "word": "黒",
+    "english": "black",
+    "romaji": "kuro",
+    "kana": "くろ"
+  },
+  {
+    "word": "短い",
+    "english": "short",
+    "romaji": "mijikai",
+    "kana": "みじかい"
+  },
+  {
+    "word": "数字",
+    "english": "numeral",
+    "romaji": "sūji",
+    "kana": "すうじ"
+  },
+  {
+    "word": "クラス",
+    "english": "class",
+    "romaji": "kurasu",
+    "kana": "クラス"
+  },
+  {
+    "word": "風",
+    "english": "wind",
+    "romaji": "kaze",
+    "kana": "かぜ"
+  },
+  {
+    "word": "質問",
+    "english": "question",
+    "romaji": "shitsumon",
+    "kana": "しつもん"
+  },
+  {
+    "word": "起こる",
+    "english": "happen",
+    "romaji": "okoru",
+    "kana": "おこる"
+  },
+  {
+    "word": "完全な",
+    "english": "complete",
+    "romaji": "kanzen na",
+    "kana": "かんぜんな"
+  },
+  {
+    "word": "船",
+    "english": "ship",
+    "romaji": "fune",
+    "kana": "ふね"
+  },
+  {
+    "word": "エリア",
+    "english": "area",
+    "romaji": "eria",
+    "kana": "エリア"
+  },
+  {
+    "word": "半分",
+    "english": "half",
+    "romaji": "hanbun",
+    "kana": "はんぶん"
+  },
+  {
+    "word": "岩",
+    "english": "rock",
+    "romaji": "iwa",
+    "kana": "いわ"
+  },
+  {
+    "word": "オーダー",
+    "english": "order",
+    "romaji": "ōdā",
+    "kana": "オーダー"
+  },
+  {
+    "word": "火災",
+    "english": "fire",
+    "romaji": "kasai",
+    "kana": "かさい"
+  },
+  {
+    "word": "南",
+    "english": "south",
+    "romaji": "minami",
+    "kana": "みなみ"
+  },
+  {
+    "word": "問題",
+    "english": "problem",
+    "romaji": "mondai",
+    "kana": "もんだい"
+  },
+  {
+    "word": "作品",
+    "english": "piece / work",
+    "romaji": "sakuhin",
+    "kana": "さくひん"
+  },
+  {
+    "word": "言われ",
+    "english": "told",
+    "romaji": "iware",
+    "kana": "いわれ"
+  },
+  {
+    "word": "知っていた",
+    "english": "knew",
+    "romaji": "shitteita",
+    "kana": "しっていた"
+  },
+  {
+    "word": "合格",
+    "english": "pass",
+    "romaji": "gōkaku",
+    "kana": "ごうかく"
+  },
+  {
+    "word": "以来",
+    "english": "since",
+    "romaji": "irai",
+    "kana": "いらい"
+  },
+  {
+    "word": "トップ",
+    "english": "top",
+    "romaji": "toppu",
+    "kana": "トップ"
+  },
+  {
+    "word": "全体",
+    "english": "whole",
+    "romaji": "zentai",
+    "kana": "ぜんたい"
+  },
+  {
+    "word": "王",
+    "english": "king",
+    "romaji": "ō",
+    "kana": "おう"
+  },
+  {
+    "word": "ストリート",
+    "english": "street",
+    "romaji": "sutorīto",
+    "kana": "ストリート"
+  },
+  {
+    "word": "インチ",
+    "english": "inch",
+    "romaji": "inchi",
+    "kana": "インチ"
+  },
+  {
+    "word": "掛ける",
+    "english": "multiply",
+    "romaji": "kakeru",
+    "kana": "かける"
+  },
+  {
+    "word": "何も",
+    "english": "nothing",
+    "romaji": "nanimo",
+    "kana": "なにも"
+  },
+  {
+    "word": "もちろん",
+    "english": "course / of course",
+    "romaji": "mochiron",
+    "kana": "もちろん"
+  },
+  {
+    "word": "滞在",
+    "english": "stay",
+    "romaji": "taizai",
+    "kana": "たいざい"
+  },
+  {
+    "word": "ホイール",
+    "english": "wheel",
+    "romaji": "hoīru",
+    "kana": "ホイール"
+  },
+  {
+    "word": "フル",
+    "english": "full",
+    "romaji": "furu",
+    "kana": "フル"
+  },
+  {
+    "word": "力",
+    "english": "force",
+    "romaji": "chikara",
+    "kana": "ちから"
+  },
+  {
+    "word": "ブルー",
+    "english": "blue",
+    "romaji": "burū",
+    "kana": "ブルー"
+  },
+  {
+    "word": "オブジェクト",
+    "english": "object",
+    "romaji": "obujekuto",
+    "kana": "オブジェクト"
+  },
+  {
+    "word": "決定する",
+    "english": "decide",
+    "romaji": "ketteisuru",
+    "kana": "けっていする"
+  },
+  {
+    "word": "表面",
+    "english": "surface",
+    "romaji": "hyōmen",
+    "kana": "ひょうめん"
+  },
+  {
+    "word": "深い",
+    "english": "deep",
+    "romaji": "fukai",
+    "kana": "ふかい"
+  },
+  {
+    "word": "ムーン",
+    "english": "moon",
+    "romaji": "mūn",
+    "kana": "ムーン"
+  },
+  {
+    "word": "島",
+    "english": "island",
+    "romaji": "shima",
+    "kana": "しま"
+  },
+  {
+    "word": "足",
+    "english": "foot",
+    "romaji": "ashi",
+    "kana": "あし"
+  },
+  {
+    "word": "システム",
+    "english": "system",
+    "romaji": "shisutemu",
+    "kana": "システム"
+  },
+  {
+    "word": "忙しい",
+    "english": "busy",
+    "romaji": "isogashii",
+    "kana": "いそがしい"
+  },
+  {
+    "word": "テスト",
+    "english": "test",
+    "romaji": "tesuto",
+    "kana": "テスト"
+  },
+  {
+    "word": "記録",
+    "english": "record",
+    "romaji": "kiroku",
+    "kana": "きろく"
+  },
+  {
+    "word": "ボート",
+    "english": "boat",
+    "romaji": "bōto",
+    "kana": "ボート"
+  },
+  {
+    "word": "一般的な",
+    "english": "common",
+    "romaji": "ippanteki na",
+    "kana": "いっぱんてきな"
+  },
+  {
+    "word": "ゴールド",
+    "english": "gold",
+    "romaji": "gōrudo",
+    "kana": "ゴールド"
+  },
+  {
+    "word": "可能",
+    "english": "possible",
+    "romaji": "kanō",
+    "kana": "かのう"
+  },
+  {
+    "word": "飛行機",
+    "english": "plane",
+    "romaji": "hikōki",
+    "kana": "ひこうき"
+  },
+  {
+    "word": "代わり",
+    "english": "stead / instead",
+    "romaji": "kawari",
+    "kana": "かわり"
+  },
+  {
+    "word": "ドライ",
+    "english": "dry",
+    "romaji": "dorai",
+    "kana": "ドライ"
+  },
+  {
+    "word": "不思議",
+    "english": "wonder",
+    "romaji": "fushigi",
+    "kana": "ふしぎ"
+  },
+  {
+    "word": "笑い",
+    "english": "laugh",
+    "romaji": "warai",
+    "kana": "わらい"
+  },
+  {
+    "word": "千の",
+    "english": "thousand",
+    "romaji": "sen no",
+    "kana": "せんの"
+  },
+  {
+    "word": "前",
+    "english": "ago / before",
+    "romaji": "mae",
+    "kana": "まえ"
+  },
+  {
+    "word": "走った",
+    "english": "ran",
+    "romaji": "hashitta",
+    "kana": "はしった"
+  },
+  {
+    "word": "チェック",
+    "english": "check",
+    "romaji": "chekku",
+    "kana": "チェック"
+  },
+  {
+    "word": "ゲーム",
+    "english": "game",
+    "romaji": "gēmu",
+    "kana": "ゲーム"
+  },
+  {
+    "word": "形状",
+    "english": "shape",
+    "romaji": "keijō",
+    "kana": "けいじょう"
+  },
+  {
+    "word": "一致する",
+    "english": "equate / match",
+    "romaji": "itchisuru",
+    "kana": "いっちする"
+  },
+  {
+    "word": "ミス",
+    "english": "miss",
+    "romaji": "misu",
+    "kana": "ミス"
+  },
+  {
+    "word": "熱",
+    "english": "heat",
+    "romaji": "netsu",
+    "kana": "ねつ"
+  },
+  {
+    "word": "雪",
+    "english": "snow",
+    "romaji": "yuki",
+    "kana": "ゆき"
+  },
+  {
+    "word": "タイヤ",
+    "english": "tire",
+    "romaji": "taiya",
+    "kana": "タイヤ"
+  },
+  {
+    "word": "持って来る",
+    "english": "bring",
+    "romaji": "mottekuru",
+    "kana": "もってくる"
+  },
+  {
+    "word": "はい",
+    "english": "yes",
+    "romaji": "hai",
+    "kana": "はい"
+  },
+  {
+    "word": "遠い",
+    "english": "distant",
+    "romaji": "tōi",
+    "kana": "とおい"
+  },
+  {
+    "word": "埋める",
+    "english": "fill",
+    "romaji": "umeru",
+    "kana": "うめる"
+  },
+  {
+    "word": "東",
+    "english": "east",
+    "romaji": "higashi",
+    "kana": "ひがし"
+  },
+  {
+    "word": "ペイント",
+    "english": "paint",
+    "romaji": "peinto",
+    "kana": "ペイント"
+  },
+  {
+    "word": "言語",
+    "english": "language",
+    "romaji": "gengo",
+    "kana": "げんご"
+  },
+  {
+    "word": "の間で",
+    "english": "among",
+    "romaji": "no aida de",
+    "kana": "のあいだで"
+  },
+  {
+    "word": "ユニット",
+    "english": "unit",
+    "romaji": "yunitto",
+    "kana": "ユニット"
+  },
+  {
+    "word": "パワー",
+    "english": "power",
+    "romaji": "pawā",
+    "kana": "パワー"
+  },
+  {
+    "word": "町",
+    "english": "town",
+    "romaji": "machi",
+    "kana": "まち"
+  },
+  {
+    "word": "罰金",
+    "english": "fine",
+    "romaji": "bakkin",
+    "kana": "ばっきん"
+  },
+  {
+    "word": "特定の",
+    "english": "certain",
+    "romaji": "tokutei no",
+    "kana": "とくていの"
+  },
+  {
+    "word": "飛ぶ",
+    "english": "fly",
+    "romaji": "tobu",
+    "kana": "とぶ"
+  },
+  {
+    "word": "落ちる",
+    "english": "fall",
+    "romaji": "ochiru",
+    "kana": "おちる"
+  },
+  {
+    "word": "鉛",
+    "english": "lead (metal)",
+    "romaji": "namari",
+    "kana": "なまり"
+  },
+  {
+    "word": "泣く",
+    "english": "cry",
+    "romaji": "naku",
+    "kana": "なく"
+  },
+  {
+    "word": "暗い",
+    "english": "dark",
+    "romaji": "kurai",
+    "kana": "くらい"
+  },
+  {
+    "word": "マシン",
+    "english": "machine",
+    "romaji": "mashin",
+    "kana": "マシン"
+  },
+  {
+    "word": "ノート",
+    "english": "note",
+    "romaji": "nōto",
+    "kana": "ノート"
+  },
+  {
+    "word": "待つ",
+    "english": "wait",
+    "romaji": "matsu",
+    "kana": "まつ"
+  },
+  {
+    "word": "計画",
+    "english": "plan",
+    "romaji": "keikaku",
+    "kana": "けいかく"
+  },
+  {
+    "word": "図",
+    "english": "figure",
+    "romaji": "zu",
+    "kana": "ず"
+  },
+  {
+    "word": "スター",
+    "english": "star",
+    "romaji": "sutā",
+    "kana": "スター"
+  },
+  {
+    "word": "ボックス",
+    "english": "box",
+    "romaji": "bokkusu",
+    "kana": "ボックス"
+  },
+  {
+    "word": "名詞",
+    "english": "noun",
+    "romaji": "meishi",
+    "kana": "めいし"
+  },
+  {
+    "word": "フィールド",
+    "english": "field",
+    "romaji": "fīrudo",
+    "kana": "フィールド"
+  },
+  {
+    "word": "残り",
+    "english": "rest",
+    "romaji": "nokori",
+    "kana": "のこり"
+  },
+  {
+    "word": "正しい",
+    "english": "correct",
+    "romaji": "tadashii",
+    "kana": "ただしい"
+  },
+  {
+    "word": "できる",
+    "english": "able",
+    "romaji": "dekiru",
+    "kana": "できる"
+  },
+  {
+    "word": "ポンド",
+    "english": "pound",
+    "romaji": "pondo",
+    "kana": "ポンド"
+  },
+  {
+    "word": "終わった",
+    "english": "done",
+    "romaji": "owatta",
+    "kana": "おわった"
+  },
+  {
+    "word": "美しさ",
+    "english": "beauty",
+    "romaji": "utsukushisa",
+    "kana": "うつくしさ"
+  },
+  {
+    "word": "ドライブ",
+    "english": "drive",
+    "romaji": "doraibu",
+    "kana": "ドライブ"
+  },
+  {
+    "word": "立っていた",
+    "english": "stood",
+    "romaji": "tatteita",
+    "kana": "たっていた"
+  },
+  {
+    "word": "含む",
+    "english": "contain",
+    "romaji": "fukumu",
+    "kana": "ふくむ"
+  },
+  {
+    "word": "フロント",
+    "english": "front",
+    "romaji": "furonto",
+    "kana": "フロント"
+  },
+  {
+    "word": "教える",
+    "english": "teach",
+    "romaji": "oshieru",
+    "kana": "おしえる"
+  },
+  {
+    "word": "週",
+    "english": "week",
+    "romaji": "shū",
+    "kana": "しゅう"
+  },
+  {
+    "word": "ファイナル",
+    "english": "final",
+    "romaji": "fainaru",
+    "kana": "ファイナル"
+  },
+  {
+    "word": "与えた",
+    "english": "gave",
+    "romaji": "ataeta",
+    "kana": "あたえた"
+  },
+  {
+    "word": "緑",
+    "english": "green",
+    "romaji": "midori",
+    "kana": "みどり"
+  },
+  {
+    "word": "ああ",
+    "english": "oh",
+    "romaji": "aa",
+    "kana": "ああ"
+  },
+  {
+    "word": "クイック",
+    "english": "quick",
+    "romaji": "kuikku",
+    "kana": "クイック"
+  },
+  {
+    "word": "開発する",
+    "english": "develop",
+    "romaji": "kaihatsusuru",
+    "kana": "かいはつする"
+  },
+  {
+    "word": "暖かい",
+    "english": "warm",
+    "romaji": "atatakai",
+    "kana": "あたたかい"
+  },
+  {
+    "word": "無料で",
+    "english": "free",
+    "romaji": "muryō de",
+    "kana": "むりょうで"
+  },
+  {
+    "word": "分",
+    "english": "minute",
+    "romaji": "fun",
+    "kana": "ふん"
+  },
+  {
+    "word": "強い",
+    "english": "strong",
+    "romaji": "tsuyoi",
+    "kana": "つよい"
+  },
+  {
+    "word": "特別",
+    "english": "special",
+    "romaji": "tokubetsu",
+    "kana": "とくべつ"
+  },
+  {
+    "word": "心",
+    "english": "mind / heart",
+    "romaji": "kokoro",
+    "kana": "こころ"
+  },
+  {
+    "word": "背後に",
+    "english": "behind",
+    "romaji": "haigo ni",
+    "kana": "はいごに"
+  },
+  {
+    "word": "明確な",
+    "english": "clear",
+    "romaji": "meikaku na",
+    "kana": "めいかくな"
+  },
+  {
+    "word": "テール",
+    "english": "tail",
+    "romaji": "tēru",
+    "kana": "テール"
+  },
+  {
+    "word": "事実",
+    "english": "fact",
+    "romaji": "jijitsu",
+    "kana": "じじつ"
+  },
+  {
+    "word": "スペース",
+    "english": "space",
+    "romaji": "supēsu",
+    "kana": "スペース"
+  },
+  {
+    "word": "聞いた",
+    "english": "heard",
+    "romaji": "kiita",
+    "kana": "きいた"
+  },
+  {
+    "word": "ベスト",
+    "english": "best",
+    "romaji": "besuto",
+    "kana": "ベスト"
+  },
+  {
+    "word": "真の",
+    "english": "true",
+    "romaji": "shin no",
+    "kana": "しんの"
+  },
+  {
+    "word": "百",
+    "english": "hundred",
+    "romaji": "hyaku",
+    "kana": "ひゃく"
+  },
+  {
+    "word": "五",
+    "english": "five",
+    "romaji": "go",
+    "kana": "ご"
+  },
+  {
+    "word": "覚えている",
+    "english": "remember",
+    "romaji": "oboeteiru",
+    "kana": "おぼえている"
+  },
+  {
+    "word": "ステップ",
+    "english": "step",
+    "romaji": "suteppu",
+    "kana": "ステップ"
+  },
+  {
+    "word": "早い",
+    "english": "early / fast",
+    "romaji": "hayai",
+    "kana": "はやい"
+  },
+  {
+    "word": "ホールド",
+    "english": "hold",
+    "romaji": "hōrudo",
+    "kana": "ホールド"
+  },
+  {
+    "word": "西",
+    "english": "west",
+    "romaji": "nishi",
+    "kana": "にし"
+  },
+  {
+    "word": "地面",
+    "english": "ground",
+    "romaji": "jimen",
+    "kana": "じめん"
+  },
+  {
+    "word": "関心",
+    "english": "interest",
+    "romaji": "kansin",
+    "kana": "かんしん"
+  },
+  {
+    "word": "リーチ",
+    "english": "reach",
+    "romaji": "rīchi",
+    "kana": "リーチ"
+  },
+  {
+    "word": "速い",
+    "english": "fast",
+    "romaji": "hayai",
+    "kana": "はやい"
+  },
+  {
+    "word": "動詞",
+    "english": "verb",
+    "romaji": "dōshi",
+    "kana": "どうし"
+  },
+  {
+    "word": "歌う",
+    "english": "sing",
+    "romaji": "utau",
+    "kana": "うたう"
+  },
+  {
+    "word": "六",
+    "english": "six",
+    "romaji": "roku",
+    "kana": "ろく"
+  },
+  {
+    "word": "テーブル",
+    "english": "table",
+    "romaji": "tēburu",
+    "kana": "テーブル"
+  },
+  {
+    "word": "旅行",
+    "english": "travel",
+    "romaji": "ryokō",
+    "kana": "りょこう"
+  },
+  {
+    "word": "レス",
+    "english": "less",
+    "romaji": "resu",
+    "kana": "レス"
+  },
+  {
+    "word": "朝",
+    "english": "morning",
+    "romaji": "asa",
+    "kana": "あさ"
+  },
+  {
+    "word": "十",
+    "english": "ten",
+    "romaji": "jū",
+    "kana": "じゅう"
+  },
+  {
+    "word": "シンプル",
+    "english": "simple",
+    "romaji": "shinpuru",
+    "kana": "シンプル"
+  },
+  {
+    "word": "母音",
+    "english": "vowel",
+    "romaji": "boin",
+    "kana": "ぼいん"
+  },
+  {
+    "word": "の方へ",
+    "english": "toward",
+    "romaji": "no hō e",
+    "kana": "のほうへ"
+  },
+  {
+    "word": "戦争",
+    "english": "war",
+    "romaji": "sensō",
+    "kana": "せんそう"
+  },
+  {
+    "word": "産む",
+    "english": "lay / give birth",
+    "romaji": "umu",
+    "kana": "うむ"
+  },
+  {
+    "word": "に対する",
+    "english": "against",
+    "romaji": "ni taisuru",
+    "kana": "にたいする"
+  },
+  {
+    "word": "パターン",
+    "english": "pattern",
+    "romaji": "patān",
+    "kana": "パターン"
+  },
+  {
+    "word": "遅い",
+    "english": "slow",
+    "romaji": "osoi",
+    "kana": "おそい"
+  },
+  {
+    "word": "センター",
+    "english": "center",
+    "romaji": "sentā",
+    "kana": "センター"
+  },
+  {
+    "word": "愛",
+    "english": "love",
+    "romaji": "ai",
+    "kana": "あい"
+  },
+  {
+    "word": "人",
+    "english": "person",
+    "romaji": "hito",
+    "kana": "ひと"
+  },
+  {
+    "word": "マネー",
+    "english": "money",
+    "romaji": "manē",
+    "kana": "マネー"
+  },
+  {
+    "word": "サーブ",
+    "english": "serve",
+    "romaji": "sābu",
+    "kana": "サーブ"
+  },
+  {
+    "word": "道路",
+    "english": "road",
+    "romaji": "dōro",
+    "kana": "どうろ"
+  },
+  {
+    "word": "マップ",
+    "english": "map",
+    "romaji": "mappu",
+    "kana": "マップ"
+  },
+  {
+    "word": "雨",
+    "english": "rain",
+    "romaji": "ame",
+    "kana": "あめ"
+  },
+  {
+    "word": "ルール",
+    "english": "rule",
+    "romaji": "rūru",
+    "kana": "ルール"
+  },
+  {
+    "word": "支配する",
+    "english": "govern",
+    "romaji": "shihaisuru",
+    "kana": "しはいする"
+  },
+  {
+    "word": "引っ張る",
+    "english": "pull",
+    "romaji": "hipparu",
+    "kana": "ひっぱる"
+  },
+  {
+    "word": "寒い",
+    "english": "cold",
+    "romaji": "samui",
+    "kana": "さむい"
+  },
+  {
+    "word": "予告",
+    "english": "notice",
+    "romaji": "yokoku",
+    "kana": "よこく"
+  },
+  {
+    "word": "声",
+    "english": "voice",
+    "romaji": "koe",
+    "kana": "こえ"
+  },
+  {
+    "word": "エネルギー",
+    "english": "energy",
+    "romaji": "enerugī",
+    "kana": "エネルギー"
+  },
+  {
+    "word": "狩り",
+    "english": "hunt",
+    "romaji": "kari",
+    "kana": "かり"
+  },
+  {
+    "word": "ありそうな",
+    "english": "probable",
+    "romaji": "arisōna",
+    "kana": "ありそうな"
+  },
+  {
+    "word": "ベッド",
+    "english": "bed",
+    "romaji": "beddo",
+    "kana": "ベッド"
+  },
+  {
+    "word": "兄",
+    "english": "brother",
+    "romaji": "ani",
+    "kana": "あに"
+  },
+  {
+    "word": "卵",
+    "english": "egg",
+    "romaji": "tamago",
+    "kana": "たまご"
+  },
+  {
+    "word": "乗る",
+    "english": "ride",
+    "romaji": "noru",
+    "kana": "のる"
+  },
+  {
+    "word": "セル",
+    "english": "cell",
+    "romaji": "seru",
+    "kana": "セル"
+  },
+  {
+    "word": "信じる",
+    "english": "believe",
+    "romaji": "shinjiru",
+    "kana": "しんじる"
+  },
+  {
+    "word": "たぶん",
+    "english": "perhaps",
+    "romaji": "tabun",
+    "kana": "たぶん"
+  },
+  {
+    "word": "選ぶ",
+    "english": "pick / choose",
+    "romaji": "erabu",
+    "kana": "えらぶ"
+  },
+  {
+    "word": "突然の",
+    "english": "sudden",
+    "romaji": "totsuzen no",
+    "kana": "とつぜんの"
+  },
+  {
+    "word": "カウント",
+    "english": "count",
+    "romaji": "kaunto",
+    "kana": "カウント"
+  },
+  {
+    "word": "広場",
+    "english": "square",
+    "romaji": "hiroba",
+    "kana": "ひろば"
+  },
+  {
+    "word": "理由",
+    "english": "reason",
+    "romaji": "riyū",
+    "kana": "りゆう"
+  },
+  {
+    "word": "長さ",
+    "english": "length",
+    "romaji": "nagasa",
+    "kana": "ながさ"
+  },
+  {
+    "word": "表す",
+    "english": "represent",
+    "romaji": "arawasu",
+    "kana": "あらわす"
+  },
+  {
+    "word": "アート",
+    "english": "art",
+    "romaji": "āto",
+    "kana": "アート"
+  },
+  {
+    "word": "テーマ",
+    "english": "subject / theme",
+    "romaji": "tēma",
+    "kana": "テーマ"
+  },
+  {
+    "word": "地域",
+    "english": "region",
+    "romaji": "chiiki",
+    "kana": "ちいき"
+  },
+  {
+    "word": "サイズ",
+    "english": "size",
+    "romaji": "saizu",
+    "kana": "サイズ"
+  },
+  {
+    "word": "変える",
+    "english": "vary / change",
+    "romaji": "kaeru",
+    "kana": "かえる"
+  },
+  {
+    "word": "落ち着く",
+    "english": "settle",
+    "romaji": "ochitsuku",
+    "kana": "おちつく"
+  },
+  {
+    "word": "話す",
+    "english": "speak",
+    "romaji": "hanasu",
+    "kana": "はなす"
+  },
+  {
+    "word": "重さ",
+    "english": "weight",
+    "romaji": "omosa",
+    "kana": "おもさ"
+  },
+  {
+    "word": "一般",
+    "english": "general",
+    "romaji": "ippan",
+    "kana": "いっぱん"
+  },
+  {
+    "word": "アイス",
+    "english": "ice",
+    "romaji": "aisu",
+    "kana": "アイス"
+  },
+  {
+    "word": "サークル",
+    "english": "circle",
+    "romaji": "sākuru",
+    "kana": "サークル"
+  },
+  {
+    "word": "ペア",
+    "english": "pair",
+    "romaji": "pea",
+    "kana": "ペア"
+  },
+  {
+    "word": "含める",
+    "english": "include",
+    "romaji": "fukumeru",
+    "kana": "ふくめる"
+  },
+  {
+    "word": "分割",
+    "english": "divide",
+    "romaji": "bunkatsu",
+    "kana": "ぶんかつ"
+  },
+  {
+    "word": "音節",
+    "english": "syllable",
+    "romaji": "onsetsu",
+    "kana": "おんせつ"
+  },
+  {
+    "word": "フェルト",
+    "english": "felt",
+    "romaji": "feruto",
+    "kana": "フェルト"
+  },
+  {
+    "word": "壮大な",
+    "english": "grand",
+    "romaji": "sōdai na",
+    "kana": "そうだいな"
+  },
+  {
+    "word": "ボール",
+    "english": "ball",
+    "romaji": "bōru",
+    "kana": "ボール"
+  },
+  {
+    "word": "波",
+    "english": "wave",
+    "romaji": "nami",
+    "kana": "なみ"
+  },
+  {
+    "word": "ドロップ",
+    "english": "drop",
+    "romaji": "doroppu",
+    "kana": "ドロップ"
+  },
+  {
+    "word": "AM",
+    "english": "AM",
+    "romaji": "ē-emu",
+    "kana": "エーエム"
+  },
+  {
+    "word": "現在",
+    "english": "present",
+    "romaji": "genzai",
+    "kana": "げんざい"
+  },
+  {
+    "word": "重い",
+    "english": "heavy",
+    "romaji": "omoi",
+    "kana": "おもい"
+  },
+  {
+    "word": "ダンス",
+    "english": "dance",
+    "romaji": "dansu",
+    "kana": "ダンス"
+  },
+  {
+    "word": "エンジン",
+    "english": "engine",
+    "romaji": "enjin",
+    "kana": "エンジン"
+  },
+  {
+    "word": "ポジション",
+    "english": "position",
+    "romaji": "pojishon",
+    "kana": "ポジション"
+  },
+  {
+    "word": "アーム",
+    "english": "arm",
+    "romaji": "āmu",
+    "kana": "アーム"
+  },
+  {
+    "word": "広い",
+    "english": "wide",
+    "romaji": "hiroi",
+    "kana": "ひろい"
+  },
+  {
+    "word": "帆",
+    "english": "sail",
+    "romaji": "ho",
+    "kana": "ほ"
+  },
+  {
+    "word": "材料",
+    "english": "material",
+    "romaji": "zairyō",
+    "kana": "ざいりょう"
+  },
+  {
+    "word": "分数",
+    "english": "fraction",
+    "romaji": "bunsu",
+    "kana": "ぶんすう"
+  },
+  {
+    "word": "森",
+    "english": "forest",
+    "romaji": "mori",
+    "kana": "もり"
+  },
+  {
+    "word": "座る",
+    "english": "sit",
+    "romaji": "suwaru",
+    "kana": "すわる"
+  },
+  {
+    "word": "レース",
+    "english": "race",
+    "romaji": "rēsu",
+    "kana": "レース"
+  },
+  {
+    "word": "窓",
+    "english": "window",
+    "romaji": "mado",
+    "kana": "まど"
+  },
+  {
+    "word": "店",
+    "english": "store",
+    "romaji": "mise",
+    "kana": "みせ"
+  },
+  {
+    "word": "夏",
+    "english": "summer",
+    "romaji": "natsu",
+    "kana": "なつ"
+  },
+  {
+    "word": "列車",
+    "english": "train",
+    "romaji": "ressha",
+    "kana": "れっしゃ"
+  },
+  {
+    "word": "スリープ",
+    "english": "sleep",
+    "romaji": "surīpu",
+    "kana": "スリープ"
+  },
+  {
+    "word": "証明する",
+    "english": "prove",
+    "romaji": "shōmeisuru",
+    "kana": "しょうめいする"
+  },
+  {
+    "word": "ローン",
+    "english": "lone / loan",
+    "romaji": "rōn",
+    "kana": "ローン"
+  },
+  {
+    "word": "レッグ",
+    "english": "leg",
+    "romaji": "reggu",
+    "kana": "レッグ"
+  },
+  {
+    "word": "エクササイズ",
+    "english": "exercise",
+    "romaji": "ekusasaizu",
+    "kana": "エクササイズ"
+  },
+  {
+    "word": "壁",
+    "english": "wall",
+    "romaji": "kabe",
+    "kana": "かべ"
+  },
+  {
+    "word": "キャッチ",
+    "english": "catch",
+    "romaji": "kyatchi",
+    "kana": "キャッチ"
+  },
+  {
+    "word": "マウント",
+    "english": "mount",
+    "romaji": "maunto",
+    "kana": "マウント"
+  },
+  {
+    "word": "希望",
+    "english": "wish / hope",
+    "romaji": "kibō",
+    "kana": "きぼう"
+  },
+  {
+    "word": "空",
+    "english": "sky",
+    "romaji": "sora",
+    "kana": "そら"
+  },
+  {
+    "word": "ボード",
+    "english": "board",
+    "romaji": "bōdo",
+    "kana": "ボード"
+  },
+  {
+    "word": "喜び",
+    "english": "joy",
+    "romaji": "yorokobi",
+    "kana": "よろこび"
+  },
+  {
+    "word": "冬",
+    "english": "winter",
+    "romaji": "fuyu",
+    "kana": "ふゆ"
+  },
+  {
+    "word": "土",
+    "english": "sat / soil",
+    "romaji": "tsuchi",
+    "kana": "つち"
+  },
+  {
+    "word": "書かれた",
+    "english": "written",
+    "romaji": "kakareta",
+    "kana": "かかれた"
+  },
+  {
+    "word": "ワイルド",
+    "english": "wild",
+    "romaji": "wairudo",
+    "kana": "ワイルド"
+  },
+  {
+    "word": "楽器",
+    "english": "instrument",
+    "romaji": "gakki",
+    "kana": "がっき"
+  },
+  {
+    "word": "保管",
+    "english": "kept",
+    "romaji": "hokan",
+    "kana": "ほかん"
+  },
+  {
+    "word": "ガラス",
+    "english": "glass",
+    "romaji": "garasu",
+    "kana": "ガラス"
+  },
+  {
+    "word": "草",
+    "english": "grass",
+    "romaji": "kusa",
+    "kana": "くさ"
+  },
+  {
+    "word": "乳牛",
+    "english": "cow",
+    "romaji": "nyūgyū",
+    "kana": "にゅうぎゅう"
+  },
+  {
+    "word": "エッジ",
+    "english": "edge",
+    "romaji": "ejji",
+    "kana": "エッジ"
+  },
+  {
+    "word": "看板",
+    "english": "sign",
+    "romaji": "kanban",
+    "kana": "かんばん"
+  },
+  {
+    "word": "訪問",
+    "english": "visit",
+    "romaji": "hōmon",
+    "kana": "ほうもん"
+  },
+  {
+    "word": "過去",
+    "english": "past",
+    "romaji": "kako",
+    "kana": "かこ"
+  },
+  {
+    "word": "ソフト",
+    "english": "soft",
+    "romaji": "sofuto",
+    "kana": "ソフト"
+  },
+  {
+    "word": "楽しい",
+    "english": "fun",
+    "romaji": "tanoshii",
+    "kana": "たのしい"
+  },
+  {
+    "word": "明るい",
+    "english": "bright",
+    "romaji": "akarui",
+    "kana": "あかるい"
+  },
+  {
+    "word": "ガス",
+    "english": "gas",
+    "romaji": "gasu",
+    "kana": "ガス"
+  },
+  {
+    "word": "天候",
+    "english": "weather",
+    "romaji": "tenkō",
+    "kana": "てんこう"
+  },
+  {
+    "word": "月",
+    "english": "month / moon",
+    "romaji": "tsuki",
+    "kana": "つき"
+  },
+  {
+    "word": "万",
+    "english": "million",
+    "romaji": "man",
+    "kana": "まん"
+  },
+  {
+    "word": "クマ",
+    "english": "bear",
+    "romaji": "kuma",
+    "kana": "クマ"
+  },
+  {
+    "word": "仕上げ",
+    "english": "finish",
+    "romaji": "shiage",
+    "kana": "しあげ"
+  },
+  {
+    "word": "幸せな",
+    "english": "happy",
+    "romaji": "shiawase na",
+    "kana": "しあわせな"
+  },
+  {
+    "word": "花",
+    "english": "flower",
+    "romaji": "hana",
+    "kana": "はな"
+  },
+  {
+    "word": "衣服を着せる",
+    "english": "clothe",
+    "romaji": "ifuku o kiseru",
+    "kana": "いふくをきせる"
+  },
+  {
+    "word": "奇妙な",
+    "english": "strange",
+    "romaji": "kimyō na",
+    "kana": "きみょうな"
+  },
+  {
+    "word": "いなくなった",
+    "english": "gone",
+    "romaji": "inakunatta",
+    "kana": "いなくなった"
+  },
+  {
+    "word": "トレード",
+    "english": "trade",
+    "romaji": "torēdo",
+    "kana": "トレード"
+  },
+  {
+    "word": "メロディー",
+    "english": "melody",
+    "romaji": "merodī",
+    "kana": "メロディー"
+  },
+  {
+    "word": "旅",
+    "english": "trip",
+    "romaji": "tabi",
+    "kana": "たび"
+  },
+  {
+    "word": "オフィス",
+    "english": "office",
+    "romaji": "ofisu",
+    "kana": "オフィス"
+  },
+  {
+    "word": "受け取る",
+    "english": "receive",
+    "romaji": "uketoru",
+    "kana": "うけとる"
+  },
+  {
+    "word": "行",
+    "english": "row",
+    "romaji": "gyō",
+    "kana": "ぎょう"
+  },
+  {
+    "word": "口",
+    "english": "mouth",
+    "romaji": "kuchi",
+    "kana": "くち"
+  },
+  {
+    "word": "正確な",
+    "english": "exact",
+    "romaji": "seikaku na",
+    "kana": "せいかくな"
+  },
+  {
+    "word": "シンボル",
+    "english": "symbol",
+    "romaji": "shinboru",
+    "kana": "シンボル"
+  },
+  {
+    "word": "死ぬ",
+    "english": "die",
+    "romaji": "shinu",
+    "kana": "しぬ"
+  },
+  {
+    "word": "最低",
+    "english": "least",
+    "romaji": "saitei",
+    "kana": "さいてい"
+  },
+  {
+    "word": "トラブル",
+    "english": "trouble",
+    "romaji": "toraburu",
+    "kana": "トラブル"
+  },
+  {
+    "word": "シャウト",
+    "english": "shout",
+    "romaji": "shauto",
+    "kana": "シャウト"
+  },
+  {
+    "word": "ただし",
+    "english": "except",
+    "romaji": "tadashi",
+    "kana": "ただし"
+  },
+  {
+    "word": "書いた",
+    "english": "wrote",
+    "romaji": "kaita",
+    "kana": "かいた"
+  },
+  {
+    "word": "シード",
+    "english": "seed",
+    "romaji": "shīdo",
+    "kana": "シード"
+  },
+  {
+    "word": "トーン",
+    "english": "tone",
+    "romaji": "tōn",
+    "kana": "トーン"
+  },
+  {
+    "word": "参加する",
+    "english": "join",
+    "romaji": "sankasuru",
+    "kana": "さんかする"
+  },
+  {
+    "word": "提案する",
+    "english": "suggest",
+    "romaji": "teiansuru",
+    "kana": "ていあんする"
+  },
+  {
+    "word": "クリーン",
+    "english": "clean",
+    "romaji": "kurīn",
+    "kana": "クリーン"
+  },
+  {
+    "word": "ブレーク",
+    "english": "break",
+    "romaji": "burēku",
+    "kana": "ブレーク"
+  },
+  {
+    "word": "女性",
+    "english": "lady / woman",
+    "romaji": "josei",
+    "kana": "じょせい"
+  },
+  {
+    "word": "庭",
+    "english": "yard / garden",
+    "romaji": "niwa",
+    "kana": "にわ"
+  },
+  {
+    "word": "上昇",
+    "english": "rise",
+    "romaji": "jōshō",
+    "kana": "じょうしょう"
+  },
+  {
+    "word": "悪い",
+    "english": "bad",
+    "romaji": "warui",
+    "kana": "わるい"
+  },
+  {
+    "word": "打撃",
+    "english": "blow",
+    "romaji": "dageki",
+    "kana": "だげき"
+  },
+  {
+    "word": "オイル",
+    "english": "oil",
+    "romaji": "oiru",
+    "kana": "オイル"
+  },
+  {
+    "word": "血",
+    "english": "blood",
+    "romaji": "chi",
+    "kana": "ち"
+  },
+  {
+    "word": "触れる",
+    "english": "touch",
+    "romaji": "fureru",
+    "kana": "ふれる"
+  },
+  {
+    "word": "成長した",
+    "english": "grew",
+    "romaji": "seichōshita",
+    "kana": "せいちょうした"
+  },
+  {
+    "word": "セント",
+    "english": "cent",
+    "romaji": "sento",
+    "kana": "セント"
+  },
+  {
+    "word": "ミックス",
+    "english": "mix",
+    "romaji": "mikkusu",
+    "kana": "ミックス"
+  },
+  {
+    "word": "チーム",
+    "english": "team",
+    "romaji": "chīmu",
+    "kana": "チーム"
+  },
+  {
+    "word": "ワイヤー",
+    "english": "wire",
+    "romaji": "waiyā",
+    "kana": "ワイヤー"
+  },
+  {
+    "word": "コスト",
+    "english": "cost",
+    "romaji": "kosuto",
+    "kana": "コスト"
+  },
+  {
+    "word": "失われた",
+    "english": "lost",
+    "romaji": "ushinawareta",
+    "kana": "うしなわれた"
+  },
+  {
+    "word": "ブラウン",
+    "english": "brown",
+    "romaji": "buraun",
+    "kana": "ブラウン"
+  },
+  {
+    "word": "着用",
+    "english": "wear",
+    "romaji": "chakuyō",
+    "kana": "ちゃくよう"
+  },
+  {
+    "word": "等しい",
+    "english": "equal",
+    "romaji": "hitoshii",
+    "kana": "ひとしい"
+  },
+  {
+    "word": "送信された",
+    "english": "sent",
+    "romaji": "sōshinsareta",
+    "kana": "そうしんされた"
+  },
+  {
+    "word": "落ちた",
+    "english": "fell",
+    "romaji": "ochita",
+    "kana": "おちた"
+  },
+  {
+    "word": "フィット",
+    "english": "fit",
+    "romaji": "fitto",
+    "kana": "フィット"
+  },
+  {
+    "word": "流れ",
+    "english": "flow",
+    "romaji": "nagare",
+    "kana": "ながれ"
+  },
+  {
+    "word": "フェア",
+    "english": "fair",
+    "romaji": "fea",
+    "kana": "フェア"
+  },
+  {
+    "word": "銀行",
+    "english": "bank",
+    "romaji": "ginkō",
+    "kana": "ぎんこう"
+  },
+  {
+    "word": "集める",
+    "english": "collect",
+    "romaji": "atsumeru",
+    "kana": "あつめる"
+  },
+  {
+    "word": "保存",
+    "english": "save",
+    "romaji": "hozon",
+    "kana": "ほぞん"
+  },
+  {
+    "word": "コントロール",
+    "english": "control",
+    "romaji": "kontorōru",
+    "kana": "コントロール"
+  },
+  {
+    "word": "進",
+    "english": "decimal (rare usage) / advance",
+    "romaji": "shin",
+    "kana": "しん"
+  },
+  {
+    "word": "耳",
+    "english": "ear",
+    "romaji": "mimi",
+    "kana": "みみ"
+  },
+  {
+    "word": "ほかに",
+    "english": "else",
+    "romaji": "hokani",
+    "kana": "ほかに"
+  },
+  {
+    "word": "かなり",
+    "english": "quite",
+    "romaji": "kanari",
+    "kana": "かなり"
+  },
+  {
+    "word": "壊した",
+    "english": "broke",
+    "romaji": "kowashita",
+    "kana": "こわした"
+  },
+  {
+    "word": "ケース",
+    "english": "case",
+    "romaji": "kēsu",
+    "kana": "ケース"
+  },
+  {
+    "word": "ミドル",
+    "english": "middle",
+    "romaji": "midoru",
+    "kana": "ミドル"
+  },
+  {
+    "word": "殺す",
+    "english": "kill",
+    "romaji": "korosu",
+    "kana": "ころす"
+  },
+  {
+    "word": "息子",
+    "english": "son",
+    "romaji": "musuko",
+    "kana": "むすこ"
+  },
+  {
+    "word": "湖",
+    "english": "lake",
+    "romaji": "mizuumi",
+    "kana": "みずうみ"
+  },
+  {
+    "word": "瞬間",
+    "english": "moment",
+    "romaji": "shunkan",
+    "kana": "しゅんかん"
+  },
+  {
+    "word": "スケール",
+    "english": "scale",
+    "romaji": "sukēru",
+    "kana": "スケール"
+  },
+  {
+    "word": "騒々しい",
+    "english": "loud",
+    "romaji": "sōzōshii",
+    "kana": "そうぞうしい"
+  },
+  {
+    "word": "春",
+    "english": "spring",
+    "romaji": "haru",
+    "kana": "はる"
+  },
+  {
+    "word": "観察する",
+    "english": "observe",
+    "romaji": "kansatsusuru",
+    "kana": "かんさつする"
+  },
+  {
+    "word": "子ども",
+    "english": "child",
+    "romaji": "kodomo",
+    "kana": "こども"
+  },
+  {
+    "word": "ストレート",
+    "english": "straight",
+    "romaji": "sutorēto",
+    "kana": "ストレート"
+  },
+  {
+    "word": "子音",
+    "english": "consonant",
+    "romaji": "shiin",
+    "kana": "しいん"
+  },
+  {
+    "word": "国家",
+    "english": "nation",
+    "romaji": "kokka",
+    "kana": "こっか"
+  },
+  {
+    "word": "辞書",
+    "english": "dictionary",
+    "romaji": "jisho",
+    "kana": "じしょ"
+  },
+  {
+    "word": "ミルク",
+    "english": "milk",
+    "romaji": "miruku",
+    "kana": "ミルク"
+  },
+  {
+    "word": "スピード",
+    "english": "speed",
+    "romaji": "supīdo",
+    "kana": "スピード"
+  },
+  {
+    "word": "オルガン",
+    "english": "organ",
+    "romaji": "orugan",
+    "kana": "オルガン"
+  },
+  {
+    "word": "支払い",
+    "english": "pay",
+    "romaji": "shiharai",
+    "kana": "しはらい"
+  },
+  {
+    "word": "年齢",
+    "english": "age",
+    "romaji": "nenrei",
+    "kana": "ねんれい"
+  },
+  {
+    "word": "セクション",
+    "english": "section",
+    "romaji": "sekushon",
+    "kana": "セクション"
+  },
+  {
+    "word": "ドレス",
+    "english": "dress",
+    "romaji": "doresu",
+    "kana": "ドレス"
+  },
+  {
+    "word": "クラウド",
+    "english": "cloud",
+    "romaji": "kuraudo",
+    "kana": "クラウド"
+  },
+  {
+    "word": "驚き",
+    "english": "surprise",
+    "romaji": "odoroki",
+    "kana": "おどろき"
+  },
+  {
+    "word": "静かな",
+    "english": "quiet",
+    "romaji": "shizuka na",
+    "kana": "しずかな"
+  },
+  {
+    "word": "石",
+    "english": "stone",
+    "romaji": "ishi",
+    "kana": "いし"
+  },
+  {
+    "word": "小さな",
+    "english": "tiny / small",
+    "romaji": "chiisana",
+    "kana": "ちいさな"
+  },
+  {
+    "word": "登る",
+    "english": "climb",
+    "romaji": "noboru",
+    "kana": "のぼる"
+  },
+  {
+    "word": "涼しい",
+    "english": "cool",
+    "romaji": "suzushii",
+    "kana": "すずしい"
+  },
+  {
+    "word": "デザイン",
+    "english": "design",
+    "romaji": "dezain",
+    "kana": "デザイン"
+  },
+  {
+    "word": "貧しい",
+    "english": "poor",
+    "romaji": "mazushii",
+    "kana": "まずしい"
+  },
+  {
+    "word": "たくさん",
+    "english": "lot",
+    "romaji": "takusan",
+    "kana": "たくさん"
+  },
+  {
+    "word": "実験",
+    "english": "experiment",
+    "romaji": "jikken",
+    "kana": "じっけん"
+  },
+  {
+    "word": "ボトム",
+    "english": "bottom",
+    "romaji": "botomu",
+    "kana": "ボトム"
+  },
+  {
+    "word": "キー",
+    "english": "key",
+    "romaji": "kī",
+    "kana": "キー"
+  },
+  {
+    "word": "鉄",
+    "english": "iron",
+    "romaji": "tetsu",
+    "kana": "てつ"
+  },
+  {
+    "word": "シングル",
+    "english": "single",
+    "romaji": "shinguru",
+    "kana": "シングル"
+  },
+  {
+    "word": "スティック",
+    "english": "stick",
+    "romaji": "sutikku",
+    "kana": "スティック"
+  },
+  {
+    "word": "フラット",
+    "english": "flat",
+    "romaji": "furatto",
+    "kana": "フラット"
+  },
+  {
+    "word": "個の",
+    "english": "piece of (counter)",
+    "romaji": "ko no",
+    "kana": "この"
+  },
+  {
+    "word": "スキン",
+    "english": "skin",
+    "romaji": "sukin",
+    "kana": "スキン"
+  },
+  {
+    "word": "笑顔",
+    "english": "smile",
+    "romaji": "egao",
+    "kana": "えがお"
+  },
+  {
+    "word": "しわ",
+    "english": "crease",
+    "romaji": "shiwa",
+    "kana": "しわ"
+  },
+  {
+    "word": "穴",
+    "english": "hole",
+    "romaji": "ana",
+    "kana": "あな"
+  },
+  {
+    "word": "ジャンプ",
+    "english": "jump",
+    "romaji": "janpu",
+    "kana": "ジャンプ"
+  },
+  {
+    "word": "赤ちゃん",
+    "english": "baby",
+    "romaji": "akachan",
+    "kana": "あかちゃん"
+  },
+  {
+    "word": "村",
+    "english": "village",
+    "romaji": "mura",
+    "kana": "むら"
+  },
+  {
+    "word": "大会",
+    "english": "meet",
+    "romaji": "taikai",
+    "kana": "たいかい"
+  },
+  {
+    "word": "ルート",
+    "english": "root",
+    "romaji": "rūto",
+    "kana": "ルート"
+  },
+  {
+    "word": "買う",
+    "english": "buy",
+    "romaji": "kau",
+    "kana": "かう"
+  },
+  {
+    "word": "上げる",
+    "english": "raise",
+    "romaji": "ageru",
+    "kana": "あげる"
+  },
+  {
+    "word": "解く",
+    "english": "solve",
+    "romaji": "toku",
+    "kana": "とく"
+  },
+  {
+    "word": "金属",
+    "english": "metal",
+    "romaji": "kinzoku",
+    "kana": "きんぞく"
+  },
+  {
+    "word": "かどうか",
+    "english": "whether",
+    "romaji": "kadōka",
+    "kana": "かどうか"
+  },
+  {
+    "word": "プッシュ",
+    "english": "push",
+    "romaji": "pusshu",
+    "kana": "プッシュ"
+  },
+  {
+    "word": "7",
+    "english": "seven",
+    "romaji": "nana",
+    "kana": "なな"
+  },
+  {
+    "word": "パラグラフ",
+    "english": "paragraph",
+    "romaji": "paragurafu",
+    "kana": "パラグラフ"
+  },
+  {
+    "word": "第3",
+    "english": "third",
+    "romaji": "daisan",
+    "kana": "だいさん"
+  },
+  {
+    "word": "ハンドヘルド",
+    "english": "held / handheld",
+    "romaji": "handoherudo",
+    "kana": "ハンドヘルド"
+  },
+  {
+    "word": "髪",
+    "english": "hair",
+    "romaji": "kami",
+    "kana": "かみ"
+  },
+  {
+    "word": "説明する",
+    "english": "describe",
+    "romaji": "setsumeisuru",
+    "kana": "せつめいする"
+  },
+  {
+    "word": "料理人",
+    "english": "cook",
+    "romaji": "ryōrinin",
+    "kana": "りょうりにん"
+  },
+  {
+    "word": "床",
+    "english": "floor",
+    "romaji": "yuka",
+    "kana": "ゆか"
+  },
+  {
+    "word": "どちら",
+    "english": "either",
+    "romaji": "dochira",
+    "kana": "どちら"
+  },
+  {
+    "word": "結果",
+    "english": "result",
+    "romaji": "kekka",
+    "kana": "けっか"
+  },
+  {
+    "word": "燃やす",
+    "english": "burn",
+    "romaji": "moyasu",
+    "kana": "もやす"
+  },
+  {
+    "word": "丘",
+    "english": "hill",
+    "romaji": "oka",
+    "kana": "おか"
+  },
+  {
+    "word": "金庫",
+    "english": "safe",
+    "romaji": "kinko",
+    "kana": "きんこ"
+  },
+  {
+    "word": "猫",
+    "english": "cat",
+    "romaji": "neko",
+    "kana": "ねこ"
+  },
+  {
+    "word": "世紀",
+    "english": "century",
+    "romaji": "seiki",
+    "kana": "せいき"
+  },
+  {
+    "word": "考える",
+    "english": "consider",
+    "romaji": "kangaeru",
+    "kana": "かんがえる"
+  },
+  {
+    "word": "タイプ",
+    "english": "type",
+    "romaji": "taipu",
+    "kana": "タイプ"
+  },
+  {
+    "word": "法則",
+    "english": "law",
+    "romaji": "hōsoku",
+    "kana": "ほうそく"
+  },
+  {
+    "word": "ビット",
+    "english": "bit",
+    "romaji": "bitto",
+    "kana": "ビット"
+  },
+  {
+    "word": "海岸",
+    "english": "coast",
+    "romaji": "kaigan",
+    "kana": "かいがん"
+  },
+  {
+    "word": "コピー",
+    "english": "copy",
+    "romaji": "kopī",
+    "kana": "コピー"
+  },
+  {
+    "word": "フレーズ",
+    "english": "phrase",
+    "romaji": "furēzu",
+    "kana": "フレーズ"
+  },
+  {
+    "word": "サイレント",
+    "english": "silent",
+    "romaji": "sairento",
+    "kana": "サイレント"
+  },
+  {
+    "word": "背の高い",
+    "english": "tall",
+    "romaji": "se no takai",
+    "kana": "せのたかい"
+  },
+  {
+    "word": "砂",
+    "english": "sand",
+    "romaji": "suna",
+    "kana": "すな"
+  },
+  {
+    "word": "土壌",
+    "english": "soil",
+    "romaji": "dojō",
+    "kana": "どじょう"
+  },
+  {
+    "word": "ロール",
+    "english": "roll",
+    "romaji": "rōru",
+    "kana": "ロール"
+  },
+  {
+    "word": "温度",
+    "english": "temperature",
+    "romaji": "ondo",
+    "kana": "おんど"
+  },
+  {
+    "word": "指",
+    "english": "finger",
+    "romaji": "yubi",
+    "kana": "ゆび"
+  },
+  {
+    "word": "業界",
+    "english": "industry",
+    "romaji": "gyōkai",
+    "kana": "ぎょうかい"
+  },
+  {
+    "word": "値",
+    "english": "value",
+    "romaji": "atai",
+    "kana": "あたい"
+  },
+  {
+    "word": "戦い",
+    "english": "fight",
+    "romaji": "tatakai",
+    "kana": "たたかい"
+  },
+  {
+    "word": "うそ",
+    "english": "lie",
+    "romaji": "uso",
+    "kana": "うそ"
+  },
+  {
+    "word": "ビート",
+    "english": "beat",
+    "romaji": "bīto",
+    "kana": "ビート"
+  },
+  {
+    "word": "エキサイト",
+    "english": "excite",
+    "romaji": "ekisaito",
+    "kana": "エキサイト"
+  },
+  {
+    "word": "ナチュラル",
+    "english": "natural",
+    "romaji": "nachuraru",
+    "kana": "ナチュラル"
+  },
+  {
+    "word": "ビュー",
+    "english": "view",
+    "romaji": "byū",
+    "kana": "ビュー"
+  },
+  {
+    "word": "感覚",
+    "english": "sense",
+    "romaji": "kankaku",
+    "kana": "かんかく"
+  },
+  {
+    "word": "首都",
+    "english": "capital",
+    "romaji": "shuto",
+    "kana": "しゅと"
+  },
+  {
+    "word": "ないでしょう",
+    "english": "won't",
+    "romaji": "naideshō",
+    "kana": "ないでしょう"
+  },
+  {
+    "word": "椅子",
+    "english": "chair",
+    "romaji": "isu",
+    "kana": "いす"
+  },
+  {
+    "word": "危険",
+    "english": "danger",
+    "romaji": "kiken",
+    "kana": "きけん"
+  },
+  {
+    "word": "フルーツ",
+    "english": "fruit",
+    "romaji": "furūtsu",
+    "kana": "フルーツ"
+  },
+  {
+    "word": "金持ち",
+    "english": "rich",
+    "romaji": "kanemochi",
+    "kana": "かねもち"
+  },
+  {
+    "word": "厚い",
+    "english": "thick",
+    "romaji": "atsui",
+    "kana": "あつい"
+  },
+  {
+    "word": "兵士",
+    "english": "soldier",
+    "romaji": "heishi",
+    "kana": "へいし"
+  },
+  {
+    "word": "プロセス",
+    "english": "process",
+    "romaji": "purosesu",
+    "kana": "プロセス"
+  },
+  {
+    "word": "操作する",
+    "english": "operate",
+    "romaji": "sōsasuru",
+    "kana": "そうさする"
+  },
+  {
+    "word": "練習",
+    "english": "practice",
+    "romaji": "renshū",
+    "kana": "れんしゅう"
+  },
+  {
+    "word": "別",
+    "english": "separate",
+    "romaji": "betsu",
+    "kana": "べつ"
+  },
+  {
+    "word": "難しい",
+    "english": "difficult",
+    "romaji": "muzukashii",
+    "kana": "むずかしい"
+  },
+  {
+    "word": "医師",
+    "english": "doctor",
+    "romaji": "ishi",
+    "kana": "いし"
+  },
+  {
+    "word": "どうぞ",
+    "english": "please",
+    "romaji": "dōzo",
+    "kana": "どうぞ"
+  },
+  {
+    "word": "守る",
+    "english": "protect",
+    "romaji": "mamoru",
+    "kana": "まもる"
+  },
+  {
+    "word": "正午",
+    "english": "noon",
+    "romaji": "shōgo",
+    "kana": "しょうご"
+  },
+  {
+    "word": "作物",
+    "english": "crop",
+    "romaji": "sakumotsu",
+    "kana": "さくもつ"
+  },
+  {
+    "word": "モダン",
+    "english": "modern",
+    "romaji": "modan",
+    "kana": "モダン"
+  },
+  {
+    "word": "要素",
+    "english": "element",
+    "romaji": "yōso",
+    "kana": "ようそ"
+  },
+  {
+    "word": "ヒット",
+    "english": "hit",
+    "romaji": "hitto",
+    "kana": "ヒット"
+  },
+  {
+    "word": "学生",
+    "english": "student",
+    "romaji": "gakusei",
+    "kana": "がくせい"
+  },
+  {
+    "word": "コーナー",
+    "english": "corner",
+    "romaji": "kōnā",
+    "kana": "コーナー"
+  },
+  {
+    "word": "パーティー",
+    "english": "party",
+    "romaji": "pātī",
+    "kana": "パーティー"
+  },
+  {
+    "word": "サプライ",
+    "english": "supply",
+    "romaji": "sapurai",
+    "kana": "サプライ"
+  },
+  {
+    "word": "検索する",
+    "english": "search (verb)",
+    "romaji": "kensakusuru",
+    "kana": "けんさくする"
+  },
+  {
+    "word": "リング",
+    "english": "ring",
+    "romaji": "ringu",
+    "kana": "リング"
+  },
+  {
+    "word": "キャラクター",
+    "english": "character",
+    "romaji": "kyarakutā",
+    "kana": "キャラクター"
+  },
+  {
+    "word": "昆虫",
+    "english": "insect",
+    "romaji": "konchū",
+    "kana": "こんちゅう"
+  },
+  {
+    "word": "期間",
+    "english": "period",
+    "romaji": "kikan",
+    "kana": "きかん"
+  },
+  {
+    "word": "示す",
+    "english": "indicate",
+    "romaji": "shimesu",
+    "kana": "しめす"
+  },
+  {
+    "word": "ラジオ",
+    "english": "radio",
+    "romaji": "rajio",
+    "kana": "ラジオ"
+  },
+  {
+    "word": "スポーク",
+    "english": "spoke",
+    "romaji": "supōku",
+    "kana": "スポーク"
+  },
+  {
+    "word": "アトム",
+    "english": "atom",
+    "romaji": "atomu",
+    "kana": "アトム"
+  },
+  {
+    "word": "人間",
+    "english": "human",
+    "romaji": "ningen",
+    "kana": "にんげん"
+  },
+  {
+    "word": "歴史",
+    "english": "history",
+    "romaji": "rekishi",
+    "kana": "れきし"
+  },
+  {
+    "word": "効果",
+    "english": "effect",
+    "romaji": "kōka",
+    "kana": "こうか"
+  },
+  {
+    "word": "エレクトリック",
+    "english": "electric",
+    "romaji": "erekutorikku",
+    "kana": "エレクトリック"
+  },
+  {
+    "word": "期待する",
+    "english": "expect",
+    "romaji": "kitaisuru",
+    "kana": "きたいする"
+  },
+  {
+    "word": "骨",
+    "english": "bone",
+    "romaji": "hone",
+    "kana": "ほね"
+  },
+  {
+    "word": "レール",
+    "english": "rail",
+    "romaji": "rēru",
+    "kana": "レール"
+  },
+  {
+    "word": "想像する",
+    "english": "imagine",
+    "romaji": "sōzōsuru",
+    "kana": "そうぞうする"
+  },
+  {
+    "word": "提供する",
+    "english": "provide",
+    "romaji": "teikyōsuru",
+    "kana": "ていきょうする"
+  },
+  {
+    "word": "同意する",
+    "english": "agree",
+    "romaji": "dōisuru",
+    "kana": "どういする"
+  },
+  {
+    "word": "このようにして",
+    "english": "thus",
+    "romaji": "konoyōnishite",
+    "kana": "このようにして"
+  },
+  {
+    "word": "優しい",
+    "english": "gentle",
+    "romaji": "yasashii",
+    "kana": "やさしい"
+  },
+  {
+    "word": "女",
+    "english": "woman",
+    "romaji": "onna",
+    "kana": "おんな"
+  },
+  {
+    "word": "キャプテン",
+    "english": "captain",
+    "romaji": "kyaputen",
+    "kana": "キャプテン"
+  },
+  {
+    "word": "推測",
+    "english": "guess",
+    "romaji": "suisoku",
+    "kana": "すいそく"
+  },
+  {
+    "word": "シャープ",
+    "english": "sharp",
+    "romaji": "shāpu",
+    "kana": "シャープ"
+  },
+  {
+    "word": "ウイング",
+    "english": "wing",
+    "romaji": "uingu",
+    "kana": "ウイング"
+  },
+  {
+    "word": "隣人",
+    "english": "neighbor",
+    "romaji": "rinjin",
+    "kana": "りんじん"
+  },
+  {
+    "word": "ウォッシュ",
+    "english": "wash",
+    "romaji": "wosshu",
+    "kana": "ウォッシュ"
+  },
+  {
+    "word": "バット",
+    "english": "bat",
+    "romaji": "batto",
+    "kana": "バット"
+  },
+  {
+    "word": "むしろ",
+    "english": "rather",
+    "romaji": "mushiro",
+    "kana": "むしろ"
+  },
+  {
+    "word": "群衆",
+    "english": "crowd",
+    "romaji": "gunshū",
+    "kana": "ぐんしゅう"
+  },
+  {
+    "word": "トウモロコシ",
+    "english": "corn",
+    "romaji": "tōmorokoshi",
+    "kana": "トウモロコシ"
+  },
+  {
+    "word": "比較する",
+    "english": "compare",
+    "romaji": "hikakusuru",
+    "kana": "ひかくする"
+  },
+  {
+    "word": "詩",
+    "english": "poem",
+    "romaji": "shi",
+    "kana": "し"
+  },
+  {
+    "word": "文字列",
+    "english": "string",
+    "romaji": "mojiretsu",
+    "kana": "もじれつ"
+  },
+  {
+    "word": "鐘",
+    "english": "bell",
+    "romaji": "kane",
+    "kana": "かね"
+  },
+  {
+    "word": "決まる",
+    "english": "depend / be decided",
+    "romaji": "kimaru",
+    "kana": "きまる"
+  },
+  {
+    "word": "肉",
+    "english": "meat",
+    "romaji": "niku",
+    "kana": "にく"
+  },
+  {
+    "word": "こする",
+    "english": "rub",
+    "romaji": "kosuru",
+    "kana": "こする"
+  },
+  {
+    "word": "チューブ",
+    "english": "tube",
+    "romaji": "chūbu",
+    "kana": "チューブ"
+  },
+  {
+    "word": "有名な",
+    "english": "famous",
+    "romaji": "yūmei na",
+    "kana": "ゆうめいな"
+  },
+  {
+    "word": "ドル",
+    "english": "dollar",
+    "romaji": "doru",
+    "kana": "ドル"
+  },
+  {
+    "word": "ストリーム",
+    "english": "stream",
+    "romaji": "sutorīmu",
+    "kana": "ストリーム"
+  },
+  {
+    "word": "恐怖",
+    "english": "fear",
+    "romaji": "kyōfu",
+    "kana": "きょうふ"
+  },
+  {
+    "word": "視力",
+    "english": "sight",
+    "romaji": "shiryoku",
+    "kana": "しりょく"
+  },
+  {
+    "word": "薄い",
+    "english": "thin",
+    "romaji": "usui",
+    "kana": "うすい"
+  },
+  {
+    "word": "三角形",
+    "english": "triangle",
+    "romaji": "sankakkei",
+    "kana": "さんかくけい"
+  },
+  {
+    "word": "惑星",
+    "english": "planet",
+    "romaji": "wakusei",
+    "kana": "わくせい"
+  },
+  {
+    "word": "急ぐ",
+    "english": "hurry",
+    "romaji": "isogu",
+    "kana": "いそぐ"
+  },
+  {
+    "word": "チーフ",
+    "english": "chief",
+    "romaji": "chīfu",
+    "kana": "チーフ"
+  },
+  {
+    "word": "コロニー",
+    "english": "colony",
+    "romaji": "koronī",
+    "kana": "コロニー"
+  },
+  {
+    "word": "クロック",
+    "english": "clock",
+    "romaji": "kurokku",
+    "kana": "クロック"
+  },
+  {
+    "word": "地雷",
+    "english": "mine (explosive)",
+    "romaji": "jirai",
+    "kana": "じらい"
+  },
+  {
+    "word": "ネクタイ",
+    "english": "tie",
+    "romaji": "nekutai",
+    "kana": "ネクタイ"
+  },
+  {
+    "word": "入力する",
+    "english": "enter / input",
+    "romaji": "nyūryokusuru",
+    "kana": "にゅうりょくする"
+  },
+  {
+    "word": "主要な",
+    "english": "major",
+    "romaji": "shuyō na",
+    "kana": "しゅような"
+  },
+  {
+    "word": "新鮮な",
+    "english": "fresh",
+    "romaji": "shinsen na",
+    "kana": "しんせんな"
+  },
+  {
+    "word": "検索",
+    "english": "search",
+    "romaji": "kensaku",
+    "kana": "けんさく"
+  },
+  {
+    "word": "送信",
+    "english": "send",
+    "romaji": "sōshin",
+    "kana": "そうしん"
+  },
+  {
+    "word": "黄色",
+    "english": "yellow",
+    "romaji": "kiiro",
+    "kana": "きいろ"
+  },
+  {
+    "word": "銃",
+    "english": "gun",
+    "romaji": "jū",
+    "kana": "じゅう"
+  },
+  {
+    "word": "許可する",
+    "english": "allow",
+    "romaji": "kyokasuru",
+    "kana": "きょかする"
+  },
+  {
+    "word": "印刷",
+    "english": "print",
+    "romaji": "insatsu",
+    "kana": "いんさつ"
+  },
+  {
+    "word": "死んだ",
+    "english": "dead",
+    "romaji": "shinda",
+    "kana": "しんだ"
+  },
+  {
+    "word": "スポット",
+    "english": "spot",
+    "romaji": "supotto",
+    "kana": "スポット"
+  },
+  {
+    "word": "砂漠",
+    "english": "desert",
+    "romaji": "sabaku",
+    "kana": "さばく"
+  },
+  {
+    "word": "スーツ",
+    "english": "suit",
+    "romaji": "sūtsu",
+    "kana": "スーツ"
+  },
+  {
+    "word": "現在の",
+    "english": "current",
+    "romaji": "genzai no",
+    "kana": "げんざいの"
+  },
+  {
+    "word": "リフト",
+    "english": "lift",
+    "romaji": "rifuto",
+    "kana": "リフト"
+  },
+  {
+    "word": "ローズ",
+    "english": "rose",
+    "romaji": "rōzu",
+    "kana": "ローズ"
+  },
+  {
+    "word": "届く",
+    "english": "arrive / reach",
+    "romaji": "todoku",
+    "kana": "とどく"
+  },
+  {
+    "word": "マスター",
+    "english": "master",
+    "romaji": "masutā",
+    "kana": "マスター"
+  },
+  {
+    "word": "トラック",
+    "english": "truck / track",
+    "romaji": "torakku",
+    "kana": "トラック"
+  },
+  {
+    "word": "親",
+    "english": "parent",
+    "romaji": "oya",
+    "kana": "おや"
+  },
+  {
+    "word": "分裂",
+    "english": "division",
+    "romaji": "bunretsu",
+    "kana": "ぶんれつ"
+  },
+  {
+    "word": "シート",
+    "english": "sheet",
+    "romaji": "shīto",
+    "kana": "シート"
+  },
+  {
+    "word": "物質",
+    "english": "substance",
+    "romaji": "busshitsu",
+    "kana": "ぶっしつ"
+  },
+  {
+    "word": "好む",
+    "english": "favor / like",
+    "romaji": "konomu",
+    "kana": "このむ"
+  },
+  {
+    "word": "接続する",
+    "english": "connect",
+    "romaji": "setsuzokusuru",
+    "kana": "せつぞくする"
+  },
+  {
+    "word": "ポスト",
+    "english": "post",
+    "romaji": "posuto",
+    "kana": "ポスト"
+  },
+  {
+    "word": "過ごす",
+    "english": "spend",
+    "romaji": "sugosu",
+    "kana": "すごす"
+  },
+  {
+    "word": "和音",
+    "english": "chord",
+    "romaji": "waon",
+    "kana": "わおん"
+  },
+  {
+    "word": "脂肪",
+    "english": "fat",
+    "romaji": "shibō",
+    "kana": "しぼう"
+  },
+  {
+    "word": "うれしい",
+    "english": "glad",
+    "romaji": "ureshii",
+    "kana": "うれしい"
+  },
+  {
+    "word": "オリジナル",
+    "english": "original",
+    "romaji": "orijinaru",
+    "kana": "オリジナル"
+  },
+  {
+    "word": "シェア",
+    "english": "share",
+    "romaji": "shea",
+    "kana": "シェア"
+  },
+  {
+    "word": "駅",
+    "english": "station",
+    "romaji": "eki",
+    "kana": "えき"
+  },
+  {
+    "word": "お父さん",
+    "english": "dad",
+    "romaji": "otōsan",
+    "kana": "おとうさん"
+  },
+  {
+    "word": "パン",
+    "english": "bread",
+    "romaji": "pan",
+    "kana": "パン"
+  },
+  {
+    "word": "充電",
+    "english": "charge",
+    "romaji": "jūden",
+    "kana": "じゅうでん"
+  },
+  {
+    "word": "適切な",
+    "english": "proper",
+    "romaji": "tekisetsu na",
+    "kana": "てきせつな"
+  },
+  {
+    "word": "バー",
+    "english": "bar",
+    "romaji": "bā",
+    "kana": "バー"
+  },
+  {
+    "word": "申し出",
+    "english": "offer",
+    "romaji": "mōshide",
+    "kana": "もうしで"
+  },
+  {
+    "word": "セグメント",
+    "english": "segment",
+    "romaji": "segumento",
+    "kana": "セグメント"
+  },
+  {
+    "word": "スレーブ",
+    "english": "slave",
+    "romaji": "surēbu",
+    "kana": "スレーブ"
+  },
+  {
+    "word": "アヒル",
+    "english": "duck",
+    "romaji": "ahiru",
+    "kana": "アヒル"
+  },
+  {
+    "word": "インスタント",
+    "english": "instant",
+    "romaji": "insutanto",
+    "kana": "インスタント"
+  },
+  {
+    "word": "市場",
+    "english": "market",
+    "romaji": "ichiba",
+    "kana": "いちば"
+  },
+  {
+    "word": "度",
+    "english": "degree",
+    "romaji": "do",
+    "kana": "ど"
+  },
+  {
+    "word": "投入する",
+    "english": "populate",
+    "romaji": "tōnyūsuru",
+    "kana": "とうにゅうする"
+  },
+  {
+    "word": "ひよこ",
+    "english": "chick",
+    "romaji": "hiyoko",
+    "kana": "ひよこ"
+  },
+  {
+    "word": "かわいい",
+    "english": "cute / dear",
+    "romaji": "kawaii",
+    "kana": "かわいい"
+  },
+  {
+    "word": "敵",
+    "english": "enemy",
+    "romaji": "teki",
+    "kana": "てき"
+  },
+  {
+    "word": "返事",
+    "english": "reply",
+    "romaji": "henji",
+    "kana": "へんじ"
+  },
+  {
+    "word": "ドリンク",
+    "english": "drink",
+    "romaji": "dorinku",
+    "kana": "ドリンク"
+  },
+  {
+    "word": "サポート",
+    "english": "support",
+    "romaji": "sapōto",
+    "kana": "サポート"
+  },
+  {
+    "word": "スピーチ",
+    "english": "speech",
+    "romaji": "supīchi",
+    "kana": "スピーチ"
+  },
+  {
+    "word": "自然",
+    "english": "nature",
+    "romaji": "shizen",
+    "kana": "しぜん"
+  },
+  {
+    "word": "レンジ",
+    "english": "range",
+    "romaji": "renji",
+    "kana": "レンジ"
+  },
+  {
+    "word": "スチーム",
+    "english": "steam",
+    "romaji": "suchīmu",
+    "kana": "スチーム"
+  },
+  {
+    "word": "モーション",
+    "english": "motion",
+    "romaji": "mōshon",
+    "kana": "モーション"
+  },
+  {
+    "word": "パス",
+    "english": "path / pass",
+    "romaji": "pasu",
+    "kana": "パス"
+  },
+  {
+    "word": "液体",
+    "english": "liquid",
+    "romaji": "ekitai",
+    "kana": "えきたい"
+  },
+  {
+    "word": "ログ",
+    "english": "log",
+    "romaji": "rogu",
+    "kana": "ログ"
+  },
+  {
+    "word": "意味",
+    "english": "meant",
+    "romaji": "imi",
+    "kana": "いみ"
+  },
+  {
+    "word": "商",
+    "english": "quotient",
+    "romaji": "shō",
+    "kana": "しょう"
+  },
+  {
+    "word": "歯牙",
+    "english": "teeth",
+    "romaji": "shiga",
+    "kana": "しが"
+  },
+  {
+    "word": "シェル",
+    "english": "shell",
+    "romaji": "sheru",
+    "kana": "シェル"
+  },
+  {
+    "word": "首",
+    "english": "neck",
+    "romaji": "kubi",
+    "kana": "くび"
+  },
+  {
+    "word": "酸素",
+    "english": "oxygen",
+    "romaji": "sanso",
+    "kana": "さんそ"
+  },
+  {
+    "word": "砂糖",
+    "english": "sugar",
+    "romaji": "satō",
+    "kana": "さとう"
+  },
+  {
+    "word": "死",
+    "english": "death",
+    "romaji": "shi",
+    "kana": "し"
+  },
+  {
+    "word": "スキル",
+    "english": "skill",
+    "romaji": "sukiru",
+    "kana": "スキル"
+  },
+  {
+    "word": "女性たち",
+    "english": "women",
+    "romaji": "joseitachi",
+    "kana": "じょせいたち"
+  },
+  {
+    "word": "シーズン",
+    "english": "season",
+    "romaji": "shīzun",
+    "kana": "シーズン"
+  },
+  {
+    "word": "ソリューション",
+    "english": "solution",
+    "romaji": "soryūshon",
+    "kana": "ソリューション"
+  },
+  {
+    "word": "マグネット",
+    "english": "magnet",
+    "romaji": "magunetto",
+    "kana": "マグネット"
+  },
+  {
+    "word": "銀",
+    "english": "silver",
+    "romaji": "gin",
+    "kana": "ぎん"
+  },
+  {
+    "word": "感謝",
+    "english": "thank",
+    "romaji": "kansha",
+    "kana": "かんしゃ"
+  },
+  {
+    "word": "ブランチ",
+    "english": "branch",
+    "romaji": "buranchi",
+    "kana": "ブランチ"
+  },
+  {
+    "word": "マッチ",
+    "english": "match",
+    "romaji": "macchi",
+    "kana": "マッチ"
+  },
+  {
+    "word": "サフィックス",
+    "english": "suffix",
+    "romaji": "safikkusu",
+    "kana": "サフィックス"
+  },
+  {
+    "word": "特に",
+    "english": "especially",
+    "romaji": "toku ni",
+    "kana": "とくに"
+  },
+  {
+    "word": "イチジク",
+    "english": "fig",
+    "romaji": "ichijiku",
+    "kana": "イチジク"
+  },
+  {
+    "word": "恐れて",
+    "english": "afraid",
+    "romaji": "osorete",
+    "kana": "おそれて"
+  },
+  {
+    "word": "巨大な",
+    "english": "huge",
+    "romaji": "kyodai na",
+    "kana": "きょだいな"
+  },
+  {
+    "word": "姉妹",
+    "english": "sister",
+    "romaji": "shimai",
+    "kana": "しまい"
+  },
+  {
+    "word": "スチール",
+    "english": "steel",
+    "romaji": "suchīru",
+    "kana": "スチール"
+  },
+  {
+    "word": "話し合う",
+    "english": "discuss",
+    "romaji": "hanashiau",
+    "kana": "はなしあう"
+  },
+  {
+    "word": "フォワード",
+    "english": "forward",
+    "romaji": "fowādo",
+    "kana": "フォワード"
+  },
+  {
+    "word": "同じような",
+    "english": "similar",
+    "romaji": "onajiyōna",
+    "kana": "おなじような"
+  },
+  {
+    "word": "ガイド",
+    "english": "guide",
+    "romaji": "gaido",
+    "kana": "ガイド"
+  },
+  {
+    "word": "経験",
+    "english": "experience",
+    "romaji": "keiken",
+    "kana": "けいけん"
+  },
+  {
+    "word": "スコア",
+    "english": "score",
+    "romaji": "sukoa",
+    "kana": "スコア"
+  },
+  {
+    "word": "リンゴ",
+    "english": "apple",
+    "romaji": "ringo",
+    "kana": "リンゴ"
+  },
+  {
+    "word": "買った",
+    "english": "bought",
+    "romaji": "katta",
+    "kana": "かった"
+  },
+  {
+    "word": "主導",
+    "english": "led",
+    "romaji": "shudō",
+    "kana": "しゅどう"
+  },
+  {
+    "word": "ピッチ",
+    "english": "pitch",
+    "romaji": "picchi",
+    "kana": "ピッチ"
+  },
+  {
+    "word": "コート",
+    "english": "coat",
+    "romaji": "kōto",
+    "kana": "コート"
+  },
+  {
+    "word": "マス",
+    "english": "mass",
+    "romaji": "masu",
+    "kana": "マス"
+  },
+  {
+    "word": "カード",
+    "english": "card",
+    "romaji": "kādo",
+    "kana": "カード"
+  },
+  {
+    "word": "バンド",
+    "english": "band",
+    "romaji": "bando",
+    "kana": "バンド"
+  },
+  {
+    "word": "ロープ",
+    "english": "rope",
+    "romaji": "rōpu",
+    "kana": "ロープ"
+  },
+  {
+    "word": "スリップ",
+    "english": "slip",
+    "romaji": "surippu",
+    "kana": "スリップ"
+  },
+  {
+    "word": "勝つ",
+    "english": "win",
+    "romaji": "katsu",
+    "kana": "かつ"
+  },
+  {
+    "word": "夢",
+    "english": "dream",
+    "romaji": "yume",
+    "kana": "ゆめ"
+  },
+  {
+    "word": "夕べ",
+    "english": "evening",
+    "romaji": "yūbe",
+    "kana": "ゆうべ"
+  },
+  {
+    "word": "条件",
+    "english": "condition",
+    "romaji": "jōken",
+    "kana": "じょうけん"
+  },
+  {
+    "word": "フィード",
+    "english": "feed",
+    "romaji": "fīdo",
+    "kana": "フィード"
+  },
+  {
+    "word": "ツール",
+    "english": "tool",
+    "romaji": "tsūru",
+    "kana": "ツール"
+  },
+  {
+    "word": "合計",
+    "english": "total",
+    "romaji": "gōkei",
+    "kana": "ごうけい"
+  },
+  {
+    "word": "基本",
+    "english": "basic",
+    "romaji": "kihon",
+    "kana": "きほん"
+  },
+  {
+    "word": "匂い",
+    "english": "smell",
+    "romaji": "nioi",
+    "kana": "におい"
+  },
+  {
+    "word": "谷",
+    "english": "valley",
+    "romaji": "tani",
+    "kana": "たに"
+  },
+  {
+    "word": "も",
+    "english": "nor / also",
+    "romaji": "mo",
+    "kana": "も"
+  },
+  {
+    "word": "ダブル",
+    "english": "double",
+    "romaji": "daburu",
+    "kana": "ダブル"
+  },
+  {
+    "word": "座席",
+    "english": "seat",
+    "romaji": "zaseki",
+    "kana": "ざせき"
+  },
+  {
+    "word": "続ける",
+    "english": "continue",
+    "romaji": "tsuzukeru",
+    "kana": "つづける"
+  },
+  {
+    "word": "ブロック",
+    "english": "block",
+    "romaji": "burokku",
+    "kana": "ブロック"
+  },
+  {
+    "word": "チャート",
+    "english": "chart",
+    "romaji": "chāto",
+    "kana": "チャート"
+  },
+  {
+    "word": "帽子",
+    "english": "hat",
+    "romaji": "bōshi",
+    "kana": "ぼうし"
+  },
+  {
+    "word": "売る",
+    "english": "sell",
+    "romaji": "uru",
+    "kana": "うる"
+  },
+  {
+    "word": "成功",
+    "english": "success",
+    "romaji": "seikō",
+    "kana": "せいこう"
+  },
+  {
+    "word": "会社",
+    "english": "company",
+    "romaji": "kaisha",
+    "kana": "かいしゃ"
+  },
+  {
+    "word": "引く",
+    "english": "subtract / pull",
+    "romaji": "hiku",
+    "kana": "ひく"
+  },
+  {
+    "word": "イベント",
+    "english": "event",
+    "romaji": "ibento",
+    "kana": "イベント"
+  },
+  {
+    "word": "契約",
+    "english": "agreement",
+    "romaji": "keiyaku",
+    "kana": "けいやく"
+  },
+  {
+    "word": "泳ぐ",
+    "english": "swim",
+    "romaji": "oyogu",
+    "kana": "およぐ"
+  },
+  {
+    "word": "反対",
+    "english": "opposite",
+    "romaji": "hantai",
+    "kana": "はんたい"
+  },
+  {
+    "word": "妻",
+    "english": "wife",
+    "romaji": "tsuma",
+    "kana": "つま"
+  },
+  {
+    "word": "靴",
+    "english": "shoe",
+    "romaji": "kutsu",
+    "kana": "くつ"
+  },
+  {
+    "word": "肩",
+    "english": "shoulder",
+    "romaji": "kata",
+    "kana": "かた"
+  },
+  {
+    "word": "スプレッド",
+    "english": "spread",
+    "romaji": "supureddo",
+    "kana": "スプレッド"
+  },
+  {
+    "word": "アレンジ",
+    "english": "arrange",
+    "romaji": "arenji",
+    "kana": "アレンジ"
+  },
+  {
+    "word": "キャンプ",
+    "english": "camp",
+    "romaji": "kyanpu",
+    "kana": "キャンプ"
+  },
+  {
+    "word": "発明する",
+    "english": "invent",
+    "romaji": "hatsumeisuru",
+    "kana": "はつめいする"
+  },
+  {
+    "word": "綿",
+    "english": "cotton",
+    "romaji": "wata",
+    "kana": "わた"
+  },
+  {
+    "word": "ボルン",
+    "english": "born",
+    "romaji": "borun",
+    "kana": "ボルン"
+  },
+  {
+    "word": "クォート",
+    "english": "quart",
+    "romaji": "kwōto",
+    "kana": "クォート"
+  },
+  {
+    "word": "ノイズ",
+    "english": "noise",
+    "romaji": "noizu",
+    "kana": "ノイズ"
+  },
+  {
+    "word": "レベル",
+    "english": "level",
+    "romaji": "reberu",
+    "kana": "レベル"
+  },
+  {
+    "word": "チャンス",
+    "english": "chance",
+    "romaji": "chansu",
+    "kana": "チャンス"
+  },
+  {
+    "word": "集まる",
+    "english": "gather",
+    "romaji": "atsumaru",
+    "kana": "あつまる"
+  },
+  {
+    "word": "ショップ",
+    "english": "shop",
+    "romaji": "shoppu",
+    "kana": "ショップ"
+  },
+  {
+    "word": "ストレッチ",
+    "english": "stretch",
+    "romaji": "sutoretchi",
+    "kana": "ストレッチ"
+  },
+  {
+    "word": "投げる",
+    "english": "throw",
+    "romaji": "nageru",
+    "kana": "なげる"
+  },
+  {
+    "word": "輝き",
+    "english": "shine",
+    "romaji": "kagayaki",
+    "kana": "かがやき"
+  },
+  {
+    "word": "財産",
+    "english": "property",
+    "romaji": "zaisan",
+    "kana": "ざいさん"
+  },
+  {
+    "word": "コラム",
+    "english": "column",
+    "romaji": "koramu",
+    "kana": "コラム"
+  },
+  {
+    "word": "分子",
+    "english": "molecule",
+    "romaji": "bunshi",
+    "kana": "ぶんし"
+  },
+  {
+    "word": "選択する",
+    "english": "select",
+    "romaji": "sentakusuru",
+    "kana": "せんたくする"
+  },
+  {
+    "word": "間違った",
+    "english": "wrong",
+    "romaji": "machigatta",
+    "kana": "まちがった"
+  },
+  {
+    "word": "グレー",
+    "english": "gray",
+    "romaji": "gurē",
+    "kana": "グレー"
+  },
+  {
+    "word": "リピート",
+    "english": "repeat",
+    "romaji": "ripīto",
+    "kana": "リピート"
+  },
+  {
+    "word": "必要とする",
+    "english": "require",
+    "romaji": "hitsuyōtosuru",
+    "kana": "ひつようとする"
+  },
+  {
+    "word": "幅広い",
+    "english": "broad",
+    "romaji": "habahiroi",
+    "kana": "はばひろい"
+  },
+  {
+    "word": "準備する",
+    "english": "prepare",
+    "romaji": "junbisuru",
+    "kana": "じゅんびする"
+  },
+  {
+    "word": "塩",
+    "english": "salt",
+    "romaji": "shio",
+    "kana": "しお"
+  },
+  {
+    "word": "鼻",
+    "english": "nose",
+    "romaji": "hana",
+    "kana": "はな"
+  },
+  {
+    "word": "複数",
+    "english": "plural",
+    "romaji": "fukusū",
+    "kana": "ふくすう"
+  },
+  {
+    "word": "怒り",
+    "english": "anger",
+    "romaji": "ikari",
+    "kana": "いかり"
+  },
+  {
+    "word": "請求",
+    "english": "claim",
+    "romaji": "seikyū",
+    "kana": "せいきゅう"
+  },
+  {
+    "word": "大陸",
+    "english": "continent",
+    "romaji": "tairiku",
+    "kana": "たいりく"
+  }
+]
