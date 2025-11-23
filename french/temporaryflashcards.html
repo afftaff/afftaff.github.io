@@ -51,7 +51,10 @@
     }
     .panel header { padding: 0; border: none; background: none; margin-bottom: 20px; }
     
-    label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    /* Updated Label Style to accommodate the note */
+    label { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    .label-note { color: var(--accent); font-size: 11px; background: rgba(34,197,94,0.1); padding: 2px 6px; border-radius: 4px; }
+
     input[type="text"] {
       width: 100%;
       border-radius: 10px;
@@ -153,20 +156,19 @@
     summary:hover { color: var(--accent); }
     .definition-list { margin: 8px 0 0 0; padding-left: 20px; font-size: 14px; color: #cbd5e1; }
     .definition-list li { margin-bottom: 8px; }
-    .example-text { display: block; font-style: italic; color: var(--muted); font-size: 13px; margin-top: 2px; }
-
+    
     /* --- QUIZ STYLES --- */
     .quiz-container { display: flex; flex-direction: column; gap: 20px; }
     .quiz-prompt {
       text-align: center;
-      font-size: 42px;
+      font-size: 38px; /* Slightly smaller to accommodate longer phrases */
       font-weight: 600;
       color: white;
       padding: 20px 0;
       text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      word-wrap: break-word;
     }
 
-    /* Definition Reveal Box */
     .def-box {
       background: var(--card);
       border: 1px solid var(--border);
@@ -192,10 +194,8 @@
     .def-box ul { padding-left: 20px; margin: 0; }
     .def-box li { margin-bottom: 10px; }
 
-    /* Mini Flip Cards Container */
     .mini-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     
-    /* Flip Card Mechanics */
     .flip-card {
       background-color: transparent;
       height: 140px;
@@ -235,7 +235,6 @@
     .card-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
     .card-value { font-size: 20px; font-weight: 600; color: var(--accent); margin-bottom: 5px; }
     
-    /* Audio Button on card */
     .mini-audio-btn {
       background: rgba(34,197,94,0.1);
       border: 1px solid var(--accent);
@@ -263,14 +262,17 @@
     <section class="panel">
       <header>
         <h1>Build Deck</h1>
-        <p>Enter words separated by spaces to add multiple.</p>
+        <p>Add words or phrases to fetch definitions.</p>
       </header>
 
       <form id="addForm">
-        <label for="wordInput">Add words</label>
+        <label for="wordInput">
+          <span>Add Words</span>
+          <span class="label-note">Tip: Use @..@ for phrases</span>
+        </label>
         <div class="input-group">
-          <!-- Updated placeholder to indicate multiple words feature -->
-          <input id="wordInput" type="text" placeholder="e.g. chat chien pomme (space separated)" required autocomplete="off" />
+          <!-- Updated placeholder -->
+          <input id="wordInput" type="text" placeholder="e.g. chien @sur le point de@ chat" required autocomplete="off" />
           <button type="submit" class="primary">Add</button>
         </div>
         <!-- Accent Buttons Container -->
@@ -308,7 +310,7 @@
 
 <script>
     /* --- State & DOM Elements --- */
-    const storageKey = 'frenchFlashcards-Audio-v4';
+    const storageKey = 'frenchFlashcards-Audio-v5'; // Bumped version
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -335,7 +337,8 @@
       ['ô', 'œ', 'ó'],           
       ['ù', 'û', 'ü', 'ú'],      
       ['ç', 'ñ'],                
-      ['«', '»']                 
+      ['«', '»'],
+      ['@'] // Added handy @ button
     ];
     
     accentGroups.forEach(group => {
@@ -409,7 +412,7 @@
       let foundGender = '';
       let foundAudio = ''; 
 
-      const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Pronoun', 'Numeral', 'Article', 'Determiner'];
+      const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Pronoun', 'Numeral', 'Article', 'Determiner', 'Phrase'];
 
       for (const el of children) {
         let headerEl = el.matches('h2, h3, h4') ? el : el.querySelector('h2, h3, h4');
@@ -427,7 +430,8 @@
           }
           
           if (inFrenchSection && (level === 'H3' || level === 'H4')) {
-             if (validPOS.includes(text)) {
+             // Treat specific phrase headers (like "Prepositional phrase") as valid POS
+             if (validPOS.includes(text) || text.includes('phrase')) {
                if (bestDefs.length > 0) break; 
                currentPos = text;
              } else {
@@ -489,10 +493,10 @@
       if (foundGender) posDisplay += ` (${foundGender})`;
 
       return {
-        id: Date.now() + Math.random(), // Added random for batch adding unique IDs
+        id: Date.now() + Math.random(),
         term: term,
         ipa: foundIPA || '...',
-        pos: posDisplay || 'Word',
+        pos: posDisplay || 'Phrase',
         audio: foundAudio, 
         definitions: bestDefs.slice(0, 5)
       };
@@ -662,28 +666,37 @@
       window.speechSynthesis.speak(utterance);
     }
 
-    /* --- EVENT LISTENERS (Updated for Batch Adding) --- */
+    /* --- EVENT LISTENERS (Regular Expression Parsing) --- */
 
     document.getElementById('addForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
-      // 1. Get raw input and split by spaces (or tabs/newlines)
       const rawInput = dom.input.value;
-      // This regex handles single or multiple spaces between words
-      const words = rawInput.trim().split(/\s+/).filter(w => w.length > 0);
+      if (!rawInput.trim()) return;
+
+      // Regular Expression:
+      // Group 1: Matches content strictly inside @...@
+      // Group 2: Matches any non-whitespace sequence (standard words)
+      const regex = /@([^@]+)@|(\S+)/g;
+      
+      const words = [];
+      let match;
+
+      while ((match = regex.exec(rawInput)) !== null) {
+        // match[1] is the phrase content (without @), match[2] is a normal word
+        const cleanWord = match[1] ? match[1].trim() : match[2];
+        if(cleanWord) words.push(cleanWord);
+      }
 
       if (words.length === 0) return;
 
-      // Clear the input immediately
       dom.input.value = '';
       
       let addedCount = 0;
-      let skippedCount = 0; // for duplicates
+      let skippedCount = 0;
       let errors = [];
 
-      // 2. Process each word sequentially
       for (const term of words) {
-        // Local check for duplicates before network request
         if (deck.some(c => c.term.toLowerCase() === term.toLowerCase())) {
           skippedCount++;
           continue;
@@ -697,30 +710,20 @@
           addedCount++;
         } catch (err) {
           console.error(err);
-          errors.push(term); // Log the specific word that failed
+          errors.push(term);
         }
       }
 
-      // 3. Save if we added anything
       if (addedCount > 0) saveDeck();
 
-      // 4. Construct Status Message
       let statusMsg = '';
-      
-      if (addedCount > 0) {
-        statusMsg += `Added ${addedCount} word${addedCount > 1 ? 's' : ''}. `;
-      }
-      
-      if (skippedCount > 0) {
-        statusMsg += `(${skippedCount} duplicates). `;
-      }
-
+      if (addedCount > 0) statusMsg += `Added ${addedCount} word(s). `;
+      if (skippedCount > 0) statusMsg += `(${skippedCount} duplicates). `;
       if (errors.length > 0) {
         statusMsg += `Failed: ${errors.join(', ')}.`;
-        setStatus(statusMsg, 'error'); // Show as error color if some failed
+        setStatus(statusMsg, 'error');
       } else {
         setStatus(statusMsg);
-        // Clear success message after 4 seconds
         setTimeout(() => setStatus(''), 4000);
       }
       
