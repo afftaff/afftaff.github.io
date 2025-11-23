@@ -99,17 +99,22 @@
     .input-group { display: flex; gap: 10px; }
     
     /* Accent Buttons */
-    .accent-row { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .accent-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .accent-group { display: flex; gap: 4px; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 8px; border: 1px solid var(--border); }
     .accent-btn {
-      padding: 6px 10px;
+      padding: 0;
+      width: 30px;
+      height: 30px;
       background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
+      border: 1px solid transparent;
       color: var(--text);
       border-radius: 6px;
       font-size: 14px;
-      min-width: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .accent-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--muted); }
+    .accent-btn:hover { background: rgba(255,255,255,0.15); border-color: var(--muted); transform: translateY(-1px); }
 
     .actions { display: flex; gap: 10px; margin-top: 20px; align-items: center; }
 
@@ -204,7 +209,7 @@
           <button type="submit" class="primary">Add</button>
         </div>
         <!-- Accent Buttons Container -->
-        <div id="accentRow" class="accent-row"></div>
+        <div id="accentContainer" class="accent-container"></div>
         
         <div class="status-msg" id="status"></div>
       </form>
@@ -245,12 +250,12 @@
 
   <script>
     /* --- State & DOM Elements --- */
-    const storageKey = 'tempFrenchFlashcards-v6';
+    const storageKey = 'tempFrenchFlashcards-v7';
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
       input: document.getElementById('wordInput'),
-      accentRow: document.getElementById('accentRow'),
+      accentContainer: document.getElementById('accentContainer'),
       startBtn: document.getElementById('startDeck'),
       clearBtn: document.getElementById('clearDeck'),
       count: document.getElementById('countLabel'),
@@ -269,30 +274,41 @@
     let quizIndex = 0;
     let isFlipped = false;
 
-    /* --- Accent Button Logic --- */
-    const frenchAccents = ['é', 'è', 'à', 'ù', 'â', 'ê', 'î', 'ô', 'û', 'ç', 'œ', 'ë', 'ï', 'ü'];
+    /* --- Accent Groups Logic --- */
+    // Grouped to make them easy to find
+    const accentGroups = [
+      ['é', 'è', 'ê', 'ë'],      // E variants
+      ['à', 'â', 'æ', 'á'],      // A variants (including Spanish á)
+      ['î', 'ï', 'í'],           // I variants (including Spanish í)
+      ['ô', 'œ', 'ó'],           // O variants (including Spanish ó)
+      ['ù', 'û', 'ü', 'ú'],      // U variants (including Spanish ú)
+      ['ç', 'ñ'],                // Consonants (including Spanish ñ)
+      ['«', '»']                 // French Quotes
+    ];
     
-    frenchAccents.forEach(char => {
-      const btn = document.createElement('button');
-      btn.textContent = char;
-      btn.type = 'button'; // Important: prevents form submission
-      btn.className = 'accent-btn';
+    accentGroups.forEach(group => {
+      const groupDiv = document.createElement('div');
+      groupDiv.className = 'accent-group';
       
-      btn.addEventListener('click', () => {
-        const input = dom.input;
-        const start = input.selectionStart;
-        const end = input.selectionEnd;
-        const text = input.value;
+      group.forEach(char => {
+        const btn = document.createElement('button');
+        btn.textContent = char;
+        btn.type = 'button'; // Prevent submit
+        btn.className = 'accent-btn';
         
-        // Insert character at cursor position
-        input.value = text.substring(0, start) + char + text.substring(end);
-        
-        // Move cursor to right after inserted character
-        input.selectionStart = input.selectionEnd = start + 1;
-        input.focus();
+        btn.addEventListener('click', () => {
+          const input = dom.input;
+          const start = input.selectionStart;
+          const end = input.selectionEnd;
+          const text = input.value;
+          
+          input.value = text.substring(0, start) + char + text.substring(end);
+          input.selectionStart = input.selectionEnd = start + 1;
+          input.focus();
+        });
+        groupDiv.appendChild(btn);
       });
-      
-      dom.accentRow.appendChild(btn);
+      dom.accentContainer.appendChild(groupDiv);
     });
 
     /* --- Core Data Functions --- */
