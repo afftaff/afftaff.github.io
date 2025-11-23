@@ -94,7 +94,7 @@
       color: var(--muted);
       padding: 8px 12px;
     }
-    button.ghost:hover { color: #fca5a5; background: rgba(255,0,0,0.1); }
+    button.ghost:hover { color: #f87171; background: rgba(255,0,0,0.1); }
 
     .input-group { display: flex; gap: 10px; }
     .actions { display: flex; gap: 10px; margin-top: 15px; align-items: center; }
@@ -112,7 +112,7 @@
     }
     .word-head { display: flex; align-items: center; justify-content: space-between; }
     .word-head h3 { margin: 0; font-size: 18px; color: var(--accent); }
-    .tags { display: flex; gap: 8px; }
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; }
     .pill { 
       padding: 4px 10px; 
       border-radius: 20px; 
@@ -172,7 +172,7 @@
       <form id="addForm">
         <label for="wordInput">Add a word</label>
         <div class="input-group">
-          <input id="wordInput" type="text" placeholder="e.g. chien, manger, beau..." required autocomplete="off" />
+          <input id="wordInput" type="text" placeholder="e.g. plus, chien, manger..." required autocomplete="off" />
           <button type="submit" class="primary">Add</button>
         </div>
         <div class="status-msg" id="status"></div>
@@ -214,7 +214,7 @@
 
   <script>
     /* --- State & DOM Elements --- */
-    const storageKey = 'tempFrenchFlashcards-v2';
+    const storageKey = 'tempFrenchFlashcards-v3';
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -251,86 +251,123 @@
       renderList();
     }
 
-    /* --- Wiktionary Parsing Logic (The Important Part) --- */
+    /* --- Wiktionary Parsing Logic (The Robust Version) --- */
 
     function cleanWikiText(text) {
       if (!text) return '';
       let cleaned = text;
 
-      // 1. Recursively remove templates {{...}} 
-      // This handles nested templates like {{lb|fr|{{syn|...}}}}
+      // 1. Recursive template removal {{...}} 
+      // This loops until no double braces remain to handle nested templates like {{lb|fr|{{syn|...}}}}
       let old;
       do {
         old = cleaned;
-        cleaned = cleaned.replace(/{{[^{}]+}}/g, '');
+        // We replace with a space to prevent words mashing together
+        cleaned = cleaned.replace(/{{[^{}]+}}/g, ' ');
       } while (cleaned !== old);
 
       cleaned = cleaned
-        .replace(/^#\s*/, '') // Remove definition bullet points
-        .replace(/\[\[(?:[^|\]]*\|)?([^\]]+)\]\]/g, '$1') // Resolve [[link|text]] or [[text]] to just "text"
-        .replace(/'''?/g, '') // Remove bold/italic markup
-        .replace(/\(\s*\)/g, '') // Remove empty parentheses left behind
-        .replace(/\s+/g, ' ') // Collapse extra spaces
+        .replace(/^#\s*/, '') // Remove definition hash
+        .replace(/\[\[(?:[^|\]]*\|)?([^\]]+)\]\]/g, '$1') // Resolve [[link|text]] -> text
+        .replace(/'''?/g, '') // Remove bold/italic
+        .replace(/\(\s*\)/g, '') // Remove empty parentheses
+        .replace(/\s+/g, ' ') // Collapse whitespace
         .trim();
 
       return cleaned;
     }
 
     function extractFrenchSection(fullText) {
-      // Find content between ==French== and the next language header
-      const match = fullText.match(/==\s*French\s*==([\s\S]*?)(\n==[^=]|$)/);
+      // Find content starting at ==French== and ending at the next language header (==Something==)
+      const match = fullText.match(/==\s*French\s*==([\s\S]*?)(?:\n==[^=]|$)/);
       return match ? match[1] : null;
     }
 
-    function parsePartOfSpeech(frenchText) {
-      // Priority 1: Find standard grammar headers (Noun, Verb, etc.)
-      const standardMatch = frenchText.match(/===\s*(Noun|Verb|Adjective|Adverb|Preposition|Pronoun|Conjunction|Interjection|Phrase|Expression)\s*===/i);
-      if (standardMatch) return standardMatch[1];
-
-      // Priority 2: Find ANY header that isn't metadata (Etymology, Pronunciation, etc.)
-      const ignoredHeaders = ['Etymology', 'Pronunciation', 'References', 'Further reading', 'Anagrams', 'See also', 'Usage notes', 'Alternative forms', 'Derived terms'];
-      const headers = [...frenchText.matchAll(/===\s*([^=]+)\s*===/g)];
-      
-      for (const h of headers) {
-        const title = h[1].trim();
-        // If the header title isn't in our ignore list, assume it's the part of speech
-        if (!ignoredHeaders.some(ignored => title.includes(ignored))) {
-          return title;
-        }
+    function extractWordData(frenchText, term) {
+      // 1. Identify IPA
+      let ipa = '';
+      // Specific French IPA template
+      const ipaMatch = frenchText.match(/{{fr-IPA(?:\|([^}]+))?}}/); 
+      if (ipaMatch) {
+         // If {{fr-IPA|word}} use word, if {{fr-IPA}} use default lookup
+         ipa = ipaMatch[1] ? ipaMatch[1] : ''; 
+      } else {
+         // Fallback to standard IPA template
+         const genericIpa = frenchText.match(/{{IPA\|fr\|([^}|]+)/);
+         if (genericIpa) ipa = genericIpa[1].replace(/\//g, '');
       }
-      return ''; 
-    }
 
-    function parseDefinitions(frenchText) {
-      const defs = [];
-      const lines = frenchText.split('\n');
+      // 2. Identify Part of Speech and Definitions
+      // We look for headers like ===Noun=== or ====Adverb====
+      // The word "plus" uses Level 4 headers (====) because of Etymologies.
+      const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Interjection', 'Pronoun', 'Article'];
       
-      for (const line of lines) {
-        // We want lines starting with # but NOT #: (examples) or #* (quotes)
-        if (line.startsWith('#') && !line.startsWith('#:') && !line.startsWith('#*')) {
-          const cleaned = cleanWikiText(line);
-          // Only keep definitions that have actual text
-          if (cleaned.length > 2) {
-            defs.push(cleaned);
+      // Regex finds headers: === Noun === or ==== Noun ====
+      const headerRegex = /(={3,4})\s*([A-Za-z]+)\s*\1/g;
+      
+      let bestPos = '';
+      let bestDefs = [];
+
+      let match;
+      while ((match = headerRegex.exec(frenchText)) !== null) {
+        const headerLevel = match[1];
+        const posType = match[2];
+
+        // If this header is a valid part of speech
+        if (validPOS.includes(posType)) {
+          // Extract the text block following this header until the next header
+          const startIndex = match.index + match[0].length;
+          // Find the index of the NEXT header (any level) to know where to stop
+          const remainingText = frenchText.slice(startIndex);
+          const nextHeaderIndex = remainingText.search(/\n={3,5}/); // Look for next header
+          
+          const blockContent = nextHeaderIndex === -1 
+            ? remainingText 
+            : remainingText.slice(0, nextHeaderIndex);
+
+          // Extract definitions from this block
+          const lines = blockContent.split('\n');
+          const defs = [];
+          
+          for (let line of lines) {
+            line = line.trim();
+            // Valid definitions start with # but NOT #: (example) or #* (quote)
+            if (line.startsWith('#') && !line.startsWith('#:') && !line.startsWith('#*')) {
+              const cleaned = cleanWikiText(line);
+              if (cleaned.length > 2 && !cleaned.toLowerCase().includes('usage notes')) {
+                defs.push(cleaned);
+              }
+            }
+          }
+
+          if (defs.length > 0) {
+            // If we haven't found a POS yet, or if we prefer this one, take it.
+            // (Simple logic: take the first valid POS block found)
+            if (!bestPos) {
+              bestPos = posType;
+              bestDefs = defs;
+            } else {
+              // Optionally: Append definitions if you want multiple POS on one card
+              // bestDefs = bestDefs.concat(defs); 
+            }
           }
         }
       }
-      return defs.slice(0, 4); // Limit to top 4 definitions
-    }
 
-    function parseIpa(frenchText) {
-      // Look for standard template {{IPA|fr|...}}
-      const match = frenchText.match(/{{IPA\|fr\|([^}|]+)/);
-      if (match) return match[1].replace(/\//g, '').trim();
-      
-      // Fallback: look for generic slashes /.../
-      const rawMatch = frenchText.match(/\/[^\n\/]{2,}\//);
-      return rawMatch ? rawMatch[0].replace(/\//g, '') : '';
+      if (!bestDefs.length) throw new Error('No definitions found.');
+
+      return {
+        id: Date.now(),
+        term: term,
+        ipa: ipa,
+        pos: bestPos,
+        definitions: bestDefs.slice(0, 5) // Limit to 5 definitions
+      };
     }
 
     async function lookupWord(term) {
       const cleanTerm = term.trim();
-      // Using rvslots=main to fix the "Legacy format" warning
+      // Use rvslots=main to ensure modern JSON format
       const url = `https://en.wiktionary.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&format=json&titles=${encodeURIComponent(cleanTerm)}&origin=*`;
       
       const res = await fetch(url);
@@ -342,23 +379,13 @@
 
       if (page.missing) throw new Error('Word not found on Wiktionary.');
 
-      // Extract raw Wikitext
       const rawContent = page.revisions?.[0]?.slots?.main?.['*'];
       if (!rawContent) throw new Error('No content available.');
 
       const frenchSection = extractFrenchSection(rawContent);
-      if (!frenchSection) throw new Error('No "French" entry found for this word.');
+      if (!frenchSection) throw new Error('No "French" entry found.');
 
-      const definitions = parseDefinitions(frenchSection);
-      if (definitions.length === 0) throw new Error('No definitions found.');
-
-      return {
-        id: Date.now(),
-        term: page.title, // Use canonical title
-        ipa: parseIpa(frenchSection),
-        pos: parsePartOfSpeech(frenchSection),
-        definitions: definitions
-      };
+      return extractWordData(frenchSection, page.title);
     }
 
     /* --- UI Logic --- */
@@ -450,13 +477,14 @@
       setStatus('Fetching...');
       try {
         const card = await lookupWord(term);
-        deck.unshift(card); // Add to top
+        deck.unshift(card); 
         saveDeck();
         dom.input.value = '';
         setStatus(`Added: ${card.term}`);
         setTimeout(() => setStatus(''), 3000);
       } catch (err) {
         setStatus(err.message, 'error');
+        console.error(err);
       }
     });
 
