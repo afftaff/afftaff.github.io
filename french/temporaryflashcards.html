@@ -205,7 +205,7 @@
       <form id="addForm">
         <label for="wordInput">Add a word</label>
         <div class="input-group">
-          <input id="wordInput" type="text" placeholder="e.g. plus, chien, manger..." required autocomplete="off" />
+          <input id="wordInput" type="text" placeholder="e.g. dois, plus, chien..." required autocomplete="off" />
           <button type="submit" class="primary">Add</button>
         </div>
         <!-- Accent Buttons Container -->
@@ -250,7 +250,7 @@
 
   <script>
     /* --- State & DOM Elements --- */
-    const storageKey = 'tempFrenchFlashcards-v7';
+    const storageKey = 'tempFrenchFlashcards-v8';
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -275,15 +275,14 @@
     let isFlipped = false;
 
     /* --- Accent Groups Logic --- */
-    // Grouped to make them easy to find
     const accentGroups = [
       ['é', 'è', 'ê', 'ë'],      // E variants
-      ['à', 'â', 'æ', 'á'],      // A variants (including Spanish á)
-      ['î', 'ï', 'í'],           // I variants (including Spanish í)
-      ['ô', 'œ', 'ó'],           // O variants (including Spanish ó)
-      ['ù', 'û', 'ü', 'ú'],      // U variants (including Spanish ú)
-      ['ç', 'ñ'],                // Consonants (including Spanish ñ)
-      ['«', '»']                 // French Quotes
+      ['à', 'â', 'æ', 'á'],      // A variants
+      ['î', 'ï', 'í'],           // I variants
+      ['ô', 'œ', 'ó'],           // O variants
+      ['ù', 'û', 'ü', 'ú'],      // U variants
+      ['ç', 'ñ'],                // Consonants
+      ['«', '»']                 // Punctuation
     ];
     
     accentGroups.forEach(group => {
@@ -293,7 +292,7 @@
       group.forEach(char => {
         const btn = document.createElement('button');
         btn.textContent = char;
-        btn.type = 'button'; // Prevent submit
+        btn.type = 'button'; 
         btn.className = 'accent-btn';
         
         btn.addEventListener('click', () => {
@@ -344,11 +343,17 @@
       if (!text) return '';
       let cleaned = text;
 
-      // 1. Preserve Context (Glosses & Labels)
+      // 1. Convert Form-of definitions to readable text
+      // Handles: {{infl of|fr|devoir|...}} -> Inflection of devoir
+      cleaned = cleaned.replace(/{{(?:infl of|inflection of)\|[^|]+\|([^}|]+).*}}/gi, 'Inflection of $1');
+      cleaned = cleaned.replace(/{{(?:plural of)\|[^|]+\|([^}|]+).*}}/gi, 'Plural of $1');
+      cleaned = cleaned.replace(/{{(?:feminine of)\|[^|]+\|([^}|]+).*}}/gi, 'Feminine of $1');
+
+      // 2. Preserve Context (Glosses & Labels)
       cleaned = cleaned.replace(/{{(?:gl|gloss)\|([^}]+)}}/g, '($1)');
       cleaned = cleaned.replace(/{{lb\|[a-z]+\|([^}]+)}}/g, '($1)');
 
-      // 2. Remove other templates
+      // 3. Remove other templates
       let old;
       do {
         old = cleaned;
@@ -416,6 +421,7 @@
             line = line.trim();
             if (line.startsWith('#') && !line.startsWith('#:') && !line.startsWith('#*')) {
               const cleaned = cleanWikiText(line);
+              // Allow simple strings like "Inflection of..." even if short
               if (cleaned.length > 2 && !cleaned.toLowerCase().includes('usage notes')) {
                 if (currentDef) defs.push(currentDef);
                 currentDef = { text: cleaned, example: null };
@@ -451,6 +457,7 @@
 
     async function lookupWord(term) {
       const cleanTerm = term.trim();
+      // Using action=query to get the Wikitext (required for this parser)
       const url = `https://en.wiktionary.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&format=json&titles=${encodeURIComponent(cleanTerm)}&origin=*`;
       
       const res = await fetch(url);
@@ -501,7 +508,6 @@
           </li>`;
         }).join('');
 
-        // Definitions hidden by details/summary
         row.innerHTML = `
           <div class="word-head">
             <h3>${card.term}</h3>
