@@ -153,8 +153,18 @@
     }
     summary:hover { color: var(--accent); }
     .definition-list { margin: 8px 0 0 0; padding-left: 20px; font-size: 14px; color: #cbd5e1; }
-    .definition-list li { margin-bottom: 8px; }
-    .example-text { display: block; font-style: italic; color: var(--muted); font-size: 13px; margin-top: 2px; }
+    .definition-list li { margin-bottom: 12px; line-height: 1.4; }
+    
+    /* Examples in list */
+    .example-box {
+      display: block;
+      margin-top: 4px;
+      padding-left: 8px;
+      border-left: 2px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+      font-style: italic;
+    }
 
     /* QUIZ STYLES */
     .quiz-container { display: flex; flex-direction: column; gap: 20px; }
@@ -190,7 +200,7 @@
     }
     .def-box .def-content { transition: all 0.5s ease; opacity: 1; filter: blur(0); }
     .def-box ul { padding-left: 20px; margin: 0; }
-    .def-box li { margin-bottom: 10px; }
+    .def-box li { margin-bottom: 12px; }
 
     .mini-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     .flip-card {
@@ -294,8 +304,7 @@
   </main>
 
   <script>
-    /* --- State --- */
-    const storageKey = 'tempFrenchFlashcards-v13';
+    const storageKey = 'tempFrenchFlashcards-v14';
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -340,7 +349,7 @@
       dom.accentContainer.appendChild(groupDiv);
     });
 
-    /* --- Data --- */
+    /* --- Core Functions --- */
     function loadDeck() {
       try { return JSON.parse(localStorage.getItem(storageKey)) || []; } catch { return []; }
     }
@@ -349,7 +358,7 @@
       renderList();
     }
 
-    /* --- NEW PARSER LOGIC --- */
+    /* --- Advanced Parsing --- */
     async function lookupWord(term) {
       const cleanTerm = term.trim();
       const url = `https://en.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(cleanTerm)}&prop=text&format=json&origin=*&redirects=1&disabletoc=1`;
@@ -367,7 +376,7 @@
       const frenchHeader = allH2s.find(h => h.textContent.includes('French'));
       if (!frenchHeader) throw new Error('No "French" section found.');
       
-      // 2. Find the parent container of H2 (handles mw-heading wrappers)
+      // 2. Start scanning from header or its container
       let startNode = frenchHeader;
       if (frenchHeader.parentElement.classList.contains('mw-heading')) {
         startNode = frenchHeader.parentElement;
@@ -380,38 +389,34 @@
       
       const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Interjection', 'Pronoun', 'Article', 'Determiner', 'Numeral', 'Participle'];
 
-      // 3. Iterate Siblings safely
+      // 3. Iterate Siblings
       let sibling = startNode.nextElementSibling;
       
       while (sibling) {
-        // Check if we hit the next language (H2)
         if (sibling.tagName === 'H2' || sibling.querySelector('h2')) break;
 
-        // Check for H3/H4 (POS) directly or inside a wrapper
+        // Check POS header
         let headerNode = null;
         if (['H3', 'H4'].includes(sibling.tagName)) headerNode = sibling;
         else headerNode = sibling.querySelector('h3, h4');
 
-        // A. Extract IPA (look anywhere in French section until POS found)
+        // Extract IPA
         if (!ipa) {
           const ipaSpan = sibling.classList.contains('IPA') ? sibling : sibling.querySelector('.IPA');
           if (ipaSpan) ipa = ipaSpan.textContent.replace(/[\/\[\]]/g, '').trim();
         }
 
-        // B. Process POS Block
         if (headerNode) {
           const headerText = headerNode.textContent;
           const foundPos = validPOS.find(p => headerText.includes(p));
 
           if (foundPos) {
-            // Look forward from this header for gender/definitions
+            // Found a POS block, scan forward
             let innerSibling = sibling.nextElementSibling;
             const currentDefs = [];
             let currentGender = '';
 
-            // Walk until next header
             while (innerSibling) {
-              // Stop if next is a header
               if (['H2', 'H3', 'H4'].includes(innerSibling.tagName) || innerSibling.querySelector('h2, h3, h4')) break;
 
               // Gender
@@ -422,20 +427,44 @@
                 }
               }
 
-              // Definitions
+              // Definitions (OL)
               if (innerSibling.tagName === 'OL') {
-                const listItems = innerSibling.querySelectorAll('li');
+                // Direct children only (definitions)
+                const listItems = Array.from(innerSibling.children); 
                 listItems.forEach(li => {
                   const clone = li.cloneNode(true);
-                  let example = null;
-                  const exNode = clone.querySelector('ul, dl, .h-usage-example');
-                  if (exNode) {
-                    example = exNode.textContent.trim();
-                    exNode.remove();
+                  
+                  // --- Example Extraction Logic ---
+                  let exampleText = '';
+                  
+                  // 1. Look for block-level examples (ul, dl) or specific classes
+                  const exNodes = clone.querySelectorAll('ul, dl, .h-usage-example, .h-quotation');
+                  
+                  // Iterate found example containers to find clean text
+                  for (const exNode of exNodes) {
+                    // Check for structured quote: .cited-passage (French) + .e-translation (English)
+                    const passage = exNode.querySelector('.cited-passage');
+                    const trans = exNode.querySelector('.e-translation');
+                    
+                    if (passage && trans) {
+                      exampleText = `${passage.textContent.trim()} — ${trans.textContent.trim()}`;
+                      break; // Found a good one, stop looking
+                    }
+                    
+                    // Fallback: Check for .e-example + .e-translation
+                    const simpleEx = exNode.querySelector('.e-example');
+                    if (simpleEx && trans) {
+                        exampleText = `${simpleEx.textContent.trim()} — ${trans.textContent.trim()}`;
+                        break;
+                    }
                   }
+
+                  // 2. Remove ALL example containers from the clone so they don't clutter definition
+                  exNodes.forEach(n => n.remove());
+
                   let defText = clone.textContent.trim();
                   if (defText.length > 2) {
-                     currentDefs.push({ text: defText, example: example });
+                     currentDefs.push({ text: defText, example: exampleText });
                   }
                 });
               }
@@ -462,7 +491,7 @@
         term: data.parse.title,
         ipa: ipa,
         pos: posDisplay,
-        definitions: bestDefs.slice(0, 5)
+        definitions: bestDefs.slice(0, 10) // Increased limit to catch 'cost' etc
       };
     }
 
@@ -476,7 +505,13 @@
       deck.forEach((card, idx) => {
         const row = document.createElement('div');
         row.className = 'word-row';
-        let defsHtml = card.definitions.map(d => `<li>${d.text}</li>`).join('');
+        
+        let defsHtml = card.definitions.map(d => {
+          let html = `<li>${d.text}`;
+          if (d.example) html += `<span class="example-box">${d.example}</span>`;
+          html += `</li>`;
+          return html;
+        }).join('');
 
         row.innerHTML = `
           <div class="word-head">
@@ -504,7 +539,7 @@
       let defsHtml = '<ul style="margin:0; padding-left:20px;">';
       card.definitions.forEach(d => {
         defsHtml += `<li>${d.text}`;
-        if(d.example) defsHtml += `<br><span style="color:#94a3b8; font-style:italic; font-size:0.9em">"${d.example}"</span>`;
+        if(d.example) defsHtml += `<div class="example-box" style="margin-top:4px;">${d.example}</div>`;
         defsHtml += `</li>`;
       });
       defsHtml += '</ul>';
