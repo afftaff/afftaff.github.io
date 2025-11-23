@@ -307,7 +307,7 @@
 
 <script>
     /* --- State & DOM Elements --- */
-    const storageKey = 'frenchFlashcards-Fixed-v3';
+    const storageKey = 'frenchFlashcards-Audio-v4';
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -324,6 +324,7 @@
     let deck = loadDeck();
     let quizQueue = [];
     let quizIndex = 0;
+    let voices = []; // Store voices globally
 
     /* --- Accent Groups Logic --- */
     const accentGroups = [
@@ -372,7 +373,7 @@
       renderList();
     }
 
-    /* --- NEW PARSING LOGIC (Linear Scan) --- */
+    /* --- PARSING LOGIC (With Audio Scraping) --- */
 
     async function lookupWord(term) {
       const cleanTerm = term.trim();
@@ -405,6 +406,7 @@
       let bestDefs = [];
       let foundIPA = '';
       let foundGender = '';
+      let foundAudio = ''; // New variable for real audio
 
       const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Pronoun', 'Numeral', 'Article', 'Determiner'];
 
@@ -437,6 +439,7 @@
 
         if (!inFrenchSection) continue;
 
+        // 1. Capture IPA
         if (!foundIPA) {
           const ipaEl = el.querySelector('.IPA');
           if (ipaEl) {
@@ -444,6 +447,21 @@
           }
         }
 
+        // 2. Capture Audio (mp3/ogg)
+        // Wiktionary audio is usually in <audio> tags or links within the French section
+        if (!foundAudio) {
+          const audioSource = el.querySelector('audio source[src*=".mp3"], audio source[src*=".ogg"]');
+          if (audioSource) {
+            let src = audioSource.getAttribute('src');
+            if (src) {
+              // Fix relative protocol URLs (e.g., //upload.wikimedia...)
+              if (src.startsWith('//')) src = 'https:' + src;
+              foundAudio = src;
+            }
+          }
+        }
+
+        // 3. Capture Gender
         if (currentPos && el.tagName === 'P') {
           const genderEl = el.querySelector('.gender');
           if (genderEl && !foundGender) {
@@ -451,6 +469,7 @@
           }
         }
 
+        // 4. Capture Definitions
         if (currentPos && el.tagName === 'OL') {
            const items = el.querySelectorAll(':scope > li');
            items.forEach(li => {
@@ -479,6 +498,7 @@
         term: term,
         ipa: foundIPA || '...',
         pos: posDisplay || 'Word',
+        audio: foundAudio, // Save the real audio URL
         definitions: bestDefs.slice(0, 5)
       };
     }
@@ -510,9 +530,12 @@
           return `<li>${d.text}</li>`;
         }).join('');
 
+        // Icon to show if we found real audio
+        const audioIcon = card.audio ? '🎵' : '';
+
         row.innerHTML = `
           <div class="word-head">
-            <h3>${card.term}</h3>
+            <h3>${card.term} <small style="font-size:12px">${audioIcon}</small></h3>
             <button class="ghost" onclick="removeCard(${idx})">×</button>
           </div>
           <details>
@@ -551,6 +574,10 @@
       });
       defsHtml += '</ul>';
 
+      // Determine audio button styling based on whether we have a real file or fallback
+      const audioSourceType = card.audio ? "Real Audio" : "Robot Voice";
+      const audioColor = card.audio ? "var(--accent)" : "#f59e0b"; // Green for Real, Orange for Robot
+
       dom.quizContainer.innerHTML = `
         <div class="quiz-prompt">${card.term}</div>
         
@@ -584,7 +611,12 @@
               </div>
               <div class="flip-back">
                 <div class="card-value">/${card.ipa}/</div>
-                <button class="mini-audio-btn" onclick="playAudio('${card.term.replace(/'/g, "\\'")}', event)">🔊</button>
+                <button class="mini-audio-btn" 
+                  style="color: #000; background: ${audioColor}; border-color:${audioColor}"
+                  onclick="playAudio('${card.audio}', '${card.term.replace(/'/g, "\\'")}', event)">
+                  🔊
+                </button>
+                <small style="margin-top:5px; font-size:10px; color:var(--muted)">${audioSourceType}</small>
               </div>
             </div>
           </div>
@@ -592,46 +624,57 @@
       `;
     }
 
-    /* --- FORCED FRENCH AUDIO LOGIC --- */
-    
-    // Pre-load voices to ensure they are available when clicked
-    let voices = [];
+    /* --- AUDIO LOGIC (Real Audio Priority) --- */
+
+    // Initialize voices for fallback
     if ('speechSynthesis' in window) {
         window.speechSynthesis.onvoiceschanged = () => {
             voices = window.speechSynthesis.getVoices();
         };
     }
 
-    window.playAudio = (text, e) => {
+    window.playAudio = (audioUrl, text, e) => {
       e.stopPropagation();
+
+      // 1. Try Real Audio File first
+      if (audioUrl && audioUrl !== 'undefined' && audioUrl !== '') {
+          const audio = new Audio(audioUrl);
+          audio.play().catch(err => {
+              console.error("Audio play failed", err);
+              // If real audio fails, fallback to TTS
+              speakText(text); 
+          });
+          return;
+      }
+
+      // 2. Fallback to Robot Voice
+      speakText(text);
+    };
+
+    function speakText(text) {
       if (!('speechSynthesis' in window)) {
         alert('Browser text-to-speech not supported.');
         return;
       }
 
-      // Ensure we have the latest voices
       voices = window.speechSynthesis.getVoices();
-      
-      // Cancel any existing speech
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
+      // FORCE French language code
       utterance.lang = 'fr-FR';
-      utterance.rate = 0.9; // Slightly slower for better pronunciation
+      utterance.rate = 0.8; 
 
-      // 1. Aggressively find a French voice
-      // We look for 'fr-FR' specifically, or 'fr_FR', or just anything starting with 'fr'
-      const frenchVoice = voices.find(v => v.lang === 'fr-FR' || v.lang === 'fr_FR') 
-                       || voices.find(v => v.lang.startsWith('fr'));
+      // Search hard for a French voice
+      const frVoice = voices.find(v => v.lang.includes('fr-FR') || v.lang.includes('fr_FR')) 
+                   || voices.find(v => v.lang.startsWith('fr'));
 
-      if (frenchVoice) {
-          utterance.voice = frenchVoice;
-      } else {
-          console.warn('No specific French voice found. Relying on lang property.');
+      if (frVoice) {
+          utterance.voice = frVoice;
       }
 
       window.speechSynthesis.speak(utterance);
-    };
+    }
 
     /* --- Event Listeners --- */
 
