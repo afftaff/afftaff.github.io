@@ -121,7 +121,20 @@
       color: var(--muted); 
       border: 1px solid rgba(255,255,255,0.1);
     }
-    .definition-list { margin: 0; padding-left: 20px; font-size: 14px; color: #cbd5e1; }
+    
+    /* Toggle Styles for List */
+    details { width: 100%; margin-top: 5px; }
+    summary { 
+      cursor: pointer; 
+      color: var(--muted); 
+      font-size: 13px; 
+      user-select: none;
+      transition: color 0.2s;
+    }
+    summary:hover { color: var(--accent); }
+    summary::marker { color: var(--accent); }
+    
+    .definition-list { margin: 8px 0 0 0; padding-left: 20px; font-size: 14px; color: #cbd5e1; }
     .definition-list li { margin-bottom: 8px; }
     .example-text { display: block; font-style: italic; color: var(--muted); font-size: 13px; margin-top: 2px; }
 
@@ -215,7 +228,7 @@
 
   <script>
     /* --- State & DOM Elements --- */
-    const storageKey = 'tempFrenchFlashcards-v4';
+    const storageKey = 'tempFrenchFlashcards-v5';
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -252,16 +265,13 @@
       renderList();
     }
 
-    /* --- Wiktionary Parsing Logic (Improved) --- */
+    /* --- Wiktionary Parsing Logic --- */
 
     function parseExample(text) {
-      // Handles standard {{ux|fr|French sentence|English translation}}
-      // Or {{uxi|fr|...}}
       const match = text.match(/{{ux[i]?\|[^|]+\|([^}|]+)(?:\|([^}|]+))?(?:\|.*)?}}/);
       if (match) {
         const french = match[1];
         const english = match[2];
-        // If the 4th param exists (translation), use it. otherwise just return the french part
         if (english && !english.includes('=')) {
           return `${french} — ${english}`;
         }
@@ -274,26 +284,23 @@
       if (!text) return '';
       let cleaned = text;
 
-      // 1. PRESERVE GLOSSES AND LABELS (The fix for "Plus")
-      // Transform {{gloss|text}} to (text)
+      // 1. Preserve Context (Glosses & Labels)
       cleaned = cleaned.replace(/{{(?:gl|gloss)\|([^}]+)}}/g, '($1)');
-      // Transform {{lb|fr|text}} to (text) - taking the last item usually works best
       cleaned = cleaned.replace(/{{lb\|[a-z]+\|([^}]+)}}/g, '($1)');
 
-      // 2. Recursive template removal for the rest
+      // 2. Remove other templates
       let old;
       do {
         old = cleaned;
-        // Replace templates with space to avoid words merging
         cleaned = cleaned.replace(/{{[^{}]+}}/g, ' ');
       } while (cleaned !== old);
 
       cleaned = cleaned
-        .replace(/^#\s*/, '') // Remove definition hash
-        .replace(/\[\[(?:[^|\]]*\|)?([^\]]+)\]\]/g, '$1') // Resolve [[link|text]] -> text
-        .replace(/'''?/g, '') // Remove bold/italic
-        .replace(/\(\s*\)/g, '') // Remove empty parentheses
-        .replace(/\s+/g, ' ') // Collapse whitespace
+        .replace(/^#\s*/, '')
+        .replace(/\[\[(?:[^|\]]*\|)?([^\]]+)\]\]/g, '$1')
+        .replace(/'''?/g, '')
+        .replace(/\(\s*\)/g, '')
+        .replace(/\s+/g, ' ')
         .trim();
 
       return cleaned;
@@ -305,24 +312,13 @@
     }
 
     function extractWordData(frenchText, term) {
-      // 1. Identify IPA (Fixed for "plus")
+      // 1. IPA
       let ipa = '';
-      
-      // Look for {{fr-IPA}} or {{fr-IPA|word}}. 
-      // The previous error came from capturing text AFTER the template.
-      // We explicitly look for the template boundaries.
       const ipaMatch = frenchText.match(/{{fr-IPA(?:\|([^}]+))?}}/); 
-      
       if (ipaMatch) {
-         // Wiktionary behavior: {{fr-IPA}} defaults to the page title pronunciation.
-         // If a specific override is provided (ipaMatch[1]), use it.
-         // Otherwise, we leave it blank here? No, Wiktionary usually assumes standard rules.
-         // But for display, we can just grab the override if it exists.
          if (ipaMatch[1]) {
              ipa = ipaMatch[1];
          } else {
-             // If {{fr-IPA}} is empty, we don't have the raw symbols easily without an external library.
-             // We can fallback to the generic generic IPA if available
              const generic = frenchText.match(/{{IPA\|fr\|([^}|]+)/);
              if (generic) ipa = generic[1].replace(/\//g, '');
          }
@@ -331,12 +327,12 @@
          if (generic) ipa = generic[1].replace(/\//g, '');
       }
 
-      // 2. Identify Part of Speech, Definitions AND Examples
+      // 2. POS & Defs & Examples
       const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Interjection', 'Pronoun', 'Article', 'Determiner'];
       const headerRegex = /(={3,4})\s*([A-Za-z]+)\s*\1/g;
       
       let bestPos = '';
-      let bestDefs = []; // Array of objects: { text: string, example: string }
+      let bestDefs = [];
 
       let match;
       while ((match = headerRegex.exec(frenchText)) !== null) {
@@ -358,32 +354,22 @@
 
           for (let line of lines) {
             line = line.trim();
-            
-            // Definition Line
             if (line.startsWith('#') && !line.startsWith('#:') && !line.startsWith('#*')) {
               const cleaned = cleanWikiText(line);
               if (cleaned.length > 2 && !cleaned.toLowerCase().includes('usage notes')) {
-                // Save previous def if exists
                 if (currentDef) defs.push(currentDef);
-                
-                // Start new def
                 currentDef = { text: cleaned, example: null };
               }
             }
-            // Example Line (starts with #:)
             else if (line.startsWith('#:') && currentDef) {
-              // Only take the first example per definition to save space
               if (!currentDef.example) {
                 currentDef.example = parseExample(line.replace(/^#:\s*/, ''));
               }
             }
           }
-          // Push the last one
           if (currentDef) defs.push(currentDef);
 
           if (defs.length > 0) {
-            // Deduplicate definitions (Common in "plus" where multiple headers cover similar meanings)
-            // Or just take the first substantial block found.
             if (!bestPos) {
               bestPos = posType;
               bestDefs = defs;
@@ -399,7 +385,7 @@
         term: term,
         ipa: ipa,
         pos: bestPos,
-        definitions: bestDefs.slice(0, 5) // Limit to top 5
+        definitions: bestDefs.slice(0, 5)
       };
     }
 
@@ -448,7 +434,6 @@
         const row = document.createElement('div');
         row.className = 'word-row';
         
-        // Build list with examples
         let defsHtml = card.definitions.map(d => {
           return `<li>
             ${d.text}
@@ -456,6 +441,7 @@
           </li>`;
         }).join('');
 
+        // Hiding definitions inside <details>
         row.innerHTML = `
           <div class="word-head">
             <h3>${card.term}</h3>
@@ -465,7 +451,10 @@
             ${card.ipa ? `<span class="pill">/${card.ipa}/</span>` : ''}
             ${card.pos ? `<span class="pill">${card.pos}</span>` : ''}
           </div>
-          <ul class="definition-list">${defsHtml}</ul>
+          <details>
+            <summary>Show Definitions</summary>
+            <ul class="definition-list">${defsHtml}</ul>
+          </details>
         `;
         dom.list.appendChild(row);
       });
