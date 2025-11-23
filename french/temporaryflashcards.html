@@ -131,6 +131,7 @@
     }
     .word-head { display: flex; align-items: center; justify-content: space-between; }
     .word-head h3 { margin: 0; font-size: 18px; color: var(--accent); }
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; }
     .pill { 
       padding: 4px 10px; 
       border-radius: 20px; 
@@ -142,6 +143,7 @@
       margin-right: 5px;
     }
     
+    /* Toggle Styles for List */
     details { width: 100%; margin-top: 5px; }
     summary { 
       cursor: pointer; 
@@ -151,11 +153,12 @@
       transition: color 0.2s;
     }
     summary:hover { color: var(--accent); }
+    
     .definition-list { margin: 8px 0 0 0; padding-left: 20px; font-size: 14px; color: #cbd5e1; }
     .definition-list li { margin-bottom: 8px; }
     .example-text { display: block; font-style: italic; color: var(--muted); font-size: 13px; margin-top: 2px; }
 
-    /* --- QUIZ STYLES --- */
+    /* QUIZ STYLES */
     .quiz-container { display: flex; flex-direction: column; gap: 20px; }
     .quiz-prompt {
       text-align: center;
@@ -192,10 +195,9 @@
     .def-box ul { padding-left: 20px; margin: 0; }
     .def-box li { margin-bottom: 10px; }
 
-    /* Mini Flip Cards Container */
+    /* Mini Flip Cards */
     .mini-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     
-    /* Flip Card Mechanics */
     .flip-card {
       background-color: transparent;
       height: 140px;
@@ -302,7 +304,8 @@
   </main>
 
   <script>
-    const storageKey = 'tempFrenchFlashcards-v11';
+    /* --- State & DOM Elements --- */
+    const storageKey = 'tempFrenchFlashcards-v12';
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -356,10 +359,9 @@
       renderList();
     }
 
-    /* --- HTML-Based Wiktionary Parsing (The Fix) --- */
+    /* --- HTML-Based Wiktionary Parsing (Robust Fix) --- */
     async function lookupWord(term) {
       const cleanTerm = term.trim();
-      // 'parse' action gives us the rendered HTML, so we don't have to guess templates
       const url = `https://en.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(cleanTerm)}&prop=text&format=json&origin=*&redirects=1&disabletoc=1`;
 
       const res = await fetch(url);
@@ -370,63 +372,71 @@
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
 
-      // 1. Locate French Section
-      const frenchHeader = doc.getElementById('French');
+      // 1. Find French Header safely
+      // Look for any H2 that contains "French"
+      const allH2s = Array.from(doc.querySelectorAll('h2'));
+      const frenchHeader = allH2s.find(h => h.textContent.includes('French'));
+      
       if (!frenchHeader) throw new Error('No "French" section found.');
       
-      let currentNode = frenchHeader.parentElement; // The H2 element
-      
+      // 2. Determine where to start scanning
+      // If header is wrapped in a div (common in new MediaWiki), start after the div.
+      let startNode = frenchHeader;
+      if (frenchHeader.parentElement.tagName === 'DIV' && frenchHeader.parentElement.className.includes('mw-heading')) {
+        startNode = frenchHeader.parentElement;
+      }
+
       let ipa = '';
       let bestPos = '';
       let bestDefs = [];
       let gender = '';
       
-      const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Interjection', 'Pronoun', 'Article', 'Determiner', 'Numeral'];
+      const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Interjection', 'Pronoun', 'Article', 'Determiner', 'Numeral', 'Participle', 'Definitions'];
 
-      // 2. Walk through the HTML siblings
-      while (currentNode = currentNode.nextElementSibling) {
-        if (currentNode.tagName === 'H2') break; // Stop at next language
+      // 3. Linear Scan of Siblings
+      let sibling = startNode.nextElementSibling;
+      
+      while (sibling) {
+        if (sibling.tagName === 'H2') break; // Stop at next language
 
-        // Extract IPA (It's usually in a span with class "IPA")
+        // Extract IPA
         if (!ipa) {
-          const ipaSpan = currentNode.querySelector('.IPA');
+          const ipaSpan = sibling.querySelector ? sibling.querySelector('.IPA') : null;
           if (ipaSpan) {
-            // Clean brackets/slashes
             ipa = ipaSpan.textContent.replace(/[\/\[\]]/g, '').trim();
           }
         }
 
         // Identify POS Section (H3, H4)
-        if (['H3', 'H4'].includes(currentNode.tagName)) {
-          const headerText = currentNode.textContent;
-          const foundPos = validPOS.find(p => headerText.includes(p));
+        if (['H3', 'H4'].includes(sibling.tagName)) {
+          const headerText = sibling.textContent;
+          // Allow broader matching for POS (e.g. "Verb form")
+          const foundPos = validPOS.find(p => headerText.includes(p)) || (headerText.includes('form') ? 'Form' : null);
 
           if (foundPos) {
-            let sibling = currentNode.nextElementSibling;
+            // Scan content under this POS until next header
+            let innerSibling = sibling.nextElementSibling;
             const currentDefs = [];
+            let currentGender = '';
 
-            // Walk until next header
-            while(sibling && !['H2', 'H3', 'H4'].includes(sibling.tagName)) {
+            while (innerSibling && !['H2', 'H3', 'H4'].includes(innerSibling.tagName)) {
               
-              // Gender Detection (Usually in the paragraph immediately following POS header)
-              // Looks for <abbr title="masculine gender">m</abbr>
-              if (sibling.tagName === 'P' && !gender) {
-                const abbr = sibling.querySelector('abbr');
+              // Gender Detection
+              if (innerSibling.tagName === 'P' && !currentGender) {
+                const abbr = innerSibling.querySelector('abbr');
                 if (abbr) {
-                   if (abbr.textContent === 'm') gender = 'm';
-                   if (abbr.textContent === 'f') gender = 'f';
+                   if (abbr.textContent === 'm') currentGender = 'm';
+                   if (abbr.textContent === 'f') currentGender = 'f';
                 }
               }
 
-              // Definition Extraction <ol>
-              if (sibling.tagName === 'OL') {
-                const listItems = sibling.querySelectorAll('li');
+              // Definition Extraction
+              if (innerSibling.tagName === 'OL') {
+                const listItems = innerSibling.querySelectorAll('li');
                 listItems.forEach(li => {
-                  // Separate Definition vs Example
-                  // Examples are often in <ul>, <dl>, or .h-usage-example
                   const clone = li.cloneNode(true);
                   
-                  // Extract example first
+                  // Extract example
                   let example = null;
                   const exampleNode = clone.querySelector('ul, dl, .h-usage-example');
                   if (exampleNode) {
@@ -434,35 +444,35 @@
                     exampleNode.remove();
                   }
                   
-                  // Clean up definition text
                   let defText = clone.textContent.trim();
-                  // Remove parens at start like "(transitive)" if excessive
-                  // But keep them if short. 
                   if (defText.length > 2) {
                      currentDefs.push({ text: defText, example: example });
                   }
                 });
               }
-              sibling = sibling.nextElementSibling;
+              innerSibling = innerSibling.nextElementSibling;
             }
 
+            // If we found definitions here, and we don't have a "Best" one yet, take it.
+            // Prioritize standard POS over "Form" if both exist? No, usually first is best in Wiktionary.
             if (currentDefs.length > 0 && !bestPos) {
                bestPos = foundPos;
                bestDefs = currentDefs;
+               gender = currentGender;
             }
           }
         }
+        sibling = sibling.nextElementSibling;
       }
 
       if (!bestDefs.length) throw new Error('No definitions found.');
 
-      // Format POS
       let posDisplay = bestPos;
       if (gender) posDisplay += ` (${gender})`;
 
       return {
         id: Date.now(),
-        term: data.parse.title, // Use official title (handles case sensitivity)
+        term: data.parse.title,
         ipa: ipa,
         pos: posDisplay,
         definitions: bestDefs.slice(0, 5)
@@ -489,7 +499,7 @@
           <details>
             <summary>Show Definitions</summary>
             <div style="margin-top:10px;">
-              ${card.ipa ? `<span class="pill">/${card.ipa}/</span>` : ''}
+              <span class="pill">/${card.ipa || '...'} /</span>
               <span class="pill">${card.pos}</span>
             </div>
             <ul class="definition-list">${defsHtml}</ul>
@@ -542,7 +552,7 @@
                 <div class="card-value">?</div>
               </div>
               <div class="flip-back">
-                <div class="card-value">/${card.ipa}/</div>
+                <div class="card-value">/${card.ipa || '...'} /</div>
                 <button class="mini-audio-btn" onclick="playAudio('${card.term}', event)">🔊</button>
               </div>
             </div>
