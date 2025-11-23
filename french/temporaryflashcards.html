@@ -155,7 +155,7 @@
     .definition-list li { margin-bottom: 8px; }
     .example-text { display: block; font-style: italic; color: var(--muted); font-size: 13px; margin-top: 2px; }
 
-    /* --- NEW QUIZ STYLES --- */
+    /* --- QUIZ STYLES --- */
     .quiz-container { display: flex; flex-direction: column; gap: 20px; }
     .quiz-prompt {
       text-align: center;
@@ -307,7 +307,7 @@
 
   <script>
     /* --- State & DOM Elements --- */
-    const storageKey = 'tempFrenchFlashcards-v10';
+    const storageKey = 'frenchFlashcards-HTML-v1';
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -372,142 +372,137 @@
       renderList();
     }
 
-    /* --- Wiktionary Parsing Logic --- */
+    /* --- PARSING LOGIC (DOM BASED) --- */
 
-    function parseExample(text) {
-      const match = text.match(/{{ux[i]?\|[^|]+\|([^}|]+)(?:\|([^}|]+))?(?:\|.*)?}}/);
-      if (match) {
-        const french = match[1];
-        const english = match[2];
-        if (english && !english.includes('=')) {
-          return `${french} — ${english}`;
-        }
-        return french;
-      }
-      return cleanWikiText(text);
-    }
-
-    function cleanWikiText(text) {
-      if (!text) return '';
-      let cleaned = text;
-
-      // Convert Form-of definitions
-      cleaned = cleaned.replace(/{{(?:infl of|inflection of)\|[^|]+\|([^}|]+).*}}/gi, 'Inflection of $1');
-      cleaned = cleaned.replace(/{{(?:plural of)\|[^|]+\|([^}|]+).*}}/gi, 'Plural of $1');
-      cleaned = cleaned.replace(/{{(?:feminine of)\|[^|]+\|([^}|]+).*}}/gi, 'Feminine of $1');
-
-      // Preserve Context
-      cleaned = cleaned.replace(/{{(?:gl|gloss)\|([^}]+)}}/g, '($1)');
-      cleaned = cleaned.replace(/{{lb\|[a-z]+\|([^}]+)}}/g, '($1)');
-
-      // Remove other templates
-      let old;
-      do {
-        old = cleaned;
-        cleaned = cleaned.replace(/{{[^{}]+}}/g, ' ');
-      } while (cleaned !== old);
-
-      cleaned = cleaned
-        .replace(/^#\s*/, '')
-        .replace(/\[\[(?:[^|\]]*\|)?([^\]]+)\]\]/g, '$1')
-        .replace(/'''?/g, '')
-        .replace(/\(\s*\)/g, '')
-        .replace(/\s+/g, ' ')
-        .trim();
-
-      return cleaned;
-    }
-
-    function extractFrenchSection(fullText) {
-      const match = fullText.match(/==\s*French\s*==([\s\S]*?)(?:\n==[^=]|$)/);
-      return match ? match[1] : null;
-    }
-
-    function extractWordData(frenchText, term) {
-      // 1. IPA
-      let ipa = '';
-      const genericIpaMatch = frenchText.match(/{{IPA\|fr\|([^}]+)}}/);
-      if (genericIpaMatch) {
-          const parts = genericIpaMatch[1].split('|');
-          for (const p of parts) {
-              const clean = p.trim();
-              if ((clean.startsWith('/') || clean.startsWith('[')) && !clean.includes('=')) {
-                  ipa = clean.replace(/\//g, '').replace(/\[|\]/g, ''); 
-                  break; 
-              }
-          }
-      }
-      if (!ipa) {
-         const frIpaMatch = frenchText.match(/{{fr-IPA(?:\|([^}]+))?}}/); 
-         if (frIpaMatch && frIpaMatch[1]) {
-             const parts = frIpaMatch[1].split('|');
-             for (const p of parts) {
-                 const clean = p.trim();
-                 if (!clean.includes('=') && !clean.includes('qual')) {
-                     if (clean !== term) {
-                         ipa = clean;
-                         break;
-                     }
-                 }
-             }
-         }
-      }
-
-      // 2. POS & Defs & Gender Detection
-      const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Interjection', 'Pronoun', 'Article', 'Determiner'];
-      const headerRegex = /(={3,4})\s*([A-Za-z]+)\s*\1/g;
+    async function lookupWord(term) {
+      const cleanTerm = term.trim();
+      // Use action=parse to get the rendered HTML. This ensures templates like {{fr-IPA}} are calculated.
+      const url = `https://en.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(cleanTerm)}&prop=text&format=json&origin=*&redirects=1`;
       
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (data.error || !data.parse || !data.parse.text) {
+        throw new Error('Word not found on Wiktionary.');
+      }
+
+      const htmlContent = data.parse.text['*'];
+      // If it redirected, use the destination title
+      const actualTerm = data.parse.title || cleanTerm;
+      
+      return extractWordDataFromHTML(htmlContent, actualTerm);
+    }
+
+    function extractWordDataFromHTML(htmlString, term) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlString, 'text/html');
+
+      // 1. Find the "French" Section
+      // Wiktionary HTML structure: <h2 id="French">French</h2> (or wrapped in .mw-heading)
+      // We iterate through elements to capture everything between "French" header and the next language header.
+      
+      let startNode = null;
+      const allHeaders = doc.querySelectorAll('h2');
+      
+      for (let h2 of allHeaders) {
+        if (h2.textContent.includes('French')) {
+          startNode = h2.closest('.mw-heading') || h2; // Handle modern MediaWiki wrapper
+          break;
+        }
+      }
+
+      if (!startNode) throw new Error('No French entry found for this word.');
+
+      // Collect French Nodes
+      const frenchNodes = [];
+      let currentNode = startNode.nextElementSibling;
+      
+      while (currentNode) {
+        // Check if we hit the next language section (H2)
+        if (currentNode.tagName === 'H2' || currentNode.querySelector('h2')) {
+          break;
+        }
+        frenchNodes.push(currentNode);
+        currentNode = currentNode.nextElementSibling;
+      }
+
+      // Create a temporary container to query strictly within French data
+      const container = document.createElement('div');
+      frenchNodes.forEach(n => container.appendChild(n.cloneNode(true)));
+
+      // 2. Extract IPA
+      // We look for elements with class "IPA". 
+      // Wiktionary usually outputs: <span class="IPA">/dwa/</span> or <span class="IPA">[dwa]</span>
+      let ipa = '...';
+      const ipaEl = container.querySelector('.IPA');
+      if (ipaEl) {
+        // Remove slashes or brackets for cleaner display
+        ipa = ipaEl.textContent.trim().replace(/^[\/\[]|[\/\]]$/g, '');
+      }
+
+      // 3. Extract POS, Gender, and Definitions
+      const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Pronoun', 'Numeral', 'Article', 'Determiner'];
       let bestPos = '';
       let bestDefs = [];
       let gender = '';
 
-      let match;
-      while ((match = headerRegex.exec(frenchText)) !== null) {
-        const posType = match[2];
+      // Headers for POS are usually H3 or H4
+      const sectionHeaders = container.querySelectorAll('h3, h4');
 
-        if (validPOS.includes(posType)) {
-          const startIndex = match.index + match[0].length;
-          const remainingText = frenchText.slice(startIndex);
-          const nextHeaderIndex = remainingText.search(/\n={3,5}/); 
+      for (let header of sectionHeaders) {
+        // Remove "[edit]" text
+        const posText = header.textContent.replace(/\[edit\]/g, '').trim();
+
+        if (validPOS.includes(posText)) {
+          // Definitions are in the Ordered List (<ol>) immediately following
+          let sibling = header.nextElementSibling;
           
-          const blockContent = nextHeaderIndex === -1 
-            ? remainingText 
-            : remainingText.slice(0, nextHeaderIndex);
-
-          // Attempt to find gender in this block (e.g. {{fr-noun|m}})
-          if (!gender && posType === 'Noun') {
-            const genderMatch = blockContent.match(/{{fr-noun\|([mf][^}|]*)/);
-            if (genderMatch) {
-               gender = genderMatch[1].replace('-', ' '); // 'm-p' -> 'm p'
-            }
+          // Skip potential info boxes or styles until we find the list
+          while(sibling && sibling.tagName !== 'OL' && !['H2','H3','H4'].includes(sibling.tagName)) {
+            sibling = sibling.nextElementSibling;
           }
 
-          const lines = blockContent.split('\n');
-          const defs = [];
-          
-          let currentDef = null;
+          if (sibling && sibling.tagName === 'OL') {
+            // Found definitions
+            const items = sibling.querySelectorAll(':scope > li');
+            const currentDefs = [];
 
-          for (let line of lines) {
-            line = line.trim();
-            if (line.startsWith('#') && !line.startsWith('#:') && !line.startsWith('#*')) {
-              const cleaned = cleanWikiText(line);
-              if (cleaned.length > 2 && !cleaned.toLowerCase().includes('usage notes')) {
-                if (currentDef) defs.push(currentDef);
-                currentDef = { text: cleaned, example: null };
-              }
-            }
-            else if (line.startsWith('#:') && currentDef) {
-              if (!currentDef.example) {
-                currentDef.example = parseExample(line.replace(/^#:\s*/, ''));
-              }
-            }
-          }
-          if (currentDef) defs.push(currentDef);
+            items.forEach(li => {
+              // Clone to safely manipulate
+              const clone = li.cloneNode(true);
+              
+              // Remove nested lists (synonyms, derived terms usually in <ul> inside <li>)
+              const nestedLists = clone.querySelectorAll('ul, dl, ol');
+              nestedLists.forEach(n => n.remove());
 
-          if (defs.length > 0) {
-            if (!bestPos) {
-              bestPos = posType;
-              bestDefs = defs;
+              // Extract pure text
+              let defText = clone.textContent.trim();
+              
+              // Filter out "Usage notes" or empty definitions
+              if (defText && !defText.toLowerCase().startsWith('usage notes')) {
+                currentDefs.push({ text: defText, example: null });
+              }
+            });
+
+            if (currentDefs.length > 0) {
+              if (!bestPos) {
+                bestPos = posText;
+                bestDefs = currentDefs;
+                
+                // Try to find gender in the paragraph usually preceding the <ol> (the headword line)
+                // Look for <span class="gender">
+                const headwordLine = header.nextElementSibling; 
+                // Traverse a few siblings to find headword line
+                let temp = header.nextElementSibling;
+                while(temp && temp !== sibling) {
+                  const gSpan = temp.querySelector('.gender');
+                  if (gSpan) {
+                    gender = gSpan.textContent.trim();
+                  }
+                  temp = temp.nextElementSibling;
+                }
+              }
+              // We prioritize the first valid POS we find, or Nouns if we want specific logic
             }
           }
         }
@@ -515,42 +510,17 @@
 
       if (!bestDefs.length) throw new Error('No definitions found.');
 
-      // Format POS string with gender if available
+      // Format POS with Gender
       let posDisplay = bestPos;
-      if (gender) {
-         if (gender.includes('m')) posDisplay += ' (m)';
-         else if (gender.includes('f')) posDisplay += ' (f)';
-      }
+      if (gender) posDisplay += ` (${gender})`;
 
       return {
         id: Date.now(),
         term: term,
         ipa: ipa,
         pos: posDisplay,
-        definitions: bestDefs.slice(0, 5)
+        definitions: bestDefs.slice(0, 5) // Limit to top 5
       };
-    }
-
-    async function lookupWord(term) {
-      const cleanTerm = term.trim();
-      const url = `https://en.wiktionary.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&format=json&titles=${encodeURIComponent(cleanTerm)}&origin=*`;
-      
-      const res = await fetch(url);
-      const data = await res.json();
-      
-      const pages = data.query.pages;
-      const pageId = Object.keys(pages)[0];
-      const page = pages[pageId];
-
-      if (page.missing) throw new Error('Word not found on Wiktionary.');
-
-      const rawContent = page.revisions?.[0]?.slots?.main?.['*'];
-      if (!rawContent) throw new Error('No content available.');
-
-      const frenchSection = extractFrenchSection(rawContent);
-      if (!frenchSection) throw new Error('No "French" entry found.');
-
-      return extractWordData(frenchSection, page.title);
     }
 
     /* --- UI Logic --- */
@@ -577,13 +547,9 @@
         row.className = 'word-row';
         
         let defsHtml = card.definitions.map(d => {
-          return `<li>
-            ${d.text}
-            ${d.example ? `<span class="example-text">"${d.example}"</span>` : ''}
-          </li>`;
+          return `<li>${d.text}</li>`;
         }).join('');
 
-        // Hiding IPA and POS inside definitions logic
         row.innerHTML = `
           <div class="word-head">
             <h3>${card.term}</h3>
@@ -622,13 +588,11 @@
       // Build Definitions HTML
       let defsHtml = '<ul style="margin:0; padding-left:20px;">';
       card.definitions.forEach(d => {
-        defsHtml += `<li>${d.text}`;
-        if(d.example) defsHtml += `<br><span style="color:#94a3b8; font-style:italic; font-size:0.9em">"${d.example}"</span>`;
-        defsHtml += `</li>`;
+        defsHtml += `<li>${d.text}</li>`;
       });
       defsHtml += '</ul>';
 
-      // Insert New Quiz Layout
+      // Insert Quiz Layout
       dom.quizContainer.innerHTML = `
         <div class="quiz-prompt">${card.term}</div>
         
@@ -666,8 +630,8 @@
                 <div class="card-value">?</div>
               </div>
               <div class="flip-back">
-                <div class="card-value">/${card.ipa || '... '}/</div>
-                <button class="mini-audio-btn" onclick="playAudio('${card.term}', event)">🔊</button>
+                <div class="card-value">/${card.ipa}/</div>
+                <button class="mini-audio-btn" onclick="playAudio('${card.term.replace(/'/g, "\\'")}', event)">🔊</button>
               </div>
             </div>
           </div>
@@ -694,6 +658,7 @@
       const term = dom.input.value;
       if (!term) return;
 
+      // Check duplicates
       if (deck.some(c => c.term.toLowerCase() === term.toLowerCase())) {
         setStatus('Word already in deck', 'error');
         return;
