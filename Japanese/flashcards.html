@@ -105,6 +105,8 @@
       padding: 14px;
     }
     .detail-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
+    
+    /* --- UPDATED CARD STYLING START --- */
     .reveal-block { perspective: 1200px; }
 
     .reveal-block .flip-inner {
@@ -112,19 +114,26 @@
       background: #0d162a;
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 14px 16px;
       cursor: pointer;
       transform-style: preserve-3d;
       transition: transform 0.65s ease;
       min-height: 140px;
       box-shadow: 0 12px 26px rgba(0,0,0,0.25);
+      
+      /* FIX: Use grid to stack faces. This allows the container to grow with text. */
+      display: grid; 
+      grid-template-columns: 1fr;
     }
 
     .reveal-block.revealed .flip-inner { transform: rotateY(180deg); }
 
     .reveal-block .face {
-      position: absolute;
-      inset: 0;
+      /* FIX: Stack faces on top of each other */
+      grid-area: 1 / 1;
+      /* FIX: Relative positioning allows the text to push the container height */
+      position: relative;
+      width: 100%;
+      
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -138,19 +147,33 @@
       transform-style: preserve-3d;
       transition: opacity 0.35s ease;
       border-radius: 12px;
+      /* FIX: Handle long words cleanly */
+      word-break: break-word; 
     }
+
     .reveal-block .face .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
     .reveal-block .face .value { font-size: 22px; font-weight: 700; margin-top: 4px; }
     .reveal-block .face.front .value { color: rgba(226,232,240,0.7); }
+    
+    /* Ensure the back face is rotated correctly */
     .reveal-block .face.back { transform: rotateY(180deg); opacity: 0; }
+    
     .reveal-block.revealed .face.front { opacity: 0; }
     .reveal-block.revealed .face.back { opacity: 1; }
+    
     .reveal-block.highlight .flip-inner { border-color: rgba(245,158,11,0.6); box-shadow: 0 12px 30px rgba(245,158,11,0.18); }
     .reveal-block.highlight .face.front { color: #fef3c7; }
     .reveal-block .subtext { margin-top: 8px; font-size: 14px; color: rgba(148,163,184,0.8); font-weight: 600; }
+    
+    /* Mini Card Specifics */
     .reveal-block.mini { min-height: 0; }
-    .reveal-block.mini .flip-inner { min-height: 0; padding: 12px; }
-    .reveal-block.mini .face .value { font-size: 16px; line-height: 1.4; }
+    .reveal-block.mini .flip-inner { 
+      min-height: 100px; /* Ensure a sensible minimum height */
+    }
+    .reveal-block.mini .face { padding: 14px; }
+    .reveal-block.mini .face .value { font-size: 16px; line-height: 1.5; }
+    /* --- UPDATED CARD STYLING END --- */
+
     .mini-line { display: flex; gap: 6px; align-items: center; justify-content: flex-start; }
     .mini-line .label { color: rgba(148,163,184,0.9); font-weight: 600; font-size: 12px; }
     .actions { display: flex; gap: 12px; margin: 16px 0 6px; flex-wrap: wrap; }
@@ -261,9 +284,16 @@
     const speakBtn = document.getElementById('speakBtn');
 
     async function loadData() {
-      const words = await fetch(wordlistUrl).then(r => r.json());
-      cards = words.map((entry, idx) => ({ rank: idx + 1, ...entry }));
-      populateDecks(cards.length);
+      // NOTE: If you don't have this JSON file locally, the fetch will fail.
+      // Ensure '1000words.json' exists in the same folder.
+      try {
+        const words = await fetch(wordlistUrl).then(r => r.json());
+        cards = words.map((entry, idx) => ({ rank: idx + 1, ...entry }));
+        populateDecks(cards.length);
+      } catch (e) {
+        console.error("Could not load wordlist:", e);
+        alert("Error loading wordlist. Check console.");
+      }
     }
 
     function populateDecks(total) {
