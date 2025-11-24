@@ -306,6 +306,24 @@
   <script>
     const storageKey = 'tempFrenchFlashcards-v15';
     const apiKeyStorageKey = 'tempFrenchFlashcardsGeminiKey';
+    const geminiSystemInstruction = `When given a french sentence, respond like this for each word:
+
+[flâneur <m> (noun) | an aimless wanderer or stroller | Le flâneur observait la ville sans se presser.]
+
+If you detect an idiom then return idiom like this:
+
+[prendre la mouche | to take offence suddenly | Il a pris la mouche pour une remarque pourtant innocente.]
+
+As well as the words seperately:
+
+[prendre <na> (verb) | to take | Elle doit prendre le train tôt demain.]
+
+[la <f> (article) | the (feminine singular) | La porte était restée ouverte.]
+
+[mouche <f> (noun) | fly (the insect) | Une mouche tournait autour de la lampe.]
+
+
+<na> means not available as it it doesn't have a gender.`;
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -371,48 +389,72 @@
       localStorage.setItem(apiKeyStorageKey, key.trim());
     }
 
-    function extractFirstJson(text) {
-      try {
-        const match = text.match(/\{[\s\S]*\}/);
-        if (match) return JSON.parse(match[0]);
-        return JSON.parse(text);
-      } catch (err) {
-        console.warn('Failed to parse Gemini JSON', err, text);
-        throw new Error('Unable to parse AI response.');
-      }
+    function parseGeminiFlashcards(text, originalTerm) {
+      const matches = Array.from(text.matchAll(/\[(.*?)\]/gs)).map(m => m[1]);
+      if (!matches.length) throw new Error('Unable to parse AI response.');
+
+      return matches.map((entry, idx) => {
+        const parts = entry.split('|').map(p => p.trim());
+        const head = parts[0] || '';
+        const meaning = parts[1] || '';
+        const example = parts[2] || '';
+
+        const genderMatch = head.match(/<(.*?)>/);
+        const posMatch = head.match(/\((.*?)\)/);
+        const term = head.replace(/<.*?>/g, '').replace(/\(.*?\)/g, '').trim() || `${originalTerm}-${idx + 1}`;
+
+        return {
+          id: Date.now() + idx,
+          term,
+          ipa: '',
+          pos: posMatch ? posMatch[1] : '',
+          definitions: [
+            {
+              text: meaning || 'Definition unavailable',
+              example: example
+            }
+          ],
+          gender: genderMatch ? genderMatch[1] : ''
+        };
+      });
     }
 
     async function lookupWithGemini(term) {
       const apiKey = loadApiKey();
       if (!apiKey) throw new Error('Add your Google AI Studio API key below to fetch definitions.');
 
-      const prompt = [
-        'Return French dictionary data as strict JSON. Do not include any extra text.',
-        'Schema: {"term": string, "ipa": string (no slashes), "pos": string, "definitions": [{"text": string, "example": string}]}.',
-        'Up to 6 concise definitions in English. Provide short usage example per definition when possible.',
-        `Target word: ${term.trim()}`
-      ].join('\n');
-
+      const model = 'gemini-flash-latest';
       const body = {
+        model,
+        config: {
+          thinkingConfig: {
+            thinkingBudget: 0,
+          },
+          tools: [
+            {
+              googleSearch: {
+              }
+            },
+          ],
+          systemInstruction: [
+            {
+              text: geminiSystemInstruction,
+            }
+          ],
+        },
         contents: [
           {
             role: 'user',
-            parts: [{ text: prompt }]
-          }
+            parts: [
+              {
+                text: `${term}`,
+              },
+            ],
+          },
         ],
-        generationConfig: {
-          thinkingConfig: {
-            thinkingBudget: -1
-          }
-        },
-        tools: [
-          {
-            googleSearch: {}
-          }
-        ]
       };
 
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:streamGenerateContent?key=${encodeURIComponent(apiKey)}`;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?key=${encodeURIComponent(apiKey)}`;
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -441,23 +483,14 @@
         try { payloads.push(JSON.parse(line)); } catch {}
       }
 
-      const firstCandidate = payloads.find(p => p.candidates && p.candidates.length);
-      const textPart = firstCandidate?.candidates?.[0]?.content?.parts?.map(p => p.text || '').join(' ').trim();
+      const textParts = payloads
+        .flatMap(p => (p.candidates || []).flatMap(c => (c.content?.parts || []).map(part => part.text || '')))
+        .join(' ')
+        .trim();
 
-      if (!textPart) throw new Error('No AI response received.');
+      if (!textParts) throw new Error('No AI response received.');
 
-      const parsed = extractFirstJson(textPart);
-
-      return {
-        id: Date.now(),
-        term: parsed.term || term,
-        ipa: parsed.ipa || '',
-        pos: parsed.pos || '',
-        definitions: (parsed.definitions || []).slice(0, 10).map(d => ({
-          text: d.text || '',
-          example: d.example || ''
-        }))
-      };
+      return parseGeminiFlashcards(textParts, term);
     }
 
     // --- REWRITTEN ROBUST PARSER ---
@@ -678,18 +711,22 @@
       }
       dom.status.textContent = 'Fetching...';
       try {
-        let card;
+        let cards;
         // Try AI first
         try {
-          card = await lookupWithGemini(term);
+          cards = await lookupWithGemini(term);
           dom.status.textContent = 'Added via Google AI Studio';
         } catch (aiErr) {
           // Fallback to Wiktionary
           console.log("AI Failed (" + aiErr.message + "), switching to Wiktionary...");
-          card = await lookupWord(term);
+          cards = [await lookupWord(term)];
           dom.status.textContent = 'Added via Wiktionary fallback';
         }
-        deck.unshift(card);
+
+        (Array.isArray(cards) ? cards : [cards]).forEach(card => {
+          if (deck.some(c => c.term.toLowerCase() === card.term.toLowerCase())) return;
+          deck.unshift(card);
+        });
         saveDeck();
         dom.input.value = '';
         setTimeout(() => dom.status.textContent = '', 3000);
