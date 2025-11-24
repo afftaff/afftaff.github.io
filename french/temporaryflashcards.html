@@ -304,26 +304,21 @@
   </main>
 
   <script>
-    const storageKey = 'tempFrenchFlashcards-v15';
+    const storageKey = 'tempFrenchFlashcards-v17';
     const apiKeyStorageKey = 'tempFrenchFlashcardsGeminiKey';
-    const geminiSystemInstruction = `When given a french sentence, respond like this for each word:
-
-[flâneur <m> (noun) | an aimless wanderer or stroller | Le flâneur observait la ville sans se presser.]
+    
+    // UPDATED: Added instruction for English translation in brackets at the end
+    const geminiSystemInstruction = `change this text so it includes both an IPA and english pronuncation as well, and an English translation of the sentence in brackets:
+[flâneur <m> (noun) ///flɑ.nœʁ/// +++flah-nur+++ | an aimless wanderer or stroller | Le flâneur observait la ville sans se presser. (The stroller watched the city without hurrying.)]
 
 If you detect an idiom then return idiom like this:
-
-[prendre la mouche | to take offence suddenly | Il a pris la mouche pour une remarque pourtant innocente.]
+[prendre la mouche ///pʁɑ̃dʁ la muʃ/// +++prahn-druh lah moosh+++ | to take offence suddenly | Il a pris la mouche pour une remarque pourtant innocente. (He took offense at an innocent remark.)]
 
 As well as the words seperately:
+[prendre <na> (verb) ///pʁɑ̃dʁ/// +++prahn-druh+++ | to take | Elle doit prendre le train tôt demain. (She has to take the train early tomorrow.)]
+[la <f> (article) | ///la/// +++lah+++ | the (feminine singular) | La porte était restée ouverte. (The door had remained open.)]
+[mouche <f> (noun) | ///muʃ/// +++moosh+++ | fly (the insect) | Une mouche tournait autour de la lampe. (A fly was circling around the lamp.)]`;
 
-[prendre <na> (verb) | to take | Elle doit prendre le train tôt demain.]
-
-[la <f> (article) | the (feminine singular) | La porte était restée ouverte.]
-
-[mouche <f> (noun) | fly (the insect) | Une mouche tournait autour de la lampe.]
-
-
-<na> means not available as it it doesn't have a gender.`;
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -379,25 +374,45 @@ As well as the words seperately:
       localStorage.setItem(storageKey, JSON.stringify(deck));
       renderList();
     }
-
-    /* --- Advanced Parsing --- */
     function loadApiKey() {
       return localStorage.getItem(apiKeyStorageKey) || '';
     }
-
     function saveApiKey(key) {
       localStorage.setItem(apiKeyStorageKey, key.trim());
     }
 
+    /* --- GEMINI INTEGRATION --- */
+    
     function parseGeminiFlashcards(text, originalTerm) {
       const matches = Array.from(text.matchAll(/\[(.*?)\]/gs)).map(m => m[1]);
-      if (!matches.length) throw new Error('Unable to parse AI response.');
+      if (!matches.length) throw new Error('Unable to parse AI response. Try again.');
 
       return matches.map((entry, idx) => {
-        const parts = entry.split('|').map(p => p.trim());
+        // 1. Extract Pronunciation tags first (so pipes inside/outside them don't matter)
+        let ipa = '';
+        let phonetic = '';
+        
+        // Extract IPA ///...///
+        const ipaMatch = entry.match(/\/\/\/(.*?)\/\/\//);
+        if (ipaMatch) {
+            ipa = ipaMatch[1];
+            entry = entry.replace(ipaMatch[0], ''); // Remove from string to clean up
+        }
+
+        // Extract Phonetic +++...+++
+        const phoneMatch = entry.match(/\+\+\+(.*?)\+\+\+/);
+        if (phoneMatch) {
+            phonetic = phoneMatch[1];
+            entry = entry.replace(phoneMatch[0], ''); // Remove from string
+        }
+
+        // 2. Split remaining string by pipe
+        // filter(p => p.trim()) removes empty slots left by the regex removal if pipes were adjacent
+        const parts = entry.split('|').map(p => p.trim()).filter(p => p.length > 0);
+        
         const head = parts[0] || '';
         const meaning = parts[1] || '';
-        const example = parts[2] || '';
+        const example = parts[2] || ''; // This will now contain "French sentence. (English Translation)"
 
         const genderMatch = head.match(/<(.*?)>/);
         const posMatch = head.match(/\((.*?)\)/);
@@ -406,7 +421,8 @@ As well as the words seperately:
         return {
           id: Date.now() + idx,
           term,
-          ipa: '',
+          ipa: ipa,
+          phonetic: phonetic, // Store the english phonetic
           pos: posMatch ? posMatch[1] : '',
           definitions: [
             {
@@ -419,56 +435,37 @@ As well as the words seperately:
       });
     }
 
-    // --- REPLACED: Updated Gemini Call (Standard REST, no stream) ---
     async function lookupWithGemini(term) {
       const apiKey = loadApiKey();
-      if (!apiKey) throw new Error('Add your Google AI Studio API key below to fetch definitions.');
+      if (!apiKey) throw new Error('Add your Google AI Studio API key at the bottom of the page.');
 
-      const model = 'gemini-1.5-flash';
-      
-      const body = {
-        systemInstruction: {
-          parts: [{ text: geminiSystemInstruction }]
-        },
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: term }]
-          }
-        ],
-        generationConfig: {
-          temperature: 0.7,
-        }
-      };
-
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+      // Using gemini-2.5-flash as requested
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              systemInstruction: {
+                  parts: [{ text: geminiSystemInstruction }]
+              },
+              contents: [{
+                  parts: [{ text: term }]
+              }]
+          })
       });
 
-      if (!res.ok) {
-        let errMsg = res.statusText;
-        try {
-            const errData = await res.json();
-            errMsg = errData.error.message || errMsg;
-        } catch(e) {}
-        throw new Error(`Google AI Error: ${errMsg}`);
+      const data = await response.json();
+
+      if (data.error) {
+          throw new Error(data.error.message);
       }
 
-      const data = await res.json();
-      
-      // Extract text from the deep JSON structure
-      const textParts = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-      if (!textParts) throw new Error('No AI response received.');
-
-      return parseGeminiFlashcards(textParts, term);
+      const botText = data.candidates[0].content.parts[0].text;
+      return parseGeminiFlashcards(botText, term);
     }
 
-    // --- REWRITTEN ROBUST PARSER ---
+    /* --- Wiktionary Fallback --- */
     async function lookupWord(term) {
       const cleanTerm = term.trim();
       const url = `https://en.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(cleanTerm)}&prop=text&format=json&origin=*&redirects=1&disabletoc=1`;
@@ -481,21 +478,16 @@ As well as the words seperately:
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
 
-      // 1. Locate the French Section. 
-      // Wiktionary headers can be H2, or wrapped in .mw-heading.
       const allHeads = Array.from(doc.querySelectorAll('h2'));
       let frenchHeader = allHeads.find(h => h.textContent.includes('French'));
 
       if (!frenchHeader) throw new Error('No "French" section found.');
 
-      // 2. Identify the "French Container" (everything between French H2 and the next H2)
-      // If header is inside a div.mw-heading, we use the div as the start point
       let startNode = frenchHeader.closest('.mw-heading') || frenchHeader;
       
       const frenchNodes = [];
       let sibling = startNode.nextElementSibling;
       while (sibling) {
-        // Stop if we hit another H2 or a div containing an H2
         if (sibling.tagName === 'H2' || (sibling.classList.contains('mw-heading') && sibling.querySelector('h2'))) {
           break;
         }
@@ -503,12 +495,10 @@ As well as the words seperately:
         sibling = sibling.nextElementSibling;
       }
 
-      // 3. Scan the collected nodes for Data
       let ipa = '';
       let bestDefs = [];
       let bestPos = '';
       
-      // Look for IPA anywhere in French section
       for (const node of frenchNodes) {
         const ipaEl = node.querySelector('.IPA');
         if (ipaEl && !ipa) {
@@ -516,43 +506,30 @@ As well as the words seperately:
         }
       }
 
-      // Look for Parts of Speech headers (h3/h4) and their following lists
       const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Pronoun', 'Article', 'Determiner', 'Numeral', 'Participle'];
 
       for (let i = 0; i < frenchNodes.length; i++) {
         const node = frenchNodes[i];
-        
-        // Is this node a header?
         const headerText = node.textContent;
         const foundPos = validPOS.find(p => headerText.includes(p));
-
-        // Ensure it's actually a header element
         const isHeader = ['H3', 'H4', 'H5'].includes(node.tagName) || node.querySelector('h3, h4, h5');
 
         if (isHeader && foundPos) {
-          // Found a POS! Now look at immediate next siblings for an OL
           let defs = [];
-          
-          // Scan a few siblings ahead to find the <ol>
           for (let j = i + 1; j < Math.min(i + 5, frenchNodes.length); j++) {
             const nextNode = frenchNodes[j];
-            if (['H3','H4','H2'].includes(nextNode.tagName) || nextNode.querySelector('h3,h4,h2')) break; // Stop if hit new header
+            if (['H3','H4','H2'].includes(nextNode.tagName) || nextNode.querySelector('h3,h4,h2')) break; 
 
             if (nextNode.tagName === 'OL') {
               const lis = Array.from(nextNode.children);
               lis.forEach(li => {
-                 // Clone to avoid destroying original if needed, but here we destruct
                  const clone = li.cloneNode(true);
-                 
-                 // Extract Example
                  let example = '';
-                 // 1. Try structured citation
                  const quote = clone.querySelector('.h-usage-example, .h-quotation, .cited-passage');
                  if (quote) {
                     example = quote.textContent.trim();
-                    quote.remove(); // Remove from definition text
+                    quote.remove();
                  }
-                 // 2. Try nested lists (common in wiktionary for examples)
                  const nestedUl = clone.querySelector('ul, dl');
                  if (nestedUl) {
                     if (!example) example = nestedUl.textContent.trim();
@@ -560,7 +537,6 @@ As well as the words seperately:
                  }
 
                  let text = clone.textContent.trim();
-                 // Clean up common leading rubbish like "(transitive)"
                  text = text.replace(/^\((.*?)\)\s*/, ''); 
 
                  if (text.length > 2) {
@@ -569,7 +545,6 @@ As well as the words seperately:
               });
               
               if (defs.length > 0) {
-                 // If we haven't found a POS yet, or this one has more definitions, take it
                  if (defs.length > bestDefs.length) {
                     bestDefs = defs;
                     bestPos = foundPos;
@@ -586,6 +561,7 @@ As well as the words seperately:
         id: Date.now(),
         term: data.parse.title,
         ipa: ipa,
+        phonetic: '', // Wiktionary doesn't easily provide English approximation
         pos: bestPos,
         definitions: bestDefs.slice(0, 8)
       };
@@ -609,6 +585,8 @@ As well as the words seperately:
           return html;
         }).join('');
 
+        const phoneticDisplay = card.phonetic ? `[${card.phonetic}]` : '';
+
         row.innerHTML = `
           <div class="word-head">
             <h3>${card.term}</h3>
@@ -617,7 +595,7 @@ As well as the words seperately:
           <details>
             <summary>Show Definitions</summary>
             <div style="margin-top:10px;">
-              <span class="pill">/${card.ipa || '...'} /</span>
+              <span class="pill">/${card.ipa || '...'} / ${phoneticDisplay}</span>
               <span class="pill">${card.pos}</span>
             </div>
             <ul class="definition-list">${defsHtml}</ul>
@@ -639,6 +617,8 @@ As well as the words seperately:
         defsHtml += `</li>`;
       });
       defsHtml += '</ul>';
+
+      const phoneticDisplay = card.phonetic ? `<div style="font-size:14px; color:#f87171; margin-top:4px;">${card.phonetic}</div>` : '';
 
       dom.quizContainer.innerHTML = `
         <div class="quiz-prompt">${card.term}</div>
@@ -668,6 +648,7 @@ As well as the words seperately:
               </div>
               <div class="flip-back">
                 <div class="card-value">/${card.ipa || '...'} /</div>
+                ${phoneticDisplay}
                 <button class="mini-audio-btn" onclick="playAudio('${card.term}', event)">🔊</button>
               </div>
             </div>
