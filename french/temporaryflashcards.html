@@ -142,7 +142,7 @@
       border: 1px solid var(--border); 
       box-shadow: 0 16px 40px rgba(0,0,0,0.35); 
       min-height: 300px;
-      height: fit-content; /* UPDATED: Allows card to grow */
+      height: fit-content; 
       position: relative; 
       display: flex; 
       flex-direction: column; 
@@ -153,11 +153,26 @@
     .prompt { font-size: 40px; margin: 12px 0 8px; overflow-wrap: anywhere; }
     .tagline { color: var(--muted); margin: 0 0 12px; }
     .back { margin-top: 12px; background: rgba(15,23,42,0.6); border: 1px dashed var(--border); border-radius: 12px; padding: 14px; }
-    .detail-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
     
-    .reveal-block { perspective: 1200px; }
+    /* 
+       --- CSS FIX START --- 
+       Grid ensures rows have equal height.
+    */
+    .detail-grid { 
+        display: grid; 
+        gap: 10px; 
+        grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); 
+        /* align-items: stretch; <-- This is default in Grid, makes container height equal */
+    }
     
-    /* UPDATED: Flexbox/Grid hybrid to support auto height */
+    /* reveal-block acts as the grid item. We make it a column flex to fill height. */
+    .reveal-block { 
+        perspective: 1200px; 
+        display: flex; 
+        flex-direction: column;
+    }
+    
+    /* flip-inner fills the reveal-block */
     .reveal-block .flip-inner {
       position: relative;
       background: #0d162a;
@@ -167,45 +182,53 @@
       transition: transform 0.65s ease;
       box-shadow: 0 12px 26px rgba(0,0,0,0.25);
       
-      /* Grid trick: stack faces in same cell so container takes height of tallest face */
+      /* KEY FIX: Use Grid to stack faces and fill height */
+      flex: 1; /* Fills parent height */
       display: grid; 
       grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
     }
 
     .reveal-block.revealed .flip-inner { transform: rotateY(180deg); }
 
-    /* UPDATED: Removed absolute positioning */
+    /* 
+       KEY FIX: Removed absolute positioning. 
+       We put both faces in grid-area 1/1 so they sit on top of each other.
+       This allows the box to grow based on the CONTENT of the faces, 
+       while filling the height of the row.
+    */
     .reveal-block .face { 
-      grid-area: 1 / 1; /* Both faces occupy same space */
+      grid-area: 1 / 1; 
       display: flex; 
       flex-direction: column; 
       align-items: center; 
-      justify-content: center; 
+      justify-content: center; /* Centers text vertically if card is stretched */
       backface-visibility: hidden; 
       -webkit-backface-visibility: hidden; 
       gap: 8px; 
       text-align: center; 
-      padding: 20px; /* Increased padding */
+      padding: 20px; 
       background: #0d162a; 
       transform-style: preserve-3d; 
       transition: opacity 0.35s ease; 
       border-radius: 12px; 
       width: 100%;
+      height: 100%; /* Stretches background to fill container */
     }
+    /* --- CSS FIX END --- */
 
     .reveal-block .face .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
     .reveal-block .face .value { 
       font-size: 22px; 
       font-weight: 700; 
       margin-top: 4px; 
-      overflow-wrap: anywhere; /* Handles long text */
+      overflow-wrap: anywhere; 
       line-height: 1.4;
     }
     
     .reveal-block .face.front .value { color: rgba(226,232,240,0.7); }
     .reveal-block .face.back { transform: rotateY(180deg); opacity: 0; }
     
-    /* Opacity fade prevents bleed-through during flip */
     .reveal-block.revealed .face.front { opacity: 0; }
     .reveal-block.revealed .face.back { opacity: 1; }
 
