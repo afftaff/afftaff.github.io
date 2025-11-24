@@ -123,40 +123,98 @@
     .definition-list li { margin-bottom: 12px; line-height: 1.4; }
     .example-box { display: block; margin-top: 4px; padding-left: 8px; border-left: 2px solid var(--border); color: var(--muted); font-size: 13px; font-style: italic; }
 
-    .card-shell { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; position: relative; min-height: 420px; display: flex; flex-direction: column; gap: 14px; }
-    .card { background: var(--card); border-radius: 14px; padding: 20px 20px 16px; border: 1px solid var(--border); box-shadow: 0 16px 40px rgba(0,0,0,0.35); min-height: 300px; position: relative; display: flex; flex-direction: column; gap: 12px; height: auto; overflow: visible; }
+    .card-shell { 
+      background: var(--panel); 
+      border: 1px solid var(--border); 
+      border-radius: 16px; 
+      padding: 20px; 
+      position: relative; 
+      min-height: 420px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 14px; 
+    }
+    
+    .card { 
+      background: var(--card); 
+      border-radius: 14px; 
+      padding: 20px; 
+      border: 1px solid var(--border); 
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35); 
+      min-height: 300px;
+      height: fit-content; /* UPDATED: Allows card to grow */
+      position: relative; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px; 
+    }
+
     .card .face-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
-    .prompt { font-size: 40px; margin: 12px 0 8px; }
+    .prompt { font-size: 40px; margin: 12px 0 8px; overflow-wrap: anywhere; }
     .tagline { color: var(--muted); margin: 0 0 12px; }
     .back { margin-top: 12px; background: rgba(15,23,42,0.6); border: 1px dashed var(--border); border-radius: 12px; padding: 14px; }
     .detail-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
+    
     .reveal-block { perspective: 1200px; }
+    
+    /* UPDATED: Flexbox/Grid hybrid to support auto height */
     .reveal-block .flip-inner {
       position: relative;
       background: #0d162a;
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 14px 16px;
-      cursor: pointer;
       transform-style: preserve-3d;
       transition: transform 0.65s ease;
-      min-height: 140px;
       box-shadow: 0 12px 26px rgba(0,0,0,0.25);
+      
+      /* Grid trick: stack faces in same cell so container takes height of tallest face */
+      display: grid; 
+      grid-template-columns: 1fr;
     }
+
     .reveal-block.revealed .flip-inner { transform: rotateY(180deg); }
-    .reveal-block .face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; gap: 8px; text-align: center; padding: 16px; background: #0d162a; transform-style: preserve-3d; transition: opacity 0.35s ease; border-radius: 12px; }
+
+    /* UPDATED: Removed absolute positioning */
+    .reveal-block .face { 
+      grid-area: 1 / 1; /* Both faces occupy same space */
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      backface-visibility: hidden; 
+      -webkit-backface-visibility: hidden; 
+      gap: 8px; 
+      text-align: center; 
+      padding: 20px; /* Increased padding */
+      background: #0d162a; 
+      transform-style: preserve-3d; 
+      transition: opacity 0.35s ease; 
+      border-radius: 12px; 
+      width: 100%;
+    }
+
     .reveal-block .face .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-    .reveal-block .face .value { font-size: 22px; font-weight: 700; margin-top: 4px; }
+    .reveal-block .face .value { 
+      font-size: 22px; 
+      font-weight: 700; 
+      margin-top: 4px; 
+      overflow-wrap: anywhere; /* Handles long text */
+      line-height: 1.4;
+    }
+    
     .reveal-block .face.front .value { color: rgba(226,232,240,0.7); }
     .reveal-block .face.back { transform: rotateY(180deg); opacity: 0; }
+    
+    /* Opacity fade prevents bleed-through during flip */
     .reveal-block.revealed .face.front { opacity: 0; }
     .reveal-block.revealed .face.back { opacity: 1; }
-    .reveal-block button.sound { justify-self: flex-end; background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 6px 8px; cursor: pointer; }
+
+    .reveal-block button.sound { justify-self: flex-end; background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 6px 8px; cursor: pointer; margin-top: 8px; }
     .reveal-block.highlight .flip-inner { border-color: rgba(56,189,248,0.6); box-shadow: 0 12px 30px rgba(56,189,248,0.18); }
     .reveal-block.highlight .face.front { color: #bae6fd; }
-    .reveal-block .subtext { margin-top: 8px; font-size: 14px; color: rgba(148,163,184,0.8); font-weight: 600; }
-    .reveal-block.mini { min-height: 0; }
-    .reveal-block.mini .flip-inner { min-height: 0; padding: 12px; }
+    .reveal-block .subtext { margin-top: 8px; font-size: 14px; color: rgba(148,163,184,0.8); font-weight: 600; line-height: 1.4; }
+    
+    .reveal-block.mini .face { padding: 12px; }
     .reveal-block.mini .face .value { font-size: 16px; line-height: 1.4; }
     .mini-line { display: flex; gap: 6px; align-items: center; justify-content: flex-start; }
     .mini-line .label { color: rgba(148,163,184,0.9); font-weight: 600; font-size: 12px; }
