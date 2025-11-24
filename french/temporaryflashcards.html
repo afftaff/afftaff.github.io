@@ -230,7 +230,10 @@
             <label for="deckSelect" style="margin:0;">Load saved deck</label>
             <select id="deckSelect"></select>
           </div>
-          <button class="secondary" type="button" id="backupDecks">Backup decks</button>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button class="secondary" type="button" id="backupDecks">Backup decks</button>
+            <button class="ghost" type="button" id="deleteDeck">Delete deck</button>
+          </div>
         </div>
 
         <div class="backup-panel hidden" id="restorePanel">
@@ -297,6 +300,7 @@
     const storageKey = 'tempFrenchDecks-v1';
     const apiKeyStorageKey = 'tempFrenchFlashcardsGeminiKey';
     const srsStorageKey = 'tempFrenchSrs-v1';
+    const workInProgressKey = '__wip';
 
     const geminiSystemInstruction = `change this text so it includes both an IPA and english pronuncation as well, and an English translation of the sentence in brackets:
 [flâneur <m> (noun) ///flɑ.nœʁ/// +++flah-nur+++ | an aimless wanderer or stroller | Le flâneur observait la ville sans se presser. (The stroller watched the city without hurrying.)]
@@ -340,7 +344,8 @@ As well as the words seperately:
       gradeRow: document.getElementById('gradeRow'),
       queueInfo: document.getElementById('queueInfo'),
       speakBtn: document.getElementById('speakBtn'),
-      revealAll: document.getElementById('revealAll')
+      revealAll: document.getElementById('revealAll'),
+      deleteDeck: document.getElementById('deleteDeck')
     };
 
     const accentGroups = [ ['é', 'è', 'ê', 'ë'], ['à', 'â', 'æ', 'á'], ['î', 'ï', 'í'], ['ô', 'œ', 'ó'], ['ù', 'û', 'ü', 'ú'], ['ç', 'ñ'], ['«', '»'] ];
@@ -427,6 +432,22 @@ As well as the words seperately:
       });
     }
 
+    function deleteSelectedDeck(name) {
+      if (!name || !state.savedDecks[name]) { alert('Select a saved deck to delete.'); return; }
+      if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+      delete state.savedDecks[name];
+      delete srsState[name];
+      if (state.currentName === name) { state.currentName = 'Unsaved'; }
+      persistState();
+      persistSrsState();
+      renderDeckSelect();
+      renderPlayDeckSelect();
+      updatePill();
+      updateDuePill();
+      dom.status.textContent = `Deleted deck "${name}".`;
+      setTimeout(() => dom.status.textContent = '', 2500);
+    }
+
     function renderPlayDeckSelect() {
       const select = dom.playDeckSelect;
       if (!select) return;
@@ -438,8 +459,9 @@ As well as the words seperately:
       select.appendChild(placeholder);
       if (state.currentDeck.length) {
         const opt = document.createElement('option');
-        opt.value = '__current';
-        opt.textContent = state.currentName === 'Unsaved' ? 'Current deck (unsaved)' : `Current deck: ${state.currentName}`;
+        opt.value = workInProgressKey;
+        const label = state.currentName === 'Unsaved' ? 'Work-in-progress deck' : `Work-in-progress: ${state.currentName}`;
+        opt.textContent = label;
         select.appendChild(opt);
       }
       Object.keys(state.savedDecks || {}).sort().forEach((name) => {
@@ -452,8 +474,8 @@ As well as the words seperately:
       updateDuePill();
     }
 
-    function getDeckKey(name) { return name === '__current' ? 'current' : name; }
-    function getDeckCards(name) { return name === '__current' ? state.currentDeck : (state.savedDecks[name] || []); }
+    function getDeckKey(name) { return name === workInProgressKey ? 'current' : name; }
+    function getDeckCards(name) { return name === workInProgressKey ? state.currentDeck : (state.savedDecks[name] || []); }
     function cardId(card) { return card.id || card.term; }
 
     function getCardState(deckName, id) {
@@ -529,7 +551,7 @@ As well as the words seperately:
 
     function updateDuePill() {
       if (!dom.duePill || !dom.playDeckSelect) return;
-      const deckName = dom.playDeckSelect.value || (state.currentDeck.length ? '__current' : '');
+      const deckName = dom.playDeckSelect.value || (state.currentDeck.length ? workInProgressKey : '');
       const cards = deckName ? getDeckCards(deckName) : [];
       if (!deckName || !cards.length) { dom.duePill.textContent = '0 due / 0 total'; return; }
       const now = Date.now();
@@ -756,7 +778,7 @@ As well as the words seperately:
     function revealTile(tile) { tile.classList.add('revealed'); tile.classList.remove('masked'); }
 
     function startSession() {
-      const selected = dom.playDeckSelect.value || (state.currentDeck.length ? '__current' : '');
+      const selected = dom.playDeckSelect.value || (state.currentDeck.length ? workInProgressKey : '');
       const deckCards = getDeckCards(selected);
       if (!selected || !deckCards.length) {
         dom.prompt.textContent = 'Select or build a deck to study.';
@@ -922,11 +944,12 @@ As well as the words seperately:
       }
     });
 
-    dom.startBtn.addEventListener('click', () => { dom.playDeckSelect.value = '__current'; updateDuePill(); startSession(); });
+    dom.startBtn.addEventListener('click', () => { dom.playDeckSelect.value = workInProgressKey; updateDuePill(); startSession(); });
     dom.startFlashcards.addEventListener('click', startSession);
     dom.playDeckSelect.addEventListener('change', updateDuePill);
     dom.saveDeckBtn.addEventListener('click', saveDeckToLibrary);
     dom.deckSelect.addEventListener('change', (e) => loadSelectedDeck(e.target.value));
+    dom.deleteDeck.addEventListener('click', () => deleteSelectedDeck(dom.deckSelect.value));
     dom.newDeckBtn.addEventListener('click', newDeck);
     dom.restoreBtn.addEventListener('click', backupDecks);
 
