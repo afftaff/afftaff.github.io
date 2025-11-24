@@ -419,74 +419,49 @@ As well as the words seperately:
       });
     }
 
+    // --- REPLACED: Updated Gemini Call (Standard REST, no stream) ---
     async function lookupWithGemini(term) {
       const apiKey = loadApiKey();
       if (!apiKey) throw new Error('Add your Google AI Studio API key below to fetch definitions.');
 
-      const model = 'gemini-flash-latest';
+      const model = 'gemini-1.5-flash';
+      
       const body = {
-        model,
-        config: {
-          thinkingConfig: {
-            thinkingBudget: 0,
-          },
-          tools: [
-            {
-              googleSearch: {
-              }
-            },
-          ],
-          systemInstruction: [
-            {
-              text: geminiSystemInstruction,
-            }
-          ],
+        systemInstruction: {
+          parts: [{ text: geminiSystemInstruction }]
         },
         contents: [
           {
             role: 'user',
-            parts: [
-              {
-                text: `${term}`,
-              },
-            ],
-          },
+            parts: [{ text: term }]
+          }
         ],
+        generationConfig: {
+          temperature: 0.7,
+        }
       };
 
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?key=${encodeURIComponent(apiKey)}`;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
 
-      if (!res.ok) throw new Error('Google AI request failed.');
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
+      if (!res.ok) {
+        let errMsg = res.statusText;
+        try {
+            const errData = await res.json();
+            errMsg = errData.error.message || errMsg;
+        } catch(e) {}
+        throw new Error(`Google AI Error: ${errMsg}`);
       }
 
-      const lines = buffer
-        .split('\n')
-        .map(line => line.replace(/^data:\s*/, '').trim())
-        .filter(Boolean);
-
-      const payloads = [];
-      for (const line of lines) {
-        try { payloads.push(JSON.parse(line)); } catch {}
-      }
-
-      const textParts = payloads
-        .flatMap(p => (p.candidates || []).flatMap(c => (c.content?.parts || []).map(part => part.text || '')))
-        .join(' ')
-        .trim();
+      const data = await res.json();
+      
+      // Extract text from the deep JSON structure
+      const textParts = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
       if (!textParts) throw new Error('No AI response received.');
 
