@@ -250,8 +250,19 @@
       <section class="panel hidden" id="flashcardsTab">
         <header>
           <h1>Flashcards</h1>
-          <p>Study whatever is in your current deck.</p>
+          <p>Study any deck you have saved with light spaced repetition.</p>
         </header>
+
+        <div class="actions" style="align-items:flex-end; margin-bottom:12px;">
+          <div style="flex:1; display:grid; gap:8px;">
+            <label for="playDeckSelect" style="margin:0;">Choose deck to study</label>
+            <select id="playDeckSelect"></select>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <div class="pill" id="duePill">0 due / 0 total</div>
+            <button class="primary" type="button" id="startFlashcards">▶ Start session</button>
+          </div>
+        </div>
 
         <div class="card-shell">
           <div class="card" id="card">
@@ -285,6 +296,7 @@
   <script>
     const storageKey = 'tempFrenchDecks-v1';
     const apiKeyStorageKey = 'tempFrenchFlashcardsGeminiKey';
+    const srsStorageKey = 'tempFrenchSrs-v1';
 
     const geminiSystemInstruction = `change this text so it includes both an IPA and english pronuncation as well, and an English translation of the sentence in brackets:
 [flâneur <m> (noun) ///flɑ.nœʁ/// +++flah-nur+++ | an aimless wanderer or stroller | Le flâneur observait la ville sans se presser. (The stroller watched the city without hurrying.)]
@@ -309,6 +321,9 @@ As well as the words seperately:
       saveDeckBtn: document.getElementById('saveDeck'),
       deckSelect: document.getElementById('deckSelect'),
       deckPill: document.getElementById('deckPill'),
+      playDeckSelect: document.getElementById('playDeckSelect'),
+      startFlashcards: document.getElementById('startFlashcards'),
+      duePill: document.getElementById('duePill'),
       restoreBtn: document.getElementById('backupDecks'),
       restorePanel: document.getElementById('restorePanel'),
       restoreList: document.getElementById('restoreList'),
@@ -344,6 +359,7 @@ As well as the words seperately:
     });
 
     let state = loadDeckState();
+    let srsState = loadSrsState();
     let quizQueue = [];
     let quizIndex = 0;
     let currentStyle = 'fr-en';
@@ -356,6 +372,14 @@ As well as the words seperately:
       }
     }
     function persistState() { localStorage.setItem(storageKey, JSON.stringify(state)); }
+    function loadSrsState() {
+      try {
+        return JSON.parse(localStorage.getItem(srsStorageKey)) || {};
+      } catch {
+        return {};
+      }
+    }
+    function persistSrsState() { localStorage.setItem(srsStorageKey, JSON.stringify(srsState)); }
 
     function updatePill() {
       const name = state.currentName || 'Unsaved';
@@ -382,6 +406,7 @@ As well as the words seperately:
       state.currentName = name;
       persistState();
       renderDeckSelect();
+      renderPlayDeckSelect();
       updatePill();
       dom.status.textContent = `Saved as "${name}"`;
       setTimeout(() => dom.status.textContent = '', 2500);
@@ -402,12 +427,134 @@ As well as the words seperately:
       });
     }
 
+    function renderPlayDeckSelect() {
+      const select = dom.playDeckSelect;
+      if (!select) return;
+      const prev = select.value;
+      select.innerHTML = '';
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = 'Select a deck to study';
+      select.appendChild(placeholder);
+      if (state.currentDeck.length) {
+        const opt = document.createElement('option');
+        opt.value = '__current';
+        opt.textContent = state.currentName === 'Unsaved' ? 'Current deck (unsaved)' : `Current deck: ${state.currentName}`;
+        select.appendChild(opt);
+      }
+      Object.keys(state.savedDecks || {}).sort().forEach((name) => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        select.appendChild(opt);
+      });
+      select.value = Array.from(select.options).some((opt) => opt.value === prev) ? prev : '';
+      updateDuePill();
+    }
+
+    function getDeckKey(name) { return name === '__current' ? 'current' : name; }
+    function getDeckCards(name) { return name === '__current' ? state.currentDeck : (state.savedDecks[name] || []); }
+    function cardId(card) { return card.id || card.term; }
+
+    function getCardState(deckName, id) {
+      const deckKey = getDeckKey(deckName);
+      return (srsState[deckKey] || {})[id] || null;
+    }
+
+    function scheduleCard(deckName, id, grade) {
+      const deckKey = getDeckKey(deckName);
+      const now = Date.now();
+      const deckState = srsState[deckKey] || {};
+      const current = deckState[id] || { ease: 2.5, interval: 0, repetitions: 0, lapses: 0, due: now };
+      const qualityMap = { again: 1, hard: 2, good: 3, easy: 4 };
+      const quality = qualityMap[grade] || 3;
+      const state = { ...current };
+
+      if (quality < 2) {
+        state.repetitions = 0;
+        state.interval = quality === 1 ? 0.007 : 1;
+        state.ease = Math.max(1.3, (state.ease ?? 2.5) - 0.2);
+        state.lapses = (state.lapses ?? 0) + 1;
+      } else {
+        const ease = state.ease ?? 2.5;
+        let newEase = ease + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+        newEase = Math.max(1.3, newEase);
+        state.ease = newEase;
+        if (state.repetitions === 0) {
+          state.interval = grade === 'easy' ? 3 : 1;
+        } else if (state.repetitions === 1) {
+          state.interval = grade === 'easy' ? 8 : 6;
+        } else {
+          state.interval = Math.round(state.interval * newEase);
+        }
+        if (grade === 'hard') state.interval = Math.max(1, Math.round(state.interval * 0.6));
+        if (grade === 'easy') state.interval = Math.round(state.interval * 1.3);
+        state.repetitions += 1;
+      }
+
+      const intervalMs = state.interval * 24 * 60 * 60 * 1000;
+      state.due = now + Math.max(intervalMs, 10 * 60 * 1000);
+      state.lastGrade = grade;
+      srsState[deckKey] = { ...deckState, [id]: state };
+      return state;
+    }
+
+    function getReviewQueue(deckName, cards) {
+      const now = Date.now();
+      const due = [];
+      const fresh = [];
+      cards.forEach((card) => {
+        const id = cardId(card);
+        const state = getCardState(deckName, id);
+        if (!state) { fresh.push({ id, card, due: now }); }
+        else if (state.due <= now) { due.push({ id, card, due: state.due }); }
+      });
+      due.sort((a, b) => a.due - b.due);
+      fresh.sort((a, b) => a.card.term.localeCompare(b.card.term));
+      return [...due, ...fresh];
+    }
+
+    function formatDueDate(timestamp) {
+      const delta = timestamp - Date.now();
+      if (delta <= 0) return 'Available now';
+      const minutes = Math.max(1, Math.round(delta / 60000));
+      if (minutes < 60) return `${minutes} min`;
+      const hours = minutes / 60;
+      if (hours < 24) return `${hours.toFixed(hours < 10 ? 1 : 0)} hr`;
+      const days = hours / 24;
+      if (days < 7) return `${days.toFixed(days < 3 ? 1 : 0)} days`;
+      const weeks = days / 7;
+      return `${weeks.toFixed(weeks < 3 ? 1 : 0)} weeks`;
+    }
+
+    function updateDuePill() {
+      if (!dom.duePill || !dom.playDeckSelect) return;
+      const deckName = dom.playDeckSelect.value || (state.currentDeck.length ? '__current' : '');
+      const cards = deckName ? getDeckCards(deckName) : [];
+      if (!deckName || !cards.length) { dom.duePill.textContent = '0 due / 0 total'; return; }
+      const now = Date.now();
+      const stats = cards.reduce((acc, card) => {
+        const st = getCardState(deckName, cardId(card));
+        if (!st) acc.fresh += 1;
+        else if (st.due <= now) acc.due += 1;
+        else acc.waiting += 1;
+        return acc;
+      }, { due: 0, waiting: 0, fresh: 0 });
+      const total = cards.length;
+      const nextDue = cards
+        .map((card) => getCardState(deckName, cardId(card))?.due)
+        .filter(Boolean)
+        .sort((a, b) => a - b)[0];
+      dom.duePill.textContent = `${stats.due + stats.fresh} due / ${total} total${nextDue ? ` • next ${formatDueDate(nextDue)}` : ''}`;
+    }
+
     function loadSelectedDeck(name) {
       if (!name || !state.savedDecks[name]) return;
       state.currentDeck = [...state.savedDecks[name]];
       state.currentName = name;
       persistState();
       renderList();
+      renderPlayDeckSelect();
       updatePill();
       dom.status.textContent = `Loaded deck "${name}"`;
       setTimeout(() => dom.status.textContent = '', 2000);
@@ -419,6 +566,7 @@ As well as the words seperately:
       state.currentName = 'Unsaved';
       persistState();
       renderList();
+      renderPlayDeckSelect();
       updatePill();
     }
 
@@ -463,6 +611,7 @@ As well as the words seperately:
       selected.forEach(name => { state.savedDecks[name] = backup.savedDecks[name]; });
       persistState();
       renderDeckSelect();
+      renderPlayDeckSelect();
       dom.status.textContent = `Imported ${selected.length} deck(s).`;
       dom.restorePanel.classList.add('hidden');
       dom.restoreAll.checked = false;
@@ -474,6 +623,7 @@ As well as the words seperately:
       dom.list.innerHTML = '';
       dom.count.textContent = `${state.currentDeck.length} cards`;
       dom.startBtn.disabled = !state.currentDeck.length;
+      renderPlayDeckSelect();
       if (!state.currentDeck.length) return;
       state.currentDeck.forEach((card, idx) => {
         const item = document.createElement('div');
@@ -606,28 +756,48 @@ As well as the words seperately:
     function revealTile(tile) { tile.classList.add('revealed'); tile.classList.remove('masked'); }
 
     function startSession() {
-      if (!state.currentDeck.length) return;
-      quizQueue = [...state.currentDeck];
+      const selected = dom.playDeckSelect.value || (state.currentDeck.length ? '__current' : '');
+      const deckCards = getDeckCards(selected);
+      if (!selected || !deckCards.length) {
+        dom.prompt.textContent = 'Select or build a deck to study.';
+        dom.tagline.textContent = '';
+        dom.back.classList.add('hidden');
+        dom.gradeRow.classList.add('hidden');
+        updateMeta();
+        return;
+      }
+      const queue = getReviewQueue(selected, deckCards);
+      if (!queue.length) {
+        dom.prompt.textContent = 'No cards are due yet.';
+        dom.tagline.textContent = 'Finish building or wait until cards come due.';
+        dom.back.classList.add('hidden');
+        dom.gradeRow.classList.add('hidden');
+        updateMeta();
+        return;
+      }
+      quizQueue = queue;
       quizIndex = 0;
+      currentStyle = selected;
       nextCard();
       setActiveTab('flashcards');
     }
 
     function nextCard() {
       if (!quizQueue.length) { dom.prompt.textContent = 'Add cards to study'; dom.back.classList.add('hidden'); dom.gradeRow.classList.add('hidden'); dom.tagline.textContent = ''; dom.queueInfo.textContent = ''; return; }
-      const card = quizQueue[quizIndex % quizQueue.length];
-      renderCard(card);
+      const entry = quizQueue[quizIndex % quizQueue.length];
+      renderCard(entry.card);
     }
 
-    function gradeCard(action, offset) {
+    function gradeCard(action) {
       if (!quizQueue.length) return;
-      const card = quizQueue[quizIndex % quizQueue.length];
+      const entry = quizQueue[quizIndex % quizQueue.length];
+      const gradeMap = { again: 'again', hard: 'hard', medium: 'good', easy: 'easy', good: 'easy' };
+      const grade = gradeMap[action] || 'good';
+      scheduleCard(currentStyle, entry.id, grade);
       quizQueue.splice(quizIndex % quizQueue.length, 1);
-      if (offset !== 'remove') {
-        const position = Math.min(quizQueue.length, offset);
-        quizQueue.splice(position, 0, card);
-      }
       quizIndex = 0;
+      persistSrsState();
+      updateDuePill();
       if (!quizQueue.length) {
         dom.prompt.textContent = 'Deck completed!';
         dom.tagline.textContent = 'Build or load another deck to keep going.';
@@ -752,15 +922,17 @@ As well as the words seperately:
       }
     });
 
-    dom.startBtn.addEventListener('click', startSession);
+    dom.startBtn.addEventListener('click', () => { dom.playDeckSelect.value = '__current'; updateDuePill(); startSession(); });
+    dom.startFlashcards.addEventListener('click', startSession);
+    dom.playDeckSelect.addEventListener('change', updateDuePill);
     dom.saveDeckBtn.addEventListener('click', saveDeckToLibrary);
     dom.deckSelect.addEventListener('change', (e) => loadSelectedDeck(e.target.value));
     dom.newDeckBtn.addEventListener('click', newDeck);
     dom.restoreBtn.addEventListener('click', backupDecks);
 
     dom.revealAll.addEventListener('click', () => { dom.detailGrid.querySelectorAll('.reveal-block.masked').forEach(el => revealTile(el)); });
-    dom.speakBtn.addEventListener('click', () => { const card = quizQueue[quizIndex % quizQueue.length]; if (card) speak(card.term); });
-    dom.gradeRow.addEventListener('click', (e) => { const btn = e.target.closest('.grade-btn'); if (!btn) return; const offset = btn.dataset.offset === 'remove' ? 'remove' : parseInt(btn.dataset.offset, 10); gradeCard(btn.dataset.action, offset); });
+    dom.speakBtn.addEventListener('click', () => { const entry = quizQueue[quizIndex % quizQueue.length]; if (entry?.card) speak(entry.card.term); });
+    dom.gradeRow.addEventListener('click', (e) => { const btn = e.target.closest('.grade-btn'); if (!btn) return; gradeCard(btn.dataset.action); });
 
     dom.tabButtons.forEach(btn => btn.addEventListener('click', () => setActiveTab(btn.dataset.tab)));
     function setActiveTab(tab) {
@@ -821,6 +993,7 @@ As well as the words seperately:
     renderDeckSelect();
     renderList();
     updatePill();
+    updateDuePill();
   </script>
 </body>
 </html>
