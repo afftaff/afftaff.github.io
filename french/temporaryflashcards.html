@@ -256,7 +256,7 @@
 
   <header>
     <div style="font-weight:700; font-size: 20px;">🇫🇷 French Flashcards</div>
-    <small style="color: var(--muted);">Powered by Wiktionary API</small>
+    <small style="color: var(--muted);">Powered by Google AI Studio with Wiktionary fallback</small>
   </header>
 
   <main>
@@ -304,7 +304,8 @@
   </main>
 
   <script>
-    const storageKey = 'tempFrenchFlashcards-v14';
+    const storageKey = 'tempFrenchFlashcards-v15';
+    const apiKeyStorageKey = 'tempFrenchFlashcardsGeminiKey';
     const dom = {
       status: document.getElementById('status'),
       list: document.getElementById('deckList'),
@@ -315,7 +316,10 @@
       count: document.getElementById('countLabel'),
       nextBtn: document.getElementById('nextCard'),
       quizContainer: document.getElementById('quizContainer'),
-      progress: document.getElementById('progressLabel')
+      progress: document.getElementById('progressLabel'),
+      apiKeyInput: null,
+      apiKeyStatus: null,
+      apiKeySave: null
     };
 
     let deck = loadDeck();
@@ -359,6 +363,103 @@
     }
 
     /* --- Advanced Parsing --- */
+    function loadApiKey() {
+      return localStorage.getItem(apiKeyStorageKey) || '';
+    }
+
+    function saveApiKey(key) {
+      localStorage.setItem(apiKeyStorageKey, key.trim());
+    }
+
+    function extractFirstJson(text) {
+      try {
+        const match = text.match(/\{[\s\S]*\}/);
+        if (match) return JSON.parse(match[0]);
+        return JSON.parse(text);
+      } catch (err) {
+        console.warn('Failed to parse Gemini JSON', err, text);
+        throw new Error('Unable to parse AI response.');
+      }
+    }
+
+    async function lookupWithGemini(term) {
+      const apiKey = loadApiKey();
+      if (!apiKey) throw new Error('Add your Google AI Studio API key below to fetch definitions.');
+
+      const prompt = [
+        'Return French dictionary data as strict JSON. Do not include any extra text.',
+        'Schema: {"term": string, "ipa": string (no slashes), "pos": string, "definitions": [{"text": string, "example": string}]}.',
+        'Up to 6 concise definitions in English. Provide short usage example per definition when possible.',
+        `Target word: ${term.trim()}`
+      ].join('\n');
+
+      const body = {
+        contents: [
+          {
+            role: 'user',
+            parts: [{ text: prompt }]
+          }
+        ],
+        generationConfig: {
+          thinkingConfig: {
+            thinkingBudget: -1
+          }
+        },
+        tools: [
+          {
+            googleSearch: {}
+          }
+        ]
+      };
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:streamGenerateContent?key=${encodeURIComponent(apiKey)}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (!res.ok) throw new Error('Google AI request failed.');
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+      }
+
+      const lines = buffer
+        .split('\n')
+        .map(line => line.replace(/^data:\s*/, '').trim())
+        .filter(Boolean);
+
+      const payloads = [];
+      for (const line of lines) {
+        try { payloads.push(JSON.parse(line)); } catch {}
+      }
+
+      const firstCandidate = payloads.find(p => p.candidates && p.candidates.length);
+      const textPart = firstCandidate?.candidates?.[0]?.content?.parts?.map(p => p.text || '').join(' ').trim();
+
+      if (!textPart) throw new Error('No AI response received.');
+
+      const parsed = extractFirstJson(textPart);
+
+      return {
+        id: Date.now(),
+        term: parsed.term || term,
+        ipa: parsed.ipa || '',
+        pos: parsed.pos || '',
+        definitions: (parsed.definitions || []).slice(0, 10).map(d => ({
+          text: d.text || '',
+          example: d.example || ''
+        }))
+      };
+    }
+
     async function lookupWord(term) {
       const cleanTerm = term.trim();
       const url = `https://en.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(cleanTerm)}&prop=text&format=json&origin=*&redirects=1&disabletoc=1`;
@@ -590,11 +691,18 @@
       }
       dom.status.textContent = 'Fetching...';
       try {
-        const card = await lookupWord(term);
-        deck.unshift(card); 
+        let card;
+        try {
+          card = await lookupWithGemini(term);
+          dom.status.textContent = 'Added via Google AI Studio';
+        } catch (aiErr) {
+          console.warn('Gemini lookup failed, falling back', aiErr);
+          card = await lookupWord(term);
+          dom.status.textContent = 'Added via Wiktionary fallback';
+        }
+        deck.unshift(card);
         saveDeck();
         dom.input.value = '';
-        dom.status.textContent = `Added: ${card.term}`;
         setTimeout(() => dom.status.textContent = '', 3000);
       } catch (err) {
         dom.status.textContent = err.message;
@@ -613,6 +721,43 @@
     dom.nextBtn.addEventListener('click', () => { if (quizQueue.length) { quizIndex = (quizIndex + 1) % quizQueue.length; renderQuizCard(); } });
     window.removeCard = (i) => { deck.splice(i, 1); saveDeck(); };
     window.playAudio = (text, e) => { e.stopPropagation(); const u = new SpeechSynthesisUtterance(text); u.lang = 'fr-FR'; speechSynthesis.speak(u); };
+
+    // API key UI
+    (function setupApiKeyUI() {
+      const container = document.createElement('section');
+      container.className = 'panel';
+      container.style.margin = '20px auto';
+      container.style.maxWidth = '1200px';
+
+      container.innerHTML = `
+        <header style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <h3 style="margin:0;">Google AI Studio API Key</h3>
+            <p style="margin:0; color:var(--muted);">Stored locally so you can refresh without losing it.</p>
+          </div>
+          <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--accent); text-decoration:none; font-size:14px;">Get a key</a>
+        </header>
+        <div style="margin-top:12px; display:flex; gap:10px; align-items:center;">
+          <input type="text" id="apiKeyInput" placeholder="Enter your Gemini API key" style="flex:1;" />
+          <button class="primary" id="saveApiKey">Save Key</button>
+        </div>
+        <div id="apiKeyStatus" class="status-msg"></div>
+      `;
+
+      document.body.appendChild(container);
+
+      dom.apiKeyInput = container.querySelector('#apiKeyInput');
+      dom.apiKeySave = container.querySelector('#saveApiKey');
+      dom.apiKeyStatus = container.querySelector('#apiKeyStatus');
+
+      dom.apiKeyInput.value = loadApiKey();
+
+      dom.apiKeySave.addEventListener('click', () => {
+        saveApiKey(dom.apiKeyInput.value);
+        dom.apiKeyStatus.textContent = 'Saved locally.';
+        setTimeout(() => dom.apiKeyStatus.textContent = '', 3000);
+      });
+    })();
 
     renderList();
   </script>
