@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>French Flashcards</title>
+  <title>French Custom Flashcards</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
@@ -12,11 +12,12 @@
       --bg: #0b1120;
       --panel: #0f172a;
       --accent: #22c55e;
+      --accent-2: #38bdf8;
       --accent-hover: #16a34a;
       --text: #e2e8f0;
       --muted: #94a3b8;
       --border: #1f2937;
-      --card: #1e293b;
+      --card: linear-gradient(145deg, #111827, #0f172a);
     }
     * { box-sizing: border-box; }
     body {
@@ -30,17 +31,38 @@
     }
     header {
       padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
       border-bottom: 1px solid var(--border);
       background: rgba(15,23,42,0.8);
       position: sticky;
       top: 0;
       backdrop-filter: blur(8px);
-      z-index: 10;
+      z-index: 2;
     }
-    main { max-width: 1200px; margin: 0 auto; padding: 28px; display: grid; gap: 18px; grid-template-columns: 2fr 1fr; }
-    @media (max-width: 1024px) { main { grid-template-columns: 1fr; } }
-    h1 { margin: 0 0 10px; letter-spacing: -0.02em; }
+    header a { color: var(--muted); text-decoration: none; font-weight: 600; }
+    header a:hover { color: var(--text); }
+    main { max-width: 1200px; margin: 0 auto; padding: 28px; }
+    h1 { margin: 0 0 6px; letter-spacing: -0.02em; }
     p { margin: 0; color: var(--muted); }
+
+    .tab-row { display: flex; gap: 10px; margin: 18px 0 24px; flex-wrap: wrap; }
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: rgba(15,23,42,0.75);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      min-width: 140px;
+    }
+    .tab-btn.active { background: linear-gradient(135deg, var(--accent), var(--accent-hover)); color: #0b1120; border: none; }
+
+    .board { display: grid; grid-template-columns: 1.35fr 1fr; gap: 18px; }
+    @media (max-width: 1024px) { .board { grid-template-columns: 1fr; } }
 
     .panel {
       background: var(--panel);
@@ -49,10 +71,10 @@
       padding: 20px;
       box-shadow: 0 12px 30px rgba(0,0,0,0.35);
     }
-    .panel header { padding: 0; border: none; background: none; margin-bottom: 20px; }
-    
+    .panel header { padding: 0; border: none; background: none; margin-bottom: 16px; }
     label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
-    input[type="text"] {
+
+    input[type="text"], select {
       width: 100%;
       border-radius: 10px;
       border: 1px solid var(--border);
@@ -63,42 +85,15 @@
       outline: none;
       transition: border-color 0.2s;
     }
-    input[type="text"]:focus { border-color: var(--accent); }
+    input[type="text"]:focus, select:focus { border-color: var(--accent); }
 
-    button {
-      border: none;
-      padding: 12px 14px;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.2s;
-    }
+    button { border: none; padding: 12px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    button.primary { background: linear-gradient(135deg, var(--accent), var(--accent-hover)); color: #0b1120; border: none; }
+    button.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    button.ghost { background: transparent; color: var(--muted); border: 1px dashed var(--border); }
     button:disabled { opacity: 0.5; cursor: not-allowed; }
-    
-    button.primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-      color: #0b1120;
-    }
-    button.primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(34,197,94,0.3); }
 
-    button.secondary {
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text);
-    }
-    button.secondary:hover:not(:disabled) { background: rgba(255,255,255,0.05); }
-
-    button.ghost {
-      background: transparent;
-      color: var(--muted);
-      padding: 8px 12px;
-    }
-    button.ghost:hover { color: #f87171; background: rgba(255,0,0,0.1); }
-
-    .input-group { display: flex; gap: 10px; }
-    
-    /* Accent Buttons */
+    .input-row { display: grid; gap: 10px; grid-template-columns: 1fr auto; align-items: center; }
     .accent-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
     .accent-group { display: flex; gap: 4px; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 8px; border: 1px solid var(--border); }
     .accent-btn {
@@ -116,198 +111,181 @@
     }
     .accent-btn:hover { background: rgba(255,255,255,0.15); border-color: var(--muted); transform: translateY(-1px); }
 
-    .actions { display: flex; gap: 10px; margin-top: 20px; align-items: center; }
+    .actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 10px; background: rgba(56,189,248,0.12); border-radius: 10px; border: 1px solid rgba(56,189,248,0.3); color: var(--text); font-weight: 600; }
 
-    /* List Styles */
-    .deck-list { display: grid; gap: 12px; margin-top: 16px; max-height: 600px; overflow-y: auto; padding-right: 5px; }
-    .word-row {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
-      background: #0b1224;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .word-head { display: flex; align-items: center; justify-content: space-between; }
+    .deck-list { display: grid; gap: 12px; margin-top: 16px; max-height: 520px; overflow-y: auto; padding-right: 5px; }
+    .word-row { border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: #0b1224; display: flex; flex-direction: column; gap: 8px; }
+    .word-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .word-head h3 { margin: 0; font-size: 18px; color: var(--accent); }
     .tags { display: flex; gap: 8px; flex-wrap: wrap; }
-    .pill { 
-      padding: 4px 10px; 
-      border-radius: 20px; 
-      background: rgba(255,255,255,0.05); 
-      font-size: 12px; 
-      color: var(--muted); 
-      border: 1px solid rgba(255,255,255,0.1);
-      display: inline-block;
-      margin-right: 5px;
-    }
-    
-    details { width: 100%; margin-top: 5px; }
-    summary { 
-      cursor: pointer; 
-      color: var(--muted); 
-      font-size: 13px; 
-      user-select: none;
-      transition: color 0.2s;
-    }
-    summary:hover { color: var(--accent); }
-    .definition-list { margin: 8px 0 0 0; padding-left: 20px; font-size: 14px; color: #cbd5e1; }
+    .definition-list { margin: 8px 0 0 0; padding-left: 18px; font-size: 14px; color: #cbd5e1; }
     .definition-list li { margin-bottom: 12px; line-height: 1.4; }
-    
-    /* Examples in list */
-    .example-box {
-      display: block;
-      margin-top: 4px;
-      padding-left: 8px;
-      border-left: 2px solid var(--border);
-      color: var(--muted);
-      font-size: 13px;
-      font-style: italic;
-    }
+    .example-box { display: block; margin-top: 4px; padding-left: 8px; border-left: 2px solid var(--border); color: var(--muted); font-size: 13px; font-style: italic; }
 
-    /* QUIZ STYLES */
-    .quiz-container { display: flex; flex-direction: column; gap: 20px; }
-    .quiz-prompt {
-      text-align: center;
-      font-size: 42px;
-      font-weight: 600;
-      color: white;
-      padding: 20px 0;
-      text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    }
-
-    .def-box {
-      background: var(--card);
+    .card-shell { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; position: relative; min-height: 420px; }
+    .card { background: var(--card); border-radius: 14px; padding: 20px 20px 16px; border: 1px solid var(--border); box-shadow: 0 16px 40px rgba(0,0,0,0.35); min-height: 300px; position: relative; overflow: hidden; }
+    .card .face-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .prompt { font-size: 40px; margin: 12px 0 8px; }
+    .tagline { color: var(--muted); margin: 0 0 12px; }
+    .back { margin-top: 12px; background: rgba(15,23,42,0.6); border: 1px dashed var(--border); border-radius: 12px; padding: 14px; }
+    .detail-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
+    .reveal-block { perspective: 1200px; }
+    .reveal-block .flip-inner {
+      position: relative;
+      background: #0d162a;
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 20px;
-      min-height: 120px;
-      position: relative;
+      padding: 14px 16px;
       cursor: pointer;
-      transition: all 0.3s;
-    }
-    .def-box.hidden .def-content { opacity: 0; filter: blur(8px); }
-    .def-box.hidden::after {
-      content: "Tap to reveal meaning";
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      color: var(--muted);
-      font-size: 14px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    .def-box .def-content { transition: all 0.5s ease; opacity: 1; filter: blur(0); }
-    .def-box ul { padding-left: 20px; margin: 0; }
-    .def-box li { margin-bottom: 12px; }
-
-    .mini-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .flip-card {
-      background-color: transparent;
-      height: 140px;
-      perspective: 1000px;
-      cursor: pointer;
-    }
-    .flip-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      transition: transform 0.6s;
       transform-style: preserve-3d;
+      transition: transform 0.65s ease;
+      min-height: 140px;
+      box-shadow: 0 12px 26px rgba(0,0,0,0.25);
     }
-    .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
-    .flip-front, .flip-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-    }
-    .flip-front { background-color: var(--card); color: var(--muted); }
-    .flip-back { background-color: #1e293b; color: var(--text); transform: rotateY(180deg); border-color: var(--accent); }
-    .card-icon { font-size: 24px; margin-bottom: 8px; opacity: 0.5; }
-    .card-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
-    .card-value { font-size: 18px; font-weight: 600; color: var(--accent); margin-bottom: 5px; }
-    .mini-audio-btn {
-      background: rgba(34,197,94,0.1);
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin-top: 5px;
-      cursor: pointer;
-    }
-    .mini-audio-btn:hover { background: var(--accent); color: #000; }
+    .reveal-block.revealed .flip-inner { transform: rotateY(180deg); }
+    .reveal-block .face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; gap: 8px; text-align: center; padding: 16px; background: #0d162a; transform-style: preserve-3d; transition: opacity 0.35s ease; border-radius: 12px; }
+    .reveal-block .face .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .reveal-block .face .value { font-size: 22px; font-weight: 700; margin-top: 4px; }
+    .reveal-block .face.front .value { color: rgba(226,232,240,0.7); }
+    .reveal-block .face.back { transform: rotateY(180deg); opacity: 0; }
+    .reveal-block.revealed .face.front { opacity: 0; }
+    .reveal-block.revealed .face.back { opacity: 1; }
+    .reveal-block button.sound { justify-self: flex-end; background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 6px 8px; cursor: pointer; }
+    .reveal-block.highlight .flip-inner { border-color: rgba(56,189,248,0.6); box-shadow: 0 12px 30px rgba(56,189,248,0.18); }
+    .reveal-block.highlight .face.front { color: #bae6fd; }
+    .reveal-block .subtext { margin-top: 8px; font-size: 14px; color: rgba(148,163,184,0.8); font-weight: 600; }
+    .reveal-block.mini { min-height: 0; }
+    .reveal-block.mini .flip-inner { min-height: 0; padding: 12px; }
+    .reveal-block.mini .face .value { font-size: 16px; line-height: 1.4; }
+    .mini-line { display: flex; gap: 6px; align-items: center; justify-content: flex-start; }
+    .mini-line .label { color: rgba(148,163,184,0.9); font-weight: 600; font-size: 12px; }
+
+    .grades { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 14px; }
+    .grade-btn { border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 700; color: #0b1120; }
+    .grade-again { background: #f87171; }
+    .grade-hard { background: #fbbf24; }
+    .grade-medium { background: #34d399; }
+    .grade-easy { background: #60a5fa; }
+    .grade-good { background: #a78bfa; }
+    .meta { color: var(--muted); margin-top: 8px; font-size: 14px; }
+
+    .hidden { display: none; }
     .status-msg { margin-top: 10px; font-size: 13px; min-height: 20px; color: var(--muted); }
+    .backup-panel { margin-top: 12px; padding: 12px; border: 1px dashed var(--border); border-radius: 12px; background: rgba(15,23,42,0.5); }
+    .checkbox-list { display: grid; gap: 6px; margin: 10px 0; }
   </style>
 </head>
 <body>
-
   <header>
-    <div style="font-weight:700; font-size: 20px;">🇫🇷 French Flashcards</div>
-    <small style="color: var(--muted);">Powered by Google AI Studio with Wiktionary fallback</small>
+    <div>
+      <div style="font-weight:700;">French Custom Flashcards</div>
+      <small style="color: var(--muted);">Build your own decks and study them</small>
+    </div>
+    <a href="./index.html">← Back to menu</a>
   </header>
 
   <main>
-    <!-- Left Panel: Builder -->
-    <section class="panel">
-      <header>
-        <h1>Build Deck</h1>
-        <p>Enter a French word to auto-fetch definitions.</p>
-      </header>
+    <div class="tab-row">
+      <button class="tab-btn active" data-tab="build">Build Deck</button>
+      <button class="tab-btn" data-tab="flashcards">Flashcards</button>
+      <span class="pill" id="deckPill">Current deck: Unsaved</span>
+    </div>
 
-      <form id="addForm">
-        <label for="wordInput">Add a word</label>
-        <div class="input-group">
-          <input id="wordInput" type="text" placeholder="e.g. dois, plus, chien..." required autocomplete="off" />
-          <button type="submit" class="primary">Add</button>
+    <div class="board">
+      <section class="panel" id="buildTab">
+        <header>
+          <h1>Build Deck</h1>
+          <p>Add words, view saved decks, and keep editing.</p>
+        </header>
+
+        <form id="addForm">
+          <label for="wordInput">Add a word</label>
+          <div class="input-row">
+            <input id="wordInput" type="text" placeholder="e.g. dois, plus, chien..." required autocomplete="off" />
+            <button type="submit" class="primary">Add</button>
+          </div>
+          <div id="accentContainer" class="accent-container"></div>
+          <div class="status-msg" id="status"></div>
+        </form>
+
+        <div class="actions">
+          <button id="startDeck" class="secondary" disabled>▶ Use as Current Deck</button>
+          <button id="newDeck" class="ghost">New deck</button>
+          <span id="countLabel" style="margin-left:auto; color: var(--muted);">0 cards</span>
         </div>
-        <div id="accentContainer" class="accent-container"></div>
-        <div class="status-msg" id="status"></div>
-      </form>
 
-      <div class="actions">
-        <button id="startDeck" class="secondary" disabled>▶ Play Deck</button>
-        <button id="clearDeck" class="ghost" disabled>Clear All</button>
-        <span id="countLabel" style="margin-left: auto; font-size: 14px; color: var(--muted);">0 cards</span>
-      </div>
+        <div class="actions">
+          <div style="flex:1; display:grid; gap:8px;">
+            <label for="saveName" style="margin:0;">Save deck as</label>
+            <div class="input-row">
+              <input id="saveName" type="text" placeholder="My verbs" />
+              <button class="primary" type="button" id="saveDeck">Save deck</button>
+            </div>
+          </div>
+        </div>
 
-      <div id="deckList" class="deck-list"></div>
-    </section>
+        <div class="actions">
+          <div style="flex:1; display:grid; gap:6px;">
+            <label for="deckSelect" style="margin:0;">Load saved deck</label>
+            <select id="deckSelect"></select>
+          </div>
+          <button class="secondary" type="button" id="backupDecks">Backup decks</button>
+        </div>
 
-    <!-- Right Panel: Quiz -->
-    <section class="panel">
-      <header>
-        <h2>Quiz Mode</h2>
-        <p id="progressLabel">0 / 0</p>
-      </header>
-      
-      <div id="quizContainer" class="quiz-container">
-        <p style="text-align:center; color:var(--muted); margin-top:40px;">Add words and click Play Deck to begin.</p>
-      </div>
+        <div class="backup-panel hidden" id="restorePanel">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+            <strong>Select decks to restore</strong>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <label style="display:flex; gap:6px; align-items:center; color:var(--muted);"><input type="checkbox" id="restoreAll" /> Import all</label>
+              <button class="secondary" type="button" id="confirmRestore">Import selected</button>
+            </div>
+          </div>
+          <div id="restoreList" class="checkbox-list"></div>
+        </div>
 
-      <div class="actions" style="justify-content: flex-end; margin-top: 30px;">
-        <button class="secondary" id="nextCard" style="width:100%" disabled>Next Card →</button>
-      </div>
-    </section>
+        <div id="deckList" class="deck-list"></div>
+      </section>
+
+      <section class="panel hidden" id="flashcardsTab">
+        <header>
+          <h1>Flashcards</h1>
+          <p>Study whatever is in your current deck.</p>
+        </header>
+
+        <div class="card-shell">
+          <div class="card" id="card">
+            <div class="face-label">Prompt</div>
+            <div class="prompt" id="prompt">Build a deck to get started</div>
+            <p class="tagline" id="tagline"></p>
+            <div class="back hidden" id="back">
+              <div class="face-label">Answer</div>
+              <div class="detail-grid" id="detailGrid"></div>
+              <div class="actions" style="margin-top:10px;">
+                <button class="secondary" id="revealAll">Show all</button>
+                <button class="secondary" id="speakBtn">🔊 Hear it</button>
+              </div>
+            </div>
+          </div>
+          <div class="grades hidden" id="gradeRow">
+            <button class="grade-btn grade-again" data-offset="2" data-action="again">Again</button>
+            <button class="grade-btn grade-hard" data-offset="5" data-action="hard">Hard</button>
+            <button class="grade-btn grade-medium" data-offset="10" data-action="medium">Medium</button>
+            <button class="grade-btn grade-easy" data-offset="15" data-action="easy">Easy</button>
+            <button class="grade-btn grade-good" data-offset="remove" data-action="good">Good</button>
+          </div>
+          <div class="meta" id="queueInfo"></div>
+        </div>
+      </section>
+    </div>
   </main>
 
+  <input type="file" id="restoreFile" accept="application/json" class="hidden" />
+
   <script>
-    const storageKey = 'tempFrenchFlashcards-v17';
+    const storageKey = 'tempFrenchDecks-v1';
     const apiKeyStorageKey = 'tempFrenchFlashcardsGeminiKey';
-    
-    // UPDATED: Added instruction for English translation in brackets at the end
+
     const geminiSystemInstruction = `change this text so it includes both an IPA and english pronuncation as well, and an English translation of the sentence in brackets:
 [flâneur <m> (noun) ///flɑ.nœʁ/// +++flah-nur+++ | an aimless wanderer or stroller | Le flâneur observait la ville sans se presser. (The stroller watched the city without hurrying.)]
 
@@ -325,365 +303,447 @@ As well as the words seperately:
       input: document.getElementById('wordInput'),
       accentContainer: document.getElementById('accentContainer'),
       startBtn: document.getElementById('startDeck'),
-      clearBtn: document.getElementById('clearDeck'),
+      newDeckBtn: document.getElementById('newDeck'),
       count: document.getElementById('countLabel'),
-      nextBtn: document.getElementById('nextCard'),
-      quizContainer: document.getElementById('quizContainer'),
-      progress: document.getElementById('progressLabel'),
-      apiKeyInput: null,
-      apiKeyStatus: null,
-      apiKeySave: null
+      saveName: document.getElementById('saveName'),
+      saveDeckBtn: document.getElementById('saveDeck'),
+      deckSelect: document.getElementById('deckSelect'),
+      deckPill: document.getElementById('deckPill'),
+      restoreBtn: document.getElementById('backupDecks'),
+      restorePanel: document.getElementById('restorePanel'),
+      restoreList: document.getElementById('restoreList'),
+      restoreFile: document.getElementById('restoreFile'),
+      restoreAll: document.getElementById('restoreAll'),
+      restoreConfirm: document.getElementById('confirmRestore'),
+      tabButtons: document.querySelectorAll('.tab-btn'),
+      buildTab: document.getElementById('buildTab'),
+      flashTab: document.getElementById('flashcardsTab'),
+      prompt: document.getElementById('prompt'),
+      tagline: document.getElementById('tagline'),
+      back: document.getElementById('back'),
+      detailGrid: document.getElementById('detailGrid'),
+      gradeRow: document.getElementById('gradeRow'),
+      queueInfo: document.getElementById('queueInfo'),
+      speakBtn: document.getElementById('speakBtn'),
+      revealAll: document.getElementById('revealAll')
     };
 
-    let deck = loadDeck();
-    let quizQueue = [];
-    let quizIndex = 0;
-
-    /* --- Accents --- */
-    const accentGroups = [
-      ['é', 'è', 'ê', 'ë'], ['à', 'â', 'æ', 'á'], ['î', 'ï', 'í'], 
-      ['ô', 'œ', 'ó'], ['ù', 'û', 'ü', 'ú'], ['ç', 'ñ'], ['«', '»']
-    ];
+    const accentGroups = [ ['é', 'è', 'ê', 'ë'], ['à', 'â', 'æ', 'á'], ['î', 'ï', 'í'], ['ô', 'œ', 'ó'], ['ù', 'û', 'ü', 'ú'], ['ç', 'ñ'], ['«', '»'] ];
     accentGroups.forEach(group => {
       const groupDiv = document.createElement('div');
       groupDiv.className = 'accent-group';
       group.forEach(char => {
         const btn = document.createElement('button');
         btn.textContent = char;
-        btn.type = 'button'; 
+        btn.type = 'button';
         btn.className = 'accent-btn';
-        btn.addEventListener('click', () => {
-          const input = dom.input;
-          const start = input.selectionStart;
-          const end = input.selectionEnd;
-          const text = input.value;
-          input.value = text.substring(0, start) + char + text.substring(end);
-          input.selectionStart = input.selectionEnd = start + 1;
-          input.focus();
-        });
+        btn.addEventListener('click', () => insertAccent(char));
         groupDiv.appendChild(btn);
       });
       dom.accentContainer.appendChild(groupDiv);
     });
 
-    /* --- Core Functions --- */
-    function loadDeck() {
-      try { return JSON.parse(localStorage.getItem(storageKey)) || []; } catch { return []; }
+    let state = loadDeckState();
+    let quizQueue = [];
+    let quizIndex = 0;
+    let currentStyle = 'fr-en';
+
+    function loadDeckState() {
+      try {
+        return JSON.parse(localStorage.getItem(storageKey)) || { currentDeck: [], savedDecks: {}, currentName: 'Unsaved' };
+      } catch {
+        return { currentDeck: [], savedDecks: {}, currentName: 'Unsaved' };
+      }
     }
-    function saveDeck() {
-      localStorage.setItem(storageKey, JSON.stringify(deck));
-      renderList();
-    }
-    function loadApiKey() {
-      return localStorage.getItem(apiKeyStorageKey) || '';
-    }
-    function saveApiKey(key) {
-      localStorage.setItem(apiKeyStorageKey, key.trim());
+    function persistState() { localStorage.setItem(storageKey, JSON.stringify(state)); }
+
+    function updatePill() {
+      const name = state.currentName || 'Unsaved';
+      dom.deckPill.textContent = `Current deck: ${name}`;
     }
 
-    /* --- GEMINI INTEGRATION --- */
-    
+    function insertAccent(char) {
+      const input = dom.input;
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      const text = input.value;
+      input.value = text.substring(0, start) + char + text.substring(end);
+      input.selectionStart = input.selectionEnd = start + 1;
+      input.focus();
+    }
+
+    function loadApiKey() { return localStorage.getItem(apiKeyStorageKey) || ''; }
+    function saveApiKey(key) { localStorage.setItem(apiKeyStorageKey, key.trim()); }
+
+    function saveDeckToLibrary() {
+      const name = (dom.saveName.value || '').trim();
+      if (!name) { alert('Name your deck first.'); return; }
+      state.savedDecks[name] = [...state.currentDeck];
+      state.currentName = name;
+      persistState();
+      renderDeckSelect();
+      updatePill();
+      dom.status.textContent = `Saved as "${name}"`;
+      setTimeout(() => dom.status.textContent = '', 2500);
+    }
+
+    function renderDeckSelect() {
+      const select = dom.deckSelect;
+      select.innerHTML = '';
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = state.savedDecks && Object.keys(state.savedDecks).length ? 'Select a deck' : 'No saved decks yet';
+      select.appendChild(placeholder);
+      Object.keys(state.savedDecks || {}).sort().forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        select.appendChild(opt);
+      });
+    }
+
+    function loadSelectedDeck(name) {
+      if (!name || !state.savedDecks[name]) return;
+      state.currentDeck = [...state.savedDecks[name]];
+      state.currentName = name;
+      persistState();
+      renderList();
+      updatePill();
+      dom.status.textContent = `Loaded deck "${name}"`;
+      setTimeout(() => dom.status.textContent = '', 2000);
+    }
+
+    function newDeck() {
+      if (state.currentDeck.length && !confirm('Start a new deck? Save first if you need to keep these cards.')) return;
+      state.currentDeck = [];
+      state.currentName = 'Unsaved';
+      persistState();
+      renderList();
+      updatePill();
+    }
+
+    function backupDecks() {
+      const blob = new Blob([JSON.stringify({ savedDecks: state.savedDecks }, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'french-decks-backup.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function showRestoreOptions(data) {
+      const decks = data.savedDecks || {};
+      const names = Object.keys(decks);
+      dom.restoreList.innerHTML = '';
+      if (!names.length) {
+        dom.restoreList.textContent = 'No decks found in backup.';
+        return;
+      }
+      names.forEach(name => {
+        const lbl = document.createElement('label');
+        lbl.style.display = 'flex';
+        lbl.style.gap = '6px';
+        lbl.style.alignItems = 'center';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.value = name;
+        lbl.append(cb, document.createTextNode(name));
+        dom.restoreList.appendChild(lbl);
+      });
+      dom.restorePanel.classList.remove('hidden');
+    }
+
+    function importSelectedDecks(backup) {
+      const names = Object.keys(backup.savedDecks || {});
+      if (!names.length) return;
+      const selected = dom.restoreAll.checked
+        ? names
+        : Array.from(dom.restoreList.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+      selected.forEach(name => { state.savedDecks[name] = backup.savedDecks[name]; });
+      persistState();
+      renderDeckSelect();
+      dom.status.textContent = `Imported ${selected.length} deck(s).`;
+      dom.restorePanel.classList.add('hidden');
+      dom.restoreAll.checked = false;
+      dom.restoreList.innerHTML = '';
+      setTimeout(() => dom.status.textContent = '', 2500);
+    }
+
+    function renderList() {
+      dom.list.innerHTML = '';
+      dom.count.textContent = `${state.currentDeck.length} cards`;
+      dom.startBtn.disabled = !state.currentDeck.length;
+      if (!state.currentDeck.length) return;
+      state.currentDeck.forEach((card, idx) => {
+        const item = document.createElement('div');
+        item.className = 'word-row';
+        item.innerHTML = `
+          <div class="word-head">
+            <h3>${card.term}</h3>
+            <div class="tags">
+              ${card.pos ? `<span class="pill" style="background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.35);">${card.pos}</span>` : ''}
+              ${card.gender ? `<span class="pill" style="background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3);">${card.gender}</span>` : ''}
+            </div>
+          </div>
+          <ul class="definition-list">
+            ${(card.definitions || []).map(def => `<li>${def.text || ''}${def.example ? `<div class="example-box">${def.example}</div>` : ''}</li>`).join('')}
+          </ul>
+          <div class="actions" style="justify-content:flex-end;">
+            <button class="secondary" type="button" data-remove="${idx}">Remove</button>
+          </div>
+        `;
+        dom.list.appendChild(item);
+      });
+      dom.list.querySelectorAll('[data-remove]').forEach(btn => btn.addEventListener('click', () => { state.currentDeck.splice(parseInt(btn.dataset.remove,10), 1); persistState(); renderList(); }));
+    }
+
+    function renderCard(card) {
+      dom.prompt.textContent = card.term;
+      dom.tagline.textContent = 'Tap tiles to reveal details.';
+      dom.back.classList.remove('hidden');
+      dom.gradeRow.classList.remove('hidden');
+      buildDetailBlocks(card);
+      updateMeta();
+    }
+
+    function buildDetailBlocks(card) {
+      const blocks = [];
+      const meaningSubtexts = [];
+      if (card.pos) meaningSubtexts.push(card.pos);
+      blocks.push(createBlock('Meaning', (card.definitions?.[0]?.text) || '—', { highlightMeaning: true, subTexts: meaningSubtexts }));
+      blocks.push(createPronBlock(card));
+      if (card.gender) blocks.push(createBlock('Gender', card.gender));
+      if (card.definitions?.[0]?.example) blocks.push(createBlock('Example', card.definitions[0].example));
+      dom.detailGrid.innerHTML = '';
+      blocks.forEach(b => dom.detailGrid.appendChild(b));
+    }
+
+    function createBlock(label, value, options = {}) {
+      const { highlightMeaning = false, subTexts = null, size = 'regular' } = options;
+      const subItems = Array.isArray(subTexts) ? subTexts.filter(Boolean) : [];
+      const div = document.createElement('div');
+      const sizeClass = size === 'mini' ? ' mini' : '';
+      div.className = 'reveal-block masked' + (highlightMeaning ? ' highlight' : '') + sizeClass;
+      div.tabIndex = 0;
+
+      const inner = document.createElement('div');
+      inner.className = 'flip-inner';
+
+      const front = document.createElement('div');
+      front.className = 'face front';
+      const frontLabel = document.createElement('div');
+      frontLabel.className = 'label';
+      frontLabel.textContent = 'Front';
+      const frontValue = document.createElement('div');
+      frontValue.className = 'value';
+      frontValue.textContent = label;
+      front.append(frontLabel, frontValue);
+
+      const back = document.createElement('div');
+      back.className = 'face back';
+      const backLabel = document.createElement('div');
+      backLabel.className = 'label';
+      backLabel.textContent = label;
+      const backValue = document.createElement('div');
+      backValue.className = 'value';
+      backValue.textContent = value;
+      subItems.forEach(text => {
+        const sub = document.createElement('div');
+        sub.className = 'subtext';
+        sub.textContent = text;
+        backValue.append(sub);
+      });
+      back.append(backLabel, backValue);
+
+      inner.append(front, back);
+      div.append(inner);
+      div.addEventListener('click', () => revealTile(div));
+      div.addEventListener('keypress', (e) => { if (e.key === 'Enter') revealTile(div); });
+      return div;
+    }
+
+    function createPronBlock(card) {
+      const container = document.createElement('div');
+      container.className = 'reveal-block masked';
+      container.tabIndex = 0;
+
+      const inner = document.createElement('div');
+      inner.className = 'flip-inner';
+
+      const front = document.createElement('div');
+      front.className = 'face front';
+      const frontLabel = document.createElement('div');
+      frontLabel.className = 'label';
+      frontLabel.textContent = 'Front';
+      const frontValue = document.createElement('div');
+      frontValue.className = 'value';
+      frontValue.textContent = 'Pronunciation';
+      front.append(frontLabel, frontValue);
+
+      const back = document.createElement('div');
+      back.className = 'face back';
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = 'Pronunciation';
+      const value = document.createElement('div');
+      value.className = 'value';
+      value.innerHTML = `${card.phonetic || ''}${card.ipa ? ` · /${card.ipa}/` : ''}` || '—';
+      const btn = document.createElement('button');
+      btn.className = 'sound';
+      btn.type = 'button';
+      btn.textContent = '🔊';
+      btn.addEventListener('click', (e) => { e.stopPropagation(); speak(card.term); });
+      back.append(label, value, btn);
+
+      inner.append(front, back);
+      container.append(inner);
+      container.addEventListener('click', () => revealTile(container));
+      container.addEventListener('keypress', (e) => { if (e.key === 'Enter') revealTile(container); });
+      return container;
+    }
+
+    function revealTile(tile) { tile.classList.add('revealed'); tile.classList.remove('masked'); }
+
+    function startSession() {
+      if (!state.currentDeck.length) return;
+      quizQueue = [...state.currentDeck];
+      quizIndex = 0;
+      nextCard();
+      setActiveTab('flashcards');
+    }
+
+    function nextCard() {
+      if (!quizQueue.length) { dom.prompt.textContent = 'Add cards to study'; dom.back.classList.add('hidden'); dom.gradeRow.classList.add('hidden'); dom.tagline.textContent = ''; dom.queueInfo.textContent = ''; return; }
+      const card = quizQueue[quizIndex % quizQueue.length];
+      renderCard(card);
+    }
+
+    function gradeCard(action, offset) {
+      if (!quizQueue.length) return;
+      const card = quizQueue[quizIndex % quizQueue.length];
+      quizQueue.splice(quizIndex % quizQueue.length, 1);
+      if (offset !== 'remove') {
+        const position = Math.min(quizQueue.length, offset);
+        quizQueue.splice(position, 0, card);
+      }
+      quizIndex = 0;
+      if (!quizQueue.length) {
+        dom.prompt.textContent = 'Deck completed!';
+        dom.tagline.textContent = 'Build or load another deck to keep going.';
+        dom.back.classList.add('hidden');
+        dom.gradeRow.classList.add('hidden');
+        dom.queueInfo.textContent = '';
+        return;
+      }
+      nextCard();
+    }
+
+    function updateMeta() { dom.queueInfo.textContent = `${quizQueue.length} card(s) left in this session.`; }
+
+    function speak(word) { if (!('speechSynthesis' in window)) return; const utter = new SpeechSynthesisUtterance(word); utter.lang = 'fr-FR'; utter.rate = 0.95; window.speechSynthesis.speak(utter); }
+
     function parseGeminiFlashcards(text, originalTerm) {
       const matches = Array.from(text.matchAll(/\[(.*?)\]/gs)).map(m => m[1]);
       if (!matches.length) throw new Error('Unable to parse AI response. Try again.');
-
       return matches.map((entry, idx) => {
-        // 1. Extract Pronunciation tags first (so pipes inside/outside them don't matter)
         let ipa = '';
         let phonetic = '';
-        
-        // Extract IPA ///...///
         const ipaMatch = entry.match(/\/\/\/(.*?)\/\/\//);
-        if (ipaMatch) {
-            ipa = ipaMatch[1];
-            entry = entry.replace(ipaMatch[0], ''); // Remove from string to clean up
-        }
-
-        // Extract Phonetic +++...+++
+        if (ipaMatch) { ipa = ipaMatch[1]; entry = entry.replace(ipaMatch[0], ''); }
         const phoneMatch = entry.match(/\+\+\+(.*?)\+\+\+/);
-        if (phoneMatch) {
-            phonetic = phoneMatch[1];
-            entry = entry.replace(phoneMatch[0], ''); // Remove from string
-        }
-
-        // 2. Split remaining string by pipe
-        // filter(p => p.trim()) removes empty slots left by the regex removal if pipes were adjacent
-        const parts = entry.split('|').map(p => p.trim()).filter(p => p.length > 0);
-        
+        if (phoneMatch) { phonetic = phoneMatch[1]; entry = entry.replace(phoneMatch[0], ''); }
+        const parts = entry.split('|').map(p => p.trim()).filter(Boolean);
         const head = parts[0] || '';
         const meaning = parts[1] || '';
-        const example = parts[2] || ''; // This will now contain "French sentence. (English Translation)"
-
+        const example = parts[2] || '';
         const genderMatch = head.match(/<(.*?)>/);
         const posMatch = head.match(/\((.*?)\)/);
         const term = head.replace(/<.*?>/g, '').replace(/\(.*?\)/g, '').trim() || `${originalTerm}-${idx + 1}`;
-
-        return {
-          id: Date.now() + idx,
-          term,
-          ipa: ipa,
-          phonetic: phonetic, // Store the english phonetic
-          pos: posMatch ? posMatch[1] : '',
-          definitions: [
-            {
-              text: meaning || 'Definition unavailable',
-              example: example
-            }
-          ],
-          gender: genderMatch ? genderMatch[1] : ''
-        };
+        return { id: Date.now() + idx, term, ipa, phonetic, pos: posMatch ? posMatch[1] : '', definitions: [{ text: meaning || 'Definition unavailable', example }], gender: genderMatch ? genderMatch[1] : '' };
       });
     }
 
     async function lookupWithGemini(term) {
       const apiKey = loadApiKey();
       if (!apiKey) throw new Error('Add your Google AI Studio API key at the bottom of the page.');
-
-      // Using gemini-2.5-flash as requested
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              systemInstruction: {
-                  parts: [{ text: geminiSystemInstruction }]
-              },
-              contents: [{
-                  parts: [{ text: term }]
-              }]
-          })
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+          systemInstruction: { parts: [{ text: geminiSystemInstruction }] }, contents: [{ parts: [{ text: term }] }]
+        })
       });
-
       const data = await response.json();
-
-      if (data.error) {
-          throw new Error(data.error.message);
-      }
-
+      if (data.error) throw new Error(data.error.message);
       const botText = data.candidates[0].content.parts[0].text;
       return parseGeminiFlashcards(botText, term);
     }
 
-    /* --- Wiktionary Fallback --- */
     async function lookupWord(term) {
       const cleanTerm = term.trim();
       const url = `https://en.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(cleanTerm)}&prop=text&format=json&origin=*&redirects=1&disabletoc=1`;
-
       const res = await fetch(url);
       const data = await res.json();
       if (data.error || !data.parse) throw new Error('Word not found on Wiktionary.');
-
       const html = data.parse.text['*'];
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
-
       const allHeads = Array.from(doc.querySelectorAll('h2'));
       let frenchHeader = allHeads.find(h => h.textContent.includes('French'));
-
       if (!frenchHeader) throw new Error('No "French" section found.');
-
       let startNode = frenchHeader.closest('.mw-heading') || frenchHeader;
-      
       const frenchNodes = [];
       let sibling = startNode.nextElementSibling;
       while (sibling) {
-        if (sibling.tagName === 'H2' || (sibling.classList.contains('mw-heading') && sibling.querySelector('h2'))) {
-          break;
-        }
+        if (sibling.tagName === 'H2' || (sibling.classList.contains('mw-heading') && sibling.querySelector('h2'))) break;
         frenchNodes.push(sibling);
         sibling = sibling.nextElementSibling;
       }
-
       let ipa = '';
       let bestDefs = [];
       let bestPos = '';
-      
       for (const node of frenchNodes) {
         const ipaEl = node.querySelector('.IPA');
-        if (ipaEl && !ipa) {
-            ipa = ipaEl.textContent.replace(/[\/\[\]]/g, '').trim();
-        }
+        if (ipaEl && !ipa) { ipa = ipaEl.textContent.replace(/[\/\[\]]/g, '').trim(); }
       }
-
       const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Pronoun', 'Article', 'Determiner', 'Numeral', 'Participle'];
-
       for (let i = 0; i < frenchNodes.length; i++) {
         const node = frenchNodes[i];
         const headerText = node.textContent;
         const foundPos = validPOS.find(p => headerText.includes(p));
         const isHeader = ['H3', 'H4', 'H5'].includes(node.tagName) || node.querySelector('h3, h4, h5');
-
         if (isHeader && foundPos) {
           let defs = [];
           for (let j = i + 1; j < Math.min(i + 5, frenchNodes.length); j++) {
-            const nextNode = frenchNodes[j];
-            if (['H3','H4','H2'].includes(nextNode.tagName) || nextNode.querySelector('h3,h4,h2')) break; 
-
-            if (nextNode.tagName === 'OL') {
-              const lis = Array.from(nextNode.children);
-              lis.forEach(li => {
-                 const clone = li.cloneNode(true);
-                 let example = '';
-                 const quote = clone.querySelector('.h-usage-example, .h-quotation, .cited-passage');
-                 if (quote) {
-                    example = quote.textContent.trim();
-                    quote.remove();
-                 }
-                 const nestedUl = clone.querySelector('ul, dl');
-                 if (nestedUl) {
-                    if (!example) example = nestedUl.textContent.trim();
-                    nestedUl.remove();
-                 }
-
-                 let text = clone.textContent.trim();
-                 text = text.replace(/^\((.*?)\)\s*/, ''); 
-
-                 if (text.length > 2) {
-                   defs.push({ text, example });
-                 }
-              });
-              
-              if (defs.length > 0) {
-                 if (defs.length > bestDefs.length) {
-                    bestDefs = defs;
-                    bestPos = foundPos;
-                 }
-              }
+            const maybeList = frenchNodes[j];
+            if (['H3', 'H4', 'H5'].includes(maybeList.tagName)) break;
+            const lis = maybeList.querySelectorAll('ol > li');
+            if (lis.length) {
+              defs = Array.from(lis).slice(0, 3).map(li => ({
+                text: li.textContent.replace(/\n+/g, ' ').trim(),
+                example: (li.querySelector('ul li') || {}).textContent || ''
+              }));
+              break;
             }
           }
+          if (defs.length) { bestDefs = defs; bestPos = foundPos; break; }
         }
       }
-
-      if (bestDefs.length === 0) throw new Error('Found French section but no definitions.');
-
-      return {
-        id: Date.now(),
-        term: data.parse.title,
-        ipa: ipa,
-        phonetic: '', // Wiktionary doesn't easily provide English approximation
-        pos: bestPos,
-        definitions: bestDefs.slice(0, 8)
-      };
-    }
-
-    /* --- UI Logic --- */
-    function renderList() {
-      dom.list.innerHTML = '';
-      dom.count.textContent = `${deck.length} cards`;
-      dom.startBtn.disabled = deck.length === 0;
-      dom.clearBtn.disabled = deck.length === 0;
-
-      deck.forEach((card, idx) => {
-        const row = document.createElement('div');
-        row.className = 'word-row';
-        
-        let defsHtml = card.definitions.map(d => {
-          let html = `<li>${d.text}`;
-          if (d.example) html += `<span class="example-box">${d.example}</span>`;
-          html += `</li>`;
-          return html;
-        }).join('');
-
-        const phoneticDisplay = card.phonetic ? `[${card.phonetic}]` : '';
-
-        row.innerHTML = `
-          <div class="word-head">
-            <h3>${card.term}</h3>
-            <button class="ghost" onclick="removeCard(${idx})">×</button>
-          </div>
-          <details>
-            <summary>Show Definitions</summary>
-            <div style="margin-top:10px;">
-              <span class="pill">/${card.ipa || '...'} / ${phoneticDisplay}</span>
-              <span class="pill">${card.pos}</span>
-            </div>
-            <ul class="definition-list">${defsHtml}</ul>
-          </details>
-        `;
-        dom.list.appendChild(row);
-      });
-    }
-
-    function renderQuizCard() {
-      if (!quizQueue.length) return;
-      const card = quizQueue[quizIndex];
-      dom.progress.textContent = `${quizIndex + 1} / ${quizQueue.length}`;
-      
-      let defsHtml = '<ul style="margin:0; padding-left:20px;">';
-      card.definitions.forEach(d => {
-        defsHtml += `<li>${d.text}`;
-        if(d.example) defsHtml += `<div class="example-box" style="margin-top:4px;">${d.example}</div>`;
-        defsHtml += `</li>`;
-      });
-      defsHtml += '</ul>';
-
-      const phoneticDisplay = card.phonetic ? `<div style="font-size:14px; color:#f87171; margin-top:4px;">${card.phonetic}</div>` : '';
-
-      dom.quizContainer.innerHTML = `
-        <div class="quiz-prompt">${card.term}</div>
-        <div class="def-box hidden" onclick="this.classList.remove('hidden')">
-          <div class="def-content">${defsHtml}</div>
-        </div>
-        <div class="mini-cards">
-          <div class="flip-card" onclick="this.classList.toggle('flipped')">
-            <div class="flip-inner">
-              <div class="flip-front">
-                <div class="card-icon">🔤</div>
-                <div class="card-title">Grammar</div>
-                <div class="card-value">?</div>
-              </div>
-              <div class="flip-back">
-                <div class="card-title">Part of Speech</div>
-                <div class="card-value" style="font-size:16px">${card.pos}</div>
-              </div>
-            </div>
-          </div>
-          <div class="flip-card" onclick="this.classList.toggle('flipped')">
-            <div class="flip-inner">
-              <div class="flip-front">
-                <div class="card-icon">🗣️</div>
-                <div class="card-title">Pronunciation</div>
-                <div class="card-value">?</div>
-              </div>
-              <div class="flip-back">
-                <div class="card-value">/${card.ipa || '...'} /</div>
-                ${phoneticDisplay}
-                <button class="mini-audio-btn" onclick="playAudio('${card.term}', event)">🔊</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
+      return { id: Date.now(), term: cleanTerm, ipa, pos: bestPos, definitions: bestDefs.length ? bestDefs : [{ text: 'Definition unavailable', example: '' }], gender: '' };
     }
 
     document.getElementById('addForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const term = dom.input.value;
       if (!term) return;
-      if (deck.some(c => c.term.toLowerCase() === term.toLowerCase())) {
-        dom.status.textContent = 'Word already in deck';
-        return;
-      }
+      if (state.currentDeck.some(c => c.term.toLowerCase() === term.toLowerCase())) { dom.status.textContent = 'Word already in deck'; return; }
       dom.status.textContent = 'Fetching...';
       try {
         let cards;
-        // Try AI first
-        try {
-          cards = await lookupWithGemini(term);
-          dom.status.textContent = 'Added via Google AI Studio';
-        } catch (aiErr) {
-          // Fallback to Wiktionary
-          console.log("AI Failed (" + aiErr.message + "), switching to Wiktionary...");
-          cards = [await lookupWord(term)];
-          dom.status.textContent = 'Added via Wiktionary fallback';
-        }
-
-        (Array.isArray(cards) ? cards : [cards]).forEach(card => {
-          if (deck.some(c => c.term.toLowerCase() === card.term.toLowerCase())) return;
-          deck.unshift(card);
-        });
-        saveDeck();
+        try { cards = await lookupWithGemini(term); dom.status.textContent = 'Added via Google AI Studio'; }
+        catch (aiErr) { console.log('AI Failed (' + aiErr.message + '), switching to Wiktionary...'); cards = [await lookupWord(term)]; dom.status.textContent = 'Added via Wiktionary fallback'; }
+        (Array.isArray(cards) ? cards : [cards]).forEach(card => { if (state.currentDeck.some(c => c.term.toLowerCase() === card.term.toLowerCase())) return; state.currentDeck.unshift(card); });
+        persistState();
+        renderList();
         dom.input.value = '';
         setTimeout(() => dom.status.textContent = '', 3000);
       } catch (err) {
@@ -692,25 +752,50 @@ As well as the words seperately:
       }
     });
 
-    dom.startBtn.addEventListener('click', () => {
-      quizQueue = deck.sort(() => Math.random() - 0.5);
-      quizIndex = 0;
-      dom.nextBtn.disabled = false;
-      renderQuizCard();
+    dom.startBtn.addEventListener('click', startSession);
+    dom.saveDeckBtn.addEventListener('click', saveDeckToLibrary);
+    dom.deckSelect.addEventListener('change', (e) => loadSelectedDeck(e.target.value));
+    dom.newDeckBtn.addEventListener('click', newDeck);
+    dom.restoreBtn.addEventListener('click', backupDecks);
+
+    dom.revealAll.addEventListener('click', () => { dom.detailGrid.querySelectorAll('.reveal-block.masked').forEach(el => revealTile(el)); });
+    dom.speakBtn.addEventListener('click', () => { const card = quizQueue[quizIndex % quizQueue.length]; if (card) speak(card.term); });
+    dom.gradeRow.addEventListener('click', (e) => { const btn = e.target.closest('.grade-btn'); if (!btn) return; const offset = btn.dataset.offset === 'remove' ? 'remove' : parseInt(btn.dataset.offset, 10); gradeCard(btn.dataset.action, offset); });
+
+    dom.tabButtons.forEach(btn => btn.addEventListener('click', () => setActiveTab(btn.dataset.tab)));
+    function setActiveTab(tab) {
+      dom.tabButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
+      dom.buildTab.classList.toggle('hidden', tab !== 'build');
+      dom.flashTab.classList.toggle('hidden', tab !== 'flashcards');
+    }
+
+    dom.restoreConfirm.addEventListener('click', () => { if (!dom.restoreList.querySelector('input[type="checkbox"]')) return; const data = JSON.parse(dom.restoreConfirm.dataset.payload || '{}'); importSelectedDecks(data); });
+    dom.restoreAll.addEventListener('change', (e) => { const checked = e.target.checked; dom.restoreList.querySelectorAll('input[type="checkbox"]').forEach(cb => { cb.checked = checked; }); });
+
+    dom.restoreFile.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const text = await file.text();
+      try {
+        const data = JSON.parse(text);
+        dom.restoreConfirm.dataset.payload = JSON.stringify(data);
+        showRestoreOptions(data);
+      } catch { alert('Invalid backup file.'); }
+      dom.restoreFile.value = '';
     });
 
-    dom.clearBtn.addEventListener('click', () => { if(confirm('Delete all?')) { deck = []; saveDeck(); } });
-    dom.nextBtn.addEventListener('click', () => { if (quizQueue.length) { quizIndex = (quizIndex + 1) % quizQueue.length; renderQuizCard(); } });
-    window.removeCard = (i) => { deck.splice(i, 1); saveDeck(); };
-    window.playAudio = (text, e) => { e.stopPropagation(); const u = new SpeechSynthesisUtterance(text); u.lang = 'fr-FR'; speechSynthesis.speak(u); };
+    const importBtn = document.createElement('button');
+    importBtn.type = 'button';
+    importBtn.textContent = 'Restore backup';
+    importBtn.className = 'secondary';
+    importBtn.addEventListener('click', () => dom.restoreFile.click());
+    dom.restoreBtn.insertAdjacentElement('afterend', importBtn);
 
-    // API key UI
     (function setupApiKeyUI() {
       const container = document.createElement('section');
       container.className = 'panel';
       container.style.margin = '20px auto';
       container.style.maxWidth = '1200px';
-
       container.innerHTML = `
         <header style="display:flex; justify-content:space-between; align-items:center;">
           <div>
@@ -725,23 +810,17 @@ As well as the words seperately:
         </div>
         <div id="apiKeyStatus" class="status-msg"></div>
       `;
-
       document.body.appendChild(container);
-
-      dom.apiKeyInput = container.querySelector('#apiKeyInput');
-      dom.apiKeySave = container.querySelector('#saveApiKey');
-      dom.apiKeyStatus = container.querySelector('#apiKeyStatus');
-
-      dom.apiKeyInput.value = loadApiKey();
-
-      dom.apiKeySave.addEventListener('click', () => {
-        saveApiKey(dom.apiKeyInput.value);
-        dom.apiKeyStatus.textContent = 'Saved locally.';
-        setTimeout(() => dom.apiKeyStatus.textContent = '', 3000);
-      });
+      const apiInput = container.querySelector('#apiKeyInput');
+      const apiSave = container.querySelector('#saveApiKey');
+      const apiStatus = container.querySelector('#apiKeyStatus');
+      apiInput.value = loadApiKey();
+      apiSave.addEventListener('click', () => { saveApiKey(apiInput.value); apiStatus.textContent = 'Saved locally.'; setTimeout(() => apiStatus.textContent = '', 3000); });
     })();
 
+    renderDeckSelect();
     renderList();
+    updatePill();
   </script>
 </body>
 </html>
