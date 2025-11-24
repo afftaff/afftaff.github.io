@@ -460,6 +460,7 @@
       };
     }
 
+    // --- REWRITTEN ROBUST PARSER ---
     async function lookupWord(term) {
       const cleanTerm = term.trim();
       const url = `https://en.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(cleanTerm)}&prop=text&format=json&origin=*&redirects=1&disabletoc=1`;
@@ -472,127 +473,113 @@
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
 
-      // 1. Find French Header
-      const allH2s = Array.from(doc.querySelectorAll('h2'));
-      const frenchHeader = allH2s.find(h => h.textContent.includes('French'));
+      // 1. Locate the French Section. 
+      // Wiktionary headers can be H2, or wrapped in .mw-heading.
+      const allHeads = Array.from(doc.querySelectorAll('h2'));
+      let frenchHeader = allHeads.find(h => h.textContent.includes('French'));
+
       if (!frenchHeader) throw new Error('No "French" section found.');
-      
-      // 2. Start scanning from header or its container
-      let startNode = frenchHeader;
-      if (frenchHeader.parentElement.classList.contains('mw-heading')) {
-        startNode = frenchHeader.parentElement;
-      }
 
-      let ipa = '';
-      let bestPos = '';
-      let bestDefs = [];
-      let gender = '';
+      // 2. Identify the "French Container" (everything between French H2 and the next H2)
+      // If header is inside a div.mw-heading, we use the div as the start point
+      let startNode = frenchHeader.closest('.mw-heading') || frenchHeader;
       
-      const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Interjection', 'Pronoun', 'Article', 'Determiner', 'Numeral', 'Participle'];
-
-      // 3. Iterate Siblings
+      const frenchNodes = [];
       let sibling = startNode.nextElementSibling;
-      
       while (sibling) {
-        if (sibling.tagName === 'H2' || sibling.querySelector('h2')) break;
-
-        // Check POS header
-        let headerNode = null;
-        if (['H3', 'H4'].includes(sibling.tagName)) headerNode = sibling;
-        else headerNode = sibling.querySelector('h3, h4');
-
-        // Extract IPA
-        if (!ipa) {
-          const ipaSpan = sibling.classList.contains('IPA') ? sibling : sibling.querySelector('.IPA');
-          if (ipaSpan) ipa = ipaSpan.textContent.replace(/[\/\[\]]/g, '').trim();
+        // Stop if we hit another H2 or a div containing an H2
+        if (sibling.tagName === 'H2' || (sibling.classList.contains('mw-heading') && sibling.querySelector('h2'))) {
+          break;
         }
-
-        if (headerNode) {
-          const headerText = headerNode.textContent;
-          const foundPos = validPOS.find(p => headerText.includes(p));
-
-          if (foundPos) {
-            // Found a POS block, scan forward
-            let innerSibling = sibling.nextElementSibling;
-            const currentDefs = [];
-            let currentGender = '';
-
-            while (innerSibling) {
-              if (['H2', 'H3', 'H4'].includes(innerSibling.tagName) || innerSibling.querySelector('h2, h3, h4')) break;
-
-              // Gender
-              if (innerSibling.tagName === 'P' && !currentGender) {
-                const abbr = innerSibling.querySelector('abbr');
-                if (abbr && (abbr.textContent === 'm' || abbr.textContent === 'f')) {
-                  currentGender = abbr.textContent;
-                }
-              }
-
-              // Definitions (OL)
-              if (innerSibling.tagName === 'OL') {
-                // Direct children only (definitions)
-                const listItems = Array.from(innerSibling.children); 
-                listItems.forEach(li => {
-                  const clone = li.cloneNode(true);
-                  
-                  // --- Example Extraction Logic ---
-                  let exampleText = '';
-                  
-                  // 1. Look for block-level examples (ul, dl) or specific classes
-                  const exNodes = clone.querySelectorAll('ul, dl, .h-usage-example, .h-quotation');
-                  
-                  // Iterate found example containers to find clean text
-                  for (const exNode of exNodes) {
-                    // Check for structured quote: .cited-passage (French) + .e-translation (English)
-                    const passage = exNode.querySelector('.cited-passage');
-                    const trans = exNode.querySelector('.e-translation');
-                    
-                    if (passage && trans) {
-                      exampleText = `${passage.textContent.trim()} — ${trans.textContent.trim()}`;
-                      break; // Found a good one, stop looking
-                    }
-                    
-                    // Fallback: Check for .e-example + .e-translation
-                    const simpleEx = exNode.querySelector('.e-example');
-                    if (simpleEx && trans) {
-                        exampleText = `${simpleEx.textContent.trim()} — ${trans.textContent.trim()}`;
-                        break;
-                    }
-                  }
-
-                  // 2. Remove ALL example containers from the clone so they don't clutter definition
-                  exNodes.forEach(n => n.remove());
-
-                  let defText = clone.textContent.trim();
-                  if (defText.length > 2) {
-                     currentDefs.push({ text: defText, example: exampleText });
-                  }
-                });
-              }
-              innerSibling = innerSibling.nextElementSibling;
-            }
-
-            if (currentDefs.length > 0 && !bestPos) {
-               bestPos = foundPos;
-               bestDefs = currentDefs;
-               gender = currentGender;
-            }
-          }
-        }
+        frenchNodes.push(sibling);
         sibling = sibling.nextElementSibling;
       }
 
-      if (!bestDefs.length) throw new Error('No definitions found.');
+      // 3. Scan the collected nodes for Data
+      let ipa = '';
+      let bestDefs = [];
+      let bestPos = '';
+      
+      // Look for IPA anywhere in French section
+      for (const node of frenchNodes) {
+        const ipaEl = node.querySelector('.IPA');
+        if (ipaEl && !ipa) {
+            ipa = ipaEl.textContent.replace(/[\/\[\]]/g, '').trim();
+        }
+      }
 
-      let posDisplay = bestPos;
-      if (gender) posDisplay += ` (${gender})`;
+      // Look for Parts of Speech headers (h3/h4) and their following lists
+      const validPOS = ['Noun', 'Verb', 'Adjective', 'Adverb', 'Preposition', 'Conjunction', 'Pronoun', 'Article', 'Determiner', 'Numeral', 'Participle'];
+
+      for (let i = 0; i < frenchNodes.length; i++) {
+        const node = frenchNodes[i];
+        
+        // Is this node a header?
+        const headerText = node.textContent;
+        const foundPos = validPOS.find(p => headerText.includes(p));
+
+        // Ensure it's actually a header element
+        const isHeader = ['H3', 'H4', 'H5'].includes(node.tagName) || node.querySelector('h3, h4, h5');
+
+        if (isHeader && foundPos) {
+          // Found a POS! Now look at immediate next siblings for an OL
+          let defs = [];
+          
+          // Scan a few siblings ahead to find the <ol>
+          for (let j = i + 1; j < Math.min(i + 5, frenchNodes.length); j++) {
+            const nextNode = frenchNodes[j];
+            if (['H3','H4','H2'].includes(nextNode.tagName) || nextNode.querySelector('h3,h4,h2')) break; // Stop if hit new header
+
+            if (nextNode.tagName === 'OL') {
+              const lis = Array.from(nextNode.children);
+              lis.forEach(li => {
+                 // Clone to avoid destroying original if needed, but here we destruct
+                 const clone = li.cloneNode(true);
+                 
+                 // Extract Example
+                 let example = '';
+                 // 1. Try structured citation
+                 const quote = clone.querySelector('.h-usage-example, .h-quotation, .cited-passage');
+                 if (quote) {
+                    example = quote.textContent.trim();
+                    quote.remove(); // Remove from definition text
+                 }
+                 // 2. Try nested lists (common in wiktionary for examples)
+                 const nestedUl = clone.querySelector('ul, dl');
+                 if (nestedUl) {
+                    if (!example) example = nestedUl.textContent.trim();
+                    nestedUl.remove();
+                 }
+
+                 let text = clone.textContent.trim();
+                 // Clean up common leading rubbish like "(transitive)"
+                 text = text.replace(/^\((.*?)\)\s*/, ''); 
+
+                 if (text.length > 2) {
+                   defs.push({ text, example });
+                 }
+              });
+              
+              if (defs.length > 0) {
+                 // If we haven't found a POS yet, or this one has more definitions, take it
+                 if (defs.length > bestDefs.length) {
+                    bestDefs = defs;
+                    bestPos = foundPos;
+                 }
+              }
+            }
+          }
+        }
+      }
+
+      if (bestDefs.length === 0) throw new Error('Found French section but no definitions.');
 
       return {
         id: Date.now(),
         term: data.parse.title,
         ipa: ipa,
-        pos: posDisplay,
-        definitions: bestDefs.slice(0, 10) // Increased limit to catch 'cost' etc
+        pos: bestPos,
+        definitions: bestDefs.slice(0, 8)
       };
     }
 
@@ -692,11 +679,13 @@
       dom.status.textContent = 'Fetching...';
       try {
         let card;
+        // Try AI first
         try {
           card = await lookupWithGemini(term);
           dom.status.textContent = 'Added via Google AI Studio';
         } catch (aiErr) {
-          console.warn('Gemini lookup failed, falling back', aiErr);
+          // Fallback to Wiktionary
+          console.log("AI Failed (" + aiErr.message + "), switching to Wiktionary...");
           card = await lookupWord(term);
           dom.status.textContent = 'Added via Wiktionary fallback';
         }
