@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>French Mega Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b1120;
+      --panel: #0f172a;
+      --accent: #22c55e;
+      --accent-2: #38bdf8;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #1f2937;
+      --card: linear-gradient(145deg, #111827, #0f172a);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, sans-serif;
+      background: radial-gradient(circle at 15% 20%, rgba(34,197,94,0.10), transparent 30%),
+                  radial-gradient(circle at 85% 0%, rgba(56,189,248,0.12), transparent 30%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15,23,42,0.8);
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(8px);
+      z-index: 2;
+    }
+    header a { color: var(--muted); text-decoration: none; font-weight: 600; }
+    header a:hover { color: var(--text); }
+    main { max-width: 1200px; margin: 0 auto; padding: 28px; }
+    h1 { margin: 0 0 6px; letter-spacing: -0.02em; }
+    .controls { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin: 20px 0; }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    select, button, input[type="number"] { width: 100%; border-radius: 8px; border: 1px solid var(--border); padding: 10px 12px; background: #0b1224; color: var(--text); font-weight: 600; }
+    button.primary { background: linear-gradient(135deg, #22c55e, #16a34a); border: none; color: #f8fafc; cursor: pointer; }
+    button.secondary { background: transparent; border: 1px solid var(--border); color: var(--text); cursor: pointer; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .card-shell { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; position: relative; min-height: 420px; }
+    .card { background: var(--card); border-radius: 14px; padding: 20px 20px 16px; border: 1px solid var(--border); box-shadow: 0 16px 40px rgba(0,0,0,0.35); min-height: 280px; position: relative; overflow: hidden; }
+    .face-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .prompt { font-size: 38px; margin: 12px 0 8px; }
+    .tagline { color: var(--muted); margin: 0 0 12px; }
+    .back { margin-top: 12px; background: rgba(15,23,42,0.6); border: 1px dashed var(--border); border-radius: 12px; padding: 14px; }
+    .detail-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
+    .mini { background: #0d162a; border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
+    .mini .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .mini .value { font-size: 18px; font-weight: 700; margin-top: 6px; }
+    .actions { display: flex; gap: 12px; margin: 12px 0 6px; flex-wrap: wrap; }
+    .grades { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+    .grade-btn { border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: 700; color: #0b1120; }
+    .grade-again { background: #f87171; }
+    .grade-hard { background: #fbbf24; }
+    .grade-medium { background: #34d399; }
+    .grade-easy { background: #60a5fa; }
+    .grade-good { background: #a78bfa; }
+    .meta { color: var(--muted); margin-top: 8px; font-size: 14px; }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
+    .stat { display: flex; justify-content: space-between; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: rgba(15,23,42,0.65); }
+    .hidden { display: none; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 10px; background: rgba(34,197,94,0.12); border-radius: 10px; border: 1px solid rgba(34,197,94,0.3); color: var(--text); font-weight: 600; }
+    .deck-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .deck-pill { padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.04); cursor: pointer; }
+    .deck-pill input { margin-right: 6px; }
+    .section-title { margin: 0 0 10px; font-weight: 700; letter-spacing: -0.01em; }
+    .muted { color: var(--muted); font-size: 14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div style="font-weight:700;">French Mega Deck</div>
+      <small style="color: var(--muted);">Single massive session + attempt-based review decks</small>
+    </div>
+    <a href="./index.html">← Back to menu</a>
+  </header>
+  <main>
+    <h1>All-in-one study</h1>
+    <p class="muted">Build one big deck from all 50-card decks, skip ones you've cleared, and generate automatic re-attempt decks based on how many times you've tried a card.</p>
+
+    <div class="controls">
+      <div class="panel">
+        <div class="section-title">Card style</div>
+        <label for="styleSelect">Prompt vs answer</label>
+        <select id="styleSelect">
+          <option value="fr-en">French → English</option>
+          <option value="fr-en-pos">French → English (POS inline)</option>
+          <option value="en-fr">English → French</option>
+          <option value="en-fr-pos">English → French (POS inline)</option>
+          <option value="verb-conj">Verb conjugations</option>
+        </select>
+      </div>
+      <div class="panel">
+        <div class="section-title">Main big deck</div>
+        <p class="muted">Select whole 50-word decks to exclude. Progress on the big deck is saved automatically.</p>
+        <div id="deckExclusions" class="deck-list"></div>
+        <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+          <button id="applyDecks" class="secondary">Apply exclusions</button>
+          <button id="startBig" class="primary">Start fresh big deck</button>
+          <button id="resumeBig" class="secondary">Resume saved big deck</button>
+        </div>
+        <div class="muted" id="deckSummary" style="margin-top:10px;">Loading decks…</div>
+      </div>
+      <div class="panel">
+        <div class="section-title">Re-attempt decks</div>
+        <p class="muted">We remember how many times you've attempted each card. Build 25-card decks from the toughest items and play them separately from the big deck. Progress on these mini decks is not saved.</p>
+        <label for="attemptThreshold">Minimum attempts</label>
+        <input id="attemptThreshold" type="number" min="1" value="3" />
+        <button id="buildRetry" class="secondary" style="margin-top:8px;">Build re-attempt decks</button>
+        <div class="muted" id="retrySummary" style="margin-top:8px;">No re-attempt decks yet.</div>
+        <div id="retryDecks" class="deck-list"></div>
+      </div>
+    </div>
+
+    <div class="card-shell">
+      <div class="card" id="card">
+        <div class="face-label">Prompt</div>
+        <div class="prompt" id="prompt">Select a session to begin</div>
+        <p class="tagline" id="tagline"></p>
+        <div class="back hidden" id="back">
+          <div class="face-label">Answer</div>
+          <div class="detail-grid" id="detailGrid"></div>
+          <div class="actions">
+            <button class="secondary" id="revealAll">Show all</button>
+            <button class="secondary" id="speakBtn">🔊 Hear it</button>
+          </div>
+        </div>
+      </div>
+      <div class="grades hidden" id="gradeRow">
+        <button class="grade-btn grade-again" data-action="again">Again</button>
+        <button class="grade-btn grade-hard" data-action="hard">Hard</button>
+        <button class="grade-btn grade-medium" data-action="medium">Medium</button>
+        <button class="grade-btn grade-easy" data-action="easy">Easy</button>
+        <button class="grade-btn grade-good" data-action="good">Good</button>
+      </div>
+      <div class="meta" id="queueInfo"></div>
+      <div class="stat-grid">
+        <div class="stat"><span>Total in session</span><strong id="deckSize">0</strong></div>
+        <div class="stat"><span>Remaining</span><strong id="remaining">0</strong></div>
+        <div class="stat"><span>Current rank</span><strong id="rank">-</strong></div>
+        <div class="stat"><span>Style</span><strong id="styleLabel">-</strong></div>
+        <div class="stat"><span>Milestones</span><strong id="milestone">—</strong></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const wordlistUrl = '../French/wordlist.json';
+    const pronUrl = '../French/pronuncations.json';
+
+    let cards = [];
+    let cardMap = new Map();
+    let verbDeck = [];
+    let queue = [];
+    let currentCard = null;
+    let currentStyle = 'fr-en';
+    let currentMode = 'none'; // 'big' | 'retry'
+    let completedCount = 0;
+
+    const STORAGE_KEYS = {
+      attempts: 'allflashcards-attempts',
+      progress: 'allflashcards-progress',
+      excluded: 'allflashcards-excluded'
+    };
+
+    const styleLabels = {
+      'fr-en': 'French → English',
+      'fr-en-pos': 'French → English (POS inline)',
+      'en-fr': 'English → French',
+      'en-fr-pos': 'English → French (POS inline)',
+      'verb-conj': 'French verbs + conjugations'
+    };
+
+    const promptEl = document.getElementById('prompt');
+    const taglineEl = document.getElementById('tagline');
+    const backEl = document.getElementById('back');
+    const detailGrid = document.getElementById('detailGrid');
+    const gradeRow = document.getElementById('gradeRow');
+    const queueInfo = document.getElementById('queueInfo');
+    const deckSizeEl = document.getElementById('deckSize');
+    const remainingEl = document.getElementById('remaining');
+    const rankEl = document.getElementById('rank');
+    const styleLabel = document.getElementById('styleLabel');
+    const speakBtn = document.getElementById('speakBtn');
+    const milestoneEl = document.getElementById('milestone');
+    const deckExclusionsEl = document.getElementById('deckExclusions');
+    const deckSummaryEl = document.getElementById('deckSummary');
+    const resumeBigBtn = document.getElementById('resumeBig');
+    const retrySummaryEl = document.getElementById('retrySummary');
+    const retryDecksEl = document.getElementById('retryDecks');
+
+    const attempts = loadAttempts();
+
+    async function loadData() {
+      const [words, prons] = await Promise.all([
+        fetch(wordlistUrl).then(r => r.json()),
+        fetch(pronUrl).then(r => r.json())
+      ]);
+      const pronMap = new Map(prons.map(p => [p.rank, p]));
+      cards = words
+        .map(entry => ({ ...entry, pronunciation: pronMap.get(entry.rank) || null }))
+        .sort((a, b) => a.rank - b.rank);
+      cardMap = new Map(cards.map(c => [c.rank, c]));
+      verbDeck = cards.filter(entry => entry.pos === 'verb' && entry.conjugations);
+      renderDeckExclusions();
+      hydrateResumeState();
+      updateDeckSummary();
+    }
+
+    function loadAttempts() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEYS.attempts);
+        return raw ? JSON.parse(raw) : {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveAttempts() {
+      localStorage.setItem(STORAGE_KEYS.attempts, JSON.stringify(attempts));
+    }
+
+    function incrementAttempt(rank) {
+      attempts[rank] = (attempts[rank] || 0) + 1;
+      saveAttempts();
+    }
+
+    function loadExcludedDecks() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEYS.excluded);
+        return raw ? new Set(JSON.parse(raw)) : new Set();
+      } catch {
+        return new Set();
+      }
+    }
+
+    function saveExcludedDecks(set) {
+      localStorage.setItem(STORAGE_KEYS.excluded, JSON.stringify([...set]));
+    }
+
+    function chunk(array, size) {
+      const chunks = [];
+      for (let i = 0; i < array.length; i += size) {
+        chunks.push(array.slice(i, i + size));
+      }
+      return chunks;
+    }
+
+    function renderDeckExclusions() {
+      const excluded = loadExcludedDecks();
+      const deckCount = Math.ceil(cards.length / 50);
+      deckExclusionsEl.innerHTML = '';
+      for (let i = 0; i < deckCount; i++) {
+        const start = i * 50 + 1;
+        const end = Math.min(cards.length, (i + 1) * 50);
+        const pill = document.createElement('label');
+        pill.className = 'deck-pill';
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = i;
+        checkbox.checked = excluded.has(i);
+        pill.appendChild(checkbox);
+        pill.appendChild(document.createTextNode(`Deck ${i + 1} (${start}-${end})`));
+        deckExclusionsEl.appendChild(pill);
+      }
+    }
+
+    function applyExclusions() {
+      const inputs = deckExclusionsEl.querySelectorAll('input[type="checkbox"]');
+      const excluded = new Set();
+      inputs.forEach(input => { if (input.checked) excluded.add(parseInt(input.value, 10)); });
+      saveExcludedDecks(excluded);
+      updateDeckSummary();
+      resetProgress();
+    }
+
+    function buildBigQueue() {
+      const excluded = loadExcludedDecks();
+      const baseDecks = cards.filter(card => !excluded.has(Math.floor((card.rank - 1) / 50)));
+      return baseDecks;
+    }
+
+    function updateDeckSummary() {
+      const base = buildBigQueue();
+      const excluded = loadExcludedDecks();
+      const deckCount = Math.ceil(cards.length / 50);
+      const activeCount = deckCount - excluded.size;
+      deckSummaryEl.textContent = `${activeCount} deck(s) active · ${base.length} cards in the big deck`;
+      resumeBigBtn.disabled = !loadSavedProgress();
+    }
+
+    function startBigDeck(fresh = true) {
+      currentMode = 'big';
+      currentStyle = document.getElementById('styleSelect').value;
+      const baseQueue = fresh ? buildBigQueue() : restoreQueueFromSave();
+      if (!baseQueue || !baseQueue.length) {
+        alert('No cards available. Check your deck exclusions.');
+        return;
+      }
+      queue = [...baseQueue];
+      completedCount = (loadSavedProgress()?.completed) || 0;
+      styleLabel.textContent = styleLabels[currentStyle] || 'Custom';
+      deckSizeEl.textContent = queue.length;
+      nextCard();
+      persistProgress();
+    }
+
+    function restoreQueueFromSave() {
+      const saved = loadSavedProgress();
+      if (!saved || !saved.queueRanks?.length) return null;
+      const excluded = loadExcludedDecks();
+      // Ensure saved queue respects any new exclusions
+      const rebuilt = saved.queueRanks
+        .map(rank => cardMap.get(rank))
+        .filter(card => card && !excluded.has(Math.floor((card.rank - 1) / 50)));
+      completedCount = saved.completed || 0;
+      return rebuilt;
+    }
+
+    function hydrateResumeState() {
+      resumeBigBtn.disabled = !loadSavedProgress();
+    }
+
+    function loadSavedProgress() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEYS.progress);
+        return raw ? JSON.parse(raw) : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function resetProgress() {
+      localStorage.removeItem(STORAGE_KEYS.progress);
+      resumeBigBtn.disabled = true;
+      milestoneEl.textContent = '—';
+    }
+
+    function persistProgress() {
+      if (currentMode !== 'big') return;
+      const payload = {
+        queueRanks: queue.map(c => c.rank),
+        completed: completedCount,
+        excluded: [...loadExcludedDecks()]
+      };
+      localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify(payload));
+      resumeBigBtn.disabled = false;
+    }
+
+    function buildRetryDecks() {
+      const threshold = parseInt(document.getElementById('attemptThreshold').value, 10) || 1;
+      const eligible = Object.entries(attempts)
+        .filter(([, count]) => count >= threshold)
+        .map(([rank, count]) => ({ card: cardMap.get(parseInt(rank, 10)), count }))
+        .filter(({ card }) => !!card)
+        .sort((a, b) => b.count - a.count || a.card.rank - b.card.rank)
+        .map(({ card }) => card);
+      if (!eligible.length) {
+        retrySummaryEl.textContent = 'No cards meet that attempt threshold yet.';
+        retryDecksEl.innerHTML = '';
+        return;
+      }
+      const chunks = chunk(eligible, 25);
+      retryDecksEl.innerHTML = '';
+      retrySummaryEl.textContent = `${chunks.length} deck(s) built · ${eligible.length} card(s) total.`;
+      chunks.forEach((cardsChunk, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'secondary';
+        btn.textContent = `Re-attempt deck ${idx + 1} (${cardsChunk.length} cards)`;
+        btn.addEventListener('click', () => startRetryDeck(cardsChunk));
+        retryDecksEl.appendChild(btn);
+      });
+    }
+
+    function startRetryDeck(cardsChunk) {
+      currentMode = 'retry';
+      currentStyle = document.getElementById('styleSelect').value;
+      queue = [...cardsChunk];
+      deckSizeEl.textContent = queue.length;
+      completedCount = 0;
+      styleLabel.textContent = `${styleLabels[currentStyle] || 'Custom'} (Re-attempt)`;
+      milestoneEl.textContent = 'Re-attempt deck';
+      nextCard();
+    }
+
+    function nextCard() {
+      if (!queue.length) {
+        promptEl.textContent = 'Session finished!';
+        taglineEl.textContent = 'Choose another deck to keep going.';
+        backEl.classList.add('hidden');
+        gradeRow.classList.add('hidden');
+        rankEl.textContent = '-';
+        remainingEl.textContent = '0';
+        queueInfo.textContent = '';
+        persistProgress();
+        return;
+      }
+      currentCard = queue[0];
+      renderCard(currentCard);
+    }
+
+    function renderCard(card) {
+      const isFrenchPrompt = ['fr-en', 'fr-en-pos', 'verb-conj'].includes(currentStyle);
+      const isEnglishPrompt = ['en-fr', 'en-fr-pos'].includes(currentStyle);
+
+      if (isFrenchPrompt) {
+        promptEl.textContent = card.word;
+        taglineEl.textContent = currentStyle === 'verb-conj'
+          ? 'Reveal the meaning and conjugations.'
+          : 'What does this mean in English?';
+      } else if (isEnglishPrompt) {
+        promptEl.textContent = card.meaning_en || card.word;
+        taglineEl.textContent = 'How do you say this in French?';
+      } else {
+        promptEl.textContent = card.word;
+        taglineEl.textContent = '';
+      }
+      backEl.classList.remove('hidden');
+      gradeRow.classList.remove('hidden');
+      buildDetailBlocks(card);
+      updateMeta();
+    }
+
+    function updateMeta() {
+      remainingEl.textContent = queue.length;
+      rankEl.textContent = currentCard ? currentCard.rank : '-';
+      deckSizeEl.textContent = queue.length + completedCount;
+      queueInfo.textContent = queue.length ? `${queue.length} card(s) left in this session.` : '';
+    }
+
+    function buildDetailBlocks(card) {
+      const isFrenchPrompt = ['fr-en', 'fr-en-pos', 'verb-conj'].includes(currentStyle);
+      const isEnglishPrompt = ['en-fr', 'en-fr-pos'].includes(currentStyle);
+      const inlinePos = currentStyle === 'fr-en-pos' || currentStyle === 'en-fr-pos' || currentStyle === 'verb-conj';
+      const blocks = [];
+
+      if (currentStyle === 'verb-conj') {
+        const meaningSubtexts = [];
+        if (card.lemma) meaningSubtexts.push(card.lemma);
+        if (card.pos) meaningSubtexts.push(card.pos);
+        const joinedMeaningSubtext = meaningSubtexts.filter(Boolean).join(' | ');
+        blocks.push(createBlock('Meaning', card.meaning_en || '—', { highlightMeaning: true, subTexts: joinedMeaningSubtext ? [joinedMeaningSubtext] : [] }));
+        blocks.push(createPronBlock(card));
+        blocks.push(createConjugationBlock(card));
+      } else if (isFrenchPrompt) {
+        const meaningSubtexts = [];
+        if (card.lemma) meaningSubtexts.push(card.lemma);
+        if (inlinePos && card.pos) meaningSubtexts.push(card.pos);
+        const joinedMeaningSubtext = meaningSubtexts.filter(Boolean).join(' | ');
+        blocks.push(createBlock('Meaning', card.meaning_en || '—', { highlightMeaning: true, subTexts: joinedMeaningSubtext ? [joinedMeaningSubtext] : [] }));
+        blocks.push(createPronBlock(card));
+      } else if (isEnglishPrompt) {
+        const meaningSubtexts = [];
+        if (inlinePos && card.pos) meaningSubtexts.push(card.pos);
+        const joinedMeaningSubtext = meaningSubtexts.filter(Boolean).join(' | ');
+        blocks.push(createBlock('French', card.word || '—', { highlightMeaning: true, subTexts: joinedMeaningSubtext ? [joinedMeaningSubtext] : [] }));
+        blocks.push(createPronBlock(card));
+      }
+
+      const extra = [];
+      if (card.gender) extra.push(card.gender);
+      if (card.rank) extra.push(`Rank ${card.rank}`);
+      if (card.frequency) extra.push(`Frequency ${card.frequency}`);
+      if (extra.length) blocks.push(createBlock('Details', extra.join(' • ')));
+
+      detailGrid.innerHTML = '';
+      blocks.forEach(block => detailGrid.appendChild(block));
+    }
+
+    function createBlock(labelText, valueText, options = {}) {
+      const { highlightMeaning = false, subTexts = [] } = options;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'mini';
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = labelText;
+      const value = document.createElement('div');
+      value.className = 'value';
+      value.textContent = valueText;
+      if (highlightMeaning) value.style.color = '#bef264';
+      wrapper.appendChild(label);
+      wrapper.appendChild(value);
+      subTexts.forEach(text => {
+        const sub = document.createElement('div');
+        sub.className = 'muted';
+        sub.textContent = text;
+        wrapper.appendChild(sub);
+      });
+      return wrapper;
+    }
+
+    function createPronBlock(card) {
+      if (!card.pronunciation) return createBlock('Pronunciation', '—');
+      const ipa = card.pronunciation.ipa || '—';
+      const audio = card.pronunciation.url || null;
+      const block = createBlock('Pronunciation', ipa);
+      if (audio) {
+        block.dataset.audio = audio;
+      }
+      return block;
+    }
+
+    function createConjugationBlock(card) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'mini';
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = 'Conjugations';
+      wrapper.appendChild(label);
+      const grid = document.createElement('div');
+      grid.className = 'detail-grid';
+      const conj = card.conjugations || {};
+      Object.entries(conj).forEach(([tense, forms]) => {
+        const block = document.createElement('div');
+        block.className = 'mini';
+        const tLabel = document.createElement('div');
+        tLabel.className = 'label';
+        tLabel.textContent = tense;
+        const val = document.createElement('div');
+        val.className = 'value';
+        val.textContent = Array.isArray(forms) ? forms.join(', ') : forms;
+        block.appendChild(tLabel);
+        block.appendChild(val);
+        grid.appendChild(block);
+      });
+      wrapper.appendChild(grid);
+      return wrapper;
+    }
+
+    function grade(action) {
+      if (!currentCard) return;
+      const [card] = queue;
+      queue = queue.slice(1);
+      completedCount += 1;
+      incrementAttempt(card.rank);
+      if (action === 'again') {
+        queue.push(card);
+      } else if (action === 'hard') {
+        queue.splice(Math.min(3, queue.length), 0, card);
+      } else if (action === 'medium') {
+        queue.push(card);
+      } // easy/good remove it entirely
+      const milestoneCount = Math.floor(completedCount / 50) * 50;
+      milestoneEl.textContent = milestoneCount >= 50 ? `You have finished ${milestoneCount} cards in this big deck.` : '—';
+      persistProgress();
+      nextCard();
+    }
+
+    function speakCurrent() {
+      if (!currentCard || !currentCard.pronunciation?.url) return;
+      const audio = new Audio(currentCard.pronunciation.url);
+      audio.play();
+    }
+
+    document.getElementById('startBig').addEventListener('click', () => startBigDeck(true));
+    document.getElementById('resumeBig').addEventListener('click', () => startBigDeck(false));
+    document.getElementById('applyDecks').addEventListener('click', applyExclusions);
+    document.getElementById('buildRetry').addEventListener('click', buildRetryDecks);
+    document.getElementById('revealAll').addEventListener('click', () => backEl.classList.toggle('hidden'));
+    speakBtn.addEventListener('click', speakCurrent);
+    gradeRow.addEventListener('click', (e) => {
+      const action = e.target?.dataset?.action;
+      if (action) grade(action);
+    });
+
+    loadData();
+  </script>
+</body>
+</html>
