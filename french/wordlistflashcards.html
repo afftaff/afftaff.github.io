@@ -413,6 +413,24 @@
       margin-top: 1.5rem;
     }
 
+    .deck-picker {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .deck-picker label {
+      margin: 0;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    .deck-picker select {
+      min-width: 220px;
+    }
+
     .grade-btn {
       border: none;
       padding: 12px;
@@ -554,6 +572,13 @@
         <button id="nextCard" class="primary" disabled>Next Word →</button>
       </div>
 
+      <div class="deck-picker">
+        <label for="deckPicker">Choose deck:</label>
+        <select id="deckPicker" disabled>
+          <option>No decks available</option>
+        </select>
+      </div>
+
       <div class="grades" id="gradeRow" style="display:none;">
         <button class="grade-btn grade-again" data-offset="2" data-action="again">Again</button>
         <button class="grade-btn grade-hard" data-offset="5" data-action="hard">Hard</button>
@@ -601,6 +626,7 @@ and IPA and english pronuncation as well, and an English translation of the sent
       cachedCount: document.getElementById('cachedCount'),
       wordTotal: document.getElementById('wordTotal'),
       gradeRow: document.getElementById('gradeRow'),
+      deckPicker: document.getElementById('deckPicker'),
 
       headwordDisplay: document.getElementById('headwordDisplay'),
       posDisplay: document.getElementById('posDisplay'),
@@ -626,6 +652,7 @@ and IPA and english pronuncation as well, and an English translation of the sent
       currentWord: null,
       totalWords: 0,
       sentenceCount: 0,
+      selectedDeckIndex: 0,
     };
 
     const pendingDefinitions = new Map();
@@ -750,6 +777,35 @@ and IPA and english pronuncation as well, and an English translation of the sent
       dom.cachedCount.textContent = `${Object.keys(state.definitions || {}).length}`;
     }
 
+    function refreshDeckPicker() {
+      dom.deckPicker.innerHTML = '';
+      const total = state.filteredKeys.length;
+      if (!total) {
+        dom.deckPicker.innerHTML = '<option>No decks available</option>';
+        dom.deckPicker.disabled = true;
+        dom.startDeckBtn.disabled = true;
+        return;
+      }
+
+      const deckCount = Math.ceil(total / MAX_DECK);
+      state.selectedDeckIndex = Math.min(state.selectedDeckIndex, deckCount - 1);
+
+      for (let i = 0; i < deckCount; i++) {
+        const start = i * MAX_DECK;
+        const end = Math.min(start + MAX_DECK, total);
+        const firstWord = state.filteredKeys[start] || '—';
+        const lastWord = state.filteredKeys[end - 1] || '—';
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = `Deck ${i + 1}: ${firstWord} - ${lastWord}`;
+        dom.deckPicker.appendChild(option);
+      }
+
+      dom.deckPicker.disabled = false;
+      dom.deckPicker.value = `${state.selectedDeckIndex}`;
+      dom.startDeckBtn.disabled = false;
+    }
+
     function processText() {
       const input = dom.wordInput.value || '';
       const { map, totalWords, sentenceCount } = buildCountMapFromText(input);
@@ -758,13 +814,15 @@ and IPA and english pronuncation as well, and an English translation of the sent
       state.sentenceCount = sentenceCount;
       const { filteredKeys, processedLines } = applyFilters(map);
       state.filteredKeys = filteredKeys;
+      state.selectedDeckIndex = 0;
       dom.processedWords.value = processedLines.join('\n');
       dom.startDeckBtn.disabled = !filteredKeys.length;
-      
+
       dom.deckBadge.textContent = '0/0';
       dom.queueBadge.textContent = '0';
 
       updateSummary();
+      refreshDeckPicker();
       persistState();
     }
 
@@ -806,12 +864,56 @@ and IPA and english pronuncation as well, and an English translation of the sent
           systemInstruction: { parts: [{ text: geminiSystemInstruction }] }, contents: [{ parts: [{ text: term }] }]
         })
       });
-      const data = await response.json();
-      if (data.error) throw new Error(data.error.message);
-      const botText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      const responseText = await response.text();
+      let data = null;
+      try { data = JSON.parse(responseText); } catch (_) { data = null; }
+      if (!response.ok || data?.error) {
+        const err = new Error(data?.error?.message || `Request failed with status ${response.status}`);
+        err.rawResponse = responseText || response.statusText;
+        throw err;
+      }
+      const botText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
       if (!botText) throw new Error('No content returned.');
       const cards = parseGeminiFlashcards(botText, term);
       return cards[0];
+    }
+
+    function buildErrorDetails(err) {
+      const wrapper = document.createElement('div');
+      wrapper.style.gridColumn = '1 / -1';
+      wrapper.style.textAlign = 'center';
+      wrapper.style.color = 'var(--text-accent)';
+      wrapper.style.display = 'flex';
+      wrapper.style.flexDirection = 'column';
+      wrapper.style.gap = '12px';
+
+      const message = document.createElement('div');
+      message.textContent = `Error: ${err?.message || 'Unknown error'}`;
+      wrapper.appendChild(message);
+
+      if (err?.rawResponse) {
+        const details = document.createElement('details');
+        const summary = document.createElement('summary');
+        summary.textContent = 'See API response';
+        const pre = document.createElement('pre');
+        pre.style.textAlign = 'left';
+        pre.style.whiteSpace = 'pre-wrap';
+        pre.textContent = err.rawResponse;
+        details.appendChild(summary);
+        details.appendChild(pre);
+        wrapper.appendChild(details);
+      }
+
+      const skipBtn = document.createElement('button');
+      skipBtn.className = 'secondary';
+      skipBtn.style.alignSelf = 'center';
+      skipBtn.textContent = 'Skip this card';
+      skipBtn.addEventListener('click', () => {
+        skipCurrentCard();
+      });
+      wrapper.appendChild(skipBtn);
+
+      return wrapper;
     }
 
     // --- Rendering Logic ---
@@ -895,8 +997,10 @@ and IPA and english pronuncation as well, and an English translation of the sent
     function renderDefinition(word) {
       const entry = state.definitions[word];
       if (!entry || entry.error) {
-        dom.posDisplay.textContent = 'Error';
-        dom.miniGrid.innerHTML = `<div style="grid-column:1/-1; color:var(--text-accent); text-align:center;">${entry?.error || 'Error'}</div>`;
+        dom.headwordDisplay.textContent = entry?.term || word;
+        dom.posDisplay.textContent = 'API Error';
+        dom.miniGrid.innerHTML = '';
+        dom.miniGrid.appendChild(buildErrorDetails({ message: entry?.error || 'Error', rawResponse: entry?.rawResponse }));
         return;
       }
 
@@ -1021,8 +1125,11 @@ and IPA and english pronuncation as well, and an English translation of the sent
           updateSummary();
         } catch (err) {
           console.error(err);
-          state.definitions[word] = { error: err.message };
-          dom.miniGrid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-accent);">Error: ${err.message}</div>`;
+          state.definitions[word] = { error: err.message, rawResponse: err.rawResponse };
+          dom.headwordDisplay.textContent = word;
+          dom.posDisplay.textContent = 'API Error';
+          dom.miniGrid.innerHTML = '';
+          dom.miniGrid.appendChild(buildErrorDetails(state.definitions[word]));
           persistState();
         } finally {
           pendingDefinitions.delete(word);
@@ -1045,11 +1152,15 @@ and IPA and english pronuncation as well, and an English translation of the sent
       dom.nextCardBtn.disabled = true;
       dom.shuffleBtn.disabled = true;
       dom.gradeRow.style.display = 'none';
+      dom.deckPicker.innerHTML = '<option>No decks available</option>';
+      dom.deckPicker.disabled = true;
     }
 
     function startDeck() {
       if (!state.filteredKeys.length) return;
-      state.queue = state.filteredKeys.slice(0, MAX_DECK);
+      const startIndex = state.selectedDeckIndex * MAX_DECK;
+      const deckSlice = state.filteredKeys.slice(startIndex, startIndex + MAX_DECK);
+      state.queue = deckSlice;
       state.deckSize = state.queue.length;
       state.completed = 0;
       dom.startDeckBtn.disabled = false;
@@ -1085,6 +1196,10 @@ and IPA and english pronuncation as well, and an English translation of the sent
       state.queue.shift();
       state.completed += 1;
       showCard();
+    }
+
+    function skipCurrentCard() {
+      nextCard();
     }
 
     function shuffleDeck(keepCurrent = true) {
@@ -1155,11 +1270,16 @@ and IPA and english pronuncation as well, and an English translation of the sent
     dom.minOcc.addEventListener('input', processText);
     dom.maxOcc.addEventListener('input', processText);
     dom.removeDuplicates.addEventListener('change', processText);
-    dom.saveKey.addEventListener('click', saveApiKey);
-    dom.apiKey.addEventListener('change', () => localStorage.setItem(API_KEY_STORAGE, dom.apiKey.value.trim()));
+      dom.saveKey.addEventListener('click', saveApiKey);
+      dom.apiKey.addEventListener('change', () => localStorage.setItem(API_KEY_STORAGE, dom.apiKey.value.trim()));
+
+      dom.deckPicker.addEventListener('change', () => {
+        state.selectedDeckIndex = parseInt(dom.deckPicker.value, 10) || 0;
+      });
 
     // --- Init ---
     loadState();
+    refreshDeckPicker();
     loadApiKey();
     updateRangeExtras();
     if (dom.wordInput.value) processText();
