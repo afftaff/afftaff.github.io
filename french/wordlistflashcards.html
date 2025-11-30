@@ -854,7 +854,8 @@ and IPA and english pronuncation as well, and an English translation of the sent
       inner.appendChild(back);
       card.appendChild(inner);
       
-      card.addEventListener('click', () => {
+      card.addEventListener('click', (event) => {
+        if (event.target.closest('.speaker-btn')) return;
         card.classList.toggle('flipped');
       });
       
@@ -897,7 +898,8 @@ and IPA and english pronuncation as well, and an English translation of the sent
         dom.miniGrid.innerHTML = `<div style="grid-column:1/-1; color:var(--text-accent); text-align:center;">${entry?.error || 'Error'}</div>`;
         return;
       }
-      
+
+      dom.headwordDisplay.textContent = entry.term || word;
       dom.posDisplay.textContent = `${entry.pos ? entry.pos : ''}${entry.gender ? ' • ' + entry.gender : ''}`;
 
       const defs = entry.definitions || [];
