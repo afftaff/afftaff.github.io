@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>French Wordlist Flashcards</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --panel: #0f172a;
+      --accent: #22c55e;
+      --accent-2: #38bdf8;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #1f2937;
+      --card: linear-gradient(145deg, #111827, #0f172a);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, sans-serif;
+      background: radial-gradient(circle at 15% 20%, rgba(34,197,94,0.10), transparent 30%),
+                  radial-gradient(circle at 85% 0%, rgba(56,189,248,0.12), transparent 30%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15,23,42,0.85);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    header a { color: var(--muted); text-decoration: none; font-weight: 600; }
+    header a:hover { color: var(--text); }
+    main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    h1 { margin: 8px 0 12px; letter-spacing: -0.02em; }
+    .description { color: var(--muted); margin-bottom: 12px; }
+    .layout { display: grid; grid-template-columns: 1.2fr 1.3fr; gap: 18px; }
+    @media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      font-family: Menlo, Consolas, monospace;
+      font-size: 0.95rem;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0b1224;
+      color: var(--text);
+      resize: vertical;
+    }
+    fieldset {
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 12px 0;
+    }
+    legend { color: var(--muted); padding: 0 6px; }
+    label { display: block; margin: 6px 0; color: var(--muted); font-size: 0.95rem; }
+    input[type="number"], select, button {
+      background: #0b1224;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 8px 10px;
+      font-size: 0.95rem;
+    }
+    select, button { cursor: pointer; }
+    button.primary {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #f8fafc;
+      border: none;
+      font-weight: 700;
+    }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .controls { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .summary { margin: 10px 0; color: var(--muted); }
+    .small { color: var(--muted); font-size: 0.9rem; }
+    .progress { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+    progress { width: 100%; height: 10px; }
+    .card-shell { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 18px; min-height: 380px; }
+    .card { background: var(--card); border-radius: 14px; padding: 18px; border: 1px solid var(--border); box-shadow: 0 16px 40px rgba(0,0,0,0.35); min-height: 260px; position: relative; overflow: hidden; }
+    .face-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .prompt { font-size: 36px; margin: 12px 0 6px; }
+    .tagline { color: var(--muted); margin: 0 0 12px; }
+    .flip { perspective: 1200px; }
+    .flip-inner { position: relative; transform-style: preserve-3d; transition: transform 0.65s ease; cursor: pointer; min-height: 200px; }
+    .flip.show-back .flip-inner { transform: rotateY(180deg); }
+    .face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; padding: 16px; text-align: center; gap: 8px; }
+    .back { transform: rotateY(180deg); background: rgba(15,23,42,0.65); }
+    .meta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; color: var(--muted); font-weight: 600; }
+    .pill { padding: 6px 10px; border-radius: 12px; border: 1px solid var(--border); background: rgba(56,189,248,0.12); color: #bae6fd; }
+    .actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+    .secondary { border: 1px solid var(--border); background: transparent; color: var(--text); }
+    .defs { list-style: disc; padding-left: 20px; text-align: left; }
+    .examples { margin-top: 10px; }
+    .examples h4 { margin: 0 0 6px; color: var(--muted); }
+    .examples ul { padding-left: 20px; text-align: left; }
+    .deck-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 10px; margin-top: 10px; }
+    .stat { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 12px; color: var(--muted); }
+    .stat strong { display: block; color: var(--text); font-size: 1.1rem; }
+    .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(34,197,94,0.4); background: rgba(34,197,94,0.12); color: #bbf7d0; font-weight: 700; font-size: 0.9rem; }
+    .faded { opacity: 0.75; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div style="font-weight:700;">Wordlist Flashcards</div>
+      <small class="small">Paste text, filter words, then study in 50-card decks.</small>
+    </div>
+    <a href="./index.html">← Back to menu</a>
+  </header>
+  <main>
+    <h1>Build flashcards from any French text</h1>
+    <p class="description">We split your text into words, apply filters, fetch Wiktionary definitions + examples, then turn them into flip cards. Decks load in batches of 50 so you only fetch what you need.</p>
+    <div class="layout">
+      <section class="panel">
+        <h2>1) Input & filters</h2>
+        <textarea id="wordInput" placeholder="Collez votre texte ici..."></textarea>
+        <fieldset>
+          <legend>Word filters</legend>
+          <label><input type="checkbox" id="removeDuplicates" checked /> Remove duplicates in processed list</label>
+          <label>
+            Remove words with occurrences
+            <select id="underOverMode">
+              <option value="none">(no frequency filter)</option>
+              <option value="under">under</option>
+              <option value="over">over</option>
+              <option value="range">outside range</option>
+            </select>
+            <input type="number" id="threshold" min="1" placeholder="N" />
+            <span id="rangeExtras" style="display:none;">
+              (min)
+              <input type="number" id="minOcc" min="1" style="width:4rem;" />
+              (max)
+              <input type="number" id="maxOcc" min="1" style="width:4rem;" />
+            </span>
+          </label>
+          <p class="small">Occurrences are counted from the tokenised words (case-insensitive). Filters are applied on those counts; definitions are fetched once per remaining unique word.</p>
+        </fieldset>
+        <div class="actions">
+          <button id="processBtn" class="primary">Process text</button>
+          <button id="clearBtn" class="secondary">Clear</button>
+        </div>
+        <div class="summary" id="summary">No text processed yet.</div>
+        <label class="small">Filtered word list</label>
+        <textarea id="processedWords" readonly placeholder="Processed word list (one per line) will appear here..."></textarea>
+        <div class="small" id="cacheInfo"></div>
+      </section>
+      <section>
+        <div class="panel card-shell">
+          <h2>2) Flashcards</h2>
+          <div class="controls">
+            <button id="startDeck" class="primary" disabled>Start / continue deck</button>
+            <button id="nextCard" class="secondary" disabled>Next card</button>
+            <button id="flipCard" class="secondary" disabled>Flip</button>
+          </div>
+          <div class="progress" id="progressRow" style="display:none;">
+            <progress id="progressBar" value="0" max="100"></progress>
+            <span id="progressText" class="small"></span>
+          </div>
+          <div class="card flip" id="card">
+            <div class="flip-inner" id="flipInner">
+              <div class="face front" id="frontFace">
+                <div class="face-label">Prompt</div>
+                <div class="prompt" id="prompt">Process text to build your deck</div>
+                <p class="tagline" id="tagline"></p>
+              </div>
+              <div class="face back" id="backFace">
+                <div class="face-label">Answer</div>
+                <div id="answer"></div>
+              </div>
+            </div>
+          </div>
+          <div class="actions" style="margin-top:14px;">
+            <span class="chip" id="deckBadge">Deck 0 / 0</span>
+            <span class="chip faded" id="queueBadge">0 left</span>
+          </div>
+          <div class="deck-info">
+            <div class="stat">Deck size <strong id="deckSize">0</strong></div>
+            <div class="stat">Remaining <strong id="remaining">0</strong></div>
+            <div class="stat">Definitions cached <strong id="cachedCount">0</strong></div>
+            <div class="stat">Word count <strong id="wordTotal">0</strong></div>
+          </div>
+          <div class="small" id="status"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const LS_KEY = 'wordlist-flashcards-state-v1';
+    const MAX_DECK = 50;
+
+    const state = {
+      countMap: new Map(),
+      filteredKeys: [],
+      definitions: {},
+      inputText: '',
+      deckIndex: 0,
+      queue: [],
+      currentWord: null,
+    };
+
+    const wordInput = document.getElementById('wordInput');
+    const processedWords = document.getElementById('processedWords');
+    const summaryEl = document.getElementById('summary');
+    const cacheInfo = document.getElementById('cacheInfo');
+    const processBtn = document.getElementById('processBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const startDeckBtn = document.getElementById('startDeck');
+    const nextCardBtn = document.getElementById('nextCard');
+    const flipCardBtn = document.getElementById('flipCard');
+    const progressRow = document.getElementById('progressRow');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const statusEl = document.getElementById('status');
+    const deckSizeEl = document.getElementById('deckSize');
+    const remainingEl = document.getElementById('remaining');
+    const deckBadge = document.getElementById('deckBadge');
+    const queueBadge = document.getElementById('queueBadge');
+    const cachedCountEl = document.getElementById('cachedCount');
+    const wordTotalEl = document.getElementById('wordTotal');
+    const flipInner = document.getElementById('flipInner');
+    const promptEl = document.getElementById('prompt');
+    const taglineEl = document.getElementById('tagline');
+    const answerEl = document.getElementById('answer');
+
+    // --- utilities ---
+    function normaliseWord(raw) { return raw.trim().toLowerCase(); }
+    function splitTextToSentences(text) {
+      if (!text) return [];
+      const normalised = text.replace(/\s+/g, ' ').trim();
+      if (!normalised) return [];
+      const matches = normalised.match(/[^.!?]+[.!?]*/g);
+      if (!matches) return [];
+      return matches.map(s => s.trim()).filter(Boolean);
+    }
+    function sentenceToWords(sentence) {
+      const cleaned = sentence.replace(/[^A-Za-zÀ-ÖØ-öø-ÿœŒ'-]+/g, ' ');
+      return cleaned.split(/\s+/).map(w => w.trim()).filter(w => w.length > 0);
+    }
+    function buildCountMapFromText(inputText) {
+      const sentences = splitTextToSentences(inputText);
+      const map = new Map();
+      let totalWords = 0;
+      for (const sentence of sentences) {
+        const words = sentenceToWords(sentence);
+        for (const rawWord of words) {
+          const key = normaliseWord(rawWord);
+          if (!key) continue;
+          totalWords++;
+          const existing = map.get(key);
+          if (existing) {
+            existing.count += 1;
+          } else {
+            map.set(key, { original: rawWord, count: 1 });
+          }
+        }
+      }
+      return { map, totalWords, sentenceCount: sentences.length };
+    }
+
+    function applyFilters(countMap) {
+      const mode = document.getElementById('underOverMode').value;
+      const removeDuplicates = document.getElementById('removeDuplicates').checked;
+      let thresholdVal = parseInt(document.getElementById('threshold').value, 10);
+      if (Number.isNaN(thresholdVal)) thresholdVal = null;
+      let minOcc = parseInt(document.getElementById('minOcc').value, 10);
+      let maxOcc = parseInt(document.getElementById('maxOcc').value, 10);
+      if (Number.isNaN(minOcc)) minOcc = null;
+      if (Number.isNaN(maxOcc)) maxOcc = null;
+
+      const filteredKeys = [];
+      const processedLines = [];
+      for (const [key, info] of countMap.entries()) {
+        const count = info.count;
+        let keep = true;
+        if (mode === 'under' && thresholdVal != null && count < thresholdVal) keep = false;
+        else if (mode === 'over' && thresholdVal != null && count > thresholdVal) keep = false;
+        else if (mode === 'range') {
+          if (minOcc != null && count < minOcc) keep = false;
+          if (maxOcc != null && count > maxOcc) keep = false;
+        }
+        if (!keep) continue;
+        filteredKeys.push(key);
+        if (removeDuplicates) processedLines.push(info.original);
+        else {
+          for (let i = 0; i < count; i++) processedLines.push(info.original);
+        }
+      }
+      return { filteredKeys, processedLines };
+    }
+
+    // --- wiktionary ---
+    function stripHtml(html) {
+      return html
+        .replace(/<[^>]*>/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .trim();
+    }
+
+    function extractFrenchData(data) {
+      const definitions = [];
+      const examples = [];
+      const defSeen = new Set();
+      const exSeen = new Set();
+      let pos = '';
+      let gender = '';
+
+      for (const value of Object.values(data)) {
+        if (!Array.isArray(value)) continue;
+        for (const entry of value) {
+          if (entry.language && entry.language !== 'French') continue;
+          const rawPos = entry.partOfSpeech || entry.part_of_speech || entry.pos;
+          if (!pos && rawPos) pos = rawPos;
+          const rawGender = entry.gender || (Array.isArray(entry.genders) ? entry.genders[0] : '');
+          if (!gender && rawGender) gender = rawGender;
+
+          const rawDefs = entry.definitions || entry.senses || [];
+          for (const d of rawDefs) {
+            let defHtml = '';
+            let dPos = '';
+            let dGender = '';
+            if (typeof d === 'string') {
+              defHtml = d;
+            } else if (d && typeof d === 'object') {
+              defHtml = d.definition || d.gloss || '';
+              dPos = d.partOfSpeech || d.pos || '';
+              dGender = d.gender || (Array.isArray(d.genders) ? d.genders[0] : '');
+            }
+            if (!pos && dPos) pos = dPos;
+            if (!gender && dGender) gender = dGender;
+            const defText = stripHtml(defHtml);
+            if (defText && !defSeen.has(defText)) {
+              defSeen.add(defText);
+              definitions.push(defText);
+            }
+
+            let exList = [];
+            if (d && Array.isArray(d.examples)) exList = d.examples;
+            for (const ex of exList) {
+              let exHtml = '';
+              if (typeof ex === 'string') exHtml = ex;
+              else if (ex && typeof ex === 'object') exHtml = ex.example || ex.text || '';
+              const exText = stripHtml(exHtml);
+              if (exText && !exSeen.has(exText)) {
+                exSeen.add(exText);
+                examples.push(exText);
+              }
+            }
+          }
+        }
+      }
+      return { definitions, examples, pos, gender };
+    }
+
+    async function fetchDefinitionForWord(word) {
+      const endpoint = 'https://en.wiktionary.org/api/rest_v1/page/definition/';
+      const url = endpoint + encodeURIComponent(word);
+      try {
+        const res = await fetch(url, { headers: { accept: 'application/json' } });
+        if (!res.ok) return { error: `HTTP ${res.status} ${res.statusText}` };
+        const data = await res.json();
+        const frenchData = extractFrenchData(data);
+        if (!frenchData.definitions.length && !frenchData.examples.length) {
+          return { error: 'No French definitions or examples found in Wiktionary data.' };
+        }
+        return frenchData;
+      } catch (err) {
+        return { error: String(err) };
+      }
+    }
+
+    async function fetchDefinitionsForWords(words, onProgress) {
+      const out = { ...state.definitions };
+      let completed = 0;
+      for (const word of words) {
+        if (!word) continue;
+        if (!out[word]) {
+          const result = await fetchDefinitionForWord(word);
+          out[word] = result;
+        }
+        completed += 1;
+        if (onProgress) onProgress(completed, words.length, word, out[word]);
+      }
+      return out;
+    }
+
+    // --- flashcards ---
+    function computeDeckSlice(index) {
+      const start = index * MAX_DECK;
+      const slice = state.filteredKeys.slice(start, start + MAX_DECK);
+      return { start, slice };
+    }
+
+    function buildCard(word) {
+      const entry = state.definitions[word] || {};
+      const pos = entry.pos || '';
+      const gender = entry.gender || '';
+      const prompt = word + (pos ? ` (${pos})` : '');
+      const meaning = entry.definitions?.[0] || (entry.error ? entry.error : '—');
+      const defsList = entry.definitions || [];
+      const examples = entry.examples || [];
+
+      promptEl.textContent = prompt;
+      taglineEl.textContent = gender ? `Gender: ${gender}` : '';
+
+      const container = document.createElement('div');
+      const meaningEl = document.createElement('div');
+      meaningEl.innerHTML = `<strong>Meaning:</strong> ${meaning}`;
+      container.appendChild(meaningEl);
+
+      if (defsList.length > 1) {
+        const ul = document.createElement('ul');
+        ul.className = 'defs';
+        defsList.forEach((d, idx) => {
+          const li = document.createElement('li');
+          li.textContent = d;
+          if (idx === 0) li.style.fontWeight = '700';
+          ul.appendChild(li);
+        });
+        container.appendChild(ul);
+      }
+
+      if (examples.length) {
+        const exWrap = document.createElement('div');
+        exWrap.className = 'examples';
+        const title = document.createElement('h4');
+        title.textContent = 'Example sentences';
+        const exList = document.createElement('ul');
+        examples.slice(0, 3).forEach(ex => {
+          const li = document.createElement('li');
+          li.textContent = ex;
+          exList.appendChild(li);
+        });
+        exWrap.append(title, exList);
+        container.appendChild(exWrap);
+      }
+
+      answerEl.innerHTML = '';
+      answerEl.appendChild(container);
+    }
+
+    function updateBadges() {
+      const deckCount = Math.ceil(state.filteredKeys.length / MAX_DECK) || 0;
+      deckBadge.textContent = `Deck ${state.filteredKeys.length ? state.deckIndex + 1 : 0} / ${deckCount}`;
+      queueBadge.textContent = `${state.queue.length} left in deck`;
+      deckSizeEl.textContent = Math.min(MAX_DECK, state.filteredKeys.length - state.deckIndex * MAX_DECK) || 0;
+      remainingEl.textContent = state.queue.length;
+      cachedCountEl.textContent = Object.keys(state.definitions || {}).length;
+      wordTotalEl.textContent = state.filteredKeys.length;
+    }
+
+    function setLoading(isLoading) {
+      processBtn.disabled = isLoading;
+      startDeckBtn.disabled = isLoading || !state.filteredKeys.length;
+      nextCardBtn.disabled = isLoading || !state.queue.length;
+      flipCardBtn.disabled = isLoading || !state.queue.length;
+    }
+
+    function showStatus(text) { statusEl.textContent = text; }
+
+    function flipCard() {
+      flipInner.classList.toggle('show-back');
+    }
+
+    function resetCard() {
+      flipInner.classList.remove('show-back');
+      promptEl.textContent = 'Process text to build your deck';
+      taglineEl.textContent = '';
+      answerEl.innerHTML = '';
+    }
+
+    function advanceCard() {
+      if (!state.queue.length) {
+        if ((state.deckIndex + 1) * MAX_DECK < state.filteredKeys.length) {
+          showStatus('Deck finished! Click start to load the next 50.');
+          startDeckBtn.disabled = false;
+        } else {
+          showStatus('All decks completed!');
+        }
+        updateBadges();
+        return;
+      }
+      state.currentWord = state.queue.shift();
+      buildCard(state.currentWord);
+      updateBadges();
+      saveState();
+      flipInner.classList.remove('show-back');
+    }
+
+    async function startDeck() {
+      if (!state.filteredKeys.length) {
+        showStatus('Process text first.');
+        return;
+      }
+      const { slice } = computeDeckSlice(state.deckIndex);
+      if (!slice.length) {
+        showStatus('No more words in the list.');
+        return;
+      }
+      setLoading(true);
+      progressRow.style.display = 'flex';
+      progressBar.value = 0;
+      progressText.textContent = `0 / ${slice.length}`;
+      showStatus('Fetching definitions for this deck...');
+
+      state.definitions = await fetchDefinitionsForWords(slice, (done, total, word) => {
+        const percent = Math.round((done / total) * 100);
+        progressBar.value = percent;
+        progressText.textContent = `${done} / ${total} (${percent}%) – last: ${word}`;
+      });
+      state.queue = [...slice];
+      saveState();
+      progressRow.style.display = 'none';
+      setLoading(false);
+      showStatus('Definitions ready. Flip cards to study.');
+      advanceCard();
+      nextCardBtn.disabled = false;
+      flipCardBtn.disabled = false;
+    }
+
+    function saveState() {
+      const payload = {
+        inputText: state.inputText,
+        filteredKeys: state.filteredKeys,
+        definitions: state.definitions,
+        deckIndex: state.deckIndex,
+        queue: state.queue,
+      };
+      try { localStorage.setItem(LS_KEY, JSON.stringify(payload)); } catch (_) {}
+      cacheInfo.textContent = `Cached ${payload.filteredKeys.length} word(s).`;
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(LS_KEY);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        state.inputText = saved.inputText || '';
+        state.filteredKeys = saved.filteredKeys || [];
+        state.definitions = saved.definitions || {};
+        state.deckIndex = saved.deckIndex || 0;
+        state.queue = saved.queue || [];
+        wordInput.value = state.inputText;
+        processedWords.value = state.filteredKeys.join('\n');
+        wordTotalEl.textContent = state.filteredKeys.length;
+        cacheInfo.textContent = `Restored ${state.filteredKeys.length} cached word(s).`;
+        if (state.filteredKeys.length) startDeckBtn.disabled = false;
+        if (state.queue.length) {
+          buildCard(state.queue[0]);
+          nextCardBtn.disabled = false;
+          flipCardBtn.disabled = false;
+        }
+        updateBadges();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function clearState() {
+      Object.assign(state, {
+        countMap: new Map(),
+        filteredKeys: [],
+        definitions: {},
+        inputText: '',
+        deckIndex: 0,
+        queue: [],
+        currentWord: null,
+      });
+      try { localStorage.removeItem(LS_KEY); } catch (_) {}
+      processedWords.value = '';
+      wordInput.value = '';
+      resetCard();
+      updateBadges();
+      summaryEl.textContent = 'Cleared.';
+      startDeckBtn.disabled = true;
+      nextCardBtn.disabled = true;
+      flipCardBtn.disabled = true;
+      cacheInfo.textContent = '';
+    }
+
+    function renderSummary(totalWords, uniqueCount, keptCount, sentenceCount) {
+      summaryEl.textContent = `Sentences: ${sentenceCount} | Total words: ${totalWords} | Unique words: ${uniqueCount} | After filters: ${keptCount}`;
+    }
+
+    function renderProcessedList(processedLines) {
+      processedWords.value = processedLines.join('\n');
+    }
+
+    // --- event wiring ---
+    document.getElementById('underOverMode').addEventListener('change', (e) => {
+      const mode = e.target.value;
+      const extras = document.getElementById('rangeExtras');
+      if (mode === 'range') extras.style.display = 'inline';
+      else extras.style.display = 'none';
+    });
+
+    processBtn.addEventListener('click', () => {
+      const text = wordInput.value || '';
+      state.inputText = text;
+      const { map, totalWords, sentenceCount } = buildCountMapFromText(text);
+      state.countMap = map;
+      const { filteredKeys, processedLines } = applyFilters(map);
+      state.filteredKeys = filteredKeys;
+      state.deckIndex = 0;
+      state.queue = [];
+      renderProcessedList(processedLines);
+      renderSummary(totalWords, map.size, filteredKeys.length, sentenceCount);
+      startDeckBtn.disabled = filteredKeys.length === 0;
+      nextCardBtn.disabled = true;
+      flipCardBtn.disabled = true;
+      deckBadge.textContent = `Deck ${filteredKeys.length ? 1 : 0} / ${Math.ceil(filteredKeys.length / MAX_DECK) || 0}`;
+      queueBadge.textContent = `${state.queue.length} left in deck`;
+      cacheInfo.textContent = '';
+      saveState();
+      resetCard();
+      updateBadges();
+      showStatus(filteredKeys.length ? 'Ready to start the first 50-card deck.' : 'Nothing to study after filters.');
+    });
+
+    clearBtn.addEventListener('click', clearState);
+    startDeckBtn.addEventListener('click', startDeck);
+    nextCardBtn.addEventListener('click', () => {
+      advanceCard();
+      if (!state.queue.length && (state.deckIndex + 1) * MAX_DECK < state.filteredKeys.length) {
+        state.deckIndex += 1;
+        saveState();
+      }
+    });
+    flipCardBtn.addEventListener('click', flipCard);
+    flipInner.addEventListener('click', flipCard);
+
+    window.addEventListener('beforeunload', saveState);
+
+    loadState();
+  </script>
+</body>
+</html>
