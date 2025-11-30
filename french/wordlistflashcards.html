@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>French Wordlist Flashcards (Gemini per card)</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --panel: #0f172a;
+      --accent: #22c55e;
+      --accent-2: #38bdf8;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #1f2937;
+      --card: linear-gradient(145deg, #111827, #0f172a);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, sans-serif;
+      background: radial-gradient(circle at 15% 20%, rgba(34,197,94,0.10), transparent 30%),
+                  radial-gradient(circle at 85% 0%, rgba(56,189,248,0.12), transparent 30%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15,23,42,0.85);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    header a { color: var(--muted); text-decoration: none; font-weight: 600; }
+    header a:hover { color: var(--text); }
+    main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    h1 { margin: 8px 0 12px; letter-spacing: -0.02em; }
+    .description { color: var(--muted); margin-bottom: 12px; }
+    .layout { display: grid; grid-template-columns: 1.2fr 1.3fr; gap: 18px; }
+    @media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      font-family: Menlo, Consolas, monospace;
+      font-size: 0.95rem;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0b1224;
+      color: var(--text);
+      resize: vertical;
+    }
+    fieldset {
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 12px 0;
+    }
+    legend { color: var(--muted); padding: 0 6px; }
+    label { display: block; margin: 6px 0; color: var(--muted); font-size: 0.95rem; }
+    input[type="number"], select, button, input[type="text"] {
+      background: #0b1224;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 8px 10px;
+      font-size: 0.95rem;
+    }
+    select, button { cursor: pointer; }
+    button.primary {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #f8fafc;
+      border: none;
+      font-weight: 700;
+    }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .controls { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .summary { margin: 10px 0; color: var(--muted); }
+    .small { color: var(--muted); font-size: 0.9rem; }
+    .progress { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+    progress { width: 100%; height: 10px; }
+    .card-shell { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 18px; min-height: 380px; }
+    .card { background: var(--card); border-radius: 14px; padding: 18px; border: 1px solid var(--border); box-shadow: 0 16px 40px rgba(0,0,0,0.35); min-height: 260px; position: relative; overflow: hidden; }
+    .face-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .prompt { font-size: 36px; margin: 12px 0 6px; }
+    .tagline { color: var(--muted); margin: 0 0 12px; }
+    .flip { perspective: 1200px; }
+    .flip-inner { position: relative; transform-style: preserve-3d; transition: transform 0.65s ease; cursor: pointer; min-height: 200px; }
+    .flip.show-back .flip-inner { transform: rotateY(180deg); }
+    .face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; padding: 16px; text-align: center; gap: 8px; }
+    .back { transform: rotateY(180deg); background: rgba(15,23,42,0.65); }
+    .meta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; color: var(--muted); font-weight: 600; }
+    .pill { padding: 6px 10px; border-radius: 12px; border: 1px solid var(--border); background: rgba(56,189,248,0.12); color: #bae6fd; }
+    .actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+    .secondary { border: 1px solid var(--border); background: transparent; color: var(--text); }
+    .defs { list-style: disc; padding-left: 20px; text-align: left; }
+    .examples { margin-top: 10px; }
+    .examples h4 { margin: 0 0 6px; color: var(--muted); }
+    .examples ul { padding-left: 20px; text-align: left; }
+    .deck-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 10px; margin-top: 10px; }
+    .stat { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 12px; color: var(--muted);} 
+    .stat strong { display: block; color: var(--text); font-size: 1.1rem; }
+    .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(34,197,94,0.4); background: rgba(34,197,94,0.12); color: #bbf7d0; font-weight: 700; font-size: 0.9rem; }
+    .faded { opacity: 0.75; }
+    .input-row { display: grid; gap: 8px; grid-template-columns: 1fr auto; align-items: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div style="font-weight:700;">Wordlist Flashcards (Gemini per word)</div>
+      <small class="small">Paste text, filter words, then fetch Gemini answers as you study.</small>
+    </div>
+    <a href="./index.html">← Back to menu</a>
+  </header>
+  <main>
+    <h1>Build flashcards from any French text</h1>
+    <p class="description">We split your text into words, apply filters, and call Gemini for each card as you progress through the deck. Responses are cached locally so you only call the API once per word.</p>
+    <div class="layout">
+      <section class="panel">
+        <h2>1) Input & filters</h2>
+        <textarea id="wordInput" placeholder="Collez votre texte ici..."></textarea>
+        <fieldset>
+          <legend>Word filters</legend>
+          <label><input type="checkbox" id="removeDuplicates" checked /> Remove duplicates in processed list</label>
+          <label>
+            Remove words with occurrences
+            <select id="underOverMode">
+              <option value="none">(no frequency filter)</option>
+              <option value="under">under</option>
+              <option value="over">over</option>
+              <option value="range">outside range</option>
+            </select>
+            <input type="number" id="threshold" min="1" placeholder="N" />
+            <span id="rangeExtras" style="display:none;">
+              (min)
+              <input type="number" id="minOcc" min="1" style="width:4rem;" />
+              (max)
+              <input type="number" id="maxOcc" min="1" style="width:4rem;" />
+            </span>
+          </label>
+          <p class="small">Occurrences are counted from the tokenised words (case-insensitive). Filters are applied on those counts; Gemini calls happen one word at a time while studying.</p>
+        </fieldset>
+        <div class="actions">
+          <button id="processBtn" class="primary">Process text</button>
+          <button id="clearBtn" class="secondary">Clear</button>
+        </div>
+        <label class="small" for="apiKey">Google AI Studio API key (stored locally)</label>
+        <div class="input-row">
+          <input type="text" id="apiKey" placeholder="AIza..." />
+          <button id="saveKey" class="secondary">Save key</button>
+        </div>
+        <div class="summary" id="summary">No text processed yet.</div>
+        <label class="small">Filtered word list</label>
+        <textarea id="processedWords" readonly placeholder="Processed word list (one per line) will appear here..."></textarea>
+        <div class="small" id="cacheInfo"></div>
+      </section>
+      <section>
+        <div class="panel card-shell">
+          <h2>2) Flashcards</h2>
+          <div class="controls">
+            <button id="startDeck" class="primary" disabled>Start / continue deck</button>
+            <button id="nextCard" class="secondary" disabled>Next card</button>
+            <button id="flipCard" class="secondary" disabled>Flip</button>
+          </div>
+          <div class="progress" id="progressRow" style="display:none;">
+            <progress id="progressBar" value="0" max="100"></progress>
+            <span id="progressText" class="small"></span>
+          </div>
+          <div class="card flip" id="card">
+            <div class="flip-inner" id="flipInner">
+              <div class="face front" id="frontFace">
+                <div class="face-label">Prompt</div>
+                <div class="prompt" id="prompt">Process text to build your deck</div>
+                <p class="tagline" id="tagline"></p>
+              </div>
+              <div class="face back" id="backFace">
+                <div class="face-label">Answer</div>
+                <div id="answer"></div>
+              </div>
+            </div>
+          </div>
+          <div class="actions" style="margin-top:14px;">
+            <span class="chip" id="deckBadge">Deck 0 / 0</span>
+            <span class="chip faded" id="queueBadge">0 left</span>
+            <span class="chip faded" id="cachedCount">0 cached</span>
+          </div>
+          <div class="deck-info">
+            <div class="stat"><strong id="wordTotal">0</strong>Total filtered words</div>
+            <div class="stat"><strong id="deckSize">0</strong>Deck size (max 50)</div>
+            <div class="stat"><strong id="remaining">0</strong>Remaining this deck</div>
+          </div>
+          <p id="status" class="small" style="margin-top:12px;"></p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'french-wordlist-gemini-state-v1';
+    const API_KEY_STORAGE = 'frenchWordlistGeminiKey';
+    const MAX_DECK = 50;
+
+    const geminiSystemInstruction = `I will write a FRENCH word and i want the definition of word 
+and IPA and english pronuncation as well, and an English translation of the sentence in brackets:
+[flâneur <m> (noun) ///flɑ.nœʁ/// +++flah-nur+++ | an aimless wanderer or stroller | Le flâneur observait la ville sans se presser. (The stroller watched the city without hurrying.)]`;
+
+    const dom = {
+      wordInput: document.getElementById('wordInput'),
+      processedWords: document.getElementById('processedWords'),
+      summary: document.getElementById('summary'),
+      cacheInfo: document.getElementById('cacheInfo'),
+      processBtn: document.getElementById('processBtn'),
+      clearBtn: document.getElementById('clearBtn'),
+      startDeckBtn: document.getElementById('startDeck'),
+      nextCardBtn: document.getElementById('nextCard'),
+      flipCardBtn: document.getElementById('flipCard'),
+      progressRow: document.getElementById('progressRow'),
+      progressBar: document.getElementById('progressBar'),
+      progressText: document.getElementById('progressText'),
+      status: document.getElementById('status'),
+      deckSize: document.getElementById('deckSize'),
+      remaining: document.getElementById('remaining'),
+      deckBadge: document.getElementById('deckBadge'),
+      queueBadge: document.getElementById('queueBadge'),
+      cachedCount: document.getElementById('cachedCount'),
+      wordTotal: document.getElementById('wordTotal'),
+      flipInner: document.getElementById('flipInner'),
+      prompt: document.getElementById('prompt'),
+      tagline: document.getElementById('tagline'),
+      answer: document.getElementById('answer'),
+      removeDuplicates: document.getElementById('removeDuplicates'),
+      modeSelect: document.getElementById('underOverMode'),
+      threshold: document.getElementById('threshold'),
+      minOcc: document.getElementById('minOcc'),
+      maxOcc: document.getElementById('maxOcc'),
+      rangeExtras: document.getElementById('rangeExtras'),
+      apiKey: document.getElementById('apiKey'),
+      saveKey: document.getElementById('saveKey'),
+    };
+
+    const state = {
+      countMap: new Map(),
+      filteredKeys: [],
+      definitions: {},
+      queue: [],
+      deckIndex: 0,
+      currentWord: null,
+      totalWords: 0,
+      sentenceCount: 0,
+    };
+
+    // --- storage helpers ---
+    function persistState() {
+      const payload = {
+        inputText: dom.wordInput.value,
+        filteredKeys: state.filteredKeys,
+        definitions: state.definitions,
+        settings: {
+          removeDuplicates: dom.removeDuplicates.checked,
+          mode: dom.modeSelect.value,
+          threshold: dom.threshold.value,
+          minOcc: dom.minOcc.value,
+          maxOcc: dom.maxOcc.value,
+        },
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    }
+
+    function loadState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        if (data.inputText) dom.wordInput.value = data.inputText;
+        if (data.settings) {
+          dom.removeDuplicates.checked = !!data.settings.removeDuplicates;
+          dom.modeSelect.value = data.settings.mode || 'none';
+          dom.threshold.value = data.settings.threshold || '';
+          dom.minOcc.value = data.settings.minOcc || '';
+          dom.maxOcc.value = data.settings.maxOcc || '';
+        }
+        state.filteredKeys = Array.isArray(data.filteredKeys) ? data.filteredKeys : [];
+        state.definitions = data.definitions || {};
+      } catch (err) { console.error('Load state failed', err); }
+    }
+
+    function loadApiKey() {
+      const saved = localStorage.getItem(API_KEY_STORAGE);
+      if (saved) dom.apiKey.value = saved;
+      return dom.apiKey.value.trim();
+    }
+
+    function saveApiKey() {
+      const val = dom.apiKey.value.trim();
+      if (!val) return;
+      localStorage.setItem(API_KEY_STORAGE, val);
+      dom.status.textContent = 'API key saved locally.';
+      setTimeout(() => dom.status.textContent = '', 2000);
+    }
+
+    // --- text processing ---
+    function normaliseWord(raw) { return raw.trim().toLowerCase(); }
+    function splitTextToSentences(text) {
+      if (!text) return [];
+      const normalised = text.replace(/\s+/g, ' ').trim();
+      if (!normalised) return [];
+      const matches = normalised.match(/[^.!?]+[.!?]*/g);
+      if (!matches) return [];
+      return matches.map(s => s.trim()).filter(Boolean);
+    }
+    function sentenceToWords(sentence) {
+      const cleaned = sentence.replace(/[^A-Za-zÀ-ÖØ-öø-ÿœŒ'-]+/g, ' ');
+      return cleaned.split(/\s+/).map(w => w.trim()).filter(w => w.length > 0);
+    }
+    function buildCountMapFromText(inputText) {
+      const sentences = splitTextToSentences(inputText);
+      const map = new Map();
+      let totalWords = 0;
+      for (const sentence of sentences) {
+        const words = sentenceToWords(sentence);
+        for (const rawWord of words) {
+          const key = normaliseWord(rawWord);
+          if (!key) continue;
+          totalWords++;
+          const existing = map.get(key);
+          if (existing) existing.count += 1; else map.set(key, { original: rawWord, count: 1 });
+        }
+      }
+      return { map, totalWords, sentenceCount: sentences.length };
+    }
+
+    function applyFilters(countMap) {
+      const mode = dom.modeSelect.value;
+      const removeDuplicates = dom.removeDuplicates.checked;
+      let thresholdVal = parseInt(dom.threshold.value, 10);
+      if (Number.isNaN(thresholdVal)) thresholdVal = null;
+      let minOcc = parseInt(dom.minOcc.value, 10);
+      let maxOcc = parseInt(dom.maxOcc.value, 10);
+      if (Number.isNaN(minOcc)) minOcc = null;
+      if (Number.isNaN(maxOcc)) maxOcc = null;
+
+      const filteredKeys = [];
+      const processedLines = [];
+      for (const [key, info] of countMap.entries()) {
+        const count = info.count;
+        let keep = true;
+        if (mode === 'under' && thresholdVal != null && count < thresholdVal) keep = false;
+        else if (mode === 'over' && thresholdVal != null && count > thresholdVal) keep = false;
+        else if (mode === 'range') {
+          if (minOcc != null && count < minOcc) keep = false;
+          if (maxOcc != null && count > maxOcc) keep = false;
+        }
+        if (!keep) continue;
+        filteredKeys.push(key);
+        if (removeDuplicates) processedLines.push(info.original);
+        else { for (let i = 0; i < count; i++) processedLines.push(info.original); }
+      }
+      return { filteredKeys, processedLines };
+    }
+
+    function updateRangeExtras() {
+      dom.rangeExtras.style.display = dom.modeSelect.value === 'range' ? 'inline' : 'none';
+    }
+
+    function updateSummary() {
+      dom.summary.textContent = `${state.filteredKeys.length} unique filtered words across ${state.totalWords} tokens (${state.sentenceCount} sentences).`;
+      dom.wordTotal.textContent = state.filteredKeys.length;
+      dom.cacheInfo.textContent = `Cached definitions: ${Object.keys(state.definitions || {}).length}`;
+      dom.cachedCount.textContent = `${Object.keys(state.definitions || {}).length} cached`;
+    }
+
+    function processText() {
+      const input = dom.wordInput.value || '';
+      const { map, totalWords, sentenceCount } = buildCountMapFromText(input);
+      state.countMap = map;
+      state.totalWords = totalWords;
+      state.sentenceCount = sentenceCount;
+      const { filteredKeys, processedLines } = applyFilters(map);
+      state.filteredKeys = filteredKeys;
+      dom.processedWords.value = processedLines.join('\n');
+      dom.startDeckBtn.disabled = !filteredKeys.length;
+      dom.deckSize.textContent = Math.min(filteredKeys.length, MAX_DECK);
+      dom.remaining.textContent = Math.min(filteredKeys.length, MAX_DECK);
+      dom.queueBadge.textContent = `${Math.max(filteredKeys.length - state.deckIndex, 0)} left`;
+      updateSummary();
+      persistState();
+    }
+
+    // --- Gemini helpers ---
+    function parseGeminiFlashcards(text, originalTerm) {
+      const matches = Array.from(text.matchAll(/\[(.*?)\]/gs)).map(m => m[1]);
+      if (!matches.length) throw new Error('Unable to parse AI response. Try again.');
+      return matches.map((entry, idx) => {
+        let ipa = '';
+        let phonetic = '';
+        const ipaMatch = entry.match(/\/\/\/(.*?)\/\/\//);
+        if (ipaMatch) { ipa = ipaMatch[1]; entry = entry.replace(ipaMatch[0], ''); }
+        const phoneMatch = entry.match(/\+\+\+(.*?)\+\+\+/);
+        if (phoneMatch) { phonetic = phoneMatch[1]; entry = entry.replace(phoneMatch[0], ''); }
+        const parts = entry.split('|').map(p => p.trim()).filter(Boolean);
+        const head = parts[0] || '';
+        const meaning = parts[1] || '';
+        const example = parts[2] || '';
+        const genderMatch = head.match(/<(.*?)>/);
+        const posMatch = head.match(/\((.*?)\)/);
+        const term = head.replace(/<.*?>/g, '').replace(/\(.*?\)/g, '').trim() || `${originalTerm}-${idx + 1}`;
+        return { id: Date.now() + idx, term, ipa, phonetic, pos: posMatch ? posMatch[1] : '', definitions: [{ text: meaning || 'Definition unavailable', example }], gender: genderMatch ? genderMatch[1] : '' };
+      });
+    }
+
+    async function fetchGeminiDefinition(term) {
+      const apiKey = dom.apiKey.value.trim() || loadApiKey();
+      if (!apiKey) throw new Error('Add your Google AI Studio API key.');
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${apiKey}`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+          systemInstruction: { parts: [{ text: geminiSystemInstruction }] }, contents: [{ parts: [{ text: term }] }]
+        })
+      });
+      const data = await response.json();
+      if (data.error) throw new Error(data.error.message);
+      const botText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!botText) throw new Error('Gemini returned no content.');
+      const cards = parseGeminiFlashcards(botText, term);
+      return cards[0];
+    }
+
+    async function ensureDefinition(word) {
+      if (state.definitions[word]) { renderDefinition(word); return; }
+      dom.tagline.textContent = 'Fetching definition via Gemini...';
+      dom.answer.innerHTML = '<em>Loading...</em>';
+      try {
+        const def = await fetchGeminiDefinition(word);
+        state.definitions[word] = def;
+        renderDefinition(word);
+        persistState();
+      } catch (err) {
+        console.error(err);
+        state.definitions[word] = { error: err.message };
+        dom.answer.innerHTML = `<span style="color:#fca5a5;">${err.message}</span>`;
+        dom.tagline.textContent = 'Error fetching definition';
+        persistState();
+      }
+    }
+
+    function renderDefinition(word) {
+      const entry = state.definitions[word];
+      if (!entry || entry.error) {
+        dom.answer.innerHTML = `<span style="color:#fca5a5;">${entry?.error || 'No data available.'}</span>`;
+        dom.tagline.textContent = '';
+        return;
+      }
+      const defs = entry.definitions || [];
+      const first = defs[0] || {};
+      const example = first.example || '—';
+      dom.tagline.textContent = `${entry.pos ? `${entry.pos}` : ''}${entry.gender ? ` · ${entry.gender}` : ''}`.trim();
+      const listItems = defs.slice(1).map(d => `<li>${d.text}</li>`).join('');
+      dom.answer.innerHTML = `
+        <div><strong>Definition:</strong> ${first.text || '—'}</div>
+        <div class="meta-row" style="justify-content:center;">
+          ${entry.ipa ? `<span class="pill">/${entry.ipa}/</span>` : ''}
+          ${entry.phonetic ? `<span class="pill">${entry.phonetic}</span>` : ''}
+        </div>
+        ${defs.length > 1 ? `<ul class="defs">${listItems}</ul>` : ''}
+        <div class="examples">
+          <h4>Example</h4>
+          <p>${example}</p>
+        </div>
+      `;
+    }
+
+    // --- flashcard flow ---
+    function resetDeckUi() {
+      dom.progressRow.style.display = 'none';
+      dom.progressBar.value = 0;
+      dom.progressText.textContent = '';
+      dom.prompt.textContent = 'Process text to build your deck';
+      dom.answer.textContent = '';
+      dom.tagline.textContent = '';
+      dom.deckBadge.textContent = 'Deck 0 / 0';
+      dom.queueBadge.textContent = '0 left';
+      dom.remaining.textContent = '0';
+      dom.startDeckBtn.disabled = true;
+      dom.nextCardBtn.disabled = true;
+      dom.flipCardBtn.disabled = true;
+    }
+
+    function startDeck() {
+      if (!state.filteredKeys.length) return;
+      state.deckIndex = 0;
+      state.queue = state.filteredKeys.slice(0, MAX_DECK);
+      dom.progressRow.style.display = 'flex';
+      dom.startDeckBtn.disabled = false;
+      dom.nextCardBtn.disabled = false;
+      dom.flipCardBtn.disabled = false;
+      showCard();
+    }
+
+    function showCard() {
+      if (!state.queue.length || state.deckIndex >= state.queue.length) {
+        dom.prompt.textContent = 'Deck completed!';
+        dom.tagline.textContent = 'Add more words or process again to keep going.';
+        dom.answer.textContent = '';
+        dom.remaining.textContent = '0';
+        dom.deckBadge.textContent = `Deck ${state.queue.length} / ${state.queue.length}`;
+        dom.queueBadge.textContent = '0 left';
+        dom.nextCardBtn.disabled = true;
+        return;
+      }
+      const word = state.queue[state.deckIndex];
+      state.currentWord = word;
+      dom.flipInner.classList.remove('show-back');
+      dom.prompt.textContent = word;
+      dom.tagline.textContent = '';
+      dom.answer.innerHTML = '<em>Flip for answer once ready.</em>';
+      dom.deckBadge.textContent = `Deck ${state.deckIndex + 1} / ${state.queue.length}`;
+      dom.queueBadge.textContent = `${state.queue.length - state.deckIndex - 1} left`;
+      dom.remaining.textContent = `${state.queue.length - state.deckIndex}`;
+      const progress = ((state.deckIndex) / state.queue.length) * 100;
+      dom.progressBar.value = progress;
+      dom.progressText.textContent = `${state.deckIndex} / ${state.queue.length}`;
+      ensureDefinition(word);
+    }
+
+    function nextCard() {
+      if (!state.queue.length) return;
+      if (state.deckIndex < state.queue.length - 1) {
+        state.deckIndex += 1;
+        showCard();
+      } else {
+        state.deckIndex = state.queue.length;
+        showCard();
+      }
+    }
+
+    function toggleFlip() {
+      dom.flipInner.classList.toggle('show-back');
+    }
+
+    function clearAll() {
+      dom.wordInput.value = '';
+      dom.processedWords.value = '';
+      dom.summary.textContent = 'Cleared.';
+      dom.cacheInfo.textContent = '';
+      state.filteredKeys = [];
+      state.definitions = {};
+      state.queue = [];
+      state.deckIndex = 0;
+      persistState();
+      resetDeckUi();
+    }
+
+    // --- events ---
+    dom.processBtn.addEventListener('click', processText);
+    dom.clearBtn.addEventListener('click', clearAll);
+    dom.startDeckBtn.addEventListener('click', startDeck);
+    dom.nextCardBtn.addEventListener('click', nextCard);
+    dom.flipCardBtn.addEventListener('click', toggleFlip);
+    dom.flipInner.addEventListener('click', toggleFlip);
+    dom.modeSelect.addEventListener('change', () => { updateRangeExtras(); processText(); });
+    dom.threshold.addEventListener('input', processText);
+    dom.minOcc.addEventListener('input', processText);
+    dom.maxOcc.addEventListener('input', processText);
+    dom.removeDuplicates.addEventListener('change', processText);
+    dom.saveKey.addEventListener('click', saveApiKey);
+    dom.apiKey.addEventListener('change', () => localStorage.setItem(API_KEY_STORAGE, dom.apiKey.value.trim()));
+
+    // --- init ---
+    loadState();
+    loadApiKey();
+    updateRangeExtras();
+    if (dom.wordInput.value) processText();
+    updateSummary();
+  </script>
+</body>
+</html>
