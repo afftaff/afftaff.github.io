@@ -944,10 +944,29 @@ and IPA and english pronuncation as well, and an English translation of the sent
       pronActions.appendChild(speakIpaBtn);
       pronWrapper.appendChild(pronActions);
 
+      const contextWrapper = document.createElement('div');
+      const exampleParagraph = document.createElement('div');
+      exampleParagraph.textContent = exampleText;
+      contextWrapper.appendChild(exampleParagraph);
+
+      if (exampleText && exampleText !== '—') {
+        const exampleActions = document.createElement('div');
+        exampleActions.className = 'pron-actions';
+
+        const speakExampleBtn = document.createElement('button');
+        speakExampleBtn.type = 'button';
+        speakExampleBtn.className = 'speaker-btn';
+        speakExampleBtn.innerHTML = '🔈 Speak example';
+        speakExampleBtn.addEventListener('click', () => speak(exampleText));
+
+        exampleActions.appendChild(speakExampleBtn);
+        contextWrapper.appendChild(exampleActions);
+      }
+
       dom.miniGrid.innerHTML = '';
       dom.miniGrid.appendChild(createMiniCard('Meaning', '📖', meaningText));
       dom.miniGrid.appendChild(createMiniCard('Pronounce', '🗣️', pronWrapper));
-      dom.miniGrid.appendChild(createMiniCard('Context', '💬', exampleText));
+      dom.miniGrid.appendChild(createMiniCard('Context', '💬', contextWrapper));
     }
 
     async function ensureDefinition(word) {
