@@ -396,6 +396,7 @@
       justify-content: center;
       gap: 1rem;
       margin-top: 2rem;
+      flex-wrap: wrap;
     }
 
     .controls button {
@@ -404,6 +405,49 @@
       font-size: 1rem;
       font-weight: 600;
     }
+
+    .grades {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin-top: 1.5rem;
+    }
+
+    .grade-btn {
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #0b1120;
+    }
+
+    .grade-again { background: #f87171; }
+    .grade-hard { background: #fbbf24; }
+    .grade-medium { background: #34d399; }
+    .grade-easy { background: #60a5fa; }
+    .grade-good { background: #a78bfa; }
+
+    .pron-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .speaker-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-inset);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--primary);
+    }
+    .speaker-btn:hover { background: #fff; }
 
     .status-text {
       text-align: center;
@@ -506,7 +550,16 @@
       <!-- Controls -->
       <div class="controls">
         <button id="startDeck" class="primary" disabled>Start Deck</button>
+        <button id="shuffleDeck" class="secondary" disabled>Shuffle</button>
         <button id="nextCard" class="primary" disabled>Next Word →</button>
+      </div>
+
+      <div class="grades" id="gradeRow" style="display:none;">
+        <button class="grade-btn grade-again" data-offset="2" data-action="again">Again</button>
+        <button class="grade-btn grade-hard" data-offset="5" data-action="hard">Hard</button>
+        <button class="grade-btn grade-medium" data-offset="10" data-action="medium">Medium</button>
+        <button class="grade-btn grade-easy" data-offset="15" data-action="easy">Easy</button>
+        <button class="grade-btn grade-good" data-offset="remove" data-action="good">Good</button>
       </div>
 
       <div class="status-text" id="status">Ready.</div>
@@ -539,6 +592,7 @@ and IPA and english pronuncation as well, and an English translation of the sent
       clearBtn: document.getElementById('clearBtn'),
       startDeckBtn: document.getElementById('startDeck'),
       nextCardBtn: document.getElementById('nextCard'),
+      shuffleBtn: document.getElementById('shuffleDeck'),
       status: document.getElementById('status'),
       deckSize: document.getElementById('deckSize'),
       remaining: document.getElementById('remaining'),
@@ -546,7 +600,8 @@ and IPA and english pronuncation as well, and an English translation of the sent
       queueBadge: document.getElementById('queueBadge'),
       cachedCount: document.getElementById('cachedCount'),
       wordTotal: document.getElementById('wordTotal'),
-      
+      gradeRow: document.getElementById('gradeRow'),
+
       headwordDisplay: document.getElementById('headwordDisplay'),
       posDisplay: document.getElementById('posDisplay'),
       miniGrid: document.getElementById('miniGrid'),
@@ -566,11 +621,14 @@ and IPA and english pronuncation as well, and an English translation of the sent
       filteredKeys: [],
       definitions: {},
       queue: [],
-      deckIndex: 0,
+      deckSize: 0,
+      completed: 0,
       currentWord: null,
       totalWords: 0,
       sentenceCount: 0,
     };
+
+    const pendingDefinitions = new Map();
 
     // --- storage helpers ---
     function persistState() {
@@ -846,40 +904,85 @@ and IPA and english pronuncation as well, and an English translation of the sent
       const first = defs[0] || {};
       const meaningText = first.text || '—';
       const exampleText = first.example || '—';
-      
-      // Phonetics HTML
-      let phoneHtml = '';
-      if (entry.ipa) phoneHtml += `<span class="pill">/${entry.ipa}/</span>`;
-      if (entry.phonetic) phoneHtml += `<span class="pill">${entry.phonetic}</span>`;
-      if (!phoneHtml) phoneHtml = 'No pronunciation data.';
+
+      // Phonetics UI
+      const pronWrapper = document.createElement('div');
+      if (entry.ipa) {
+        const ipaPill = document.createElement('span');
+        ipaPill.className = 'pill';
+        ipaPill.textContent = `/${entry.ipa}/`;
+        pronWrapper.appendChild(ipaPill);
+      }
+      if (entry.phonetic) {
+        const phonePill = document.createElement('span');
+        phonePill.className = 'pill';
+        phonePill.textContent = entry.phonetic;
+        pronWrapper.appendChild(phonePill);
+      }
+      if (!entry.ipa && !entry.phonetic) {
+        pronWrapper.textContent = 'No pronunciation data.';
+      }
+
+      const pronActions = document.createElement('div');
+      pronActions.className = 'pron-actions';
+
+      const speakWordBtn = document.createElement('button');
+      speakWordBtn.type = 'button';
+      speakWordBtn.className = 'speaker-btn';
+      speakWordBtn.innerHTML = '🔊 Speak word';
+      speakWordBtn.addEventListener('click', () => speak(entry.term || word));
+
+      const speakIpaBtn = document.createElement('button');
+      speakIpaBtn.type = 'button';
+      speakIpaBtn.className = 'speaker-btn';
+      speakIpaBtn.innerHTML = '🗣️ Speak IPA';
+      speakIpaBtn.addEventListener('click', () => speak(entry.ipa || entry.phonetic || entry.term || word));
+
+      pronActions.appendChild(speakWordBtn);
+      pronActions.appendChild(speakIpaBtn);
+      pronWrapper.appendChild(pronActions);
 
       dom.miniGrid.innerHTML = '';
       dom.miniGrid.appendChild(createMiniCard('Meaning', '📖', meaningText));
-      dom.miniGrid.appendChild(createMiniCard('Pronounce', '🗣️', phoneHtml));
+      dom.miniGrid.appendChild(createMiniCard('Pronounce', '🗣️', pronWrapper));
       dom.miniGrid.appendChild(createMiniCard('Context', '💬', exampleText));
     }
 
     async function ensureDefinition(word) {
-      if (state.definitions[word]) { 
-        renderDefinition(word); 
-        return; 
-      }
-      
-      // Render Loading UI
-      renderLoadingState(word);
-      
-      try {
-        const def = await fetchGeminiDefinition(word);
-        state.definitions[word] = def;
+      if (state.definitions[word]) {
         renderDefinition(word);
-        persistState();
-        updateSummary(); // Update cached count
-      } catch (err) {
-        console.error(err);
-        state.definitions[word] = { error: err.message };
-        dom.miniGrid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-accent);">Error: ${err.message}</div>`;
-        persistState();
+        return state.definitions[word];
       }
+
+      if (pendingDefinitions.has(word)) {
+        renderLoadingState(word);
+        await pendingDefinitions.get(word);
+        renderDefinition(word);
+        return state.definitions[word];
+      }
+
+      renderLoadingState(word);
+
+      const promise = (async () => {
+        try {
+          const def = await fetchGeminiDefinition(word);
+          state.definitions[word] = def;
+          renderDefinition(word);
+          persistState();
+          updateSummary();
+        } catch (err) {
+          console.error(err);
+          state.definitions[word] = { error: err.message };
+          dom.miniGrid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-accent);">Error: ${err.message}</div>`;
+          persistState();
+        } finally {
+          pendingDefinitions.delete(word);
+        }
+      })();
+
+      pendingDefinitions.set(word, promise);
+      await promise;
+      return state.definitions[word];
     }
 
     // --- Flashcard Flow ---
@@ -891,44 +994,76 @@ and IPA and english pronuncation as well, and an English translation of the sent
       dom.queueBadge.textContent = '0';
       dom.startDeckBtn.disabled = true;
       dom.nextCardBtn.disabled = true;
+      dom.shuffleBtn.disabled = true;
+      dom.gradeRow.style.display = 'none';
     }
 
     function startDeck() {
       if (!state.filteredKeys.length) return;
-      state.deckIndex = 0;
       state.queue = state.filteredKeys.slice(0, MAX_DECK);
+      state.deckSize = state.queue.length;
+      state.completed = 0;
       dom.startDeckBtn.disabled = false;
       dom.nextCardBtn.disabled = false;
+      dom.shuffleBtn.disabled = false;
+      dom.gradeRow.style.display = 'grid';
       showCard();
     }
 
     function showCard() {
-      if (!state.queue.length || state.deckIndex >= state.queue.length) {
+      if (!state.queue.length) {
         dom.headwordDisplay.textContent = 'Finished';
         dom.posDisplay.textContent = 'Deck Complete';
         dom.miniGrid.innerHTML = `<div style="grid-column:1/-1; text-align:center;">Great job!</div>`;
         dom.queueBadge.textContent = '0';
         dom.nextCardBtn.disabled = true;
+        dom.shuffleBtn.disabled = true;
+        dom.gradeRow.style.display = 'none';
         return;
       }
-      const word = state.queue[state.deckIndex];
+      const word = state.queue[0];
       state.currentWord = word;
-      
-      dom.deckBadge.textContent = `${state.deckIndex + 1}/${state.queue.length}`;
-      dom.queueBadge.textContent = `${state.queue.length - state.deckIndex - 1}`;
-      
+
+      const seenCount = state.deckSize ? Math.min(state.completed + 1, state.deckSize) : 1;
+      dom.deckBadge.textContent = `${seenCount}/${state.deckSize || state.queue.length}`;
+      dom.queueBadge.textContent = `${Math.max(0, state.queue.length - 1)}`;
+
       ensureDefinition(word);
     }
 
     function nextCard() {
       if (!state.queue.length) return;
-      if (state.deckIndex < state.queue.length - 1) {
-        state.deckIndex += 1;
-        showCard();
-      } else {
-        state.deckIndex = state.queue.length;
-        showCard();
+      state.queue.shift();
+      state.completed += 1;
+      showCard();
+    }
+
+    function shuffleDeck(keepCurrent = true) {
+      if (state.queue.length <= 1) return;
+      const working = keepCurrent ? state.queue.slice(1) : state.queue.slice();
+      for (let i = working.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [working[i], working[j]] = [working[j], working[i]];
       }
+      state.queue = keepCurrent ? [state.queue[0], ...working] : working;
+      showCard();
+      dom.status.textContent = 'Deck shuffled.';
+      setTimeout(() => dom.status.textContent = '', 1500);
+    }
+
+    async function gradeCard(action, offset) {
+      if (!state.queue.length) return;
+      const word = state.queue[0];
+      await ensureDefinition(word);
+      state.queue.shift();
+      if (offset !== 'remove') {
+        const position = Math.min(state.queue.length, offset);
+        state.queue.splice(position, 0, word);
+      }
+      state.completed += 1;
+      dom.status.textContent = `Marked ${action}.`;
+      setTimeout(() => dom.status.textContent = '', 1200);
+      showCard();
     }
 
     function clearAll() {
@@ -939,9 +1074,18 @@ and IPA and english pronuncation as well, and an English translation of the sent
       state.filteredKeys = [];
       state.definitions = {};
       state.queue = [];
-      state.deckIndex = 0;
+      state.deckSize = 0;
+      state.completed = 0;
       persistState();
       resetDeckUi();
+    }
+
+    function speak(text) {
+      if (!text || !('speechSynthesis' in window)) return;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'fr-FR';
+      utter.rate = 0.95;
+      window.speechSynthesis.speak(utter);
     }
 
     // --- Events ---
@@ -949,6 +1093,13 @@ and IPA and english pronuncation as well, and an English translation of the sent
     dom.clearBtn.addEventListener('click', clearAll);
     dom.startDeckBtn.addEventListener('click', startDeck);
     dom.nextCardBtn.addEventListener('click', nextCard);
+    dom.shuffleBtn.addEventListener('click', () => shuffleDeck(true));
+    dom.gradeRow.addEventListener('click', (e) => {
+      const btn = e.target.closest('.grade-btn');
+      if (!btn) return;
+      const offset = btn.dataset.offset === 'remove' ? 'remove' : parseInt(btn.dataset.offset, 10);
+      gradeCard(btn.dataset.action, offset);
+    });
     
     dom.modeSelect.addEventListener('change', () => { updateRangeExtras(); processText(); });
     dom.threshold.addEventListener('input', processText);
