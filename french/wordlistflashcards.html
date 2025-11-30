@@ -957,7 +957,8 @@ and IPA and english pronuncation as well, and an English translation of the sent
         speakExampleBtn.type = 'button';
         speakExampleBtn.className = 'speaker-btn';
         speakExampleBtn.innerHTML = '🔈 Speak example';
-        speakExampleBtn.addEventListener('click', () => speak(exampleText));
+        const exampleSpeech = exampleText.replace(/\s*[\(\[].*?[\)\]]\s*$/, '').trim() || exampleText;
+        speakExampleBtn.addEventListener('click', () => speak(exampleSpeech));
 
         exampleActions.appendChild(speakExampleBtn);
         contextWrapper.appendChild(exampleActions);
