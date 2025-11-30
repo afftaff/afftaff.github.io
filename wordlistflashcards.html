@@ -114,6 +114,15 @@
     .stat strong { display: block; color: var(--text); font-size: 1.1rem; }
     .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(34,197,94,0.4); background: rgba(34,197,94,0.12); color: #bbf7d0; font-weight: 700; font-size: 0.9rem; }
     .faded { opacity: 0.75; }
+    .mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 12px; width: 100%; }
+    .mini-card { position: relative; perspective: 900px; min-height: 120px; }
+    .mini-inner { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform 0.45s ease; cursor: pointer; }
+    .mini-card.show-back .mini-inner { transform: rotateY(180deg); }
+    .mini-face { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: rgba(15,23,42,0.85); text-align: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .mini-face.back { transform: rotateY(180deg); background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.5); }
+    .mini-label { color: var(--muted); letter-spacing: 0.08em; font-size: 0.9rem; text-transform: uppercase; }
+    .mini-text { color: var(--text); font-weight: 700; line-height: 1.4; }
+    .mini-hint { color: var(--muted); font-size: 0.95rem; }
   </style>
 </head>
 <body>
@@ -214,6 +223,7 @@
       deckIndex: 0,
       queue: [],
       currentWord: null,
+      currentDeckTotal: 0,
     };
 
     const wordInput = document.getElementById('wordInput');
@@ -372,6 +382,10 @@
       return { definitions, examples, pos, gender };
     }
 
+    function hasUsableDefinition(entry) {
+      return !!(entry && Array.isArray(entry.definitions) && entry.definitions.length && !entry.error);
+    }
+
     async function fetchDefinitionForWord(word) {
       const endpoint = 'https://en.wiktionary.org/api/rest_v1/page/definition/';
       const url = endpoint + encodeURIComponent(word);
@@ -419,6 +433,8 @@
       const meaning = entry.definitions?.[0] || (entry.error ? entry.error : '—');
       const defsList = entry.definitions || [];
       const examples = entry.examples || [];
+      const firstExample = examples[0] || 'No example sentence available yet.';
+      const genderLabel = gender || 'Not specified';
 
       promptEl.textContent = prompt;
       taglineEl.textContent = gender ? `Gender: ${gender}` : '';
@@ -456,14 +472,56 @@
       }
 
       answerEl.innerHTML = '';
-      answerEl.appendChild(container);
+      const miniGrid = document.createElement('div');
+      miniGrid.className = 'mini-grid';
+
+      function createMiniCard(label, content, fallback) {
+        const card = document.createElement('div');
+        card.className = 'mini-card';
+        const inner = document.createElement('div');
+        inner.className = 'mini-inner';
+
+        const front = document.createElement('div');
+        front.className = 'mini-face front';
+        const frontLabel = document.createElement('div');
+        frontLabel.className = 'mini-label';
+        frontLabel.textContent = label;
+        const hint = document.createElement('div');
+        hint.className = 'mini-hint';
+        hint.textContent = 'Click to reveal';
+        front.append(frontLabel, hint);
+
+        const back = document.createElement('div');
+        back.className = 'mini-face back';
+        const backLabel = document.createElement('div');
+        backLabel.className = 'mini-label';
+        backLabel.textContent = label;
+        const text = document.createElement('div');
+        text.className = 'mini-text';
+        text.textContent = content || fallback;
+        back.append(backLabel, text);
+
+        inner.append(front, back);
+        card.appendChild(inner);
+        card.addEventListener('click', () => card.classList.toggle('show-back'));
+        return card;
+      }
+
+      miniGrid.append(
+        createMiniCard('Meaning', meaning, 'No definition yet.'),
+        createMiniCard('Gender', genderLabel, 'Not provided.'),
+        createMiniCard('Sentence', firstExample, 'No sentence available yet.')
+      );
+
+      answerEl.append(container, miniGrid);
     }
 
     function updateBadges() {
       const deckCount = Math.ceil(state.filteredKeys.length / MAX_DECK) || 0;
       deckBadge.textContent = `Deck ${state.filteredKeys.length ? state.deckIndex + 1 : 0} / ${deckCount}`;
       queueBadge.textContent = `${state.queue.length} left in deck`;
-      deckSizeEl.textContent = Math.min(MAX_DECK, state.filteredKeys.length - state.deckIndex * MAX_DECK) || 0;
+      const plannedDeck = Math.min(MAX_DECK, state.filteredKeys.length - state.deckIndex * MAX_DECK);
+      deckSizeEl.textContent = state.currentDeckTotal || plannedDeck || 0;
       remainingEl.textContent = state.queue.length;
       cachedCountEl.textContent = Object.keys(state.definitions || {}).length;
       wordTotalEl.textContent = state.filteredKeys.length;
@@ -497,6 +555,7 @@
         } else {
           showStatus('All decks completed!');
         }
+        state.currentDeckTotal = 0;
         updateBadges();
         return;
       }
@@ -528,11 +587,29 @@
         progressBar.value = percent;
         progressText.textContent = `${done} / ${total} (${percent}%) – last: ${word}`;
       });
-      state.queue = [...slice];
+      const usableWords = slice.filter(key => hasUsableDefinition(state.definitions[key]));
+      const skipped = slice.length - usableWords.length;
+      state.queue = [...usableWords];
+      state.currentDeckTotal = usableWords.length;
       saveState();
       progressRow.style.display = 'none';
       setLoading(false);
-      showStatus('Definitions ready. Flip cards to study.');
+      updateBadges();
+
+      if (!usableWords.length) {
+        if ((state.deckIndex + 1) * MAX_DECK < state.filteredKeys.length) {
+          state.deckIndex += 1;
+          saveState();
+          showStatus('No definitions found for this deck. Moved to the next 50.');
+        } else {
+          showStatus('No definitions found for the remaining words.');
+        }
+        updateBadges();
+        return;
+      }
+
+      const skippedMsg = skipped ? ` Skipped ${skipped} word(s) without definitions.` : '';
+      showStatus(`Definitions ready. Flip cards to study.${skippedMsg}`);
       advanceCard();
       nextCardBtn.disabled = false;
       flipCardBtn.disabled = false;
@@ -545,6 +622,7 @@
         definitions: state.definitions,
         deckIndex: state.deckIndex,
         queue: state.queue,
+        currentDeckTotal: state.currentDeckTotal,
       };
       try { localStorage.setItem(LS_KEY, JSON.stringify(payload)); } catch (_) {}
       cacheInfo.textContent = `Cached ${payload.filteredKeys.length} word(s).`;
@@ -559,7 +637,8 @@
         state.filteredKeys = saved.filteredKeys || [];
         state.definitions = saved.definitions || {};
         state.deckIndex = saved.deckIndex || 0;
-        state.queue = saved.queue || [];
+        state.queue = (saved.queue || []).filter(key => hasUsableDefinition(state.definitions[key]));
+        state.currentDeckTotal = saved.currentDeckTotal || state.queue.length || 0;
         wordInput.value = state.inputText;
         processedWords.value = state.filteredKeys.join('\n');
         wordTotalEl.textContent = state.filteredKeys.length;
@@ -585,6 +664,7 @@
         deckIndex: 0,
         queue: [],
         currentWord: null,
+        currentDeckTotal: 0,
       });
       try { localStorage.removeItem(LS_KEY); } catch (_) {}
       processedWords.value = '';
@@ -623,6 +703,7 @@
       state.filteredKeys = filteredKeys;
       state.deckIndex = 0;
       state.queue = [];
+      state.currentDeckTotal = 0;
       renderProcessedList(processedLines);
       renderSummary(totalWords, map.size, filteredKeys.length, sentenceCount);
       startDeckBtn.disabled = filteredKeys.length === 0;
