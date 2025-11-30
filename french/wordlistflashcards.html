@@ -3,209 +3,522 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>French Wordlist Flashcards (Gemini per card)</title>
+  <title>French Study Dashboard (Gemini)</title>
+  
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg: #0b1120;
-      --panel: #0f172a;
-      --accent: #22c55e;
-      --accent-2: #38bdf8;
-      --text: #e2e8f0;
-      --muted: #94a3b8;
-      --border: #1f2937;
-      --card: linear-gradient(145deg, #111827, #0f172a);
+      /* Palette: Academic Paper */
+      --bg-body: #F9F7F2;
+      --bg-card: #FFFFFF;
+      --bg-inset: #F2F0EB;
+      
+      --text-main: #2C3E50;
+      --text-muted: #95a5a6;
+      --text-accent: #C0392B; /* Terracotta */
+      
+      --primary: #2C3E50;
+      --primary-hover: #1a252f;
+      
+      --border: #E0DED8;
+      
+      --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --shadow-float: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+      
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
     }
-    * { box-sizing: border-box; }
+
+    * { box-sizing: border-box; outline-color: var(--primary); }
+    
     body {
       margin: 0;
-      font-family: 'Poppins', system-ui, sans-serif;
-      background: radial-gradient(circle at 15% 20%, rgba(34,197,94,0.10), transparent 30%),
-                  radial-gradient(circle at 85% 0%, rgba(56,189,248,0.12), transparent 30%),
-                  var(--bg);
-      color: var(--text);
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
       min-height: 100vh;
-    }
-    header {
-      padding: 20px 24px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+    }
+
+    /* --- Header --- */
+    header {
+      background: var(--bg-card);
       border-bottom: 1px solid var(--border);
-      background: rgba(15,23,42,0.85);
-      backdrop-filter: blur(8px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       position: sticky;
       top: 0;
-      z-index: 2;
+      z-index: 100;
     }
-    header a { color: var(--muted); text-decoration: none; font-weight: 600; }
-    header a:hover { color: var(--text); }
-    main { max-width: 1200px; margin: 0 auto; padding: 24px; }
-    h1 { margin: 8px 0 12px; letter-spacing: -0.02em; }
-    .description { color: var(--muted); margin-bottom: 12px; }
-    .layout { display: grid; grid-template-columns: 1.2fr 1.3fr; gap: 18px; }
-    @media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } }
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-    }
-    textarea {
-      width: 100%;
-      min-height: 200px;
-      font-family: Menlo, Consolas, monospace;
-      font-size: 0.95rem;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: #0b1224;
-      color: var(--text);
-      resize: vertical;
-    }
-    fieldset {
-      border: 1px dashed var(--border);
-      border-radius: 10px;
-      padding: 10px;
-      margin: 12px 0;
-    }
-    legend { color: var(--muted); padding: 0 6px; }
-    label { display: block; margin: 6px 0; color: var(--muted); font-size: 0.95rem; }
-    input[type="number"], select, button, input[type="text"] {
-      background: #0b1224;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      padding: 8px 10px;
-      font-size: 0.95rem;
-    }
-    select, button { cursor: pointer; }
-    button.primary {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: #f8fafc;
-      border: none;
+    
+    .brand h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
       font-weight: 700;
+      margin: 0;
+      color: var(--primary);
     }
-    button:disabled { opacity: 0.6; cursor: not-allowed; }
-    .controls { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-    .summary { margin: 10px 0; color: var(--muted); }
-    .small { color: var(--muted); font-size: 0.9rem; }
-    .progress { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
-    progress { width: 100%; height: 10px; }
-    .card-shell { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 18px; min-height: 380px; }
-    .card { background: var(--card); border-radius: 14px; padding: 18px; border: 1px solid var(--border); box-shadow: 0 16px 40px rgba(0,0,0,0.35); min-height: 260px; position: relative; overflow: hidden; }
-    .face-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
-    .prompt { font-size: 36px; margin: 12px 0 6px; }
-    .tagline { color: var(--muted); margin: 0 0 12px; }
-    .flip { perspective: 1200px; }
-    .flip-inner { position: relative; transform-style: preserve-3d; transition: transform 0.65s ease; cursor: pointer; min-height: 200px; }
-    .flip.show-back .flip-inner { transform: rotateY(180deg); }
-    .face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; padding: 16px; text-align: center; gap: 8px; }
-    .back { transform: rotateY(180deg); background: rgba(15,23,42,0.65); }
-    .meta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; color: var(--muted); font-weight: 600; }
-    .pill { padding: 6px 10px; border-radius: 12px; border: 1px solid var(--border); background: rgba(56,189,248,0.12); color: #bae6fd; }
-    .actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-    .secondary { border: 1px solid var(--border); background: transparent; color: var(--text); }
-    .defs { list-style: disc; padding-left: 20px; text-align: left; }
-    .examples { margin-top: 10px; }
-    .examples h4 { margin: 0 0 6px; color: var(--muted); }
-    .examples ul { padding-left: 20px; text-align: left; }
-    .deck-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 10px; margin-top: 10px; }
-    .stat { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 12px; color: var(--muted);} 
-    .stat strong { display: block; color: var(--text); font-size: 1.1rem; }
-    .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(34,197,94,0.4); background: rgba(34,197,94,0.12); color: #bbf7d0; font-weight: 700; font-size: 0.9rem; }
-    .faded { opacity: 0.75; }
-    .input-row { display: grid; gap: 8px; grid-template-columns: 1fr auto; align-items: center; }
+    .brand small { color: var(--text-muted); font-size: 0.85rem; }
+
+    header a {
+      font-size: 0.9rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    header a:hover { color: var(--text-accent); }
+
+    /* --- Layout --- */
+    main {
+      flex: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; padding: 1rem; }
+    }
+
+    /* --- Sidebar --- */
+    .sidebar {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-soft);
+      position: sticky;
+      top: 90px;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--bg-inset);
+    }
+
+    textarea, input[type="text"], input[type="password"] {
+      width: 100%;
+      background: var(--bg-inset);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-main);
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    textarea:focus, input:focus { border-color: var(--primary); background: #fff; }
+
+    fieldset {
+      border: 0;
+      background: var(--bg-inset);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem;
+      margin: 1rem 0;
+    }
+    
+    legend {
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    label { display: block; margin-bottom: 0.4rem; font-size: 0.85rem; }
+    
+    input[type="number"], select {
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
+    .btn-group { display: flex; gap: 8px; margin-top: 1rem; }
+    
+    button {
+      flex: 1;
+      padding: 10px 16px;
+      border: 1px solid var(--primary);
+      border-radius: var(--radius-sm);
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    button.primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 4px rgba(44, 62, 80, 0.2);
+    }
+    button.primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    button.primary:disabled { background: var(--text-muted); border-color: var(--text-muted); opacity: 0.7; transform: none; cursor: not-allowed; }
+
+    button.secondary { background: #fff; color: var(--primary); }
+    button.secondary:hover { background: var(--bg-inset); }
+
+    .meta-display {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+    
+    .api-section {
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+    }
+
+    /* --- Dashboard --- */
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .deck-stats {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .stat-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-soft);
+    }
+    .stat-pill span { color: var(--text-muted); font-weight: 400; margin-right: 4px; }
+
+    /* --- STATIC STUDY CARD --- */
+    .static-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-float);
+      padding: 3rem;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      border-bottom: 2px solid var(--bg-inset);
+      width: 100%;
+      padding-bottom: 2rem;
+    }
+    
+    .headword {
+      font-family: 'Playfair Display', serif;
+      font-size: 4.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0;
+      line-height: 1.1;
+    }
+    
+    .sub-headword {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      color: var(--text-accent);
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
+    /* Mini Grid */
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    @media (max-width: 768px) {
+      .mini-grid { grid-template-columns: 1fr; }
+      .static-card { padding: 1.5rem; }
+      .headword { font-size: 3rem; }
+    }
+
+    /* --- MINI FLIP CARDS --- */
+    .mini-card {
+      position: relative;
+      background: transparent;
+      perspective: 1000px;
+      cursor: pointer;
+      height: 220px;
+    }
+
+    .mini-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+      transform-style: preserve-3d;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-soft);
+      background: var(--bg-body);
+    }
+
+    .mini-card.flipped .mini-inner {
+      transform: rotateY(180deg);
+    }
+    
+    /* Loading / Pulse State */
+    .mini-card.loading {
+      cursor: wait;
+    }
+    .mini-card.loading .mini-inner {
+      background: linear-gradient(90deg, #F2F0EB 25%, #fff 50%, #F2F0EB 75%);
+      background-size: 200% 100%;
+      animation: pulse 1.5s infinite;
+      border-color: transparent;
+    }
+    @keyframes pulse {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Faces */
+    .mini-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      border-radius: var(--radius-md);
+    }
+
+    .mini-face.mini-front {
+      background: #FFFFFF;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    
+    .mini-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    .mini-icon {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      opacity: 0.8;
+    }
+    
+    .mini-hint {
+      font-size: 0.75rem;
+      color: var(--text-accent);
+      font-weight: 500;
+    }
+
+    .mini-face.mini-back {
+      background: #FFF;
+      transform: rotateY(180deg);
+      overflow-y: auto;
+      border: 1px solid var(--primary);
+      align-items: flex-start;
+      text-align: left;
+    }
+    
+    .mini-back-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--text-accent);
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .mini-content {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+    
+    .pill {
+      display: inline-block;
+      font-size: 0.8rem;
+      background: var(--bg-inset);
+      padding: 4px 8px;
+      border-radius: 6px;
+      color: var(--text-main);
+      margin-right: 6px;
+      margin-bottom: 6px;
+      font-family: monospace;
+      border: 1px solid var(--border);
+    }
+
+    .mini-face::-webkit-scrollbar { width: 4px; }
+    .mini-face::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .controls button {
+      min-width: 140px;
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .status-text {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
+
   <header>
-    <div>
-      <div style="font-weight:700;">Wordlist Flashcards (Gemini per word)</div>
-      <small class="small">Paste text, filter words, then fetch Gemini answers as you study.</small>
+    <div class="brand">
+      <h1>L'Étude Français</h1>
+      <small>Powered by Gemini AI</small>
     </div>
-    <a href="./index.html">← Back to menu</a>
+    <a href="./index.html">Main Menu</a>
   </header>
+
   <main>
-    <h1>Build flashcards from any French text</h1>
-    <p class="description">We split your text into words, apply filters, and call Gemini for each card as you progress through the deck. Responses are cached locally so you only call the API once per word.</p>
-    <div class="layout">
-      <section class="panel">
-        <h2>1) Input & filters</h2>
-        <textarea id="wordInput" placeholder="Collez votre texte ici..."></textarea>
-        <fieldset>
-          <legend>Word filters</legend>
-          <label><input type="checkbox" id="removeDuplicates" checked /> Remove duplicates in processed list</label>
-          <label>
-            Remove words with occurrences
-            <select id="underOverMode">
-              <option value="none">(no frequency filter)</option>
-              <option value="under">under</option>
-              <option value="over">over</option>
-              <option value="range">outside range</option>
+    <!-- LEFT: Settings & Input -->
+    <section class="sidebar">
+      
+      <!-- API Key Section -->
+      <div class="api-section">
+        <label for="apiKey">Google AI Studio API Key</label>
+        <div style="display:flex; gap:6px; margin-top:6px;">
+          <input type="password" id="apiKey" placeholder="AIza..." />
+          <button id="saveKey" class="secondary" style="flex:0 0 auto;">Save</button>
+        </div>
+        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Key is stored locally in your browser.</div>
+      </div>
+
+      <h2>1. Source Text</h2>
+      <label for="wordInput">Paste French text below:</label>
+      <textarea id="wordInput" placeholder="Paste article or book excerpt here..."></textarea>
+      
+      <fieldset>
+        <legend>Filters</legend>
+        <label><input type="checkbox" id="removeDuplicates" checked /> Unique words only</label>
+        
+        <div style="margin-top:10px;">
+          <label style="margin-bottom:4px; display:block;">Frequency filter:</label>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <select id="underOverMode" style="flex:1;">
+              <option value="none">All words</option>
+              <option value="under">Occurs under</option>
+              <option value="over">Occurs over</option>
+              <option value="range">Outside range</option>
             </select>
-            <input type="number" id="threshold" min="1" placeholder="N" />
-            <span id="rangeExtras" style="display:none;">
-              (min)
-              <input type="number" id="minOcc" min="1" style="width:4rem;" />
-              (max)
-              <input type="number" id="maxOcc" min="1" style="width:4rem;" />
-            </span>
-          </label>
-          <p class="small">Occurrences are counted from the tokenised words (case-insensitive). Filters are applied on those counts; Gemini calls happen one word at a time while studying.</p>
-        </fieldset>
-        <div class="actions">
-          <button id="processBtn" class="primary">Process text</button>
-          <button id="clearBtn" class="secondary">Clear</button>
+            <input type="number" id="threshold" min="1" placeholder="N" style="width:60px;" />
+          </div>
+          <div id="rangeExtras" style="display:none; margin-top:8px; gap:4px; align-items:center;">
+             <span style="font-size:0.8rem;">Min:</span>
+             <input type="number" id="minOcc" min="1" style="width:50px;" />
+             <span style="font-size:0.8rem;">Max:</span>
+             <input type="number" id="maxOcc" min="1" style="width:50px;" />
+          </div>
         </div>
-        <label class="small" for="apiKey">Google AI Studio API key (stored locally)</label>
-        <div class="input-row">
-          <input type="text" id="apiKey" placeholder="AIza..." />
-          <button id="saveKey" class="secondary">Save key</button>
+      </fieldset>
+
+      <div class="btn-group">
+        <button id="processBtn" class="primary">Process Text</button>
+        <button id="clearBtn" class="secondary">Reset</button>
+      </div>
+
+      <div class="meta-display">
+        <div id="summary">Waiting for input...</div>
+        <div style="margin-top:10px;">
+          <label style="display:block; margin-bottom:5px;">Filtered List:</label>
+          <textarea id="processedWords" readonly style="min-height:80px; font-family:monospace; color:var(--text-muted);"></textarea>
         </div>
-        <div class="summary" id="summary">No text processed yet.</div>
-        <label class="small">Filtered word list</label>
-        <textarea id="processedWords" readonly placeholder="Processed word list (one per line) will appear here..."></textarea>
-        <div class="small" id="cacheInfo"></div>
-      </section>
-      <section>
-        <div class="panel card-shell">
-          <h2>2) Flashcards</h2>
-          <div class="controls">
-            <button id="startDeck" class="primary" disabled>Start / continue deck</button>
-            <button id="nextCard" class="secondary" disabled>Next card</button>
-            <button id="flipCard" class="secondary" disabled>Flip</button>
-          </div>
-          <div class="progress" id="progressRow" style="display:none;">
-            <progress id="progressBar" value="0" max="100"></progress>
-            <span id="progressText" class="small"></span>
-          </div>
-          <div class="card flip" id="card">
-            <div class="flip-inner" id="flipInner">
-              <div class="face front" id="frontFace">
-                <div class="face-label">Prompt</div>
-                <div class="prompt" id="prompt">Process text to build your deck</div>
-                <p class="tagline" id="tagline"></p>
-              </div>
-              <div class="face back" id="backFace">
-                <div class="face-label">Answer</div>
-                <div id="answer"></div>
-              </div>
-            </div>
-          </div>
-          <div class="actions" style="margin-top:14px;">
-            <span class="chip" id="deckBadge">Deck 0 / 0</span>
-            <span class="chip faded" id="queueBadge">0 left</span>
-            <span class="chip faded" id="cachedCount">0 cached</span>
-          </div>
-          <div class="deck-info">
-            <div class="stat"><strong id="wordTotal">0</strong>Total filtered words</div>
-            <div class="stat"><strong id="deckSize">0</strong>Deck size (max 50)</div>
-            <div class="stat"><strong id="remaining">0</strong>Remaining this deck</div>
-          </div>
-          <p id="status" class="small" style="margin-top:12px;"></p>
+        <div id="cacheInfo" style="margin-top:5px; font-size:0.75rem;"></div>
+      </div>
+    </section>
+
+    <!-- RIGHT: Dashboard -->
+    <section class="dashboard">
+      <div class="deck-stats">
+        <div class="stat-pill"><span>Deck:</span><strong id="deckBadge">0/0</strong></div>
+        <div class="stat-pill"><span>Left:</span><strong id="queueBadge">0</strong></div>
+        <div class="stat-pill"><span>Cached:</span><strong id="cachedCount">0</strong></div>
+      </div>
+
+      <div class="static-card">
+        <div class="card-header">
+          <h1 class="headword" id="headwordDisplay">Bonjour</h1>
+          <div class="sub-headword" id="posDisplay">Start here</div>
         </div>
-      </section>
-    </div>
+
+        <!-- Mini Cards Grid -->
+        <div class="mini-grid" id="miniGrid">
+          <div style="grid-column: 1 / -1; text-align:center; color:var(--text-muted);">
+            Enter text and API key, then click 'Start Deck'.
+          </div>
+        </div>
+      </div>
+      
+      <!-- Controls -->
+      <div class="controls">
+        <button id="startDeck" class="primary" disabled>Start Deck</button>
+        <button id="nextCard" class="primary" disabled>Next Word →</button>
+      </div>
+
+      <div class="status-text" id="status">Ready.</div>
+      
+      <!-- Hidden Logic Elements (kept for JS ref) -->
+      <div style="display:none;">
+        <span id="deckSize"></span>
+        <span id="remaining"></span>
+        <span id="wordTotal"></span>
+      </div>
+
+    </section>
   </main>
 
   <script>
@@ -226,10 +539,6 @@ and IPA and english pronuncation as well, and an English translation of the sent
       clearBtn: document.getElementById('clearBtn'),
       startDeckBtn: document.getElementById('startDeck'),
       nextCardBtn: document.getElementById('nextCard'),
-      flipCardBtn: document.getElementById('flipCard'),
-      progressRow: document.getElementById('progressRow'),
-      progressBar: document.getElementById('progressBar'),
-      progressText: document.getElementById('progressText'),
       status: document.getElementById('status'),
       deckSize: document.getElementById('deckSize'),
       remaining: document.getElementById('remaining'),
@@ -237,10 +546,11 @@ and IPA and english pronuncation as well, and an English translation of the sent
       queueBadge: document.getElementById('queueBadge'),
       cachedCount: document.getElementById('cachedCount'),
       wordTotal: document.getElementById('wordTotal'),
-      flipInner: document.getElementById('flipInner'),
-      prompt: document.getElementById('prompt'),
-      tagline: document.getElementById('tagline'),
-      answer: document.getElementById('answer'),
+      
+      headwordDisplay: document.getElementById('headwordDisplay'),
+      posDisplay: document.getElementById('posDisplay'),
+      miniGrid: document.getElementById('miniGrid'),
+      
       removeDuplicates: document.getElementById('removeDuplicates'),
       modeSelect: document.getElementById('underOverMode'),
       threshold: document.getElementById('threshold'),
@@ -376,10 +686,10 @@ and IPA and english pronuncation as well, and an English translation of the sent
     }
 
     function updateSummary() {
-      dom.summary.textContent = `${state.filteredKeys.length} unique filtered words across ${state.totalWords} tokens (${state.sentenceCount} sentences).`;
+      dom.summary.textContent = `${state.filteredKeys.length} filtered words.`;
       dom.wordTotal.textContent = state.filteredKeys.length;
-      dom.cacheInfo.textContent = `Cached definitions: ${Object.keys(state.definitions || {}).length}`;
-      dom.cachedCount.textContent = `${Object.keys(state.definitions || {}).length} cached`;
+      dom.cacheInfo.textContent = `Cached: ${Object.keys(state.definitions || {}).length}`;
+      dom.cachedCount.textContent = `${Object.keys(state.definitions || {}).length}`;
     }
 
     function processText() {
@@ -392,9 +702,10 @@ and IPA and english pronuncation as well, and an English translation of the sent
       state.filteredKeys = filteredKeys;
       dom.processedWords.value = processedLines.join('\n');
       dom.startDeckBtn.disabled = !filteredKeys.length;
-      dom.deckSize.textContent = Math.min(filteredKeys.length, MAX_DECK);
-      dom.remaining.textContent = Math.min(filteredKeys.length, MAX_DECK);
-      dom.queueBadge.textContent = `${Math.max(filteredKeys.length - state.deckIndex, 0)} left`;
+      
+      dom.deckBadge.textContent = '0/0';
+      dom.queueBadge.textContent = '0';
+
       updateSummary();
       persistState();
     }
@@ -402,7 +713,7 @@ and IPA and english pronuncation as well, and an English translation of the sent
     // --- Gemini helpers ---
     function parseGeminiFlashcards(text, originalTerm) {
       const matches = Array.from(text.matchAll(/\[(.*?)\]/gs)).map(m => m[1]);
-      if (!matches.length) throw new Error('Unable to parse AI response. Try again.');
+      if (!matches.length) throw new Error('AI Parse Error. Try again.');
       return matches.map((entry, idx) => {
         let ipa = '';
         let phonetic = '';
@@ -417,13 +728,21 @@ and IPA and english pronuncation as well, and an English translation of the sent
         const genderMatch = head.match(/<(.*?)>/);
         const posMatch = head.match(/\((.*?)\)/);
         const term = head.replace(/<.*?>/g, '').replace(/\(.*?\)/g, '').trim() || `${originalTerm}-${idx + 1}`;
-        return { id: Date.now() + idx, term, ipa, phonetic, pos: posMatch ? posMatch[1] : '', definitions: [{ text: meaning || 'Definition unavailable', example }], gender: genderMatch ? genderMatch[1] : '' };
+        return { 
+          id: Date.now() + idx, 
+          term, 
+          ipa, 
+          phonetic, 
+          pos: posMatch ? posMatch[1] : '', 
+          definitions: [{ text: meaning || 'Definition unavailable', example }], 
+          gender: genderMatch ? genderMatch[1] : '' 
+        };
       });
     }
 
     async function fetchGeminiDefinition(term) {
       const apiKey = dom.apiKey.value.trim() || loadApiKey();
-      if (!apiKey) throw new Error('Add your Google AI Studio API key.');
+      if (!apiKey) throw new Error('API Key Missing.');
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${apiKey}`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
           systemInstruction: { parts: [{ text: geminiSystemInstruction }] }, contents: [{ parts: [{ text: term }] }]
@@ -432,105 +751,172 @@ and IPA and english pronuncation as well, and an English translation of the sent
       const data = await response.json();
       if (data.error) throw new Error(data.error.message);
       const botText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!botText) throw new Error('Gemini returned no content.');
+      if (!botText) throw new Error('No content returned.');
       const cards = parseGeminiFlashcards(botText, term);
       return cards[0];
     }
 
-    async function ensureDefinition(word) {
-      if (state.definitions[word]) { renderDefinition(word); return; }
-      dom.tagline.textContent = 'Fetching definition via Gemini...';
-      dom.answer.innerHTML = '<em>Loading...</em>';
-      try {
-        const def = await fetchGeminiDefinition(word);
-        state.definitions[word] = def;
-        renderDefinition(word);
-        persistState();
-      } catch (err) {
-        console.error(err);
-        state.definitions[word] = { error: err.message };
-        dom.answer.innerHTML = `<span style="color:#fca5a5;">${err.message}</span>`;
-        dom.tagline.textContent = 'Error fetching definition';
-        persistState();
-      }
+    // --- Rendering Logic ---
+
+    function createMiniCard(label, icon, content) {
+      const card = document.createElement('div');
+      card.className = 'mini-card';
+      
+      const inner = document.createElement('div');
+      inner.className = 'mini-inner';
+      
+      // Front
+      const front = document.createElement('div');
+      front.className = 'mini-face mini-front';
+      front.innerHTML = `
+        <div class="mini-label">${label}</div>
+        <div class="mini-icon">${icon}</div>
+        <div class="mini-hint">Click to Reveal</div>
+      `;
+      
+      // Back
+      const back = document.createElement('div');
+      back.className = 'mini-face mini-back';
+      
+      const backTitle = document.createElement('div');
+      backTitle.className = 'mini-back-title';
+      backTitle.textContent = label;
+      
+      const backContent = document.createElement('div');
+      backContent.className = 'mini-content';
+      
+      // Allow HTML in content (for pills etc)
+      if(typeof content === 'string') backContent.innerHTML = content;
+      else backContent.appendChild(content);
+      
+      back.appendChild(backTitle);
+      back.appendChild(backContent);
+      
+      inner.appendChild(front);
+      inner.appendChild(back);
+      card.appendChild(inner);
+      
+      card.addEventListener('click', () => {
+        card.classList.toggle('flipped');
+      });
+      
+      return card;
+    }
+
+    function createLoadingCard(label, icon) {
+      const card = document.createElement('div');
+      card.className = 'mini-card loading';
+      
+      const inner = document.createElement('div');
+      inner.className = 'mini-inner';
+      
+      const front = document.createElement('div');
+      front.className = 'mini-face mini-front';
+      front.innerHTML = `
+        <div class="mini-label">${label}</div>
+        <div class="mini-icon" style="opacity:0.5;">${icon}</div>
+        <div class="mini-hint">Fetching AI...</div>
+      `;
+      
+      inner.appendChild(front);
+      card.appendChild(inner);
+      return card;
+    }
+
+    function renderLoadingState(word) {
+      dom.headwordDisplay.textContent = word;
+      dom.posDisplay.textContent = 'Fetching data...';
+      dom.miniGrid.innerHTML = '';
+      dom.miniGrid.appendChild(createLoadingCard('Meaning', '📖'));
+      dom.miniGrid.appendChild(createLoadingCard('Pronounce', '🗣️'));
+      dom.miniGrid.appendChild(createLoadingCard('Context', '💬'));
     }
 
     function renderDefinition(word) {
       const entry = state.definitions[word];
       if (!entry || entry.error) {
-        dom.answer.innerHTML = `<span style="color:#fca5a5;">${entry?.error || 'No data available.'}</span>`;
-        dom.tagline.textContent = '';
+        dom.posDisplay.textContent = 'Error';
+        dom.miniGrid.innerHTML = `<div style="grid-column:1/-1; color:var(--text-accent); text-align:center;">${entry?.error || 'Error'}</div>`;
         return;
       }
+      
+      dom.posDisplay.textContent = `${entry.pos ? entry.pos : ''}${entry.gender ? ' • ' + entry.gender : ''}`;
+
       const defs = entry.definitions || [];
       const first = defs[0] || {};
-      const example = first.example || '—';
-      dom.tagline.textContent = `${entry.pos ? `${entry.pos}` : ''}${entry.gender ? ` · ${entry.gender}` : ''}`.trim();
-      const listItems = defs.slice(1).map(d => `<li>${d.text}</li>`).join('');
-      dom.answer.innerHTML = `
-        <div><strong>Definition:</strong> ${first.text || '—'}</div>
-        <div class="meta-row" style="justify-content:center;">
-          ${entry.ipa ? `<span class="pill">/${entry.ipa}/</span>` : ''}
-          ${entry.phonetic ? `<span class="pill">${entry.phonetic}</span>` : ''}
-        </div>
-        ${defs.length > 1 ? `<ul class="defs">${listItems}</ul>` : ''}
-        <div class="examples">
-          <h4>Example</h4>
-          <p>${example}</p>
-        </div>
-      `;
+      const meaningText = first.text || '—';
+      const exampleText = first.example || '—';
+      
+      // Phonetics HTML
+      let phoneHtml = '';
+      if (entry.ipa) phoneHtml += `<span class="pill">/${entry.ipa}/</span>`;
+      if (entry.phonetic) phoneHtml += `<span class="pill">${entry.phonetic}</span>`;
+      if (!phoneHtml) phoneHtml = 'No pronunciation data.';
+
+      dom.miniGrid.innerHTML = '';
+      dom.miniGrid.appendChild(createMiniCard('Meaning', '📖', meaningText));
+      dom.miniGrid.appendChild(createMiniCard('Pronounce', '🗣️', phoneHtml));
+      dom.miniGrid.appendChild(createMiniCard('Context', '💬', exampleText));
     }
 
-    // --- flashcard flow ---
+    async function ensureDefinition(word) {
+      if (state.definitions[word]) { 
+        renderDefinition(word); 
+        return; 
+      }
+      
+      // Render Loading UI
+      renderLoadingState(word);
+      
+      try {
+        const def = await fetchGeminiDefinition(word);
+        state.definitions[word] = def;
+        renderDefinition(word);
+        persistState();
+        updateSummary(); // Update cached count
+      } catch (err) {
+        console.error(err);
+        state.definitions[word] = { error: err.message };
+        dom.miniGrid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-accent);">Error: ${err.message}</div>`;
+        persistState();
+      }
+    }
+
+    // --- Flashcard Flow ---
     function resetDeckUi() {
-      dom.progressRow.style.display = 'none';
-      dom.progressBar.value = 0;
-      dom.progressText.textContent = '';
-      dom.prompt.textContent = 'Process text to build your deck';
-      dom.answer.textContent = '';
-      dom.tagline.textContent = '';
-      dom.deckBadge.textContent = 'Deck 0 / 0';
-      dom.queueBadge.textContent = '0 left';
-      dom.remaining.textContent = '0';
+      dom.headwordDisplay.textContent = 'Bonjour';
+      dom.posDisplay.textContent = 'Start here';
+      dom.miniGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; color:var(--text-muted);">Process text to begin.</div>`;
+      dom.deckBadge.textContent = '0/0';
+      dom.queueBadge.textContent = '0';
       dom.startDeckBtn.disabled = true;
       dom.nextCardBtn.disabled = true;
-      dom.flipCardBtn.disabled = true;
     }
 
     function startDeck() {
       if (!state.filteredKeys.length) return;
       state.deckIndex = 0;
       state.queue = state.filteredKeys.slice(0, MAX_DECK);
-      dom.progressRow.style.display = 'flex';
       dom.startDeckBtn.disabled = false;
       dom.nextCardBtn.disabled = false;
-      dom.flipCardBtn.disabled = false;
       showCard();
     }
 
     function showCard() {
       if (!state.queue.length || state.deckIndex >= state.queue.length) {
-        dom.prompt.textContent = 'Deck completed!';
-        dom.tagline.textContent = 'Add more words or process again to keep going.';
-        dom.answer.textContent = '';
-        dom.remaining.textContent = '0';
-        dom.deckBadge.textContent = `Deck ${state.queue.length} / ${state.queue.length}`;
-        dom.queueBadge.textContent = '0 left';
+        dom.headwordDisplay.textContent = 'Finished';
+        dom.posDisplay.textContent = 'Deck Complete';
+        dom.miniGrid.innerHTML = `<div style="grid-column:1/-1; text-align:center;">Great job!</div>`;
+        dom.queueBadge.textContent = '0';
         dom.nextCardBtn.disabled = true;
         return;
       }
       const word = state.queue[state.deckIndex];
       state.currentWord = word;
-      dom.flipInner.classList.remove('show-back');
-      dom.prompt.textContent = word;
-      dom.tagline.textContent = '';
-      dom.answer.innerHTML = '<em>Flip for answer once ready.</em>';
-      dom.deckBadge.textContent = `Deck ${state.deckIndex + 1} / ${state.queue.length}`;
-      dom.queueBadge.textContent = `${state.queue.length - state.deckIndex - 1} left`;
-      dom.remaining.textContent = `${state.queue.length - state.deckIndex}`;
-      const progress = ((state.deckIndex) / state.queue.length) * 100;
-      dom.progressBar.value = progress;
-      dom.progressText.textContent = `${state.deckIndex} / ${state.queue.length}`;
+      
+      dom.deckBadge.textContent = `${state.deckIndex + 1}/${state.queue.length}`;
+      dom.queueBadge.textContent = `${state.queue.length - state.deckIndex - 1}`;
+      
       ensureDefinition(word);
     }
 
@@ -543,10 +929,6 @@ and IPA and english pronuncation as well, and an English translation of the sent
         state.deckIndex = state.queue.length;
         showCard();
       }
-    }
-
-    function toggleFlip() {
-      dom.flipInner.classList.toggle('show-back');
     }
 
     function clearAll() {
@@ -562,13 +944,12 @@ and IPA and english pronuncation as well, and an English translation of the sent
       resetDeckUi();
     }
 
-    // --- events ---
+    // --- Events ---
     dom.processBtn.addEventListener('click', processText);
     dom.clearBtn.addEventListener('click', clearAll);
     dom.startDeckBtn.addEventListener('click', startDeck);
     dom.nextCardBtn.addEventListener('click', nextCard);
-    dom.flipCardBtn.addEventListener('click', toggleFlip);
-    dom.flipInner.addEventListener('click', toggleFlip);
+    
     dom.modeSelect.addEventListener('change', () => { updateRangeExtras(); processText(); });
     dom.threshold.addEventListener('input', processText);
     dom.minOcc.addEventListener('input', processText);
@@ -577,7 +958,7 @@ and IPA and english pronuncation as well, and an English translation of the sent
     dom.saveKey.addEventListener('click', saveApiKey);
     dom.apiKey.addEventListener('change', () => localStorage.setItem(API_KEY_STORAGE, dom.apiKey.value.trim()));
 
-    // --- init ---
+    // --- Init ---
     loadState();
     loadApiKey();
     updateRangeExtras();
