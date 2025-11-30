@@ -989,9 +989,9 @@ and IPA and english pronuncation as well, and an English translation of the sent
       dom.posDisplay.textContent = 'Fetching data...';
       dom.miniGrid.innerHTML = '';
       dom.miniGrid.appendChild(createLoadingCard('Meaning', '📖'));
+      dom.miniGrid.appendChild(createLoadingCard('Gender', '⚧️'));
       dom.miniGrid.appendChild(createLoadingCard('Pronounce', '🗣️'));
       dom.miniGrid.appendChild(createLoadingCard('Context', '💬'));
-      dom.miniGrid.appendChild(createLoadingCard('Gender', '⚧️'));
     }
 
     function renderDefinition(word) {
@@ -1096,9 +1096,9 @@ and IPA and english pronuncation as well, and an English translation of the sent
 
       dom.miniGrid.innerHTML = '';
       dom.miniGrid.appendChild(createMiniCard('Meaning', '📖', meaningWrapper));
+      dom.miniGrid.appendChild(createMiniCard('Gender', '⚧️', genderWrapper));
       dom.miniGrid.appendChild(createMiniCard('Pronounce', '🗣️', pronWrapper));
       dom.miniGrid.appendChild(createMiniCard('Context', '💬', contextWrapper));
-      dom.miniGrid.appendChild(createMiniCard('Gender', '⚧️', genderWrapper));
     }
 
     async function ensureDefinition(word) {
