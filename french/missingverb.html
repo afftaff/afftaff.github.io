@@ -239,7 +239,8 @@
       pendingCard: null,
       sentences: [],
       nextIndex: 0,
-      loadingCard: false
+      loadingCard: false,
+      solutionMode: false
     };
 
     function saveKey() {
@@ -378,6 +379,7 @@
       dom.select.style.display = 'none';
       dom.checkBtn.style.display = 'none';
       dom.options.innerHTML = '';
+      dom.options.style.display = 'none';
       dom.queueButtons.style.display = 'none';
       dom.checkBtn.disabled = false;
       state.cards = [];
@@ -386,6 +388,7 @@
       state.nextIndex = 0;
       state.pendingCard = null;
       state.loadingCard = false;
+      state.solutionMode = false;
       updateCounters();
       try {
         await fetchNextCard();
@@ -435,7 +438,7 @@
         return;
       }
       dom.question.textContent = current.question;
-      dom.options.innerHTML = current.options.map(opt => `<div>${opt}</div>`).join('');
+      dom.options.innerHTML = '';
       dom.select.style.display = 'block';
       dom.checkBtn.style.display = 'inline-block';
       dom.checkBtn.disabled = false;
@@ -447,20 +450,34 @@
     }
 
     async function checkAnswer() {
+      if (state.solutionMode) {
+        state.solutionMode = false;
+        dom.checkBtn.textContent = 'Check answer';
+        dom.checkBtn.disabled = false;
+        dom.select.value = '';
+        await fetchNextCard();
+        renderCard();
+        return;
+      }
       const current = state.queue[0];
       if (!current) return;
       const choice = dom.select.value.trim();
       if (!choice) { alert('Choose an option first.'); return; }
       const isCorrect = choice.toLowerCase() === current.correct.toLowerCase();
-      dom.translation.textContent = current.translation || '';
+      const completed = current.question.replace('____', current.correct);
       dom.feedback.textContent = isCorrect ? 'Correct! 🎉' : `Not quite. Correct answer: ${current.correct}`;
       state.pendingCard = isCorrect ? null : state.queue.shift();
       dom.checkBtn.disabled = true;
       if (isCorrect) {
         state.queue.shift();
-        await fetchNextCard();
-        renderCard();
+        dom.translation.innerHTML = `${completed}${current.translation ? `<br>${current.translation}` : ''}`;
+        dom.select.style.display = 'none';
+        dom.checkBtn.textContent = 'Next card';
+        dom.checkBtn.disabled = false;
+        state.solutionMode = true;
+        updateCounters();
       } else {
+        dom.translation.textContent = current.translation || '';
         dom.queueButtons.style.display = 'flex';
         updateCounters();
       }
@@ -487,6 +504,7 @@
       state.nextIndex = 0;
       state.pendingCard = null;
       state.loadingCard = false;
+      state.solutionMode = false;
       dom.select.innerHTML = '';
       dom.options.innerHTML = '';
       dom.feedback.textContent = '';
