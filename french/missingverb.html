@@ -231,10 +231,15 @@
     const cleaningInstruction = "I'll give you some text without punctuation and can you fix them in to sentences please. Do not say anything, just return the fixed text.";
     const missingVerbInstruction = `I say:\nTu dois terminer ton travail avant de sortir ?\n\nYOU REPLY IN THIS FORMAT ONLY!! Choose first verb!\n[\nTu ____ terminer ton travail avant de sortir ?\n| dois (Indicatif – Présent)\n| devais (Indicatif – Imparfait)\n| devras (Indicatif – Futur simple)\n| as dû (Indicatif – Passé composé)\n| avais dû (Indicatif – Plus-que-parfait)\n| auras dû (Indicatif – Futur antérieur)\n| dus (Indicatif – Passé simple)\n| eus dû (Indicatif – Passé antérieur)\n| doives (Subjonctif – Présent)\n| aies dû (Subjonctif – Passé)\n| dusses (Subjonctif – Imparfait)\n| eusses dû (Subjonctif – Plus-que-parfait)\n| devrais (Conditionnel – Présent)\n| aurais dû (Conditionnel – Passé)\n| dois (Impératif)\n| devant (Participe présent)\n| dû (Participe passé)\n<Dois>\n**Tu dois terminer ton travail avant de sortir? (Do you have to finish your work before going out?)**\n]`;
 
+    const MAX_SENTENCES = 10;
+
     const state = {
       queue: [],
       cards: [],
-      pendingCard: null
+      pendingCard: null,
+      sentences: [],
+      nextIndex: 0,
+      loadingCard: false
     };
 
     function saveKey() {
@@ -261,9 +266,11 @@
     }
 
     function updateCounters() {
-      dom.sentenceCount.textContent = `${state.cards.length}`;
+      const totalSentences = state.sentences.length || 0;
+      const unbuilt = Math.max(0, totalSentences - state.nextIndex - (state.loadingCard ? 1 : 0));
+      dom.sentenceCount.textContent = `${totalSentences}`;
       dom.deckCount.textContent = `${state.cards.length}`;
-      dom.remaining.textContent = `${state.queue.length}`;
+      dom.remaining.textContent = `${state.queue.length + unbuilt}`;
     }
 
     async function callGemini(systemInstruction, userContent) {
@@ -328,11 +335,43 @@
       return { sentence, ...parsed };
     }
 
+    async function fetchNextCard() {
+      if (state.loadingCard) return;
+      if (state.nextIndex >= state.sentences.length) {
+        updateCounters();
+        return;
+      }
+      const index = state.nextIndex;
+      state.loadingCard = true;
+      const sentence = state.sentences[index];
+      try {
+        const card = await buildCard(sentence, index, state.sentences.length);
+        state.nextIndex = index + 1;
+        state.cards.push(card);
+        state.queue.push(card);
+        setStatus(`Card ${index + 1} ready. ${state.sentences.length - state.nextIndex} left to fetch.`);
+        updateCounters();
+        if (state.queue.length === 1) {
+          renderCard();
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus(`Error building card ${index + 1}: ${err.message}`);
+      } finally {
+        state.loadingCard = false;
+        updateCounters();
+      }
+    }
+
     async function buildDeck() {
       const input = dom.source.value.trim();
       if (!input) { alert('Paste some text first.'); return; }
       const sentences = splitSentences(input);
       if (!sentences.length) { alert('No sentences detected.'); return; }
+      const limited = sentences.slice(0, MAX_SENTENCES);
+      if (sentences.length > MAX_SENTENCES) {
+        setStatus(`Using first ${MAX_SENTENCES} sentences to keep the deck lean.`);
+      }
       dom.buildBtn.disabled = dom.cleanBtn.disabled = true;
       dom.feedback.textContent = '';
       dom.translation.textContent = '';
@@ -343,16 +382,16 @@
       dom.checkBtn.disabled = false;
       state.cards = [];
       state.queue = [];
+      state.sentences = limited;
+      state.nextIndex = 0;
+      state.pendingCard = null;
+      state.loadingCard = false;
       updateCounters();
       try {
-        for (let i = 0; i < sentences.length; i++) {
-          const card = await buildCard(sentences[i], i, sentences.length);
-          state.cards.push(card);
+        await fetchNextCard();
+        if (state.queue.length) {
+          setStatus('Deck ready. Solve a card to load the next one.');
         }
-        state.queue = [...state.cards];
-        setStatus('Deck ready.');
-        updateCounters();
-        renderCard();
       } catch (err) {
         console.error(err);
         setStatus(`Error building deck: ${err.message}`);
@@ -368,10 +407,30 @@
       dom.queueButtons.style.display = 'none';
       const current = state.queue[0];
       if (!current) {
+        if (state.loadingCard) {
+          dom.question.textContent = 'Loading next card…';
+          dom.options.innerHTML = '';
+          dom.select.style.display = 'none';
+          dom.checkBtn.style.display = 'none';
+          dom.checkBtn.disabled = true;
+          updateCounters();
+          return;
+        }
+        if (state.nextIndex < state.sentences.length) {
+          fetchNextCard();
+          dom.question.textContent = 'Loading next card…';
+          dom.options.innerHTML = '';
+          dom.select.style.display = 'none';
+          dom.checkBtn.style.display = 'none';
+          dom.checkBtn.disabled = true;
+          updateCounters();
+          return;
+        }
         dom.question.textContent = 'Deck complete!';
         dom.options.innerHTML = '';
         dom.select.style.display = 'none';
         dom.checkBtn.style.display = 'none';
+        dom.checkBtn.disabled = true;
         updateCounters();
         return;
       }
@@ -379,6 +438,7 @@
       dom.options.innerHTML = current.options.map(opt => `<div>${opt}</div>`).join('');
       dom.select.style.display = 'block';
       dom.checkBtn.style.display = 'inline-block';
+      dom.checkBtn.disabled = false;
       dom.select.innerHTML = '<option value="">Select the missing verb…</option>' + current.options.map(opt => {
         const [verb] = opt.split(' ');
         return `<option value="${verb}">${verb}</option>`;
@@ -386,7 +446,7 @@
       updateCounters();
     }
 
-    function checkAnswer() {
+    async function checkAnswer() {
       const current = state.queue[0];
       if (!current) return;
       const choice = dom.select.value.trim();
@@ -398,6 +458,7 @@
       dom.checkBtn.disabled = true;
       if (isCorrect) {
         state.queue.shift();
+        await fetchNextCard();
         renderCard();
       } else {
         dom.queueButtons.style.display = 'flex';
@@ -422,6 +483,10 @@
       dom.source.value = '';
       state.queue = [];
       state.cards = [];
+      state.sentences = [];
+      state.nextIndex = 0;
+      state.pendingCard = null;
+      state.loadingCard = false;
       dom.select.innerHTML = '';
       dom.options.innerHTML = '';
       dom.feedback.textContent = '';
