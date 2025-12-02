@@ -1,541 +1,952 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>French Missing Verb Flashcards</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f172a;
-      --panel: #111827;
-      --card: #0b1120;
-      --accent: #10b981;
-      --muted: #9ca3af;
-      --border: #1f2937;
-      --shadow: 0 20px 60px rgba(0,0,0,0.35);
-      --radius: 14px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color-scheme: light dark;
     }
-    * { box-sizing: border-box; outline-color: var(--accent); }
+
     body {
       margin: 0;
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background: radial-gradient(circle at 20% 20%, rgba(16,185,129,0.08), transparent 30%),
-                  radial-gradient(circle at 80% 0%, rgba(59,130,246,0.08), transparent 30%),
-                  var(--bg);
+      padding: 0;
+      background: #0f172a;
       color: #e5e7eb;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding: 24px;
-      gap: 20px;
     }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 18px;
-      background: rgba(15,23,42,0.7);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      position: sticky;
-      top: 12px;
-      backdrop-filter: blur(8px);
-      z-index: 10;
-    }
-    h1 { margin: 0; font-family: 'Playfair Display', serif; letter-spacing: -0.01em; }
-    header a { color: var(--muted); text-decoration: none; font-weight: 600; }
-    header a:hover { color: var(--accent); }
 
-    main {
-      display: grid;
-      grid-template-columns: 360px 1fr;
-      gap: 18px;
-      align-items: start;
+    .app {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
     }
-    @media (max-width: 960px) { main { grid-template-columns: 1fr; } }
 
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: var(--shadow);
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
     }
-    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.95rem; }
-    textarea, input, select, button {
-      font-family: 'Inter', sans-serif;
+
+    h2 {
+      font-size: 1.1rem;
+      margin: 1.8rem 0 0.4rem;
     }
-    textarea, input, select {
+
+    p {
+      margin: 0.2rem 0 0.4rem;
+      color: #cbd5f5;
+      font-size: 0.9rem;
+    }
+
+    textarea {
       width: 100%;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: #e5e7eb;
+      box-sizing: border-box;
+      min-height: 120px;
       padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #e5e7eb;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 0.95rem;
     }
-    textarea { min-height: 140px; resize: vertical; }
 
-    .btn-row { display: flex; gap: 10px; margin-top: 10px; }
-    button {
-      border-radius: 10px;
-      border: 1px solid var(--accent);
-      background: transparent;
-      color: #e5e7eb;
-      padding: 10px 12px;
-      cursor: pointer;
-      font-weight: 700;
-      flex: 1;
-      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    textarea[readonly] {
+      opacity: 0.8;
     }
-    button.primary { background: var(--accent); color: #0b1120; }
-    button:hover { transform: translateY(-1px); border-color: #34d399; }
-    button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .inline-label {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 0.6rem;
+      font-size: 0.9rem;
+    }
+
+    .inline-label input[type="checkbox"] {
+      margin-right: 4px;
+    }
+
+    input[type="password"],
+    input[type="text"] {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #e5e7eb;
+      font-family: inherit;
+      font-size: 0.9rem;
+      min-width: 260px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: #10b981;
+      color: #020617;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    button.secondary {
+      background: #111827;
+      color: #e5e7eb;
+      border: 1px solid #1f2937;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .button-row {
+      margin-top: 0.7rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
 
     .status {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 10px;
-      margin-top: 12px;
+      margin-top: 0.8rem;
+      min-height: 1.2rem;
+      font-size: 0.85rem;
+      color: #a5b4fc;
+      white-space: pre-line;
     }
-    .pill {
-      background: var(--card);
-      border: 1px solid var(--border);
+
+    .card-shell {
+      margin-top: 1rem;
       border-radius: 12px;
-      padding: 10px 12px;
+      border: 1px solid #1f2937;
+      background: radial-gradient(circle at top left, #0f172a, #020617 52%);
+      padding: 16px 14px;
+      min-height: 120px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 10px;
     }
-    .pill small { color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
-    .pill strong { font-size: 1.2rem; }
 
-    .card-area { display: flex; flex-direction: column; gap: 14px; }
-    .flashcard {
-      background: linear-gradient(145deg, #0b1224, #0d1429);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-      min-height: 320px;
+    .card-question {
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .card-question strong {
+      font-weight: 600;
+    }
+
+    select {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #e5e7eb;
+      font-family: inherit;
+      font-size: 0.9rem;
+      max-width: 100%;
+    }
+
+    .flashcard-footer {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      box-shadow: var(--shadow);
+      gap: 8px;
+      margin-top: 0.6rem;
     }
-    .question { font-size: 1.1rem; line-height: 1.6; }
-    select.answer { width: auto; margin-top: 8px; }
-    .options { background: rgba(255,255,255,0.02); border-radius: 12px; padding: 12px; border: 1px dashed var(--border); }
-    .translation { color: var(--muted); font-style: italic; }
-    .feedback { font-weight: 700; }
 
-    .queue-controls { display: flex; gap: 8px; flex-wrap: wrap; }
-    .queue-controls button { flex: 1 1 140px; }
+    .srs-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
 
-    .log { font-family: 'Inter', sans-serif; font-size: 0.85rem; color: var(--muted); white-space: pre-wrap; }
+    .srs-buttons button {
+      flex: 0 0 auto;
+      font-size: 0.85rem;
+      padding-inline: 12px;
+    }
+
+    .srs-buttons button.again {
+      background: #b91c1c;
+      color: #f9fafb;
+    }
+
+    .srs-buttons button.medium {
+      background: #4b5563;
+      color: #f9fafb;
+    }
+
+    .srs-buttons button.easy {
+      background: #22c55e;
+      color: #052e16;
+    }
+
+    .feedback {
+      font-size: 0.9rem;
+      min-height: 1.1rem;
+    }
+
+    .feedback.ok {
+      color: #6ee7b7;
+    }
+
+    .feedback.bad {
+      color: #fecaca;
+    }
+
+    .explanation {
+      font-size: 0.85rem;
+      color: #cbd5f5;
+      margin-top: 4px;
+    }
+
+    .meta {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 0.4rem;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-right: 6px;
+    }
+
+    @media (min-width: 860px) {
+      .layout-two-column {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+        gap: 20px;
+        align-items: flex-start;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div>
-      <h1>Missing Verb Flashcards</h1>
-      <div style="color:var(--muted);">Cloze practice powered by Gemini</div>
+  <div class="app">
+    <h1>French Missing Verb Flashcards</h1>
+    <p>Paste a block of French, optionally clean it with Gemini, then build a small deck of verb-cloze flashcards.</p>
+
+    <!-- API key -->
+    <section>
+      <h2>API key</h2>
+      <label for="apiKey">Gemini API key</label>
+      <div class="button-row">
+        <input id="apiKey" type="password" autocomplete="off" placeholder="Your Gemini API key" />
+        <button id="saveKey" class="secondary" type="button">Save key locally</button>
+      </div>
+      <p class="meta">Stored in your browser’s localStorage only.</p>
+    </section>
+
+    <div class="layout-two-column">
+      <!-- Left: input & cleaning -->
+      <section>
+        <h2>1. Input text</h2>
+        <label for="sourceText">Raw French sentences (one per line, or a paragraph without punctuation)</label>
+        <textarea id="sourceText" placeholder="Eg: il faut que je parte demain matin&#10;je voudrais apprendre le français rapidement"></textarea>
+
+        <label class="inline-label">
+          <input type="checkbox" id="useCleaning" checked />
+          Use Gemini to clean / punctuate first (uses <code>cleaningInstruction</code>)
+        </label>
+
+        <div class="button-row">
+          <button id="buildDeck" type="button">Build flashcard deck (max 10)</button>
+        </div>
+
+        <div id="status" class="status"></div>
+      </section>
+
+      <!-- Right: cleaned text -->
+      <section>
+        <h2>2. Cleaned sentences</h2>
+        <p>This shows the result of the cleaning step before flashcards are built.</p>
+        <textarea id="cleanedText" readonly placeholder="Cleaned sentences will appear here."></textarea>
+      </section>
     </div>
-    <a href="./index.html">← Back to menu</a>
-  </header>
 
-  <main>
-    <section class="panel">
-      <label for="apiKey">Google AI Studio API Key</label>
-      <div class="btn-row" style="margin-top:6px;">
-        <input type="password" id="apiKey" placeholder="AIza..." />
-        <button id="saveKey" style="flex:0 0 auto; width:90px;">Save</button>
-      </div>
-      <small style="color:var(--muted);">Stored locally in your browser.</small>
+    <!-- Flashcard area -->
+    <section>
+      <h2>3. Flashcards</h2>
+      <p>Each flashcard hides one verb and offers a dropdown list of conjugations.</p>
 
-      <div style="margin-top:16px;">
-        <label for="sourceText">Paste sentences (punctuation optional)</label>
-        <textarea id="sourceText" placeholder="Tu dois terminer ton travail avant de sortir Tu devras..." ></textarea>
-      </div>
-
-      <div class="btn-row">
-        <button class="secondary" id="cleanBtn">Clean text with AI</button>
-        <button class="primary" id="buildBtn">Build deck</button>
-      </div>
-      <button class="secondary" id="clearBtn" style="margin-top:8px; width:100%;">Reset</button>
-
-      <div class="status">
-        <div class="pill">
-          <small>Sentences</small>
-          <strong id="sentenceCount">0</strong>
+      <div id="cardShell" class="card-shell">
+        <div id="cardContent" class="card-question">
+          No cards yet. Build a deck to begin.
         </div>
-        <div class="pill">
-          <small>In deck</small>
-          <strong id="deckCount">0</strong>
-        </div>
-        <div class="pill">
-          <small>Remaining</small>
-          <strong id="remaining">0</strong>
-        </div>
-      </div>
 
-      <div class="pill" style="margin-top:12px;">
-        <small>Status</small>
-        <div id="statusText" class="log">Awaiting input…</div>
-      </div>
-    </section>
-
-    <section class="card-area">
-      <div class="flashcard" id="card">
-        <div class="question" id="question">Paste text and click Build deck to start.</div>
-        <div class="options" id="options"></div>
-        <select id="answerSelect" class="answer" style="display:none;"></select>
-        <button class="primary" id="checkBtn" style="width: fit-content; display:none;">Check answer</button>
-        <div class="feedback" id="feedback"></div>
-        <div class="translation" id="translation"></div>
-        <div class="queue-controls" id="queueButtons" style="display:none;">
-          <button id="againBtn">Again (reshuffle top)</button>
-          <button id="mediumBtn">Medium (middle)</button>
-          <button id="easyBtn">Easy (later)</button>
+        <div class="flashcard-footer">
+          <div class="button-row">
+            <button id="checkBtn" type="button" disabled>Check answer</button>
+            <button id="nextBtn" type="button" class="secondary" disabled>Next card</button>
+            <button id="revealBtn" type="button" class="secondary" disabled>Reveal explanation</button>
+          </div>
+          <div class="srs-buttons">
+            <button id="againBtn" type="button" class="again" disabled>Again</button>
+            <button id="mediumBtn" type="button" class="medium" disabled>Medium</button>
+            <button id="easyBtn" type="button" class="easy" disabled>Easy</button>
+          </div>
+          <div id="feedback" class="feedback"></div>
+          <div id="explanation" class="explanation"></div>
+          <div id="cardMeta" class="meta"></div>
         </div>
       </div>
     </section>
-  </main>
+  </div>
 
   <script>
-    const dom = {
-      apiKey: document.getElementById('apiKey'),
-      saveKey: document.getElementById('saveKey'),
-      source: document.getElementById('sourceText'),
-      cleanBtn: document.getElementById('cleanBtn'),
-      buildBtn: document.getElementById('buildBtn'),
-      clearBtn: document.getElementById('clearBtn'),
-      sentenceCount: document.getElementById('sentenceCount'),
-      deckCount: document.getElementById('deckCount'),
-      remaining: document.getElementById('remaining'),
-      statusText: document.getElementById('statusText'),
-      question: document.getElementById('question'),
-      options: document.getElementById('options'),
-      select: document.getElementById('answerSelect'),
-      checkBtn: document.getElementById('checkBtn'),
-      feedback: document.getElementById('feedback'),
-      translation: document.getElementById('translation'),
-      queueButtons: document.getElementById('queueButtons'),
-      againBtn: document.getElementById('againBtn'),
-      mediumBtn: document.getElementById('mediumBtn'),
-      easyBtn: document.getElementById('easyBtn')
-    };
+    // --- System instructions used for the model ---
 
-    const cleaningInstruction = "I'll give you some text without punctuation and can you fix them in to sentences please. Do not say anything, just return the fixed text.";
-    const missingVerbInstruction = `I say:\nTu dois terminer ton travail avant de sortir ?\n\nYOU REPLY IN THIS FORMAT ONLY!! Choose first verb!\n[\nTu ____ terminer ton travail avant de sortir ?\n| dois (Indicatif – Présent)\n| devais (Indicatif – Imparfait)\n| devras (Indicatif – Futur simple)\n| as dû (Indicatif – Passé composé)\n| avais dû (Indicatif – Plus-que-parfait)\n| auras dû (Indicatif – Futur antérieur)\n| dus (Indicatif – Passé simple)\n| eus dû (Indicatif – Passé antérieur)\n| doives (Subjonctif – Présent)\n| aies dû (Subjonctif – Passé)\n| dusses (Subjonctif – Imparfait)\n| eusses dû (Subjonctif – Plus-que-parfait)\n| devrais (Conditionnel – Présent)\n| aurais dû (Conditionnel – Passé)\n| dois (Impératif)\n| devant (Participe présent)\n| dû (Participe passé)\n<Dois>\n**Tu dois terminer ton travail avant de sortir? (Do you have to finish your work before going out?)**\n]`;
+    const cleaningInstruction =
+      "I'll give you some text without punctuation and can you fix them in to sentences please. Do not say anything, just return the fixed text.";
 
-    const MAX_SENTENCES = 10;
+    const missingVerbInstruction = `I say:
+Tu dois terminer ton travail avant de sortir ?
 
-    const state = {
-      queue: [],
-      cards: [],
-      pendingCard: null,
-      sentences: [],
-      nextIndex: 0,
-      loadingCard: false,
-      solutionMode: false
-    };
+YOU REPLY IN THIS FORMAT ONLY!! Choose first verb!
+[
+Tu ____ terminer ton travail avant de sortir ?
+| dois (Indicatif – Présent)
+| devais (Indicatif – Imparfait)
+| devras (Indicatif – Futur simple)
+| as dû (Indicatif – Passé composé)
+| avais dû (Indicatif – Plus-que-parfait)
+| auras dû (Indicatif – Futur antérieur)
+| dus (Indicatif – Passé simple)
+| eus dû (Indicatif – Passé antérieur)
+| doives (Subjonctif – Présent)
+| aies dû (Subjonctif – Passé)
+| dusses (Subjonctif – Imparfait)
+| eusses dû (Subjonctif – Plus-que-parfait)
+| devrais (Conditionnel – Présent)
+| aurais dû (Conditionnel – Passé)
+| dois (Impératif)
+| devant (Participe présent)
+| dû (Participe passé)
+<Dois>
+**Tu dois terminer ton travail avant de sortir? (Do you have to finish your work before going out?)**
+];`;
 
-    function saveKey() {
-      const val = dom.apiKey.value.trim();
-      if (!val) { alert('Enter an API key first.'); return; }
-      localStorage.setItem('geminiKey', val);
-      dom.statusText.textContent = 'API key saved locally.';
-    }
+    // --- API key helpers ---
 
     function loadKey() {
-      const saved = localStorage.getItem('geminiKey');
-      if (saved && !dom.apiKey.value) dom.apiKey.value = saved;
-      return dom.apiKey.value.trim();
-    }
-    loadKey();
+      const input = document.getElementById('apiKey');
+      const stored = localStorage.getItem('geminiApiKey');
 
-    function setStatus(msg) { dom.statusText.textContent = msg; }
+      if (input && input.value.trim()) {
+        return input.value.trim();
+      }
 
-    function splitSentences(text) {
-      return text
-        .split(/[.!?]/)
-        .map(s => s.trim())
-        .filter(Boolean);
+      if (stored) {
+        if (input && !input.value) {
+          input.value = stored;
+        }
+        return stored;
+      }
+
+      return null;
     }
 
-    function updateCounters() {
-      const totalSentences = state.sentences.length || 0;
-      const unbuilt = Math.max(0, totalSentences - state.nextIndex - (state.loadingCard ? 1 : 0));
-      dom.sentenceCount.textContent = `${totalSentences}`;
-      dom.deckCount.textContent = `${state.cards.length}`;
-      dom.remaining.textContent = `${state.queue.length + unbuilt}`;
+    function saveKey() {
+      const input = document.getElementById('apiKey');
+      if (!input) return;
+      const value = input.value.trim();
+      if (value) {
+        localStorage.setItem('geminiApiKey', value);
+      }
     }
+
+    // --- Single central Gemini call, using the system instructions above ---
 
     async function callGemini(systemInstruction, userContent) {
       const key = loadKey();
       if (!key) throw new Error('Missing API key');
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${key}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: systemInstruction }] },
-          contents: [{ parts: [{ text: userContent }] }]
-        })
-      });
+
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${key}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: systemInstruction }] },
+            contents: [{ parts: [{ text: userContent }] }]
+          })
+        }
+      );
+
       const raw = await response.text();
       let data;
-      try { data = JSON.parse(raw); } catch (e) { data = null; }
+      try {
+        data = JSON.parse(raw);
+      } catch (e) {
+        data = null;
+      }
+
       if (!response.ok || data?.error) {
-        const err = new Error(data?.error?.message || `Request failed (${response.status})`);
+        const err = new Error(
+          data?.error?.message || `Request failed (${response.status})`
+        );
         err.raw = raw;
         throw err;
       }
+
       const botText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
       if (!botText) throw new Error('No content returned.');
       return botText;
     }
 
-    async function cleanText() {
-      const input = dom.source.value.trim();
-      if (!input) { alert('Paste some text first.'); return; }
-      setStatus('Cleaning text…');
-      dom.cleanBtn.disabled = dom.buildBtn.disabled = true;
+    // --- Flashcard cache (per sentence) ---
+
+    const FLASHCARD_CACHE_KEY = 'geminiVerbFlashcardCache';
+    let flashcardCache = {};
+
+    function loadFlashcardCache() {
       try {
-        const cleaned = await callGemini(cleaningInstruction, input);
-        dom.source.value = cleaned.trim();
-        setStatus('Cleaned text inserted. You can build the deck now.');
-      } catch (err) {
-        console.error(err);
-        setStatus(`Clean-up failed: ${err.message}`);
-      } finally {
-        dom.cleanBtn.disabled = dom.buildBtn.disabled = false;
+        const raw = localStorage.getItem(FLASHCARD_CACHE_KEY);
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === 'object' ? parsed : {};
+      } catch (e) {
+        console.warn('Could not load flashcard cache', e);
+        return {};
       }
     }
 
-    function parseMissingVerbResponse(text) {
-      const bracketMatch = text.match(/\[(.*)\]/s);
-      const content = (bracketMatch ? bracketMatch[1] : text).trim();
-      const lines = content.split(/\n+/).map(l => l.trim()).filter(Boolean);
-      const question = lines.find(l => l.includes('____')) || lines[0] || '';
-      const options = lines.filter(l => l.startsWith('|')).map(l => l.replace(/^\|\s*/, ''));
-      const answerLine = lines.find(l => /^<.*>$/.test(l)) || '';
-      const translationLine = lines.find(l => /^\*\*.*\*\*$/.test(l)) || '';
-      const correct = answerLine.replace(/[<>]/g, '').trim();
-      const translation = translationLine.replace(/\*\*/g, '').trim();
-      return { question, options, correct, translation };
+    function saveFlashcardCache() {
+      try {
+        localStorage.setItem(FLASHCARD_CACHE_KEY, JSON.stringify(flashcardCache));
+      } catch (e) {
+        console.warn('Could not save flashcard cache', e);
+      }
     }
 
-    async function buildCard(sentence, index, total) {
-      setStatus(`Building card ${index + 1}/${total}…`);
-      const response = await callGemini(missingVerbInstruction, sentence);
-      const parsed = parseMissingVerbResponse(response);
-      if (!parsed.question || !parsed.options.length || !parsed.correct) throw new Error('Could not parse card.');
-      return { sentence, ...parsed };
+    // --- Flashcard data structures and state ---
+
+    // Each deck entry is { sentence, card: null | cardObject }
+    let deck = [];
+    // queue elements are { entry, id }
+    let queue = [];
+    let currentNode = null;
+    let hasChecked = false;
+
+    // Card shape:
+    // {
+    //   question: "Tu ____ ... ?",
+    //   options: [{ label, value }],
+    //   correctValue: "Dois",
+    //   explanation: "Tu dois ... (Do you ...)",
+    //   originalSentence: "Tu dois terminer ... ?",
+    //   raw: "<full raw model reply>"
+    // }
+
+    function parseFlashcardResponse(raw) {
+      const lines = raw
+        .split('\n')
+        .map(l => l.trim())
+        .filter(Boolean);
+
+      if (!lines.length) {
+        throw new Error('Empty response from model for flashcard.');
+      }
+
+      // Question line: look for the line with the blank
+      let question = lines.find(l => l.includes('____'));
+      if (!question) {
+        // fallback: first non-bracket line
+        question = lines.find(l => !l.startsWith('[') && !l.startsWith('|')) || lines[0];
+      }
+
+      // Option lines: those starting with '|'
+      const optionLines = lines.filter(l => l.startsWith('|'));
+      if (!optionLines.length) {
+        throw new Error('No options found in model reply.');
+      }
+
+      const options = optionLines.map(line => {
+        const label = line.replace(/^\|\s*/, '');
+        const m = label.match(/^(.+?)\s*\(/);
+        const value = m ? m[1].trim() : label.trim();
+        return { label, value };
+      });
+
+      // Correct form: between < and >
+      const answerLine = lines.find(l => l.startsWith('<') && l.endsWith('>'));
+      if (!answerLine) {
+        throw new Error('No correct answer marker <...> found.');
+      }
+      const correctValue = answerLine.slice(1, -1).trim();
+
+      // Explanation: line that starts with ** and ends with **
+      const explanationLine = lines.find(l => l.startsWith('**') && l.endsWith('**'));
+      const explanation = explanationLine
+        ? explanationLine.replace(/^\*\*/, '').replace(/\*\*$/, '').trim()
+        : '';
+
+      return {
+        question,
+        options,
+        correctValue,
+        explanation,
+        raw
+      };
     }
 
-    async function fetchNextCard() {
-      if (state.loadingCard) return;
-      if (state.nextIndex >= state.sentences.length) {
-        updateCounters();
+    function initQueueFromDeck() {
+      queue = deck.map((entry, idx) => ({ entry, id: idx }));
+      currentNode = null;
+      hasChecked = false;
+    }
+
+    // --- UI helpers ---
+
+    function setStatus(text) {
+      const el = document.getElementById('status');
+      if (el) el.textContent = text || '';
+    }
+
+    function setFeedback(text, ok) {
+      const fb = document.getElementById('feedback');
+      if (!fb) return;
+      fb.textContent = text || '';
+      fb.classList.remove('ok', 'bad');
+      if (!text) return;
+      fb.classList.add(ok ? 'ok' : 'bad');
+    }
+
+    function setExplanation(text) {
+      const el = document.getElementById('explanation');
+      if (el) el.textContent = text || '';
+    }
+
+    function setCardMeta(text) {
+      const el = document.getElementById('cardMeta');
+      if (el) el.textContent = text || '';
+    }
+
+    function setControlsEnabled(enabled) {
+      const checkBtn = document.getElementById('checkBtn');
+      const againBtn = document.getElementById('againBtn');
+      const mediumBtn = document.getElementById('mediumBtn');
+      const easyBtn = document.getElementById('easyBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const revealBtn = document.getElementById('revealBtn');
+
+      [checkBtn, againBtn, mediumBtn, easyBtn, nextBtn, revealBtn].forEach(btn => {
+        if (btn) btn.disabled = !enabled;
+      });
+    }
+
+    function renderNoCards(message) {
+      const cardContent = document.getElementById('cardContent');
+      if (cardContent) {
+        cardContent.innerHTML = message || 'No cards available.';
+      }
+      setFeedback('');
+      setExplanation('');
+      setCardMeta('');
+      setControlsEnabled(false);
+    }
+
+    // --- Lazy loading: ensure the current node has a card, using cache if possible ---
+
+    async function ensureCurrentCardLoaded() {
+      if (!currentNode || !currentNode.entry) return null;
+
+      const entry = currentNode.entry;
+      if (entry.card) {
+        // Already loaded in memory
+        return entry.card;
+      }
+
+      const sentence = entry.sentence;
+      if (!sentence) {
+        throw new Error('Missing sentence for this card.');
+      }
+
+      // Try cache (per sentence)
+      const cached = flashcardCache[sentence];
+      if (cached) {
+        entry.card = cached;
+        return entry.card;
+      }
+
+      // If not in cache, generate now
+      setStatus(`Generating flashcard for sentence ${currentNode.id + 1}…`);
+      const rawFlashcard = await callGemini(missingVerbInstruction, sentence);
+      const parsed = parseFlashcardResponse(rawFlashcard);
+      parsed.originalSentence = sentence;
+
+      entry.card = parsed;
+      flashcardCache[sentence] = parsed;
+      saveFlashcardCache();
+
+      return entry.card;
+    }
+
+    // --- Rendering current card (async because of lazy loading) ---
+
+    async function renderCurrentCard() {
+      const cardContent = document.getElementById('cardContent');
+      if (!cardContent) return;
+
+      if (!currentNode || !currentNode.entry) {
+        renderNoCards('Deck finished. Build a new one to continue.');
         return;
       }
-      const index = state.nextIndex;
-      state.loadingCard = true;
-      const sentence = state.sentences[index];
+
+      // Disable everything while loading this card
+      setControlsEnabled(false);
+      hasChecked = false;
+      setFeedback('');
+      setExplanation('');
+      setCardMeta('');
+
+      const nextBtn = document.getElementById('nextBtn');
+      const revealBtn = document.getElementById('revealBtn');
+
+      if (nextBtn) nextBtn.disabled = true;
+      if (revealBtn) revealBtn.disabled = true;
+
+      let card;
       try {
-        const card = await buildCard(sentence, index, state.sentences.length);
-        state.nextIndex = index + 1;
-        state.cards.push(card);
-        state.queue.push(card);
-        setStatus(`Card ${index + 1} ready. ${state.sentences.length - state.nextIndex} left to fetch.`);
-        updateCounters();
-        if (state.queue.length === 1) {
-          renderCard();
-        }
+        card = await ensureCurrentCardLoaded();
       } catch (err) {
         console.error(err);
-        setStatus(`Error building card ${index + 1}: ${err.message}`);
+        setStatus(`Error creating flashcard: ${err.message || String(err)}`);
+        renderNoCards('Could not create this card.');
+        return;
       } finally {
-        state.loadingCard = false;
-        updateCounters();
+        setStatus('');
       }
-    }
 
-    async function buildDeck() {
-      const input = dom.source.value.trim();
-      if (!input) { alert('Paste some text first.'); return; }
-      const sentences = splitSentences(input);
-      if (!sentences.length) { alert('No sentences detected.'); return; }
-      const limited = sentences.slice(0, MAX_SENTENCES);
-      if (sentences.length > MAX_SENTENCES) {
-        setStatus(`Using first ${MAX_SENTENCES} sentences to keep the deck lean.`);
-      }
-      dom.buildBtn.disabled = dom.cleanBtn.disabled = true;
-      dom.feedback.textContent = '';
-      dom.translation.textContent = '';
-      dom.select.style.display = 'none';
-      dom.checkBtn.style.display = 'none';
-      dom.options.innerHTML = '';
-      dom.options.style.display = 'none';
-      dom.queueButtons.style.display = 'none';
-      dom.checkBtn.disabled = false;
-      state.cards = [];
-      state.queue = [];
-      state.sentences = limited;
-      state.nextIndex = 0;
-      state.pendingCard = null;
-      state.loadingCard = false;
-      state.solutionMode = false;
-      updateCounters();
-      try {
-        await fetchNextCard();
-        if (state.queue.length) {
-          setStatus('Deck ready. Solve a card to load the next one.');
-        }
-      } catch (err) {
-        console.error(err);
-        setStatus(`Error building deck: ${err.message}`);
-      } finally {
-        dom.buildBtn.disabled = dom.cleanBtn.disabled = false;
-        updateCounters();
-      }
-    }
-
-    function renderCard() {
-      dom.feedback.textContent = '';
-      dom.translation.textContent = '';
-      dom.queueButtons.style.display = 'none';
-      const current = state.queue[0];
-      if (!current) {
-        if (state.loadingCard) {
-          dom.question.textContent = 'Loading next card…';
-          dom.options.innerHTML = '';
-          dom.select.style.display = 'none';
-          dom.checkBtn.style.display = 'none';
-          dom.checkBtn.disabled = true;
-          updateCounters();
-          return;
-        }
-        if (state.nextIndex < state.sentences.length) {
-          fetchNextCard();
-          dom.question.textContent = 'Loading next card…';
-          dom.options.innerHTML = '';
-          dom.select.style.display = 'none';
-          dom.checkBtn.style.display = 'none';
-          dom.checkBtn.disabled = true;
-          updateCounters();
-          return;
-        }
-        dom.question.textContent = 'Deck complete!';
-        dom.options.innerHTML = '';
-        dom.select.style.display = 'none';
-        dom.checkBtn.style.display = 'none';
-        dom.checkBtn.disabled = true;
-        updateCounters();
+      if (!card) {
+        renderNoCards('Could not create this card.');
         return;
       }
-      dom.question.textContent = current.question;
-      dom.options.innerHTML = '';
-      dom.select.style.display = 'block';
-      dom.checkBtn.style.display = 'inline-block';
-      dom.checkBtn.disabled = false;
-      dom.select.innerHTML = '<option value="">Select the missing verb…</option>' + current.options.map(opt => {
-        const [verb] = opt.split(' ');
-        return `<option value="${verb}">${verb}</option>`;
-      }).join('');
-      updateCounters();
+
+      setCardMeta(`Card ${currentNode.id + 1} of ${deck.length}`);
+
+      const parts = card.question.split('____');
+      const before = parts[0] || '';
+      const after = parts[1] || '';
+
+      const container = document.createElement('div');
+
+      const questionEl = document.createElement('div');
+      questionEl.className = 'card-question';
+
+      const beforeSpan = document.createElement('span');
+      beforeSpan.textContent = before;
+
+      const afterSpan = document.createElement('span');
+      afterSpan.textContent = after;
+
+      const select = document.createElement('select');
+      select.id = 'answerSelect';
+
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = '— choisir une forme —';
+      placeholder.disabled = true;
+      placeholder.selected = true;
+      select.appendChild(placeholder);
+
+      card.options.forEach(opt => {
+        const o = document.createElement('option');
+        o.value = opt.value;
+        o.textContent = opt.label;
+        select.appendChild(o);
+      });
+
+      questionEl.appendChild(beforeSpan);
+      questionEl.appendChild(document.createTextNode(' '));
+      questionEl.appendChild(select);
+      questionEl.appendChild(document.createTextNode(' '));
+      questionEl.appendChild(afterSpan);
+
+      container.appendChild(questionEl);
+
+      const hint = document.createElement('div');
+      hint.className = 'meta';
+      hint.innerHTML = `<span class="pill">Verb</span>Choose the correct conjugation of the missing verb.`;
+      container.appendChild(hint);
+
+      cardContent.innerHTML = '';
+      cardContent.appendChild(container);
+
+      // After rendering: enable only "Check" initially
+      const checkBtn = document.getElementById('checkBtn');
+      const againBtn = document.getElementById('againBtn');
+      const mediumBtn = document.getElementById('mediumBtn');
+      const easyBtn = document.getElementById('easyBtn');
+
+      if (checkBtn) checkBtn.disabled = false;
+      if (againBtn) againBtn.disabled = true;
+      if (mediumBtn) mediumBtn.disabled = true;
+      if (easyBtn) easyBtn.disabled = true;
+      if (nextBtn) nextBtn.disabled = true;
+      if (revealBtn) revealBtn.disabled = true;
     }
 
-    async function checkAnswer() {
-      if (state.solutionMode) {
-        state.solutionMode = false;
-        dom.checkBtn.textContent = 'Check answer';
-        dom.checkBtn.disabled = false;
-        dom.select.value = '';
-        await fetchNextCard();
-        renderCard();
+    // --- Queue navigation (async because renderCurrentCard is async) ---
+
+    async function nextCard() {
+      if (!queue.length) {
+        currentNode = null;
+        renderNoCards('All cards in this deck are done for now.');
         return;
       }
-      const current = state.queue[0];
-      if (!current) return;
-      const choice = dom.select.value.trim();
-      if (!choice) { alert('Choose an option first.'); return; }
-      const isCorrect = choice.toLowerCase() === current.correct.toLowerCase();
-      const completed = current.question.replace('____', current.correct);
-      dom.feedback.textContent = isCorrect ? 'Correct! 🎉' : `Not quite. Correct answer: ${current.correct}`;
-      state.pendingCard = isCorrect ? null : state.queue.shift();
-      dom.checkBtn.disabled = true;
+      currentNode = queue.shift();
+      await renderCurrentCard();
+    }
+
+    function rateCurrentCard(difficulty) {
+      if (!currentNode || !currentNode.entry) return;
+      const entry = currentNode.entry;
+
+      if (!entry.card) {
+        setFeedback('This card is still loading. Please wait.', false);
+        return;
+      }
+
+      if (!hasChecked) {
+        setFeedback('Check your answer before rating the card.', false);
+        return;
+      }
+
+      let insertIndex;
+      switch (difficulty) {
+        case 'again':
+          insertIndex = 1;
+          break;
+        case 'medium':
+          insertIndex = 3;
+          break;
+        case 'easy':
+        default:
+          insertIndex = queue.length;
+          break;
+      }
+
+      if (insertIndex > queue.length) insertIndex = queue.length;
+      queue.splice(insertIndex, 0, currentNode);
+      // Move on to next card
+      nextCard();
+    }
+
+    function checkAnswer() {
+      if (!currentNode || !currentNode.entry) return;
+      const entry = currentNode.entry;
+      const card = entry.card;
+
+      if (!card) {
+        setFeedback('This card is still loading. Please wait.', false);
+        return;
+      }
+
+      const select = document.getElementById('answerSelect');
+      if (!select) return;
+
+      const value = select.value;
+      if (!value) {
+        setFeedback('Please choose an answer from the list.', false);
+        return;
+      }
+
+      const normalisedValue = value.trim().toLowerCase();
+      const normalisedCorrect = card.correctValue.trim().toLowerCase();
+
+      const isCorrect = normalisedValue === normalisedCorrect;
+
+      const checkBtn = document.getElementById('checkBtn');
+      const againBtn = document.getElementById('againBtn');
+      const mediumBtn = document.getElementById('mediumBtn');
+      const easyBtn = document.getElementById('easyBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const revealBtn = document.getElementById('revealBtn');
+
       if (isCorrect) {
-        state.queue.shift();
-        dom.translation.innerHTML = `${completed}${current.translation ? `<br>${current.translation}` : ''}`;
-        dom.select.style.display = 'none';
-        dom.checkBtn.textContent = 'Next card';
-        dom.checkBtn.disabled = false;
-        state.solutionMode = true;
-        updateCounters();
+        setFeedback(`Correct: ${card.correctValue}`, true);
+        // Automatically reveal explanation on correct
+        setExplanation(card.explanation || '');
+
+        // Disable SRS & reveal; enable Next; disable Check
+        if (againBtn) againBtn.disabled = true;
+        if (mediumBtn) mediumBtn.disabled = true;
+        if (easyBtn) easyBtn.disabled = true;
+        if (revealBtn) revealBtn.disabled = true;
+        if (checkBtn) checkBtn.disabled = true;
+        if (nextBtn) nextBtn.disabled = false;
       } else {
-        dom.translation.textContent = current.translation || '';
-        dom.queueButtons.style.display = 'flex';
-        updateCounters();
+        setFeedback(`Not quite. Correct answer will be hidden until you reveal it.`, false);
+        // Hide explanation until user chooses to reveal
+        setExplanation('');
+
+        // Enable SRS buttons, enable Reveal, keep Next disabled
+        if (againBtn) againBtn.disabled = false;
+        if (mediumBtn) mediumBtn.disabled = false;
+        if (easyBtn) easyBtn.disabled = false;
+        if (revealBtn) revealBtn.disabled = false;
+        if (nextBtn) nextBtn.disabled = true;
+      }
+
+      hasChecked = true;
+    }
+
+    function revealExplanation() {
+      if (!currentNode || !currentNode.entry) return;
+      const entry = currentNode.entry;
+      const card = entry.card;
+      if (!card) return;
+      setExplanation(card.explanation || '');
+    }
+
+    function goToNextCard() {
+      // On correct, we do not reinsert this card into the queue:
+      // it's already been shifted out when we first showed it,
+      // and we simply move on.
+      nextCard();
+    }
+
+    // --- Deck building workflow (cleans + sets up sentences; cards are lazy-loaded) ---
+
+    async function buildDeckFromInput() {
+      const sourceEl = document.getElementById('sourceText');
+      const cleanedEl = document.getElementById('cleanedText');
+      const useCleaningEl = document.getElementById('useCleaning');
+
+      if (!sourceEl || !cleanedEl || !useCleaningEl) return;
+
+      const rawText = sourceEl.value.trim();
+      if (!rawText) {
+        alert('Please paste some French text first.');
+        return;
+      }
+
+      setStatus('');
+      setFeedback('');
+      setExplanation('');
+      setCardMeta('');
+      renderNoCards('Preparing deck...');
+
+      let workingText = rawText;
+
+      try {
+        if (useCleaningEl.checked) {
+          setStatus('Cleaning text with Gemini using cleaningInstruction…');
+          const cleaned = await callGemini(cleaningInstruction, rawText);
+          cleanedEl.value = cleaned;
+          workingText = cleaned;
+        } else {
+          cleanedEl.value = workingText;
+        }
+
+        const sentences = workingText
+          .split(/\r?\n/)
+          .map(s => s.trim())
+          .filter(Boolean);
+
+        if (!sentences.length) {
+          throw new Error('No sentences found after cleaning / splitting.');
+        }
+
+        const limited = sentences.slice(0, 10);
+
+        // Lazy: keep only sentences here, no per-sentence AI call yet
+        deck = limited.map(sentence => ({
+          sentence,
+          card: null
+        }));
+
+        initQueueFromDeck();
+        setStatus(`Initialised deck with ${deck.length} sentences. Each flashcard is generated only when you see it.`);
+        await nextCard();
+      } catch (err) {
+        console.error(err);
+        setStatus(`Error: ${err.message || String(err)}`);
+        renderNoCards('Could not build deck due to an error.');
       }
     }
 
-    function requeue(mode) {
-      if (!state.pendingCard) return;
-      const card = state.pendingCard;
-      state.pendingCard = null;
-      const queue = state.queue;
-      let position = queue.length;
-      if (mode === 'again') position = Math.max(0, Math.min(1, queue.length));
-      else if (mode === 'medium') position = Math.floor(queue.length / 2);
-      queue.splice(position, 0, card);
-      dom.queueButtons.style.display = 'none';
-      renderCard();
-    }
+    // --- Wire up UI once DOM is ready ---
 
-    function clearAll() {
-      dom.source.value = '';
-      state.queue = [];
-      state.cards = [];
-      state.sentences = [];
-      state.nextIndex = 0;
-      state.pendingCard = null;
-      state.loadingCard = false;
-      state.solutionMode = false;
-      dom.select.innerHTML = '';
-      dom.options.innerHTML = '';
-      dom.feedback.textContent = '';
-      dom.translation.textContent = '';
-      dom.queueButtons.style.display = 'none';
-      dom.question.textContent = 'Paste text and click Build deck to start.';
-      updateCounters();
-      setStatus('Awaiting input…');
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+      // Load caches
+      flashcardCache = loadFlashcardCache();
 
-    dom.saveKey.addEventListener('click', saveKey);
-    dom.cleanBtn.addEventListener('click', cleanText);
-    dom.buildBtn.addEventListener('click', buildDeck);
-    dom.clearBtn.addEventListener('click', clearAll);
-    dom.checkBtn.addEventListener('click', checkAnswer);
-    dom.select.addEventListener('change', () => { dom.feedback.textContent = ''; dom.translation.textContent = ''; });
-    dom.againBtn.addEventListener('click', () => requeue('again'));
-    dom.mediumBtn.addEventListener('click', () => requeue('medium'));
-    dom.easyBtn.addEventListener('click', () => requeue('easy'));
+      // Prefill key from localStorage
+      loadKey();
 
-    // Checking answer by selecting option and pressing Enter
-    dom.select.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') { e.preventDefault(); checkAnswer(); }
-    });
-    // Dedicated click anywhere on options to evaluate
-    dom.options.addEventListener('click', (e) => {
-      if (e.target.tagName === 'DIV') {
-        const verb = e.target.textContent.split(' ')[0];
-        dom.select.value = verb;
-        checkAnswer();
+      const saveKeyBtn = document.getElementById('saveKey');
+      if (saveKeyBtn) {
+        saveKeyBtn.addEventListener('click', () => {
+          saveKey();
+          setStatus('API key saved locally.');
+        });
       }
+
+      const buildDeckBtn = document.getElementById('buildDeck');
+      if (buildDeckBtn) {
+        buildDeckBtn.addEventListener('click', () => {
+          buildDeckFromInput();
+        });
+      }
+
+      const checkBtn = document.getElementById('checkBtn');
+      if (checkBtn) {
+        checkBtn.addEventListener('click', () => {
+          checkAnswer();
+        });
+      }
+
+      const againBtn = document.getElementById('againBtn');
+      const mediumBtn = document.getElementById('mediumBtn');
+      const easyBtn = document.getElementById('easyBtn');
+
+      if (againBtn) {
+        againBtn.addEventListener('click', () => rateCurrentCard('again'));
+      }
+      if (mediumBtn) {
+        mediumBtn.addEventListener('click', () => rateCurrentCard('medium'));
+      }
+      if (easyBtn) {
+        easyBtn.addEventListener('click', () => rateCurrentCard('easy'));
+      }
+
+      const revealBtn = document.getElementById('revealBtn');
+      if (revealBtn) {
+        revealBtn.addEventListener('click', () => {
+          revealExplanation();
+        });
+      }
+
+      const nextBtn = document.getElementById('nextBtn');
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          goToNextCard();
+        });
+      }
+
+      // Initial state
+      renderNoCards('No cards yet. Build a deck to begin.');
     });
   </script>
 </body>
