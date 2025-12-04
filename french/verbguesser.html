@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>French Verb Guesser</title>
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color-scheme: light dark;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+
+    .app {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      margin: 1.8rem 0 0.4rem;
+    }
+
+    p {
+      margin: 0.2rem 0 0.4rem;
+      color: #cbd5f5;
+      font-size: 0.9rem;
+    }
+
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 120px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #e5e7eb;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+
+    textarea[readonly] {
+      opacity: 0.8;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .inline-label {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 0.6rem;
+      font-size: 0.9rem;
+    }
+
+    .inline-label input[type="checkbox"] {
+      margin-right: 4px;
+    }
+
+    input[type="password"],
+    input[type="text"] {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #e5e7eb;
+      font-family: inherit;
+      font-size: 0.9rem;
+      min-width: 260px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: #10b981;
+      color: #020617;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    button.secondary {
+      background: #111827;
+      color: #e5e7eb;
+      border: 1px solid #1f2937;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .button-row {
+      margin-top: 0.7rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .status {
+      margin-top: 0.8rem;
+      min-height: 1.2rem;
+      font-size: 0.85rem;
+      color: #a5b4fc;
+      white-space: pre-line;
+    }
+
+    .card-shell {
+      margin-top: 1rem;
+      border-radius: 12px;
+      border: 1px solid #1f2937;
+      background: radial-gradient(circle at top left, #0f172a, #020617 52%);
+      padding: 16px 14px;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-question {
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .card-question strong {
+      font-weight: 600;
+    }
+
+    select {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #e5e7eb;
+      font-family: inherit;
+      font-size: 0.9rem;
+      max-width: 100%;
+    }
+
+    .flashcard-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 0.6rem;
+    }
+
+    .srs-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .srs-buttons button {
+      flex: 0 0 auto;
+      font-size: 0.85rem;
+      padding-inline: 12px;
+    }
+
+    .srs-buttons button.again {
+      background: #b91c1c;
+      color: #f9fafb;
+    }
+
+    .srs-buttons button.medium {
+      background: #4b5563;
+      color: #f9fafb;
+    }
+
+    .srs-buttons button.easy {
+      background: #22c55e;
+      color: #052e16;
+    }
+
+    .feedback {
+      font-size: 0.9rem;
+      min-height: 1.1rem;
+    }
+
+    .feedback.ok {
+      color: #6ee7b7;
+    }
+
+    .feedback.bad {
+      color: #fecaca;
+    }
+
+    .meta {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 0.4rem;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-right: 6px;
+    }
+
+    .verb-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-right: 8px;
+    }
+
+    @media (min-width: 860px) {
+      .layout-two-column {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+        gap: 20px;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>French Verb Guesser</h1>
+    <p>Paste French text, optionally clean it with Gemini, then practice guessing verb forms from dropdowns.</p>
+
+    <section>
+      <h2>API key</h2>
+      <label for="apiKey">Gemini API key</label>
+      <div class="button-row">
+        <input id="apiKey" type="password" autocomplete="off" placeholder="Your Gemini API key" />
+        <button id="saveKey" class="secondary" type="button">Save key locally</button>
+      </div>
+      <p class="meta">Stored in your browser’s localStorage only.</p>
+    </section>
+
+    <div class="layout-two-column">
+      <section>
+        <h2>1. Input text</h2>
+        <label for="sourceText">Raw French sentences (one per line, or a paragraph without punctuation)</label>
+        <textarea id="sourceText" placeholder="Eg: il faut que je parte demain matin&#10;je voudrais apprendre le français rapidement"></textarea>
+
+        <label class="inline-label">
+          <input type="checkbox" id="useCleaning" checked />
+          Use Gemini to clean / punctuate first (uses <code>cleaningInstruction</code>)
+        </label>
+
+        <div class="button-row">
+          <button id="buildDeck" type="button">Build verb deck (max 10)</button>
+        </div>
+
+        <div id="status" class="status"></div>
+      </section>
+
+      <section>
+        <h2>2. Cleaned sentences</h2>
+        <p>This shows the result of the cleaning step before flashcards are built.</p>
+        <textarea id="cleanedText" readonly placeholder="Cleaned sentences will appear here."></textarea>
+      </section>
+    </div>
+
+    <section>
+      <h2>3. Flashcards</h2>
+      <p>Each flashcard hides every recognised verb and offers a dropdown of that verb’s conjugations.</p>
+
+      <div id="cardShell" class="card-shell">
+        <div id="cardContent" class="card-question">
+          No cards yet. Build a deck to begin.
+        </div>
+
+        <div class="flashcard-footer">
+          <div class="button-row">
+            <button id="checkBtn" type="button" disabled>Check answers</button>
+            <button id="nextBtn" type="button" class="secondary" disabled>Next card</button>
+            <button id="revealBtn" type="button" class="secondary" disabled>Reveal original</button>
+          </div>
+          <div class="srs-buttons">
+            <button id="againBtn" type="button" class="again" disabled>Again</button>
+            <button id="mediumBtn" type="button" class="medium" disabled>Medium</button>
+            <button id="easyBtn" type="button" class="easy" disabled>Easy</button>
+          </div>
+          <div id="feedback" class="feedback"></div>
+          <div id="explanation" class="explanation"></div>
+          <div id="cardMeta" class="meta"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const cleaningInstruction =
+      "I'll give you some text without punctuation and can you fix them in to sentences please. Do not say anything, just return the fixed text.";
+
+    function loadKey() {
+      const input = document.getElementById('apiKey');
+      const stored = localStorage.getItem('geminiApiKey');
+
+      if (input && input.value.trim()) {
+        return input.value.trim();
+      }
+
+      if (stored) {
+        if (input && !input.value) {
+          input.value = stored;
+        }
+        return stored;
+      }
+
+      return null;
+    }
+
+    function saveKey() {
+      const input = document.getElementById('apiKey');
+      if (!input) return;
+      const value = input.value.trim();
+      if (value) {
+        localStorage.setItem('geminiApiKey', value);
+      }
+    }
+
+    async function callGemini(systemInstruction, userContent) {
+      const key = loadKey();
+      if (!key) throw new Error('Missing API key');
+
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${key}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: systemInstruction }] },
+            contents: [{ parts: [{ text: userContent }] }]
+          })
+        }
+      );
+
+      const raw = await response.text();
+      let data;
+      try {
+        data = JSON.parse(raw);
+      } catch (e) {
+        data = null;
+      }
+
+      if (!response.ok || data?.error) {
+        const err = new Error(
+          data?.error?.message || `Request failed (${response.status})`
+        );
+        err.raw = raw;
+        throw err;
+      }
+
+      const botText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!botText) throw new Error('No content returned.');
+      return botText;
+    }
+
+    const FLASHCARD_CACHE_KEY = 'verbGuesserFlashcardCache';
+    let flashcardCache = {};
+
+    function loadFlashcardCache() {
+      try {
+        const raw = localStorage.getItem(FLASHCARD_CACHE_KEY);
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === 'object' ? parsed : {};
+      } catch (e) {
+        console.warn('Could not load flashcard cache', e);
+        return {};
+      }
+    }
+
+    function saveFlashcardCache() {
+      try {
+        localStorage.setItem(FLASHCARD_CACHE_KEY, JSON.stringify(flashcardCache));
+      } catch (e) {
+        console.warn('Could not save flashcard cache', e);
+      }
+    }
+
+    const verbToOptions = new Map();
+    const conjugationToVerb = new Map();
+    let deck = [];
+    let queue = [];
+    let currentNode = null;
+    let hasChecked = false;
+
+    function setStatus(text) {
+      const el = document.getElementById('status');
+      if (el) el.textContent = text || '';
+    }
+
+    function setFeedback(text, ok) {
+      const el = document.getElementById('feedback');
+      if (!el) return;
+      el.textContent = text || '';
+      el.className = 'feedback' + (text ? ok ? ' ok' : ' bad' : '');
+    }
+
+    function setExplanation(text) {
+      const el = document.getElementById('explanation');
+      if (!el) return;
+      el.textContent = text || '';
+    }
+
+    function setCardMeta(text) {
+      const el = document.getElementById('cardMeta');
+      if (!el) return;
+      el.textContent = text || '';
+    }
+
+    function renderNoCards(message) {
+      const cardContent = document.getElementById('cardContent');
+      if (cardContent) {
+        cardContent.textContent = message || 'No cards to show.';
+      }
+
+      const checkBtn = document.getElementById('checkBtn');
+      const againBtn = document.getElementById('againBtn');
+      const mediumBtn = document.getElementById('mediumBtn');
+      const easyBtn = document.getElementById('easyBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const revealBtn = document.getElementById('revealBtn');
+
+      [checkBtn, againBtn, mediumBtn, easyBtn, nextBtn, revealBtn].forEach(btn => {
+        if (btn) btn.disabled = true;
+      });
+    }
+
+    function normaliseWord(word) {
+      return word.toLowerCase().replace(/^['"«»“”‘’\(\[]+/, '').replace(/['"«»“”’”\)\]]+$/, '');
+    }
+
+    function parseCSV(text) {
+      const lines = text.split(/\r?\n/).filter(Boolean);
+      if (lines.length < 2) return;
+      const headers = lines[0].split(',');
+
+      for (let i = 1; i < lines.length; i++) {
+        const cols = lines[i].split(',');
+        if (!cols.length) continue;
+        const infinitive = cols[0]?.trim();
+        if (!infinitive) continue;
+
+        const options = new Set();
+        for (let c = 0; c < cols.length; c++) {
+          const value = cols[c]?.trim();
+          if (!value) continue;
+          options.add(value);
+          const key = normaliseWord(value);
+          if (!conjugationToVerb.has(key)) {
+            conjugationToVerb.set(key, infinitive);
+          }
+        }
+        verbToOptions.set(infinitive, Array.from(options));
+      }
+    }
+
+    async function loadVerbs() {
+      const cached = localStorage.getItem('verbConjugationCSV');
+      if (cached) {
+        parseCSV(cached);
+        return;
+      }
+
+      const response = await fetch('french-verb-conjugation.csv');
+      if (!response.ok) throw new Error('Could not load verb list');
+      const text = await response.text();
+      localStorage.setItem('verbConjugationCSV', text);
+      parseCSV(text);
+    }
+
+    function buildCardFromSentence(sentence) {
+      const tokens = sentence.split(/(\s+)/);
+      const blanks = [];
+
+      for (let i = 0; i < tokens.length; i++) {
+        const token = tokens[i];
+        if (!token.trim()) continue;
+        const base = normaliseWord(token);
+        const verb = conjugationToVerb.get(base);
+        if (verb) {
+          blanks.push({ index: i, verb, answer: token.trim() });
+          tokens[i] = '__VERB__';
+        }
+      }
+
+      return {
+        sentence,
+        tokens,
+        blanks,
+        original: sentence
+      };
+    }
+
+    function initQueueFromDeck() {
+      queue = deck.map((entry, idx) => ({ entry, id: idx }));
+      currentNode = null;
+      hasChecked = false;
+    }
+
+    function renderCurrentCard() {
+      setFeedback('');
+      setExplanation('');
+      setCardMeta('');
+
+      if (!currentNode || !currentNode.entry) {
+        renderNoCards('No cards to show.');
+        return;
+      }
+
+      const entry = currentNode.entry;
+      const container = document.createElement('div');
+      container.className = 'card-question';
+
+      const questionEl = document.createElement('div');
+      questionEl.style.display = 'flex';
+      questionEl.style.flexWrap = 'wrap';
+      questionEl.style.gap = '6px';
+
+      let blankCounter = 0;
+
+      entry.tokens.forEach((token, idx) => {
+        if (token === '__VERB__') {
+          const blank = entry.blanks.find(b => b.index === idx);
+          if (!blank) {
+            questionEl.appendChild(document.createTextNode('____'));
+            return;
+          }
+
+          const select = document.createElement('select');
+          select.id = `verb-${idx}`;
+          select.dataset.correct = blank.answer;
+          select.dataset.verb = blank.verb;
+
+          const opts = verbToOptions.get(blank.verb) || [];
+          const placeholder = document.createElement('option');
+          placeholder.value = '';
+          placeholder.textContent = `Pick a form of "${blank.verb}"`;
+          select.appendChild(placeholder);
+
+          opts.forEach(opt => {
+            const option = document.createElement('option');
+            option.value = opt;
+            option.textContent = opt;
+            select.appendChild(option);
+          });
+
+          questionEl.appendChild(select);
+          blankCounter += 1;
+        } else {
+          questionEl.appendChild(document.createTextNode(token));
+        }
+      });
+
+      if (!blankCounter) {
+        questionEl.textContent = 'No verbs found in this sentence. Try another.';
+      }
+
+      container.appendChild(questionEl);
+      const hint = document.createElement('div');
+      hint.className = 'meta';
+      hint.innerHTML = `<span class="pill">Verbs</span>${blankCounter || '0'} recognised in this sentence.`;
+      container.appendChild(hint);
+
+      const cardContent = document.getElementById('cardContent');
+      if (cardContent) {
+        cardContent.innerHTML = '';
+        cardContent.appendChild(container);
+      }
+
+      const checkBtn = document.getElementById('checkBtn');
+      const againBtn = document.getElementById('againBtn');
+      const mediumBtn = document.getElementById('mediumBtn');
+      const easyBtn = document.getElementById('easyBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const revealBtn = document.getElementById('revealBtn');
+
+      if (checkBtn) checkBtn.disabled = !blankCounter;
+      if (againBtn) againBtn.disabled = true;
+      if (mediumBtn) mediumBtn.disabled = true;
+      if (easyBtn) easyBtn.disabled = true;
+      if (nextBtn) nextBtn.disabled = false;
+      if (revealBtn) revealBtn.disabled = false;
+    }
+
+    function nextCard() {
+      if (!queue.length) {
+        currentNode = null;
+        renderNoCards('All cards in this deck are done for now.');
+        return;
+      }
+      currentNode = queue.shift();
+      hasChecked = false;
+      renderCurrentCard();
+    }
+
+    function rateCurrentCard(difficulty) {
+      if (!currentNode || !currentNode.entry) return;
+      const entry = currentNode.entry;
+
+      if (!hasChecked) {
+        setFeedback('Check your answers before rating the card.', false);
+        return;
+      }
+
+      let insertIndex;
+      switch (difficulty) {
+        case 'again':
+          insertIndex = 1;
+          break;
+        case 'medium':
+          insertIndex = 3;
+          break;
+        case 'easy':
+        default:
+          insertIndex = queue.length;
+          break;
+      }
+
+      if (insertIndex > queue.length) insertIndex = queue.length;
+      queue.splice(insertIndex, 0, currentNode);
+      nextCard();
+    }
+
+    function checkAnswers() {
+      if (!currentNode || !currentNode.entry) return;
+      const selects = Array.from(document.querySelectorAll('select[id^="verb-"]'));
+      if (!selects.length) return;
+
+      let allCorrect = true;
+      let missingChoice = false;
+
+      selects.forEach(select => {
+        const value = select.value;
+        if (!value) {
+          missingChoice = true;
+          return;
+        }
+        const correct = select.dataset.correct || '';
+        if (value.trim().toLowerCase() !== correct.trim().toLowerCase()) {
+          allCorrect = false;
+        }
+      });
+
+      if (missingChoice) {
+        setFeedback('Choose an answer for each verb before checking.', false);
+        return;
+      }
+
+      hasChecked = true;
+      const againBtn = document.getElementById('againBtn');
+      const mediumBtn = document.getElementById('mediumBtn');
+      const easyBtn = document.getElementById('easyBtn');
+
+      if (againBtn) againBtn.disabled = false;
+      if (mediumBtn) mediumBtn.disabled = false;
+      if (easyBtn) easyBtn.disabled = false;
+
+      if (allCorrect) {
+        setFeedback('Correct! All verb forms match the sentence.', true);
+        setExplanation('');
+      } else {
+        setFeedback('Not quite. Try adjusting your choices or use the SRS buttons.', false);
+        setExplanation('');
+      }
+    }
+
+    function revealOriginal() {
+      if (!currentNode || !currentNode.entry) return;
+      setExplanation(currentNode.entry.original || '');
+    }
+
+    async function buildDeckFromInput() {
+      const sourceEl = document.getElementById('sourceText');
+      const cleanedEl = document.getElementById('cleanedText');
+      const useCleaningEl = document.getElementById('useCleaning');
+
+      if (!sourceEl || !cleanedEl || !useCleaningEl) return;
+
+      const rawText = sourceEl.value.trim();
+      if (!rawText) {
+        alert('Please paste some French text first.');
+        return;
+      }
+
+      setStatus('');
+      setFeedback('');
+      setExplanation('');
+      setCardMeta('');
+      renderNoCards('Preparing deck...');
+
+      let workingText = rawText;
+
+      try {
+        if (useCleaningEl.checked) {
+          setStatus('Cleaning text with Gemini using cleaningInstruction…');
+          const cleaned = await callGemini(cleaningInstruction, rawText);
+          cleanedEl.value = cleaned;
+          workingText = cleaned;
+        } else {
+          cleanedEl.value = workingText;
+        }
+
+        const sentences = workingText
+          .split(/\r?\n/)
+          .map(s => s.trim())
+          .filter(Boolean);
+
+        if (!sentences.length) {
+          throw new Error('No sentences found after cleaning / splitting.');
+        }
+
+        const limited = sentences.slice(0, 10);
+        deck = limited.map(sentence => buildCardFromSentence(sentence));
+        initQueueFromDeck();
+        setStatus(`Initialised deck with ${deck.length} sentences.`);
+        nextCard();
+      } catch (err) {
+        console.error(err);
+        setStatus(`Error: ${err.message || String(err)}`);
+        renderNoCards('Could not build deck due to an error.');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      flashcardCache = loadFlashcardCache();
+      loadKey();
+
+      loadVerbs()
+        .then(() => setStatus('Verb list ready.'))
+        .catch(err => {
+          console.error(err);
+          setStatus('Could not load verb list.');
+        });
+
+      const saveKeyBtn = document.getElementById('saveKey');
+      if (saveKeyBtn) {
+        saveKeyBtn.addEventListener('click', () => {
+          saveKey();
+          setStatus('API key saved locally.');
+        });
+      }
+
+      const buildDeckBtn = document.getElementById('buildDeck');
+      if (buildDeckBtn) {
+        buildDeckBtn.addEventListener('click', () => {
+          buildDeckFromInput();
+        });
+      }
+
+      const checkBtn = document.getElementById('checkBtn');
+      if (checkBtn) {
+        checkBtn.addEventListener('click', () => {
+          checkAnswers();
+        });
+      }
+
+      const againBtn = document.getElementById('againBtn');
+      const mediumBtn = document.getElementById('mediumBtn');
+      const easyBtn = document.getElementById('easyBtn');
+
+      if (againBtn) {
+        againBtn.addEventListener('click', () => rateCurrentCard('again'));
+      }
+      if (mediumBtn) {
+        mediumBtn.addEventListener('click', () => rateCurrentCard('medium'));
+      }
+      if (easyBtn) {
+        easyBtn.addEventListener('click', () => rateCurrentCard('easy'));
+      }
+
+      const revealBtn = document.getElementById('revealBtn');
+      if (revealBtn) {
+        revealBtn.addEventListener('click', () => {
+          revealOriginal();
+        });
+      }
+
+      const nextBtn = document.getElementById('nextBtn');
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          nextCard();
+        });
+      }
+
+      renderNoCards('No cards yet. Build a deck to begin.');
+    });
+  </script>
+</body>
+</html>
