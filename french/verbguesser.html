@@ -159,6 +159,18 @@
       max-width: 100%;
     }
 
+    select.select-correct {
+      border-color: #16a34a;
+      background: linear-gradient(120deg, #022c22, #0b3b2c);
+      color: #bbf7d0;
+    }
+
+    select.select-wrong {
+      border-color: #b91c1c;
+      background: linear-gradient(120deg, #2c0a0a, #3f1a1a);
+      color: #fecaca;
+    }
+
     .flashcard-footer {
       display: flex;
       flex-direction: column;
@@ -221,6 +233,39 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin-right: 6px;
+    }
+
+    .conjugation-details {
+      border: 1px dashed #1f2937;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-top: 8px;
+      background: rgba(59, 130, 246, 0.04);
+      color: #bfdbfe;
+      font-size: 0.9rem;
+    }
+
+    .definition-box {
+      border: 1px solid #1f2937;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-top: 10px;
+      background: #0b1224;
+      color: #e5e7eb;
+      line-height: 1.45;
+    }
+
+    .definition-box ul {
+      margin: 6px 0 0;
+      padding-left: 18px;
+    }
+
+    .definition-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
     }
 
     .verb-pill {
@@ -302,7 +347,13 @@
           </div>
           <div id="feedback" class="feedback"></div>
           <div id="explanation" class="explanation"></div>
+          <div id="conjugationInfo" class="conjugation-details" style="display:none;"></div>
           <div id="cardMeta" class="meta"></div>
+          <div class="definition-actions">
+            <button id="definitionBtn" class="secondary" type="button" disabled>Get definition</button>
+            <span id="definitionStatus" class="meta"></span>
+          </div>
+          <div id="definitionResult" class="definition-box" style="display:none;"></div>
         </div>
       </div>
     </section>
@@ -402,10 +453,12 @@
 
     const verbToOptions = new Map();
     const conjugationToVerb = new Map();
+    const conjugationMeta = new Map();
     let deck = [];
     let queue = [];
     let currentNode = null;
     let hasChecked = false;
+    let selectedVerbForDefinition = '';
 
     function saveAppState() {
       try {
@@ -495,6 +548,66 @@
       el.textContent = text || '';
     }
 
+    function setConjugationInfo(text) {
+      const el = document.getElementById('conjugationInfo');
+      if (!el) return;
+      if (text) {
+        el.style.display = 'block';
+        el.innerHTML = text;
+      } else {
+        el.style.display = 'none';
+        el.innerHTML = '';
+      }
+    }
+
+    function clearSelectStatus(select) {
+      select.classList.remove('select-correct', 'select-wrong');
+    }
+
+    function updateDefinitionButton(verb) {
+      const btn = document.getElementById('definitionBtn');
+      if (!btn) return;
+      selectedVerbForDefinition = verb || '';
+      btn.textContent = verb ? `Get definition for: ${verb}` : 'Get definition';
+      btn.disabled = !verb;
+    }
+
+    function getMetaForSelection(select) {
+      const verb = select?.dataset?.verb || '';
+      const value = select?.value || '';
+      if (!verb || !value) return null;
+      return conjugationMeta.get(`${verb}:::${value.toLowerCase()}`) || null;
+    }
+
+    function showSelectionDetails(select) {
+      const meta = getMetaForSelection(select);
+      if (!meta) {
+        setConjugationInfo('');
+        return;
+      }
+      const verb = select.dataset.verb;
+      setConjugationInfo(
+        `<strong>${verb}</strong><br>${meta.label}<br><em>Example: ${meta.example}</em>`
+      );
+    }
+
+    function setDefinitionStatus(text) {
+      const el = document.getElementById('definitionStatus');
+      if (el) el.textContent = text || '';
+    }
+
+    function setDefinitionResult(definitionsHtml) {
+      const el = document.getElementById('definitionResult');
+      if (!el) return;
+      if (!definitionsHtml) {
+        el.style.display = 'none';
+        el.innerHTML = '';
+        return;
+      }
+      el.style.display = 'block';
+      el.innerHTML = definitionsHtml;
+    }
+
     function renderNoCards(message) {
       const cardContent = document.getElementById('cardContent');
       if (cardContent) {
@@ -508,10 +621,15 @@
       const nextBtn = document.getElementById('nextBtn');
       const revealBtn = document.getElementById('revealBtn');
 
-      [checkBtn, againBtn, mediumBtn, easyBtn, nextBtn, revealBtn].forEach(btn => {
-        if (btn) btn.disabled = true;
-      });
-    }
+        [checkBtn, againBtn, mediumBtn, easyBtn, nextBtn, revealBtn].forEach(btn => {
+          if (btn) btn.disabled = true;
+        });
+
+        setConjugationInfo('');
+        setDefinitionStatus('');
+        setDefinitionResult('');
+        updateDefinitionButton('');
+      }
 
     function normaliseWord(word) {
       return word.toLowerCase().replace(/^['"«»“”‘’\(\[]+/, '').replace(/['"«»“”’”\)\]]+$/, '');
@@ -522,6 +640,146 @@
         .split(/[\.\r?\n]+/)
         .map(s => s.trim())
         .filter(Boolean);
+    }
+
+    const ENGLISH_SAMPLE_VERB = 'learn';
+
+    function capitalise(str) {
+      return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+    }
+
+    function personToSubject(person) {
+      const key = (person || '').toLowerCase();
+      if (key.includes('first person singular')) return 'I';
+      if (key.includes('second person singular')) return 'you';
+      if (key.includes('third person singular')) return 'he/she/it';
+      if (key.includes('first person plural')) return 'we';
+      if (key.includes('second person plural')) return 'you (pl.)';
+      if (key.includes('third person plural')) return 'they';
+      return '';
+    }
+
+    function buildEnglishExample(parts) {
+      const lowerParts = parts.map(p => p.toLowerCase());
+      const person = lowerParts.find(p => p.includes('person')) || '';
+      const tense = lowerParts.find(p =>
+        ['present', 'imperfect', 'future', 'conditional', 'subjunctive', 'imperative', 'past participle', 'present participle', 'gerund', 'past historic', 'compound verb'].includes(p)
+      ) || '';
+
+      const subject = personToSubject(person);
+      const base = ENGLISH_SAMPLE_VERB;
+
+      function subjectPrefix() {
+        return subject ? `${subject} ` : '';
+      }
+
+      switch (tense) {
+        case 'present':
+          return `${subjectPrefix()}${subject === 'he/she/it' ? `${base}s` : base}`;
+        case 'imperfect':
+          return `${subjectPrefix()}was ${base}ing`;
+        case 'future':
+          return `${subjectPrefix()}will ${base}`;
+        case 'conditional':
+          return `${subjectPrefix()}would ${base}`;
+        case 'subjunctive':
+          return `${subjectPrefix()}${base} (subjunctive mood)`;
+        case 'imperative':
+          return `Learn! (command)`;
+        case 'past participle':
+          return `${subjectPrefix()}has ${base}ed`;
+        case 'present participle':
+          return `${subjectPrefix()}is ${base}ing`;
+        case 'gerund':
+          return `${base}ing`;
+        case 'past historic':
+          return `${subjectPrefix()}${base}ed`;
+        case 'compound verb':
+          return `${subjectPrefix()}has ${base} (compound)`;
+        default:
+          return `${subjectPrefix()}${base}`.trim();
+      }
+    }
+
+    function describeConjugation(header) {
+      const parts = (header || '')
+        .split('|')
+        .map(p => p.trim())
+        .filter(Boolean);
+      const label = parts.length ? parts.map(capitalise).join(' → ') : 'Verb form';
+      const example = buildEnglishExample(parts);
+      return { label, example };
+    }
+
+    function stripHtml(html) {
+      return html
+        .replace(/<[^>]*>/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .trim();
+    }
+
+    function extractFrenchData(data) {
+      const definitions = [];
+      const examples = [];
+      const defSeen = new Set();
+      const exSeen = new Set();
+
+      for (const value of Object.values(data)) {
+        if (!Array.isArray(value)) continue;
+        for (const entry of value) {
+          if (entry.language && entry.language !== 'French') continue;
+
+          const rawDefs = entry.definitions || entry.senses || [];
+          for (const d of rawDefs) {
+            let defHtml = '';
+            if (typeof d === 'string') {
+              defHtml = d;
+            } else if (d && typeof d === 'object') {
+              defHtml = d.definition || d.gloss || '';
+            }
+            const defText = stripHtml(defHtml);
+            if (defText && !defSeen.has(defText)) {
+              defSeen.add(defText);
+              definitions.push(defText);
+            }
+
+            let exList = [];
+            if (d && Array.isArray(d.examples)) exList = d.examples;
+            for (const ex of exList) {
+              let exHtml = '';
+              if (typeof ex === 'string') exHtml = ex;
+              else if (ex && typeof ex === 'object') exHtml = ex.example || ex.text || '';
+              const exText = stripHtml(exHtml);
+              if (exText && !exSeen.has(exText)) {
+                exSeen.add(exText);
+                examples.push(exText);
+              }
+            }
+          }
+        }
+      }
+
+      return { definitions, examples };
+    }
+
+    async function fetchDefinitionForWord(word) {
+      const endpoint = 'https://en.wiktionary.org/api/rest_v1/page/definition/';
+      const url = endpoint + encodeURIComponent(word);
+      try {
+        const res = await fetch(url, { headers: { accept: 'application/json' } });
+        if (!res.ok) return { error: `HTTP ${res.status} ${res.statusText}` };
+        const data = await res.json();
+        const frenchData = extractFrenchData(data);
+        if (!frenchData.definitions.length && !frenchData.examples.length) {
+          return { error: 'No French definitions or examples found in Wiktionary data.' };
+        }
+        return frenchData;
+      } catch (err) {
+        return { error: String(err) };
+      }
     }
 
     function parseCSV(text) {
@@ -547,6 +805,13 @@
             if (!conjugationToVerb.has(key)) {
               conjugationToVerb.set(key, infinitive);
             }
+
+            const header = headers[c] || '';
+            const meta = describeConjugation(header);
+            conjugationMeta.set(`${infinitive}:::${value.toLowerCase()}`, {
+              header,
+              ...meta
+            });
           }
         }
         verbToOptions.set(infinitive, Array.from(options));
@@ -600,6 +865,10 @@
       setFeedback('');
       setExplanation('');
       setCardMeta('');
+      setConjugationInfo('');
+      setDefinitionStatus('');
+      setDefinitionResult('');
+      updateDefinitionButton('');
 
       if (!currentNode || !currentNode.entry) {
         renderNoCards('No cards to show.');
@@ -642,6 +911,18 @@
             option.textContent = opt;
             select.appendChild(option);
           });
+
+          clearSelectStatus(select);
+          select.addEventListener('change', () => {
+            clearSelectStatus(select);
+            showSelectionDetails(select);
+            updateDefinitionButton(blank.verb);
+          });
+          select.addEventListener('click', () => {
+            showSelectionDetails(select);
+            updateDefinitionButton(blank.verb);
+          });
+          select.addEventListener('focus', () => updateDefinitionButton(blank.verb));
 
           questionEl.appendChild(select);
           blankCounter += 1;
@@ -730,15 +1011,18 @@
       let missingChoice = false;
 
       selects.forEach(select => {
+        clearSelectStatus(select);
         const value = select.value;
         if (!value) {
           missingChoice = true;
           return;
         }
         const correct = select.dataset.correct || '';
-        if (value.trim().toLowerCase() !== correct.trim().toLowerCase()) {
+        const isCorrect = value.trim().toLowerCase() === correct.trim().toLowerCase();
+        if (!isCorrect) {
           allCorrect = false;
         }
+        select.classList.add(isCorrect ? 'select-correct' : 'select-wrong');
       });
 
       if (missingChoice) {
@@ -769,6 +1053,36 @@
     function revealOriginal() {
       if (!currentNode || !currentNode.entry) return;
       setExplanation(currentNode.entry.original || '');
+    }
+
+    function renderDefinitionContent(word, payload) {
+      let html = `<strong>${word}</strong>`;
+      if (payload.definitions?.length) {
+        html += '<div>Definitions:</div><ul>' + payload.definitions.map(d => `<li>${d}</li>`).join('') + '</ul>';
+      }
+      if (payload.examples?.length) {
+        html += '<div style="margin-top:8px;">Examples:</div><ul>' + payload.examples.map(e => `<li>${e}</li>`).join('') + '</ul>';
+      }
+      return html;
+    }
+
+    async function requestDefinition() {
+      if (!selectedVerbForDefinition) return;
+      setDefinitionStatus('Fetching definition from Wiktionary…');
+      setDefinitionResult('');
+      try {
+        const result = await fetchDefinitionForWord(selectedVerbForDefinition);
+        if (result.error) {
+          setDefinitionStatus(result.error);
+          setDefinitionResult('');
+          return;
+        }
+        setDefinitionStatus('Definition loaded from Wiktionary.');
+        setDefinitionResult(renderDefinitionContent(selectedVerbForDefinition, result));
+      } catch (err) {
+        setDefinitionStatus(`Error: ${err.message || String(err)}`);
+        setDefinitionResult('');
+      }
     }
 
     async function buildDeckFromInput() {
@@ -894,6 +1208,11 @@
         nextBtn.addEventListener('click', () => {
           nextCard();
         });
+      }
+
+      const definitionBtn = document.getElementById('definitionBtn');
+      if (definitionBtn) {
+        definitionBtn.addEventListener('click', () => requestDefinition());
       }
 
       renderNoCards('No cards yet. Build a deck to begin.');
