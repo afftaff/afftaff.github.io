@@ -377,6 +377,7 @@
     }
 
     const FLASHCARD_CACHE_KEY = 'verbGuesserFlashcardCache';
+    const STATE_CACHE_KEY = 'verbGuesserState';
     let flashcardCache = {};
 
     function loadFlashcardCache() {
@@ -405,6 +406,70 @@
     let queue = [];
     let currentNode = null;
     let hasChecked = false;
+
+    function saveAppState() {
+      try {
+        const sourceEl = document.getElementById('sourceText');
+        const cleanedEl = document.getElementById('cleanedText');
+        const useCleaningEl = document.getElementById('useCleaning');
+
+        const state = {
+          rawText: sourceEl?.value || '',
+          cleanedText: cleanedEl?.value || '',
+          useCleaning: !!useCleaningEl?.checked,
+          deck,
+          queueIds: queue.map(n => n.id),
+          currentId: currentNode ? currentNode.id : null,
+          hasChecked
+        };
+
+        localStorage.setItem(STATE_CACHE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.warn('Could not save state', e);
+      }
+    }
+
+    function restoreAppState() {
+      try {
+        const raw = localStorage.getItem(STATE_CACHE_KEY);
+        if (!raw) return;
+        const state = JSON.parse(raw);
+        if (!state || typeof state !== 'object') return;
+
+        const sourceEl = document.getElementById('sourceText');
+        const cleanedEl = document.getElementById('cleanedText');
+        const useCleaningEl = document.getElementById('useCleaning');
+
+        if (sourceEl && state.rawText) sourceEl.value = state.rawText;
+        if (cleanedEl && state.cleanedText) cleanedEl.value = state.cleanedText;
+        if (useCleaningEl && typeof state.useCleaning === 'boolean') {
+          useCleaningEl.checked = state.useCleaning;
+        }
+
+        if (Array.isArray(state.deck)) deck = state.deck;
+        if (Array.isArray(state.queueIds)) {
+          queue = state.queueIds
+            .map(id => ({ entry: deck[id], id }))
+            .filter(node => !!node.entry);
+        }
+
+        if (state.currentId !== null && state.currentId !== undefined) {
+          const entry = deck[state.currentId];
+          if (entry) {
+            currentNode = { entry, id: state.currentId };
+          }
+        }
+
+        hasChecked = !!state.hasChecked;
+
+        if (deck.length) {
+          renderCurrentCard();
+          setStatus(`Restored deck with ${deck.length} sentences.`);
+        }
+      } catch (e) {
+        console.warn('Could not restore state', e);
+      }
+    }
 
     function setStatus(text) {
       const el = document.getElementById('status');
@@ -450,6 +515,13 @@
 
     function normaliseWord(word) {
       return word.toLowerCase().replace(/^['"«»“”‘’\(\[]+/, '').replace(/['"«»“”’”\)\]]+$/, '');
+    }
+
+    function splitSentences(text) {
+      return text
+        .split(/[\.\r?\n]+/)
+        .map(s => s.trim())
+        .filter(Boolean);
     }
 
     function parseCSV(text) {
@@ -558,7 +630,7 @@
           select.dataset.correct = blank.answer;
           select.dataset.verb = blank.verb;
 
-          const opts = verbToOptions.get(blank.verb) || [];
+          const opts = Array.from(new Set(verbToOptions.get(blank.verb) || []));
           const placeholder = document.createElement('option');
           placeholder.value = '';
           placeholder.textContent = `Pick a form of "${blank.verb}"`;
@@ -618,6 +690,7 @@
       currentNode = queue.shift();
       hasChecked = false;
       renderCurrentCard();
+      saveAppState();
     }
 
     function rateCurrentCard(difficulty) {
@@ -682,6 +755,8 @@
       if (mediumBtn) mediumBtn.disabled = false;
       if (easyBtn) easyBtn.disabled = false;
 
+      saveAppState();
+
       if (allCorrect) {
         setFeedback('Correct! All verb forms match the sentence.', true);
         setExplanation('');
@@ -727,10 +802,7 @@
           cleanedEl.value = workingText;
         }
 
-        const sentences = workingText
-          .split(/\r?\n/)
-          .map(s => s.trim())
-          .filter(Boolean);
+        const sentences = splitSentences(workingText);
 
         if (!sentences.length) {
           throw new Error('No sentences found after cleaning / splitting.');
@@ -741,6 +813,7 @@
         initQueueFromDeck();
         setStatus(`Initialised deck with ${deck.length} sentences.`);
         nextCard();
+        saveAppState();
       } catch (err) {
         console.error(err);
         setStatus(`Error: ${err.message || String(err)}`);
@@ -753,10 +826,14 @@
       loadKey();
 
       loadVerbs()
-        .then(() => setStatus('Verb list ready.'))
+        .then(() => {
+          setStatus('Verb list ready.');
+          restoreAppState();
+        })
         .catch(err => {
           console.error(err);
           setStatus('Could not load verb list.');
+          restoreAppState();
         });
 
       const saveKeyBtn = document.getElementById('saveKey');
@@ -765,6 +842,16 @@
           saveKey();
           setStatus('API key saved locally.');
         });
+      }
+
+      const sourceEl = document.getElementById('sourceText');
+      if (sourceEl) {
+        sourceEl.addEventListener('input', () => saveAppState());
+      }
+
+      const useCleaningEl = document.getElementById('useCleaning');
+      if (useCleaningEl) {
+        useCleaningEl.addEventListener('change', () => saveAppState());
       }
 
       const buildDeckBtn = document.getElementById('buildDeck');
