@@ -967,7 +967,14 @@ function handleVoiceOptions() {
   const stored = loadJSON(STORAGE_KEYS.voices) ?? {};
   const updateVoices = () => {
     const voices = window.speechSynthesis.getVoices();
-    const jaVoices = voices.filter((voice) => voice.lang.toLowerCase().startsWith('ja'));
+    const seen = new Set();
+    const jaVoices = voices
+      .filter((voice) => voice.lang.toLowerCase().startsWith('ja'))
+      .filter((voice) => {
+        if (seen.has(voice.name)) return false;
+        seen.add(voice.name);
+        return true;
+      });
 
     dom.voiceSelect.innerHTML = '';
     dom.voiceSelect.disabled = !jaVoices.length;

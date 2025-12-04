@@ -218,6 +218,7 @@
     const state = {
       countMap: new Map(),
       filteredKeys: [],
+      processedLines: [],
       definitions: {},
       inputText: '',
       deckIndex: 0,
@@ -256,9 +257,10 @@
       if (!text) return [];
       const normalised = text.replace(/\s+/g, ' ').trim();
       if (!normalised) return [];
-      const matches = normalised.match(/[^.!?]+[.!?]*/g);
-      if (!matches) return [];
-      return matches.map(s => s.trim()).filter(Boolean);
+      return normalised
+        .split('.')
+        .map(part => part.trim())
+        .filter(Boolean);
     }
     function sentenceToWords(sentence) {
       const cleaned = sentence.replace(/[^A-Za-zÀ-ÖØ-öø-ÿœŒ'-]+/g, ' ');
@@ -519,10 +521,11 @@
     function updateBadges() {
       const deckCount = Math.ceil(state.filteredKeys.length / MAX_DECK) || 0;
       deckBadge.textContent = `Deck ${state.filteredKeys.length ? state.deckIndex + 1 : 0} / ${deckCount}`;
-      queueBadge.textContent = `${state.queue.length} left in deck`;
+      const remaining = state.queue.length + (state.currentWord ? 1 : 0);
+      queueBadge.textContent = `${remaining} left in deck`;
       const plannedDeck = Math.min(MAX_DECK, state.filteredKeys.length - state.deckIndex * MAX_DECK);
       deckSizeEl.textContent = state.currentDeckTotal || plannedDeck || 0;
-      remainingEl.textContent = state.queue.length;
+      remainingEl.textContent = remaining;
       cachedCountEl.textContent = Object.keys(state.definitions || {}).length;
       wordTotalEl.textContent = state.filteredKeys.length;
     }
@@ -555,6 +558,7 @@
         } else {
           showStatus('All decks completed!');
         }
+        state.currentWord = null;
         state.currentDeckTotal = 0;
         updateBadges();
         return;
@@ -576,6 +580,8 @@
         showStatus('No more words in the list.');
         return;
       }
+      state.queue = [];
+      state.currentWord = null;
       setLoading(true);
       progressRow.style.display = 'flex';
       progressBar.value = 0;
@@ -619,9 +625,11 @@
       const payload = {
         inputText: state.inputText,
         filteredKeys: state.filteredKeys,
+        processedLines: state.processedLines,
         definitions: state.definitions,
         deckIndex: state.deckIndex,
         queue: state.queue,
+        currentWord: state.currentWord,
         currentDeckTotal: state.currentDeckTotal,
       };
       try { localStorage.setItem(LS_KEY, JSON.stringify(payload)); } catch (_) {}
@@ -635,16 +643,23 @@
         const saved = JSON.parse(raw);
         state.inputText = saved.inputText || '';
         state.filteredKeys = saved.filteredKeys || [];
+        state.processedLines = saved.processedLines || saved.filteredKeys || [];
         state.definitions = saved.definitions || {};
         state.deckIndex = saved.deckIndex || 0;
         state.queue = (saved.queue || []).filter(key => hasUsableDefinition(state.definitions[key]));
+        state.currentWord = saved.currentWord || null;
         state.currentDeckTotal = saved.currentDeckTotal || state.queue.length || 0;
         wordInput.value = state.inputText;
-        processedWords.value = state.filteredKeys.join('\n');
+        const cleanedList = Array.isArray(state.processedLines) ? state.processedLines : [];
+        processedWords.value = cleanedList.join('\n');
         wordTotalEl.textContent = state.filteredKeys.length;
         cacheInfo.textContent = `Restored ${state.filteredKeys.length} cached word(s).`;
         if (state.filteredKeys.length) startDeckBtn.disabled = false;
-        if (state.queue.length) {
+        if (state.currentWord) {
+          buildCard(state.currentWord);
+          nextCardBtn.disabled = false;
+          flipCardBtn.disabled = false;
+        } else if (state.queue.length) {
           buildCard(state.queue[0]);
           nextCardBtn.disabled = false;
           flipCardBtn.disabled = false;
@@ -659,6 +674,7 @@
       Object.assign(state, {
         countMap: new Map(),
         filteredKeys: [],
+        processedLines: [],
         definitions: {},
         inputText: '',
         deckIndex: 0,
@@ -701,9 +717,11 @@
       state.countMap = map;
       const { filteredKeys, processedLines } = applyFilters(map);
       state.filteredKeys = filteredKeys;
+      state.processedLines = processedLines;
       state.deckIndex = 0;
       state.queue = [];
       state.currentDeckTotal = 0;
+      state.currentWord = null;
       renderProcessedList(processedLines);
       renderSummary(totalWords, map.size, filteredKeys.length, sentenceCount);
       startDeckBtn.disabled = filteredKeys.length === 0;
