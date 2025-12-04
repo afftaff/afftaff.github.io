@@ -465,12 +465,16 @@
 
         const options = new Set();
         for (let c = 0; c < cols.length; c++) {
-          const value = cols[c]?.trim();
-          if (!value) continue;
-          options.add(value);
-          const key = normaliseWord(value);
-          if (!conjugationToVerb.has(key)) {
-            conjugationToVerb.set(key, infinitive);
+          const cell = cols[c]?.trim();
+          if (!cell) continue;
+
+          const values = cell.split(';').map(v => v.trim()).filter(Boolean);
+          for (const value of values) {
+            options.add(value);
+            const key = normaliseWord(value);
+            if (!conjugationToVerb.has(key)) {
+              conjugationToVerb.set(key, infinitive);
+            }
           }
         }
         verbToOptions.set(infinitive, Array.from(options));
