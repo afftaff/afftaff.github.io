@@ -589,8 +589,9 @@
         return;
       }
       const verb = select.dataset.verb;
+      const selectedForm = (select.value || '').trim() || verb;
       setConjugationInfo(
-        `<strong>${verb}</strong><br>${meta.label}<br><em>Example: ${meta.example}</em>`
+        `<strong>${selectedForm}</strong><br>${meta.label}<br><em>Example: ${meta.example}</em><br>lemma: ${verb}`
       );
     }
 
