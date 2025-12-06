@@ -564,12 +564,15 @@
       select.classList.remove('select-correct', 'select-wrong');
     }
 
-    function updateDefinitionButton(verb) {
+    function updateDefinitionButton(word) {
       const btn = document.getElementById('definitionBtn');
       if (!btn) return;
-      selectedVerbForDefinition = verb || '';
-      btn.textContent = verb ? `Get definition for: ${verb}` : 'Get definition';
-      btn.disabled = !verb;
+      const targetWord = (word || '').trim();
+      selectedVerbForDefinition = targetWord;
+      btn.textContent = targetWord
+        ? `Get definition for: ${targetWord}`
+        : 'Get definition';
+      btn.disabled = !targetWord;
     }
 
     function getMetaForSelection(select) {
@@ -916,13 +919,13 @@
           select.addEventListener('change', () => {
             clearSelectStatus(select);
             showSelectionDetails(select);
-            updateDefinitionButton(blank.verb);
+            updateDefinitionButton(select.value);
           });
           select.addEventListener('click', () => {
             showSelectionDetails(select);
-            updateDefinitionButton(blank.verb);
+            updateDefinitionButton(select.value);
           });
-          select.addEventListener('focus', () => updateDefinitionButton(blank.verb));
+          select.addEventListener('focus', () => updateDefinitionButton(select.value));
 
           questionEl.appendChild(select);
           blankCounter += 1;
