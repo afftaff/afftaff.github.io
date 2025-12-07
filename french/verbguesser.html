@@ -268,6 +268,15 @@
       margin-top: 8px;
     }
 
+    .deck-selector {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 0.6rem;
+      font-size: 0.9rem;
+    }
+
     .verb-pill {
       display: inline-flex;
       align-items: center;
@@ -312,7 +321,7 @@
         </label>
 
         <div class="button-row">
-          <button id="buildDeck" type="button">Build verb deck (max 10)</button>
+          <button id="buildDeck" type="button">Build verb decks (10 per deck)</button>
         </div>
 
         <div id="status" class="status"></div>
@@ -328,6 +337,12 @@
     <section>
       <h2>3. Flashcards</h2>
       <p>Each flashcard hides every recognised verb and offers a dropdown of that verb’s conjugations.</p>
+
+      <div id="deckSelectorWrapper" class="deck-selector" style="display:none;">
+        <label for="deckSelector">Deck</label>
+        <select id="deckSelector"></select>
+        <span id="deckRange" class="meta"></span>
+      </div>
 
       <div id="cardShell" class="card-shell">
         <div id="cardContent" class="card-question">
@@ -454,6 +469,8 @@
     const verbToOptions = new Map();
     const conjugationToVerb = new Map();
     const conjugationMeta = new Map();
+    let deckGroups = [];
+    let selectedDeckIndex = 0;
     let deck = [];
     let queue = [];
     let currentNode = null;
@@ -471,6 +488,8 @@
           cleanedText: cleanedEl?.value || '',
           useCleaning: !!useCleaningEl?.checked,
           deck,
+          deckGroups,
+          selectedDeckIndex,
           queueIds: queue.map(n => n.id),
           currentId: currentNode ? currentNode.id : null,
           hasChecked
@@ -499,7 +518,20 @@
           useCleaningEl.checked = state.useCleaning;
         }
 
-        if (Array.isArray(state.deck)) deck = state.deck;
+        deckGroups = Array.isArray(state.deckGroups) ? state.deckGroups : [];
+        if (!deckGroups.length && Array.isArray(state.deck)) {
+          deckGroups = [state.deck];
+        }
+
+        const storedIndex = Number.isInteger(state.selectedDeckIndex)
+          ? state.selectedDeckIndex
+          : 0;
+        selectedDeckIndex = Math.min(
+          Math.max(storedIndex, 0),
+          Math.max(deckGroups.length - 1, 0)
+        );
+
+        deck = deckGroups[selectedDeckIndex] || [];
         if (Array.isArray(state.queueIds)) {
           queue = state.queueIds
             .map(id => ({ entry: deck[id], id }))
@@ -515,9 +547,16 @@
 
         hasChecked = !!state.hasChecked;
 
+        updateDeckSelector();
+
         if (deck.length) {
           renderCurrentCard();
-          setStatus(`Restored deck with ${deck.length} sentences.`);
+          const deckCount = deckGroups.length || 1;
+          setStatus(
+            `Restored ${deckCount} deck${deckCount > 1 ? 's' : ''}; now showing deck ${
+              selectedDeckIndex + 1
+            } (${deck.length} sentences).`
+          );
         }
       } catch (e) {
         console.warn('Could not restore state', e);
@@ -865,6 +904,65 @@
       hasChecked = false;
     }
 
+    function updateDeckSelector() {
+      const wrapper = document.getElementById('deckSelectorWrapper');
+      const selector = document.getElementById('deckSelector');
+      const rangeEl = document.getElementById('deckRange');
+
+      if (!wrapper || !selector || !rangeEl) return;
+
+      selector.innerHTML = '';
+
+      const totalSentences = deckGroups.reduce(
+        (sum, group) => sum + (Array.isArray(group) ? group.length : 0),
+        0
+      );
+
+      deckGroups.forEach((group, idx) => {
+        const option = document.createElement('option');
+        option.value = String(idx);
+        const start = idx * 10 + 1;
+        const end = start + (Array.isArray(group) ? group.length : 0) - 1;
+        const safeEnd = Math.max(start, end);
+        option.textContent = `Deck ${idx + 1} (${start}-${safeEnd})`;
+        selector.appendChild(option);
+      });
+
+      selector.disabled = deckGroups.length <= 1;
+      wrapper.style.display = deckGroups.length ? 'flex' : 'none';
+
+      if (deckGroups.length) {
+        selector.value = String(selectedDeckIndex);
+        const start = selectedDeckIndex * 10 + 1;
+        const end = start + (deck?.length || 0) - 1;
+        const safeEnd = Math.max(start, end);
+        rangeEl.textContent = `Showing deck ${selectedDeckIndex + 1} of ${
+          deckGroups.length
+        } (${deck.length} sentences: ${start}-${safeEnd}, total ${totalSentences}).`;
+      } else {
+        rangeEl.textContent = '';
+      }
+    }
+
+    function selectDeckByIndex(index) {
+      if (index < 0 || index >= deckGroups.length) return;
+      selectedDeckIndex = index;
+      deck = deckGroups[selectedDeckIndex] || [];
+      initQueueFromDeck();
+      updateDeckSelector();
+
+      if (deck.length) {
+        setStatus(
+          `Switched to deck ${selectedDeckIndex + 1} of ${deckGroups.length} (${deck.length} sentences).`
+        );
+        nextCard();
+      } else {
+        renderNoCards('No cards in this deck.');
+      }
+
+      saveAppState();
+    }
+
     function renderCurrentCard() {
       setFeedback('');
       setExplanation('');
@@ -1126,10 +1224,21 @@
           throw new Error('No sentences found after cleaning / splitting.');
         }
 
-        const limited = sentences.slice(0, 10);
-        deck = limited.map(sentence => buildCardFromSentence(sentence));
+        deckGroups = [];
+        for (let i = 0; i < sentences.length; i += 10) {
+          const chunk = sentences.slice(i, i + 10);
+          deckGroups.push(chunk.map(sentence => buildCardFromSentence(sentence)));
+        }
+
+        selectedDeckIndex = 0;
+        deck = deckGroups[selectedDeckIndex] || [];
         initQueueFromDeck();
-        setStatus(`Initialised deck with ${deck.length} sentences.`);
+        updateDeckSelector();
+        setStatus(
+          `Initialised ${sentences.length} sentences across ${deckGroups.length} deck${
+            deckGroups.length > 1 ? 's' : ''
+          } (10 per deck). Now showing deck 1.`
+        );
         nextCard();
         saveAppState();
       } catch (err) {
@@ -1176,6 +1285,16 @@
       if (buildDeckBtn) {
         buildDeckBtn.addEventListener('click', () => {
           buildDeckFromInput();
+        });
+      }
+
+      const deckSelector = document.getElementById('deckSelector');
+      if (deckSelector) {
+        deckSelector.addEventListener('change', event => {
+          const idx = parseInt(event.target.value, 10);
+          if (!Number.isNaN(idx)) {
+            selectDeckByIndex(idx);
+          }
         });
       }
 
