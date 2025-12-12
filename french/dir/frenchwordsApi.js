@@ -471,3 +471,21 @@ if (typeof window !== 'undefined') {
 if (typeof module !== 'undefined') {
   module.exports = api;
 }
+
+// Example result structure:
+// [
+//   {
+//     originalText: "l'homme",
+//     word: "homme",
+//     meanings: ["man", "human"],
+//     gender: "masculine",
+//     pronouns: null,
+//     tense: null,
+//     conjugatedFrom: null,
+//     conjugatedFromMeaning: null,
+//     exampleSentences: [
+//       { english: "The man is here.", french: "L'homme est ici." }
+//     ],
+//     found: true
+//   }
+// ]
