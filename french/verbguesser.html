@@ -616,9 +616,15 @@
 
     function getMetaForSelection(select) {
       const verb = select?.dataset?.verb || '';
-      const value = select?.value || '';
+      const option = select?.selectedOptions?.[0];
+      const value = option?.value || '';
+      const header = option?.dataset?.header || '';
       if (!verb || !value) return null;
-      return conjugationMeta.get(`${verb}:::${value.toLowerCase()}`) || null;
+      const specificKey = `${verb}:::${value.toLowerCase()}:::${header.toLowerCase()}`;
+      const fallbackKey = `${verb}:::${value.toLowerCase()}`;
+      return (
+        conjugationMeta.get(specificKey) || conjugationMeta.get(fallbackKey) || null
+      );
     }
 
     function showSelectionDetails(select) {
@@ -664,18 +670,128 @@
       const nextBtn = document.getElementById('nextBtn');
       const revealBtn = document.getElementById('revealBtn');
 
-        [checkBtn, againBtn, mediumBtn, easyBtn, nextBtn, revealBtn].forEach(btn => {
-          if (btn) btn.disabled = true;
-        });
+      [checkBtn, againBtn, mediumBtn, easyBtn, nextBtn, revealBtn].forEach(btn => {
+        if (btn) btn.disabled = true;
+      });
 
-        setConjugationInfo('');
-        setDefinitionStatus('');
-        setDefinitionResult('');
-        updateDefinitionButton('');
-      }
+      setConjugationInfo('');
+      setDefinitionStatus('');
+      setDefinitionResult('');
+      updateDefinitionButton('');
+    }
+
+    const determiners = new Set([
+      'le',
+      'la',
+      'les',
+      'un',
+      'une',
+      'des',
+      'du',
+      'de',
+      'd',
+      'l',
+      'au',
+      'aux',
+      'ce',
+      'cet',
+      'cette',
+      'ces',
+      'quel',
+      'quelle',
+      'quels',
+      'quelles',
+      'chaque',
+      'tout',
+      'toute',
+      'tous',
+      'toutes',
+      'aucun',
+      'aucune',
+      'quelque',
+      'quelques'
+    ]);
+
+    const possessives = new Set([
+      'mon',
+      'ma',
+      'mes',
+      'ton',
+      'ta',
+      'tes',
+      'son',
+      'sa',
+      'ses',
+      'notre',
+      'nos',
+      'votre',
+      'vos',
+      'leur',
+      'leurs'
+    ]);
+
+    const verbIndicators = new Set([
+      'je',
+      'j',
+      'tu',
+      'il',
+      'elle',
+      'on',
+      'nous',
+      'vous',
+      'ils',
+      'elles',
+      'ne',
+      'n',
+      'me',
+      'm',
+      'te',
+      't',
+      'se',
+      's',
+      'y',
+      'en',
+      'qui',
+      'que',
+      'qu'
+    ]);
 
     function normaliseWord(word) {
       return word.toLowerCase().replace(/^['"«»“”‘’\(\[]+/, '').replace(/['"«»“”’”\)\]]+$/, '');
+    }
+
+    function findPreviousWord(tokens, index) {
+      for (let i = index - 1; i >= 0; i--) {
+        const candidate = tokens[i];
+        if (!candidate || !candidate.trim()) continue;
+        return normaliseWord(candidate);
+      }
+      return '';
+    }
+
+    function findNextWord(tokens, index) {
+      for (let i = index + 1; i < tokens.length; i++) {
+        const candidate = tokens[i];
+        if (!candidate || !candidate.trim()) continue;
+        return normaliseWord(candidate);
+      }
+      return '';
+    }
+
+    function isLikelyNounContext(tokens, index) {
+      const prev = findPreviousWord(tokens, index);
+      if (determiners.has(prev) || possessives.has(prev)) return true;
+
+      const twoBack = findPreviousWord(tokens, index - 1);
+      if (prev === 'de' && determiners.has(twoBack)) return true;
+
+      return false;
+    }
+
+    function hasVerbClue(tokens, index) {
+      const prev = findPreviousWord(tokens, index);
+      const next = findNextWord(tokens, index);
+      return verbIndicators.has(prev) || verbIndicators.has(next);
     }
 
     function splitSentences(text) {
@@ -705,9 +821,22 @@
     function buildEnglishExample(parts) {
       const lowerParts = parts.map(p => p.toLowerCase());
       const person = lowerParts.find(p => p.includes('person')) || '';
-      const tense = lowerParts.find(p =>
-        ['present', 'imperfect', 'future', 'conditional', 'subjunctive', 'imperative', 'past participle', 'present participle', 'gerund', 'past historic', 'compound verb'].includes(p)
-      ) || '';
+      const tense =
+        lowerParts.find(p =>
+          [
+            'present',
+            'imperfect',
+            'future',
+            'conditional',
+            'subjunctive',
+            'imperative',
+            'past participle',
+            'present participle',
+            'gerund',
+            'past historic',
+            'compound verb'
+          ].includes(p)
+        ) || '';
 
       const subject = personToSubject(person);
       const base = ENGLISH_SAMPLE_VERB;
@@ -752,6 +881,55 @@
       const label = parts.length ? parts.map(capitalise).join(' → ') : 'Verb form';
       const example = buildEnglishExample(parts);
       return { label, example };
+    }
+
+    const optionGroupOrder = [
+      'first-singular',
+      'second-singular',
+      'third-singular',
+      'first-plural',
+      'second-plural',
+      'third-plural',
+      'imperative',
+      'non-finite',
+      'other'
+    ];
+
+    const optionGroupLabels = {
+      'first-singular': 'First person singular',
+      'second-singular': 'Second person singular',
+      'third-singular': 'Third person singular',
+      'first-plural': 'First person plural',
+      'second-plural': 'Second person plural',
+      'third-plural': 'Third person plural',
+      imperative: 'Imperative / Commands',
+      'non-finite': 'Non-finite forms',
+      other: 'Other forms'
+    };
+
+    function groupKeyFromHeader(header) {
+      const lower = (header || '').toLowerCase();
+      if (lower.includes('first person plural')) return 'first-plural';
+      if (lower.includes('second person plural')) return 'second-plural';
+      if (lower.includes('third person plural')) return 'third-plural';
+      if (lower.includes('first person singular')) return 'first-singular';
+      if (lower.includes('second person singular')) return 'second-singular';
+      if (lower.includes('third person singular')) return 'third-singular';
+      if (lower.includes('imperative')) return 'imperative';
+      if (lower.includes('infinitive') || lower.includes('participle') || lower.includes('gerund')) {
+        return 'non-finite';
+      }
+      return 'other';
+    }
+
+    function groupOptionsByPerson(options) {
+      const grouped = new Map();
+      options.forEach(opt => {
+        const key = groupKeyFromHeader(opt.header);
+        if (!grouped.has(key)) grouped.set(key, []);
+        grouped.get(key).push(opt);
+      });
+      return grouped;
     }
 
     function stripHtml(html) {
@@ -836,28 +1014,33 @@
         const infinitive = cols[0]?.trim();
         if (!infinitive) continue;
 
-        const options = new Set();
+        const options = [];
         for (let c = 0; c < cols.length; c++) {
           const cell = cols[c]?.trim();
           if (!cell) continue;
 
+          const header = headers[c] || '';
+          const meta = describeConjugation(header);
           const values = cell.split(';').map(v => v.trim()).filter(Boolean);
           for (const value of values) {
-            options.add(value);
+            options.push({ value, header, meta });
             const key = normaliseWord(value);
             if (!conjugationToVerb.has(key)) {
               conjugationToVerb.set(key, infinitive);
             }
 
-            const header = headers[c] || '';
-            const meta = describeConjugation(header);
-            conjugationMeta.set(`${infinitive}:::${value.toLowerCase()}`, {
+            const lowerValue = value.toLowerCase();
+            conjugationMeta.set(`${infinitive}:::${lowerValue}`, {
+              header,
+              ...meta
+            });
+            conjugationMeta.set(`${infinitive}:::${lowerValue}:::${header.toLowerCase()}`, {
               header,
               ...meta
             });
           }
         }
-        verbToOptions.set(infinitive, Array.from(options));
+        verbToOptions.set(infinitive, options);
       }
     }
 
@@ -885,6 +1068,9 @@
         const base = normaliseWord(token);
         const verb = conjugationToVerb.get(base);
         if (verb) {
+          if (isLikelyNounContext(tokens, i) && !hasVerbClue(tokens, i)) {
+            continue;
+          }
           blanks.push({ index: i, verb, answer: token.trim() });
           tokens[i] = '__VERB__';
         }
@@ -1001,17 +1187,29 @@
           select.dataset.correct = blank.answer;
           select.dataset.verb = blank.verb;
 
-          const opts = Array.from(new Set(verbToOptions.get(blank.verb) || []));
+          const opts = verbToOptions.get(blank.verb) || [];
+          const grouped = groupOptionsByPerson(opts);
           const placeholder = document.createElement('option');
           placeholder.value = '';
           placeholder.textContent = `Pick a form of "${blank.verb}"`;
           select.appendChild(placeholder);
 
-          opts.forEach(opt => {
-            const option = document.createElement('option');
-            option.value = opt;
-            option.textContent = opt;
-            select.appendChild(option);
+          optionGroupOrder.forEach(groupKey => {
+            const optionsForGroup = grouped.get(groupKey);
+            if (!optionsForGroup || !optionsForGroup.length) return;
+
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = optionGroupLabels[groupKey] || 'Forms';
+
+            optionsForGroup.forEach(opt => {
+              const option = document.createElement('option');
+              option.value = opt.value;
+              option.textContent = opt.value;
+              option.dataset.header = opt.header || '';
+              optgroup.appendChild(option);
+            });
+
+            select.appendChild(optgroup);
           });
 
           clearSelectStatus(select);
