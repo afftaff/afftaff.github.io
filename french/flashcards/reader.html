@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>French Text Reader Flashcards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f6f3;
+      --card: #ffffff;
+      --muted: #7f8c8d;
+      --border: #e0ded8;
+      --accent: #2c3e50;
+      --accent-2: #c0392b;
+      --success: #2ecc71;
+      --warning: #e67e22;
+      --radius: 12px;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--accent);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 { margin: 0; font-size: 1.2rem; }
+    header span { color: var(--muted); font-size: 0.9rem; }
+
+    main { padding: 1.5rem; max-width: 1200px; width: 100%; margin: 0 auto; flex: 1; display: grid; gap: 1rem; grid-template-columns: 360px 1fr; }
+
+    @media (max-width: 960px) { main { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .controls h2 { margin-top: 0; }
+    .controls textarea { width: 100%; min-height: 160px; resize: vertical; padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border); background: #f0efeb; font-family: inherit; }
+    .controls label { display: block; font-size: 0.9rem; color: var(--muted); margin-bottom: 0.4rem; }
+
+    .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+    button { border: 1px solid var(--accent); background: var(--accent); color: #fff; padding: 0.65rem 0.9rem; border-radius: 10px; cursor: pointer; font-weight: 600; }
+    button.secondary { background: #fff; color: var(--accent); }
+    button.link { background: transparent; border: none; color: var(--accent-2); padding: 0; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .sentences h2 { margin-top: 0; }
+    .sentence {
+      padding: 0.9rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      margin-bottom: 0.6rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .sentence:hover { background: #f5f7fa; }
+    .sentence.complete { border-color: var(--success); box-shadow: inset 0 0 0 1px var(--success); }
+    .sentence .status-pill { padding: 0.15rem 0.45rem; border-radius: 999px; font-size: 0.75rem; color: #fff; background: var(--muted); }
+    .sentence.complete .status-pill { background: var(--success); }
+    .sentence .missing { color: var(--muted); font-style: italic; }
+    .sentence .word-grey { color: #b0b0b0; }
+
+    .sentence .inline-actions { margin-left: auto; display: flex; gap: 0.35rem; align-items: center; }
+    .sentence .inline-actions input { accent-color: var(--accent-2); }
+    .sentence .inline-actions span { font-size: 0.8rem; color: var(--muted); }
+
+    .badges { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    .badge { background: #eef1f5; border-radius: 8px; padding: 0.25rem 0.6rem; font-size: 0.8rem; color: var(--muted); }
+    .badge.missing { background: #f6f1ed; color: var(--accent-2); }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+    }
+    .overlay.active { display: flex; }
+    .overlay .modal { background: var(--card); border-radius: var(--radius); padding: 1.5rem; width: min(680px, 95vw); box-shadow: var(--shadow); position: relative; }
+    .modal h3 { margin-top: 0; margin-bottom: 0.4rem; }
+    .modal .close { position: absolute; top: 12px; right: 12px; background: transparent; color: var(--accent); border: none; font-size: 1.1rem; cursor: pointer; }
+    .flashcard { border: 1px solid var(--border); border-radius: 10px; padding: 1rem; margin: 1rem 0; }
+    .flashcard .term { font-size: 1.8rem; font-weight: 700; margin: 0; }
+    .flashcard .subtitle { color: var(--muted); margin: 0.25rem 0; }
+    .flashcard ul { margin: 0.5rem 0; padding-left: 1.1rem; }
+    .flashcard .not-found { color: var(--muted); font-style: italic; }
+    .flashcard .sentence-context { background: #f5f7fa; border-radius: 8px; padding: 0.65rem; font-size: 0.95rem; }
+
+    .grade-buttons { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.5rem; }
+    .grade-buttons button { width: 100%; }
+
+    .pill-row { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; font-size: 0.9rem; color: var(--muted); }
+    .pill { background: #eef1f5; border-radius: 999px; padding: 0.25rem 0.6rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>French Reader Flashcards</h1>
+      <span>Paste text, click a sentence, drill the words.</span>
+    </div>
+    <div class="pill-row">
+      <span class="pill" id="progressPill">No text loaded</span>
+      <span class="pill" id="duePill">0 due</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="card controls">
+      <h2>1) Load text</h2>
+      <label for="textInput">Paste text or drop a file</label>
+      <textarea id="textInput" placeholder="Paste your French text here..."></textarea>
+      <div class="actions">
+        <input type="file" id="fileInput" accept="text/plain" style="display:none">
+        <button class="secondary" id="fileButton" type="button">Load from file</button>
+        <button class="secondary" id="clearText" type="button">Clear</button>
+      </div>
+      <h2>2) Study</h2>
+      <div class="actions">
+        <button id="studySelected" type="button" disabled>Study selected sentences</button>
+        <button id="reviewLearned" type="button">Review all learned words</button>
+      </div>
+      <p style="color: var(--muted); font-size: 0.9rem; margin-top: 0.6rem;">Click any sentence to open a mini-deck. Check multiple sentences and hit "Study selected" to group them.</p>
+    </section>
+
+    <section class="card sentences">
+      <h2>Sentences</h2>
+      <div id="sentenceList"></div>
+    </section>
+  </main>
+
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <button class="close" id="closeOverlay" aria-label="Close">✕</button>
+      <div class="pill-row">
+        <span class="pill" id="deckLabel">Deck</span>
+        <span class="pill" id="deckProgress">0 / 0</span>
+      </div>
+      <div class="flashcard" id="flashcard">
+        <p class="term" id="cardTerm">—</p>
+        <p class="subtitle" id="cardSubtitle"></p>
+        <div id="cardMeanings"></div>
+        <div id="cardContext" class="sentence-context"></div>
+      </div>
+      <div class="grade-buttons">
+        <button data-grade="again" style="background:#e74c3c;border-color:#e74c3c">Again</button>
+        <button data-grade="hard" style="background:#e67e22;border-color:#e67e22">Hard</button>
+        <button data-grade="good" style="background:#27ae60;border-color:#27ae60">Good</button>
+        <button data-grade="easy" style="background:#16a085;border-color:#16a085">Easy</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../dir/frenchwordsApi.js"></script>
+  <script>
+    const STORAGE_KEYS = {
+      text: 'reader-text',
+      progress: 'reader-progress',
+      srs: 'reader-srs'
+    };
+
+    const dom = {
+      textInput: document.getElementById('textInput'),
+      fileInput: document.getElementById('fileInput'),
+      fileButton: document.getElementById('fileButton'),
+      clearText: document.getElementById('clearText'),
+      sentenceList: document.getElementById('sentenceList'),
+      studySelected: document.getElementById('studySelected'),
+      reviewLearned: document.getElementById('reviewLearned'),
+      progressPill: document.getElementById('progressPill'),
+      duePill: document.getElementById('duePill'),
+      overlay: document.getElementById('overlay'),
+      deckLabel: document.getElementById('deckLabel'),
+      deckProgress: document.getElementById('deckProgress'),
+      flashcard: document.getElementById('flashcard'),
+      cardTerm: document.getElementById('cardTerm'),
+      cardSubtitle: document.getElementById('cardSubtitle'),
+      cardMeanings: document.getElementById('cardMeanings'),
+      cardContext: document.getElementById('cardContext'),
+      closeOverlay: document.getElementById('closeOverlay'),
+      gradeButtons: document.querySelectorAll('.grade-buttons button')
+    };
+
+    let sentences = [];
+    let selected = new Set();
+    const CARD_DECK_KEY = 'reader-main-deck';
+    let progress = loadJson(STORAGE_KEYS.progress, {});
+    let srsState = loadJson(STORAGE_KEYS.srs, {});
+    let currentDeck = { name: '', cards: [], queue: [], pointer: 0 };
+
+    function loadJson(key, fallback) {
+      try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }
+      catch (err) { return fallback; }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify(progress));
+      localStorage.setItem(STORAGE_KEYS.srs, JSON.stringify(srsState));
+    }
+
+    function parseSentences(text) {
+      return text
+        .replace(/\n+/g, ' ')
+        .split(/(?<=[.!?…])\s+/)
+        .map(s => s.trim())
+        .filter(Boolean);
+    }
+
+    function renderSentences() {
+      dom.sentenceList.innerHTML = '';
+      selected = new Set(Array.from(selected).filter(idx => sentences[idx]));
+      dom.studySelected.disabled = selected.size === 0;
+      sentences.forEach((text, index) => {
+        const container = document.createElement('div');
+        container.className = 'sentence';
+        container.dataset.index = index;
+        const key = sentenceKey(text);
+        const record = progress[key];
+        if (record?.status === 'complete') container.classList.add('complete');
+
+        const status = document.createElement('span');
+        status.className = 'status-pill';
+        status.textContent = record ? (record.status === 'complete' ? 'Learnt' : 'In progress') : 'New';
+        container.appendChild(status);
+
+        const content = document.createElement('div');
+        const label = document.createElement('p');
+        label.style.margin = '0 0 0.35rem 0';
+        label.innerHTML = highlightMissing(text, record?.missingWords || []);
+        content.appendChild(label);
+
+        const badges = document.createElement('div');
+        badges.className = 'badges';
+        if (record?.missingWords?.length) {
+          const badge = document.createElement('span');
+          badge.className = 'badge missing';
+          badge.textContent = `${record.missingWords.length} not found`;
+          badges.appendChild(badge);
+        }
+        if (record?.cards) {
+          const learned = Object.values(record.cards).filter(c => ['good','easy'].includes(c.state?.lastGrade)).length;
+          const badge = document.createElement('span');
+          badge.className = 'badge';
+          badge.textContent = `${learned}/${Object.keys(record.cards).length} good`;
+          badges.appendChild(badge);
+        }
+        content.appendChild(badges);
+        container.appendChild(content);
+
+        const inline = document.createElement('div');
+        inline.className = 'inline-actions';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = selected.has(index);
+        cb.addEventListener('click', (e) => { e.stopPropagation(); toggleSelection(index); });
+        inline.appendChild(cb);
+        const hint = document.createElement('span');
+        hint.textContent = 'group';
+        inline.appendChild(hint);
+        container.appendChild(inline);
+
+        container.addEventListener('click', () => startStudy([index]));
+        dom.sentenceList.appendChild(container);
+      });
+      dom.progressPill.textContent = `${sentences.length} sentence${sentences.length === 1 ? '' : 's'}`;
+    }
+
+    function highlightMissing(text, missingWords) {
+      if (!missingWords?.length) return text;
+      const words = text.split(/(\s+)/);
+      const lowerMissing = missingWords.map(w => w.toLowerCase());
+      return words.map(part => {
+        const clean = part.replace(/[^\p{L}'’-]+/gu, '').toLowerCase();
+        if (clean && lowerMissing.includes(clean)) return `<span class="word-grey">${part}</span>`;
+        return part;
+      }).join('');
+    }
+
+    function toggleSelection(index) {
+      if (selected.has(index)) selected.delete(index); else selected.add(index);
+      dom.studySelected.disabled = selected.size === 0;
+      renderSentences();
+    }
+
+    function sentenceKey(text) { return text.trim().toLowerCase(); }
+
+    async function startStudy(indices) {
+      if (!indices.length) return;
+      const selectedSentences = indices.map(i => sentences[i]).filter(Boolean);
+      dom.overlay.classList.add('active');
+      dom.deckLabel.textContent = indices.length === 1 ? 'Single sentence' : `${indices.length} sentences`;
+      const deckName = `sent:${selectedSentences.map(sentenceKey).join('|')}`;
+      const cards = await buildCards(selectedSentences);
+      setupDeck(deckName, cards);
+      showNextCard();
+    }
+
+    async function buildCards(sentenceList) {
+      await window.frenchWordsApi.preloadFrenchWordData();
+      const cards = [];
+      for (const sentence of sentenceList) {
+        const lookup = await window.frenchWordsApi.lookupFrenchWords(sentence);
+        const key = sentenceKey(sentence);
+        const record = progress[key] || { cards: {}, missingWords: [] };
+        const seen = new Set();
+        const missing = [];
+        lookup.forEach((entry, idx) => {
+          const id = `${key}-${(entry.word || entry.originalText || idx).toLowerCase()}`;
+          if (seen.has(id)) return;
+          seen.add(id);
+          const card = record.cards[id]?.card || {
+            id,
+            display: entry.word || entry.originalText || 'Unknown',
+            original: entry.originalText,
+            meanings: entry.meanings,
+            gender: entry.gender,
+            pronouns: entry.pronouns,
+            tense: entry.tense,
+            conjugatedFrom: entry.conjugatedFrom,
+            conjugatedFromMeaning: entry.conjugatedFromMeaning,
+            exampleSentences: entry.exampleSentences,
+            found: entry.found,
+            sentence
+          };
+          cards.push({ ...card });
+          record.cards[id] = record.cards[id] || { card, state: null };
+          if (!entry.found) missing.push(card.original?.toLowerCase() || card.display.toLowerCase());
+        });
+        record.missingWords = Array.from(new Set(missing));
+        progress[key] = record;
+      }
+      saveState();
+      return cards;
+    }
+
+    function setupDeck(name, cards) {
+      currentDeck = { name, cards, queue: getReviewQueue(cards), pointer: 0 };
+      updateDeckProgress();
+    }
+
+    function cardId(card) { return card.id; }
+
+    function getCardState(id) {
+      return (srsState[CARD_DECK_KEY] || {})[id] || null;
+    }
+
+    function scheduleCard(id, grade) {
+      const now = Date.now();
+      const deckState = srsState[CARD_DECK_KEY] || {};
+      const current = deckState[id] || { ease: 2.5, interval: 0, repetitions: 0, lapses: 0, due: now };
+      const qualityMap = { again: 1, hard: 2, good: 3, easy: 4 };
+      const quality = qualityMap[grade] || 3;
+      const state = { ...current };
+
+      if (quality < 2) {
+        state.repetitions = 0;
+        state.interval = quality === 1 ? 0.007 : 1;
+        state.ease = Math.max(1.3, (state.ease ?? 2.5) - 0.2);
+        state.lapses = (state.lapses ?? 0) + 1;
+      } else {
+        const ease = state.ease ?? 2.5;
+        let newEase = ease + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+        newEase = Math.max(1.3, newEase);
+        state.ease = newEase;
+        if (state.repetitions === 0) {
+          state.interval = grade === 'easy' ? 3 : 1;
+        } else if (state.repetitions === 1) {
+          state.interval = grade === 'easy' ? 8 : 6;
+        } else {
+          state.interval = Math.round(state.interval * newEase);
+        }
+        if (grade === 'hard') state.interval = Math.max(1, Math.round(state.interval * 0.6));
+        if (grade === 'easy') state.interval = Math.round(state.interval * 1.3);
+        state.repetitions += 1;
+      }
+
+      const intervalMs = state.interval * 24 * 60 * 60 * 1000;
+      state.due = now + Math.max(intervalMs, 10 * 60 * 1000);
+      state.lastGrade = grade;
+      srsState[CARD_DECK_KEY] = { ...deckState, [id]: state };
+      saveState();
+      return state;
+    }
+
+    function getReviewQueue(cards) {
+      const now = Date.now();
+      const due = [];
+      const fresh = [];
+      cards.forEach((card) => {
+        const id = cardId(card);
+        const state = getCardState(id);
+        if (!state) fresh.push({ id, card, due: now });
+        else if (state.due <= now) due.push({ id, card, due: state.due });
+      });
+      due.sort((a, b) => a.due - b.due);
+      fresh.sort((a, b) => a.card.display.localeCompare(b.card.display));
+      return [...due, ...fresh];
+    }
+
+    function updateDeckProgress() {
+      const total = currentDeck.queue.length;
+      dom.deckProgress.textContent = total ? `${Math.min(currentDeck.pointer + 1, total)} / ${total}` : '0 / 0';
+      updateDuePill();
+    }
+
+    function showNextCard() {
+      if (!currentDeck.queue.length) {
+        dom.cardTerm.textContent = 'No cards due';
+        dom.cardSubtitle.textContent = '';
+        dom.cardMeanings.innerHTML = '<p class="not-found">Add more sentences to review.</p>';
+        dom.cardContext.textContent = '';
+        return;
+      }
+      const item = currentDeck.queue[currentDeck.pointer];
+      renderCard(item.card);
+      updateDeckProgress();
+    }
+
+    function renderCard(card) {
+      dom.cardTerm.textContent = card.display || card.original || '—';
+      const parts = [];
+      if (card.gender) parts.push(card.gender);
+      if (card.pronouns) parts.push(card.pronouns.join(', '));
+      if (card.tense) parts.push(card.tense.filter(Boolean).join(' · '));
+      dom.cardSubtitle.textContent = parts.join(' • ');
+
+      dom.cardMeanings.innerHTML = '';
+      if (!card.found) {
+        dom.cardMeanings.innerHTML = '<p class="not-found">Not found in dictionary</p>';
+      } else if (card.meanings?.length) {
+        const ul = document.createElement('ul');
+        card.meanings.forEach(m => { const li = document.createElement('li'); li.textContent = m; ul.appendChild(li); });
+        dom.cardMeanings.appendChild(ul);
+      }
+      if (card.exampleSentences?.length) {
+        card.exampleSentences.slice(0,2).forEach((pair) => {
+          const p = document.createElement('p');
+          p.className = 'subtitle';
+          p.textContent = `${pair.french || ''} ${pair.english ? '— ' + pair.english : ''}`;
+          dom.cardMeanings.appendChild(p);
+        });
+      }
+      dom.cardContext.textContent = card.sentence || '';
+    }
+
+    function gradeCurrent(grade) {
+      if (!currentDeck.queue.length) return;
+      const item = currentDeck.queue[currentDeck.pointer];
+      scheduleCard(item.id, grade);
+      updateProgressForSentence(item.card);
+      currentDeck.queue = getReviewQueue(currentDeck.cards);
+      currentDeck.pointer = 0;
+      showNextCard();
+    }
+
+    function updateProgressForSentence(card) {
+      const key = sentenceKey(card.sentence || '');
+      if (!key) return;
+      const record = progress[key];
+      if (!record) return;
+      const deckState = srsState[CARD_DECK_KEY] || {};
+      const state = deckState[cardId(card)];
+      record.cards[cardId(card)] = { card, state };
+      const allGood = Object.values(record.cards).length > 0 && Object.values(record.cards).every(c => ['good','easy'].includes(c.state?.lastGrade));
+      record.status = allGood ? 'complete' : 'learning';
+      progress[key] = record;
+      saveState();
+      renderSentences();
+    }
+
+    function updateDuePill() {
+      const totalCards = Object.values(progress).reduce((acc, record) => acc + Object.keys(record.cards || {}).length, 0);
+      const deck = srsState[CARD_DECK_KEY] || {};
+      const due = Object.values(deck).reduce((acc, state) => acc + (state.due <= Date.now() ? 1 : 0), 0);
+      dom.duePill.textContent = `${due} due / ${totalCards} saved`;
+    }
+
+    async function reviewLearned() {
+      const allCards = [];
+      Object.values(progress).forEach(rec => {
+        Object.values(rec.cards || {}).forEach(({ card }) => allCards.push(card));
+      });
+      if (!allCards.length) return alert('No cards saved yet.');
+      dom.overlay.classList.add('active');
+      dom.deckLabel.textContent = 'All learned words';
+      const deckName = 'global-review';
+      setupDeck(deckName, allCards);
+      showNextCard();
+    }
+
+    dom.fileButton.addEventListener('click', () => dom.fileInput.click());
+    dom.fileInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        dom.textInput.value = evt.target.result || '';
+        handleTextChange();
+      };
+      reader.readAsText(file);
+    });
+
+    function handleTextChange() {
+      const text = dom.textInput.value || '';
+      localStorage.setItem(STORAGE_KEYS.text, text);
+      sentences = parseSentences(text);
+      renderSentences();
+    }
+
+    dom.textInput.addEventListener('input', handleTextChange);
+    dom.clearText.addEventListener('click', () => { dom.textInput.value = ''; handleTextChange(); });
+    dom.studySelected.addEventListener('click', () => startStudy(Array.from(selected)));
+    dom.reviewLearned.addEventListener('click', reviewLearned);
+    dom.closeOverlay.addEventListener('click', () => dom.overlay.classList.remove('active'));
+    dom.overlay.addEventListener('click', (e) => { if (e.target === dom.overlay) dom.overlay.classList.remove('active'); });
+    dom.gradeButtons.forEach(btn => btn.addEventListener('click', () => gradeCurrent(btn.dataset.grade)));
+
+    (function init() {
+      const savedText = localStorage.getItem(STORAGE_KEYS.text);
+      if (savedText) dom.textInput.value = savedText;
+      handleTextChange();
+      updateDuePill();
+    })();
+  </script>
+</body>
+</html>
