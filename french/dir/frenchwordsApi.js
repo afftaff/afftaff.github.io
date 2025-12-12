@@ -462,7 +462,8 @@ async function preloadFrenchWordData() {
   buildIndex(wordData);
 }
 
-const api = { lookupFrenchWords, preloadFrenchWordData };
+const debug = { parseJsonContent, loadJsonFile, loadWordData };
+const api = { lookupFrenchWords, preloadFrenchWordData, debug };
 
 if (typeof window !== 'undefined') {
   window.frenchWordsApi = api;
