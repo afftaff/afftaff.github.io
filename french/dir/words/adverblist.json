@@ -1,0 +1,6157 @@
+
+[
+  {
+    "adverb": "très",
+    "gender": "invariable",
+    "pronunciation": "tʁɛ",
+    "english_approximate_pronunciation": "treh",
+    "meaning_en": "very",
+    "examples": [
+      {
+        "fr": "Il fait très froid aujourd'hui.",
+        "en": "It is very cold today."
+      },
+      {
+        "fr": "Ce film est très intéressant.",
+        "en": "This film is very interesting."
+      }
+    ]
+  },
+  {
+    "adverb": "bien",
+    "gender": "invariable",
+    "pronunciation": "bjɛ̃",
+    "english_approximate_pronunciation": "byan",
+    "meaning_en": "well",
+    "examples": [
+      {
+        "fr": "Elle parle très bien français.",
+        "en": "She speaks French very well."
+      },
+      {
+        "fr": "Tout s'est bien passé.",
+        "en": "Everything went well."
+      }
+    ]
+  },
+  {
+    "adverb": "aussi",
+    "gender": "invariable",
+    "pronunciation": "osi",
+    "english_approximate_pronunciation": "oh-see",
+    "meaning_en": "also; too",
+    "examples": [
+      {
+        "fr": "Il vient aussi ce soir.",
+        "en": "He is also coming this evening."
+      },
+      {
+        "fr": "Je voudrais aussi un café.",
+        "en": "I would also like a coffee."
+      }
+    ]
+  },
+  {
+    "adverb": "encore",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃kɔʁ",
+    "english_approximate_pronunciation": "on-kor",
+    "meaning_en": "again; still",
+    "examples": [
+      {
+        "fr": "Tu veux encore du pain ?",
+        "en": "Do you want more bread?"
+      },
+      {
+        "fr": "Il dort encore.",
+        "en": "He is still sleeping."
+      }
+    ]
+  },
+  {
+    "adverb": "toujours",
+    "gender": "invariable",
+    "pronunciation": "tuʒuʁ",
+    "english_approximate_pronunciation": "too-zhoor",
+    "meaning_en": "always; still",
+    "examples": [
+      {
+        "fr": "Je serai toujours là pour toi.",
+        "en": "I will always be there for you."
+      },
+      {
+        "fr": "Elle arrive toujours en retard.",
+        "en": "She always arrives late."
+      }
+    ]
+  },
+  {
+    "adverb": "souvent",
+    "gender": "invariable",
+    "pronunciation": "suvɑ̃",
+    "english_approximate_pronunciation": "soo-van",
+    "meaning_en": "often",
+    "examples": [
+      {
+        "fr": "Nous allons souvent au cinéma.",
+        "en": "We often go to the cinema."
+      },
+      {
+        "fr": "Il pense souvent à ses vacances.",
+        "en": "He often thinks about his holidays."
+      }
+    ]
+  },
+  {
+    "adverb": "parfois",
+    "gender": "invariable",
+    "pronunciation": "paʁfwa",
+    "english_approximate_pronunciation": "par-fwah",
+    "meaning_en": "sometimes",
+    "examples": [
+      {
+        "fr": "Je me sens parfois fatigué.",
+        "en": "I sometimes feel tired."
+      },
+      {
+        "fr": "Parfois, il pleut toute la journée.",
+        "en": "Sometimes it rains all day."
+      }
+    ]
+  },
+  {
+    "adverb": "jamais",
+    "gender": "invariable",
+    "pronunciation": "ʒamɛ",
+    "english_approximate_pronunciation": "zha-may",
+    "meaning_en": "never",
+    "examples": [
+      {
+        "fr": "Je ne mange jamais de viande.",
+        "en": "I never eat meat."
+      },
+      {
+        "fr": "Il n'est jamais prêt à l'heure.",
+        "en": "He is never ready on time."
+      }
+    ]
+  },
+  {
+    "adverb": "déjà",
+    "gender": "invariable",
+    "pronunciation": "deʒa",
+    "english_approximate_pronunciation": "day-zha",
+    "meaning_en": "already",
+    "examples": [
+      {
+        "fr": "J'ai déjà vu ce film.",
+        "en": "I have already seen this film."
+      },
+      {
+        "fr": "Tu es déjà parti ?",
+        "en": "Have you already left?"
+      }
+    ]
+  },
+  {
+    "adverb": "peut-être",
+    "gender": "invariable",
+    "pronunciation": "pøtɛtʁ",
+    "english_approximate_pronunciation": "puh-tetr",
+    "meaning_en": "perhaps; maybe",
+    "examples": [
+      {
+        "fr": "Je viendrai peut-être demain.",
+        "en": "I might come tomorrow."
+      },
+      {
+        "fr": "Peut-être qu'il a oublié.",
+        "en": "Perhaps he has forgotten."
+      }
+    ]
+  },
+  {
+    "adverb": "beaucoup",
+    "gender": "invariable",
+    "pronunciation": "boku",
+    "english_approximate_pronunciation": "boh-koo",
+    "meaning_en": "a lot; much",
+    "examples": [
+      {
+        "fr": "Merci beaucoup pour ton aide.",
+        "en": "Thank you very much for your help."
+      },
+      {
+        "fr": "Il voyage beaucoup pour son travail.",
+        "en": "He travels a lot for his work."
+      }
+    ]
+  },
+  {
+    "adverb": "trop",
+    "gender": "invariable",
+    "pronunciation": "tʁo",
+    "english_approximate_pronunciation": "troh",
+    "meaning_en": "too (much/many)",
+    "examples": [
+      {
+        "fr": "Il fait trop chaud ici.",
+        "en": "It is too hot here."
+      },
+      {
+        "fr": "Tu parles trop vite.",
+        "en": "You speak too fast."
+      }
+    ]
+  },
+  {
+    "adverb": "assez",
+    "gender": "invariable",
+    "pronunciation": "ase",
+    "english_approximate_pronunciation": "ah-say",
+    "meaning_en": "enough; quite",
+    "examples": [
+      {
+        "fr": "Il est assez grand pour conduire.",
+        "en": "He is tall enough to drive."
+      },
+      {
+        "fr": "C'est assez simple.",
+        "en": "It is quite simple."
+      }
+    ]
+  },
+  {
+    "adverb": "peu",
+    "gender": "invariable",
+    "pronunciation": "pø",
+    "english_approximate_pronunciation": "puh",
+    "meaning_en": "little; not much",
+    "examples": [
+      {
+        "fr": "Je dors très peu en ce moment.",
+        "en": "I sleep very little at the moment."
+      },
+      {
+        "fr": "Il a peu d'amis ici.",
+        "en": "He has few friends here."
+      }
+    ]
+  },
+  {
+    "adverb": "plus",
+    "gender": "invariable",
+    "pronunciation": "ply",
+    "english_approximate_pronunciation": "plew",
+    "meaning_en": "more",
+    "examples": [
+      {
+        "fr": "Je voudrais plus de temps.",
+        "en": "I would like more time."
+      },
+      {
+        "fr": "Elle ne veut plus parler.",
+        "en": "She does not want to speak any more."
+      }
+    ]
+  },
+  {
+    "adverb": "moins",
+    "gender": "invariable",
+    "pronunciation": "mwɛ̃",
+    "english_approximate_pronunciation": "mwan",
+    "meaning_en": "less",
+    "examples": [
+      {
+        "fr": "Il travaille moins qu'avant.",
+        "en": "He works less than before."
+      },
+      {
+        "fr": "J'ai mis moins de sucre.",
+        "en": "I put in less sugar."
+      }
+    ]
+  },
+  {
+    "adverb": "mieux",
+    "gender": "invariable",
+    "pronunciation": "mjø",
+    "english_approximate_pronunciation": "myeuh",
+    "meaning_en": "better",
+    "examples": [
+      {
+        "fr": "Elle chante mieux que moi.",
+        "en": "She sings better than me."
+      },
+      {
+        "fr": "Ça va beaucoup mieux aujourd'hui.",
+        "en": "It is much better today."
+      }
+    ]
+  },
+  {
+    "adverb": "mal",
+    "gender": "invariable",
+    "pronunciation": "mal",
+    "english_approximate_pronunciation": "mal",
+    "meaning_en": "badly; poorly",
+    "examples": [
+      {
+        "fr": "Il dort mal en ce moment.",
+        "en": "He sleeps badly at the moment."
+      },
+      {
+        "fr": "Tu as mal répondu à la question.",
+        "en": "You answered the question badly."
+      }
+    ]
+  },
+  {
+    "adverb": "vite",
+    "gender": "invariable",
+    "pronunciation": "vit",
+    "english_approximate_pronunciation": "veet",
+    "meaning_en": "quickly; fast",
+    "examples": [
+      {
+        "fr": "Il conduit trop vite.",
+        "en": "He drives too fast."
+      },
+      {
+        "fr": "Dépêche-toi, marche plus vite.",
+        "en": "Hurry up, walk faster."
+      }
+    ]
+  },
+  {
+    "adverb": "lentement",
+    "gender": "invariable",
+    "pronunciation": "lɑ̃tmɑ̃",
+    "english_approximate_pronunciation": "lant-man",
+    "meaning_en": "slowly",
+    "examples": [
+      {
+        "fr": "Parle plus lentement, s'il te plaît.",
+        "en": "Speak more slowly, please."
+      },
+      {
+        "fr": "La vieille voiture avance lentement.",
+        "en": "The old car moves slowly."
+      }
+    ]
+  },
+  {
+    "adverb": "tôt",
+    "gender": "invariable",
+    "pronunciation": "to",
+    "english_approximate_pronunciation": "toh",
+    "meaning_en": "early",
+    "examples": [
+      {
+        "fr": "Je me lève très tôt.",
+        "en": "I get up very early."
+      },
+      {
+        "fr": "Ils sont arrivés trop tôt.",
+        "en": "They arrived too early."
+      }
+    ]
+  },
+  {
+    "adverb": "tard",
+    "gender": "invariable",
+    "pronunciation": "taʁ",
+    "english_approximate_pronunciation": "tar",
+    "meaning_en": "late",
+    "examples": [
+      {
+        "fr": "Il est déjà très tard.",
+        "en": "It is already very late."
+      },
+      {
+        "fr": "Pourquoi rentres-tu si tard ?",
+        "en": "Why are you coming home so late?"
+      }
+    ]
+  },
+  {
+    "adverb": "ici",
+    "gender": "invariable",
+    "pronunciation": "isi",
+    "english_approximate_pronunciation": "ee-see",
+    "meaning_en": "here",
+    "examples": [
+      {
+        "fr": "Viens t'asseoir ici.",
+        "en": "Come and sit here."
+      },
+      {
+        "fr": "Je travaille ici depuis cinq ans.",
+        "en": "I have worked here for five years."
+      }
+    ]
+  },
+  {
+    "adverb": "là",
+    "gender": "invariable",
+    "pronunciation": "la",
+    "english_approximate_pronunciation": "lah",
+    "meaning_en": "there",
+    "examples": [
+      {
+        "fr": "Pose le livre là.",
+        "en": "Put the book there."
+      },
+      {
+        "fr": "Regarde, elle est juste là.",
+        "en": "Look, she is right there."
+      }
+    ]
+  },
+  {
+    "adverb": "là-bas",
+    "gender": "invariable",
+    "pronunciation": "laba",
+    "english_approximate_pronunciation": "lah-bah",
+    "meaning_en": "over there",
+    "examples": [
+      {
+        "fr": "Ils habitent là-bas, près de la rivière.",
+        "en": "They live over there, near the river."
+      },
+      {
+        "fr": "Je vois quelqu'un là-bas.",
+        "en": "I can see someone over there."
+      }
+    ]
+  },
+  {
+    "adverb": "partout",
+    "gender": "invariable",
+    "pronunciation": "paʁtu",
+    "english_approximate_pronunciation": "par-too",
+    "meaning_en": "everywhere",
+    "examples": [
+      {
+        "fr": "On le cherche partout.",
+        "en": "We are looking for him everywhere."
+      },
+      {
+        "fr": "Il y a des touristes partout.",
+        "en": "There are tourists everywhere."
+      }
+    ]
+  },
+  {
+    "adverb": "ailleurs",
+    "gender": "invariable",
+    "pronunciation": "ajœʁ",
+    "english_approximate_pronunciation": "eye-yeur",
+    "meaning_en": "elsewhere",
+    "examples": [
+      {
+        "fr": "Je voudrais vivre ailleurs.",
+        "en": "I would like to live elsewhere."
+      },
+      {
+        "fr": "Cherchons la solution ailleurs.",
+        "en": "Let us look for the solution elsewhere."
+      }
+    ]
+  },
+  {
+    "adverb": "près",
+    "gender": "invariable",
+    "pronunciation": "pʁɛ",
+    "english_approximate_pronunciation": "preh",
+    "meaning_en": "near; nearby",
+    "examples": [
+      {
+        "fr": "Il habite tout près.",
+        "en": "He lives very nearby."
+      },
+      {
+        "fr": "Reste près de moi.",
+        "en": "Stay near me."
+      }
+    ]
+  },
+  {
+    "adverb": "loin",
+    "gender": "invariable",
+    "pronunciation": "lwɛ̃",
+    "english_approximate_pronunciation": "lwang",
+    "meaning_en": "far; far away",
+    "examples": [
+      {
+        "fr": "Ta maison est loin d'ici.",
+        "en": "Your house is far from here."
+      },
+      {
+        "fr": "Ils ont déménagé très loin.",
+        "en": "They moved very far away."
+      }
+    ]
+  },
+  {
+    "adverb": "aujourd'hui",
+    "gender": "invariable",
+    "pronunciation": "oʒuʁdɥi",
+    "english_approximate_pronunciation": "oh-zhoor-dwee",
+    "meaning_en": "today",
+    "examples": [
+      {
+        "fr": "Je travaille à la maison aujourd'hui.",
+        "en": "I am working from home today."
+      },
+      {
+        "fr": "Aujourd'hui, il fait beau.",
+        "en": "Today the weather is nice."
+      }
+    ]
+  },
+  {
+    "adverb": "hier",
+    "gender": "invariable",
+    "pronunciation": "jɛʁ",
+    "english_approximate_pronunciation": "yair",
+    "meaning_en": "yesterday",
+    "examples": [
+      {
+        "fr": "Je l'ai vu hier.",
+        "en": "I saw him yesterday."
+      },
+      {
+        "fr": "Hier, nous sommes allés au musée.",
+        "en": "Yesterday we went to the museum."
+      }
+    ]
+  },
+  {
+    "adverb": "demain",
+    "gender": "invariable",
+    "pronunciation": "dəmɛ̃",
+    "english_approximate_pronunciation": "duh-man",
+    "meaning_en": "tomorrow",
+    "examples": [
+      {
+        "fr": "Je pars demain matin.",
+        "en": "I am leaving tomorrow morning."
+      },
+      {
+        "fr": "On se voit demain ?",
+        "en": "Shall we see each other tomorrow?"
+      }
+    ]
+  },
+  {
+    "adverb": "maintenant",
+    "gender": "invariable",
+    "pronunciation": "mɛ̃tnɑ̃",
+    "english_approximate_pronunciation": "mant-nan",
+    "meaning_en": "now",
+    "examples": [
+      {
+        "fr": "Je dois partir maintenant.",
+        "en": "I must leave now."
+      },
+      {
+        "fr": "Il comprend mieux maintenant.",
+        "en": "He understands better now."
+      }
+    ]
+  },
+  {
+    "adverb": "alors",
+    "gender": "invariable",
+    "pronunciation": "alɔʁ",
+    "english_approximate_pronunciation": "ah-lor",
+    "meaning_en": "so; then",
+    "examples": [
+      {
+        "fr": "Alors, tu viens avec nous ?",
+        "en": "So, are you coming with us?"
+      },
+      {
+        "fr": "Il était malade, alors il est resté chez lui.",
+        "en": "He was ill, so he stayed at home."
+      }
+    ]
+  },
+  {
+    "adverb": "ensuite",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃sɥit",
+    "english_approximate_pronunciation": "on-sweet",
+    "meaning_en": "then; afterwards",
+    "examples": [
+      {
+        "fr": "Nous avons dîné, ensuite nous sommes sortis.",
+        "en": "We had dinner, then we went out."
+      },
+      {
+        "fr": "Lavez-vous les mains, ensuite mettez la table.",
+        "en": "Wash your hands, then set the table."
+      }
+    ]
+  },
+  {
+    "adverb": "puis",
+    "gender": "invariable",
+    "pronunciation": "pɥi",
+    "english_approximate_pronunciation": "pwee",
+    "meaning_en": "then; next",
+    "examples": [
+      {
+        "fr": "Il a réfléchi, puis il a répondu.",
+        "en": "He thought, then he answered."
+      },
+      {
+        "fr": "Nous irons au marché puis au parc.",
+        "en": "We will go to the market and then to the park."
+      }
+    ]
+  },
+  {
+    "adverb": "enfin",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃fɛ̃",
+    "english_approximate_pronunciation": "on-fan",
+    "meaning_en": "finally; at last",
+    "examples": [
+      {
+        "fr": "Enfin, nous sommes arrivés.",
+        "en": "At last, we have arrived."
+      },
+      {
+        "fr": "Parle-moi enfin de ton projet.",
+        "en": "Tell me about your project at last."
+      }
+    ]
+  },
+  {
+    "adverb": "d'abord",
+    "gender": "invariable",
+    "pronunciation": "dabɔʁ",
+    "english_approximate_pronunciation": "da-bor",
+    "meaning_en": "first; first of all",
+    "examples": [
+      {
+        "fr": "D'abord, lis la consigne.",
+        "en": "First, read the instructions."
+      },
+      {
+        "fr": "Je veux d'abord comprendre le problème.",
+        "en": "I want to understand the problem first."
+      }
+    ]
+  },
+  {
+    "adverb": "récemment",
+    "gender": "invariable",
+    "pronunciation": "ʁesamɑ̃",
+    "english_approximate_pronunciation": "ray-sa-man",
+    "meaning_en": "recently",
+    "examples": [
+      {
+        "fr": "J'ai déménagé récemment.",
+        "en": "I moved recently."
+      },
+      {
+        "fr": "Elle a changé de travail récemment.",
+        "en": "She changed jobs recently."
+      }
+    ]
+  },
+  {
+    "adverb": "longtemps",
+    "gender": "invariable",
+    "pronunciation": "lɔ̃tɑ̃",
+    "english_approximate_pronunciation": "long-ton",
+    "meaning_en": "for a long time",
+    "examples": [
+      {
+        "fr": "Il a vécu longtemps à Paris.",
+        "en": "He lived in Paris for a long time."
+      },
+      {
+        "fr": "Nous avons parlé longtemps.",
+        "en": "We talked for a long time."
+      }
+    ]
+  },
+  {
+    "adverb": "ensemble",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃sɑ̃bl",
+    "english_approximate_pronunciation": "on-som-bl",
+    "meaning_en": "together",
+    "examples": [
+      {
+        "fr": "Nous travaillons souvent ensemble.",
+        "en": "We often work together."
+      },
+      {
+        "fr": "Ils sont partis ensemble en vacances.",
+        "en": "They went on holiday together."
+      }
+    ]
+  },
+  {
+    "adverb": "facilement",
+    "gender": "invariable",
+    "pronunciation": "fasilmɑ̃",
+    "english_approximate_pronunciation": "fa-seel-man",
+    "meaning_en": "easily",
+    "examples": [
+      {
+        "fr": "Elle apprend les langues facilement.",
+        "en": "She learns languages easily."
+      },
+      {
+        "fr": "On peut le réparer facilement.",
+        "en": "It can be repaired easily."
+      }
+    ]
+  },
+  {
+    "adverb": "rapidement",
+    "gender": "invariable",
+    "pronunciation": "ʁapidəmɑ̃",
+    "english_approximate_pronunciation": "ra-peed-man",
+    "meaning_en": "quickly; rapidly",
+    "examples": [
+      {
+        "fr": "Le problème a été résolu rapidement.",
+        "en": "The problem was solved quickly."
+      },
+      {
+        "fr": "Il marche très rapidement.",
+        "en": "He walks very quickly."
+      }
+    ]
+  },
+  {
+    "adverb": "exactement",
+    "gender": "invariable",
+    "pronunciation": "ɛɡzaktəmɑ̃",
+    "english_approximate_pronunciation": "eg-zak-tuh-man",
+    "meaning_en": "exactly",
+    "examples": [
+      {
+        "fr": "C'est exactement ce que je voulais.",
+        "en": "This is exactly what I wanted."
+      },
+      {
+        "fr": "Il a répété exactement les mêmes mots.",
+        "en": "He repeated exactly the same words."
+      }
+    ]
+  },
+  {
+    "adverb": "vraiment",
+    "gender": "invariable",
+    "pronunciation": "vʁɛmɑ̃",
+    "english_approximate_pronunciation": "vray-man",
+    "meaning_en": "really; truly",
+    "examples": [
+      {
+        "fr": "Je suis vraiment désolé.",
+        "en": "I am really sorry."
+      },
+      {
+        "fr": "C'était vraiment intéressant.",
+        "en": "It was really interesting."
+      }
+    ]
+  },
+  {
+    "adverb": "presque",
+    "gender": "invariable",
+    "pronunciation": "pʁɛsk",
+    "english_approximate_pronunciation": "presk",
+    "meaning_en": "almost; nearly",
+    "examples": [
+      {
+        "fr": "J'ai presque fini.",
+        "en": "I have almost finished."
+      },
+      {
+        "fr": "Il est presque minuit.",
+        "en": "It is almost midnight."
+      }
+    ]
+  },
+  {
+    "adverb": "surtout",
+    "gender": "invariable",
+    "pronunciation": "syʁtu",
+    "english_approximate_pronunciation": "sur-too",
+    "meaning_en": "especially; above all",
+    "examples": [
+      {
+        "fr": "J'aime surtout le chocolat noir.",
+        "en": "I especially like dark chocolate."
+      },
+      {
+        "fr": "Ne sois pas en retard, surtout.",
+        "en": "Above all, do not be late."
+      }
+    ]
+  },
+  {
+    "adverb": "probablement",
+    "gender": "invariable",
+    "pronunciation": "pʁɔbabləmɑ̃",
+    "english_approximate_pronunciation": "pro-ba-bleuh-man",
+    "meaning_en": "probably",
+    "examples": [
+      {
+        "fr": "Il viendra probablement plus tard.",
+        "en": "He will probably come later."
+      },
+      {
+        "fr": "Ce sera probablement difficile.",
+        "en": "It will probably be difficult."
+      }
+    ]
+  },
+  {
+    "adverb": "normalement",
+    "gender": "invariable",
+    "pronunciation": "nɔʁmalmɑ̃",
+    "english_approximate_pronunciation": "nor-mal-man",
+    "meaning_en": "normally; usually",
+    "examples": [
+      {
+        "fr": "Normalement, il arrive à huit heures.",
+        "en": "Normally, he arrives at eight o'clock."
+      },
+      {
+        "fr": "Ça devrait normalement fonctionner.",
+        "en": "It should normally work."
+      }
+    ]
+  },
+  {
+    "adverb": "simplement",
+    "gender": "invariable",
+    "pronunciation": "sɛ̃pləmɑ̃",
+    "english_approximate_pronunciation": "sam-pluh-man",
+    "meaning_en": "simply; just",
+    "examples": [
+      {
+        "fr": "Explique-le simplement.",
+        "en": "Explain it simply."
+      },
+      {
+        "fr": "Je voulais simplement dire bonjour.",
+        "en": "I just wanted to say hello."
+      }
+    ]
+  },
+  {
+    "adverb": "ainsi",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃si",
+    "english_approximate_pronunciation": "an-see",
+    "meaning_en": "thus; in this way",
+    "examples": [
+      {
+        "fr": "Fais ainsi et tout ira bien.",
+        "en": "Do it like this and everything will be fine."
+      },
+      {
+        "fr": "Ainsi s'achève notre histoire.",
+        "en": "Thus our story comes to an end."
+      }
+    ]
+  },
+  {
+    "adverb": "autrement",
+    "gender": "invariable",
+    "pronunciation": "otʁəmɑ̃",
+    "english_approximate_pronunciation": "oh-truh-man",
+    "meaning_en": "otherwise; differently",
+    "examples": [
+      {
+        "fr": "Agis autrement la prochaine fois.",
+        "en": "Act differently next time."
+      },
+      {
+        "fr": "Je ne pouvais pas faire autrement.",
+        "en": "I could not do otherwise."
+      }
+    ]
+  },
+  {
+    "adverb": "davantage",
+    "gender": "invariable",
+    "pronunciation": "davãtaʒ",
+    "english_approximate_pronunciation": "da-van-tazh",
+    "meaning_en": "more; further",
+    "examples": [
+      {
+        "fr": "Il faut travailler davantage.",
+        "en": "We need to work more."
+      },
+      {
+        "fr": "Je ne peux pas en dire davantage.",
+        "en": "I cannot say any more about it."
+      }
+    ]
+  },
+  {
+    "adverb": "car",
+    "gender": "invariable",
+    "pronunciation": "kaʁ",
+    "english_approximate_pronunciation": "kar",
+    "meaning_en": "for; because (formal/connecting)",
+    "examples": [
+      {
+        "fr": "Reste ici, car il fait trop froid dehors.",
+        "en": "Stay here, for it is too cold outside."
+      },
+      {
+        "fr": "Je pars tôt, car j'ai beaucoup de travail.",
+        "en": "I'm leaving early, because I have a lot of work."
+      }
+    ]
+  },
+  {
+    "adverb": "certes",
+    "gender": "invariable",
+    "pronunciation": "sɛʁt",
+    "english_approximate_pronunciation": "sairt",
+    "meaning_en": "certainly; admittedly",
+    "examples": [
+      {
+        "fr": "Ce n'est pas parfait, certes, mais c'est acceptable.",
+        "en": "It is not perfect, certainly, but it is acceptable."
+      },
+      {
+        "fr": "Certes, il a fait une erreur, mais il a appris.",
+        "en": "Admittedly, he made a mistake, but he has learnt."
+      }
+    ]
+  },
+  {
+    "adverb": "cependant",
+    "gender": "invariable",
+    "pronunciation": "səpɑ̃dɑ̃",
+    "english_approximate_pronunciation": "suh-pan-dan",
+    "meaning_en": "however; nevertheless",
+    "examples": [
+      {
+        "fr": "Il était fatigué, cependant il a continué.",
+        "en": "He was tired, however he carried on."
+      },
+      {
+        "fr": "Le temps est mauvais, cependant nous sortons.",
+        "en": "The weather is bad, nevertheless we are going out."
+      }
+    ]
+  },
+  {
+    "adverb": "pourtant",
+    "gender": "invariable",
+    "pronunciation": "puʁtɑ̃",
+    "english_approximate_pronunciation": "poor-tan",
+    "meaning_en": "yet; however",
+    "examples": [
+      {
+        "fr": "Il avait promis, pourtant il n'est pas venu.",
+        "en": "He had promised, yet he did not come."
+      },
+      {
+        "fr": "C'est difficile, pourtant elle réussit.",
+        "en": "It is difficult, yet she succeeds."
+      }
+    ]
+  },
+  {
+    "adverb": "toutefois",
+    "gender": "invariable",
+    "pronunciation": "tutfwa",
+    "english_approximate_pronunciation": "toot-fwah",
+    "meaning_en": "however; nonetheless",
+    "examples": [
+      {
+        "fr": "C'est possible, toutefois ce sera cher.",
+        "en": "It's possible; however, it will be expensive."
+      },
+      {
+        "fr": "Je suis d'accord, toutefois j'ai quelques réserves.",
+        "en": "I agree, nonetheless I have some reservations."
+      }
+    ]
+  },
+  {
+    "adverb": "environ",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃viʁɔ̃",
+    "english_approximate_pronunciation": "an-vee-ron(g)",
+    "meaning_en": "about; approximately",
+    "examples": [
+      {
+        "fr": "Il y avait environ vingt personnes.",
+        "en": "There were about twenty people."
+      },
+      {
+        "fr": "La gare est à environ dix minutes d'ici.",
+        "en": "The station is about ten minutes from here."
+      }
+    ]
+  },
+  {
+    "adverb": "quelquefois",
+    "gender": "invariable",
+    "pronunciation": "kɛlkəfwa",
+    "english_approximate_pronunciation": "kel-kuh-fwah",
+    "meaning_en": "sometimes; occasionally",
+    "examples": [
+      {
+        "fr": "Je vais quelquefois au théâtre.",
+        "en": "I sometimes go to the theatre."
+      },
+      {
+        "fr": "Quelquefois, il faut savoir attendre.",
+        "en": "Sometimes you have to know how to wait."
+      }
+    ]
+  },
+  {
+    "adverb": "autour",
+    "gender": "invariable",
+    "pronunciation": "otuʁ",
+    "english_approximate_pronunciation": "oh-toor",
+    "meaning_en": "around",
+    "examples": [
+      {
+        "fr": "Ils se sont assis autour de la table.",
+        "en": "They sat around the table."
+      },
+      {
+        "fr": "Regarde autour de toi.",
+        "en": "Look around you."
+      }
+    ]
+  },
+  {
+    "adverb": "dedans",
+    "gender": "invariable",
+    "pronunciation": "dədɑ̃",
+    "english_approximate_pronunciation": "duh-dan",
+    "meaning_en": "inside",
+    "examples": [
+      {
+        "fr": "Il fait froid, reste donc dedans.",
+        "en": "It is cold; so stay inside."
+      },
+      {
+        "fr": "Qu'y a-t-il dedans ?",
+        "en": "What is inside it?"
+      }
+    ]
+  },
+  {
+    "adverb": "dehors",
+    "gender": "invariable",
+    "pronunciation": "dəɔʁ",
+    "english_approximate_pronunciation": "duh-or",
+    "meaning_en": "outside",
+    "examples": [
+      {
+        "fr": "Les enfants jouent dehors.",
+        "en": "The children are playing outside."
+      },
+      {
+        "fr": "Il pleut dehors.",
+        "en": "It is raining outside."
+      }
+    ]
+  },
+  {
+    "adverb": "dessus",
+    "gender": "invariable",
+    "pronunciation": "dəsy",
+    "english_approximate_pronunciation": "duh-sue",
+    "meaning_en": "on top; above",
+    "examples": [
+      {
+        "fr": "Pose le livre dessus.",
+        "en": "Put the book on top."
+      },
+      {
+        "fr": "Il y a de la poussière dessus.",
+        "en": "There is dust on it."
+      }
+    ]
+  },
+  {
+    "adverb": "dessous",
+    "gender": "invariable",
+    "pronunciation": "dəsu",
+    "english_approximate_pronunciation": "duh-soo",
+    "meaning_en": "underneath; below",
+    "examples": [
+      {
+        "fr": "Le chat se cache dessous.",
+        "en": "The cat is hiding underneath."
+      },
+      {
+        "fr": "Regarde dessous la table.",
+        "en": "Look under the table."
+      }
+    ]
+  },
+  {
+    "adverb": "de nouveau",
+    "gender": "invariable",
+    "pronunciation": "də nuvo",
+    "english_approximate_pronunciation": "duh noo-voh",
+    "meaning_en": "again; anew",
+    "examples": [
+      {
+        "fr": "Nous allons essayer de nouveau.",
+        "en": "We are going to try again."
+      },
+      {
+        "fr": "Il a tout refait de nouveau.",
+        "en": "He did everything again from the start."
+      }
+    ]
+  },
+  {
+    "adverb": "franchement",
+    "gender": "invariable",
+    "pronunciation": "fʁɑ̃ʃmɑ̃",
+    "english_approximate_pronunciation": "fronsh-man",
+    "meaning_en": "frankly; honestly",
+    "examples": [
+      {
+        "fr": "Franchement, ce n'est pas une bonne idée.",
+        "en": "Frankly, that's not a good idea."
+      },
+      {
+        "fr": "Je dois te parler franchement.",
+        "en": "I need to speak to you frankly."
+      }
+    ]
+  },
+  {
+    "adverb": "doucement",
+    "gender": "invariable",
+    "pronunciation": "dusmɑ̃",
+    "english_approximate_pronunciation": "doos-man",
+    "meaning_en": "gently; softly; slowly",
+    "examples": [
+      {
+        "fr": "Parle plus doucement, s'il te plaît.",
+        "en": "Speak more softly, please."
+      },
+      {
+        "fr": "La voiture avance doucement.",
+        "en": "The car is moving slowly."
+      }
+    ]
+  },
+  {
+    "adverb": "brusquement",
+    "gender": "invariable",
+    "pronunciation": "bʁyskəmɑ̃",
+    "english_approximate_pronunciation": "broos-kuh-man",
+    "meaning_en": "abruptly; suddenly",
+    "examples": [
+      {
+        "fr": "Il s'est levé brusquement.",
+        "en": "He got up abruptly."
+      },
+      {
+        "fr": "La conversation s'est arrêtée brusquement.",
+        "en": "The conversation stopped suddenly."
+      }
+    ]
+  },
+  {
+    "adverb": "soudain",
+    "gender": "invariable",
+    "pronunciation": "sudɛ̃",
+    "english_approximate_pronunciation": "soo-dan",
+    "meaning_en": "suddenly",
+    "examples": [
+      {
+        "fr": "Soudain, la lumière s'est éteinte.",
+        "en": "Suddenly, the light went out."
+      },
+      {
+        "fr": "Tout s'est arrêté soudain.",
+        "en": "Everything stopped suddenly."
+      }
+    ]
+  },
+  {
+    "adverb": "précisément",
+    "gender": "invariable",
+    "pronunciation": "pʁesisemɑ̃",
+    "english_approximate_pronunciation": "pray-see-zay-man",
+    "meaning_en": "precisely",
+    "examples": [
+      {
+        "fr": "C'est précisément ce que je voulais éviter.",
+        "en": "That is precisely what I wanted to avoid."
+      },
+      {
+        "fr": "Explique-moi plus précisément ton idée.",
+        "en": "Explain your idea more precisely to me."
+      }
+    ]
+  },
+  {
+    "adverb": "justement",
+    "gender": "invariable",
+    "pronunciation": "ʒystəmɑ̃",
+    "english_approximate_pronunciation": "zhoost-uh-man",
+    "meaning_en": "exactly; precisely; rightly",
+    "examples": [
+      {
+        "fr": "C'est justement ce que je pensais.",
+        "en": "That's exactly what I was thinking."
+      },
+      {
+        "fr": "Il a été puni, et c'était justement mérité.",
+        "en": "He was punished, and it was rightly deserved."
+      }
+    ]
+  },
+  {
+    "adverb": "évidemment",
+    "gender": "invariable",
+    "pronunciation": "evidamɑ̃",
+    "english_approximate_pronunciation": "eh-vee-da-man",
+    "meaning_en": "obviously; evidently",
+    "examples": [
+      {
+        "fr": "Évidemment, tu as raison.",
+        "en": "Obviously, you are right."
+      },
+      {
+        "fr": "Il a évidemment oublié.",
+        "en": "He has obviously forgotten."
+      }
+    ]
+  },
+  {
+    "adverb": "heureusement",
+    "gender": "invariable",
+    "pronunciation": "œʁøzmɑ̃",
+    "english_approximate_pronunciation": "ur-uhz-man",
+    "meaning_en": "fortunately; luckily",
+    "examples": [
+      {
+        "fr": "Heureusement, personne n'a été blessé.",
+        "en": "Fortunately, no one was injured."
+      },
+      {
+        "fr": "Heureusement, j'avais mon parapluie.",
+        "en": "Luckily, I had my umbrella."
+      }
+    ]
+  },
+  {
+    "adverb": "malheureusement",
+    "gender": "invariable",
+    "pronunciation": "malœʁøzmɑ̃",
+    "english_approximate_pronunciation": "mal-ur-uhz-man",
+    "meaning_en": "unfortunately",
+    "examples": [
+      {
+        "fr": "Malheureusement, la réunion est annulée.",
+        "en": "Unfortunately, the meeting is cancelled."
+      },
+      {
+        "fr": "Malheureusement, il est trop tard.",
+        "en": "Unfortunately, it is too late."
+      }
+    ]
+  },
+  {
+    "adverb": "principalement",
+    "gender": "invariable",
+    "pronunciation": "pʁɛ̃sipalmɑ̃",
+    "english_approximate_pronunciation": "pran-see-pal-man",
+    "meaning_en": "mainly; principally",
+    "examples": [
+      {
+        "fr": "Le problème concerne principalement les jeunes.",
+        "en": "The problem mainly concerns young people."
+      },
+      {
+        "fr": "Ce quartier est habité principalement par des étudiants.",
+        "en": "This area is inhabited mainly by students."
+      }
+    ]
+  },
+  {
+    "adverb": "particulièrement",
+    "gender": "invariable",
+    "pronunciation": "paʁtikyljɛʁmɑ̃",
+    "english_approximate_pronunciation": "par-tee-kew-lyair-man",
+    "meaning_en": "particularly; especially",
+    "examples": [
+      {
+        "fr": "Je suis particulièrement fatigué ce soir.",
+        "en": "I am particularly tired this evening."
+      },
+      {
+        "fr": "Ce point est particulièrement important.",
+        "en": "This point is particularly important."
+      }
+    ]
+  },
+  {
+    "adverb": "globalement",
+    "gender": "invariable",
+    "pronunciation": "ɡlɔbalmɑ̃",
+    "english_approximate_pronunciation": "glo-bal-man",
+    "meaning_en": "overall; generally",
+    "examples": [
+      {
+        "fr": "Globalement, le projet est un succès.",
+        "en": "Overall, the project is a success."
+      },
+      {
+        "fr": "Globalement, la situation s'améliore.",
+        "en": "Generally, the situation is improving."
+      }
+    ]
+  },
+  {
+    "adverb": "actuellement",
+    "gender": "invariable",
+    "pronunciation": "aktyɛlmɑ̃",
+    "english_approximate_pronunciation": "ak-twel-man",
+    "meaning_en": "currently; at present",
+    "examples": [
+      {
+        "fr": "Je travaille actuellement sur un nouveau projet.",
+        "en": "I am currently working on a new project."
+      },
+      {
+        "fr": "Le magasin est actuellement fermé.",
+        "en": "The shop is currently closed."
+      }
+    ]
+  },
+  {
+    "adverb": "préalablement",
+    "gender": "invariable",
+    "pronunciation": "pʁealabləmɑ̃",
+    "english_approximate_pronunciation": "pray-a-la-bluh-man",
+    "meaning_en": "previously; beforehand",
+    "examples": [
+      {
+        "fr": "Veuillez vous inscrire préalablement.",
+        "en": "Please register beforehand."
+      },
+      {
+        "fr": "Le contrat a été relu préalablement.",
+        "en": "The contract was read over previously."
+      }
+    ]
+  },
+  {
+    "adverb": "finalement",
+    "gender": "invariable",
+    "pronunciation": "finalmɑ̃",
+    "english_approximate_pronunciation": "fee-nal-man",
+    "meaning_en": "finally; in the end",
+    "examples": [
+      {
+        "fr": "Finalement, nous sommes restés à la maison.",
+        "en": "In the end, we stayed at home."
+      },
+      {
+        "fr": "Il a finalement accepté l'offre.",
+        "en": "He finally accepted the offer."
+      }
+    ]
+  },
+  {
+    "adverb": "ultérieurement",
+    "gender": "invariable",
+    "pronunciation": "yltɛʁjœʁmɑ̃",
+    "english_approximate_pronunciation": "ool-tair-yuhr-man",
+    "meaning_en": "later; at a later date (formal)",
+    "examples": [
+      {
+        "fr": "Vous serez contacté ultérieurement.",
+        "en": "You will be contacted at a later date."
+      },
+      {
+        "fr": "Les détails seront fournis ultérieurement.",
+        "en": "The details will be provided later."
+      }
+    ]
+  },
+  {
+    "adverb": "autrefois",
+    "gender": "invariable",
+    "pronunciation": "otʁəfwa",
+    "english_approximate_pronunciation": "ot-ruh-fwah",
+    "meaning_en": "formerly; in the past",
+    "examples": [
+      {
+        "fr": "Autrefois, ce village était très isolé.",
+        "en": "In the past, this village was very isolated."
+      },
+      {
+        "fr": "On fabriquait tout à la main autrefois.",
+        "en": "Everything used to be made by hand in the past."
+      }
+    ]
+  },
+  {
+    "adverb": "jadis",
+    "gender": "invariable",
+    "pronunciation": "ʒadis",
+    "english_approximate_pronunciation": "zha-deece",
+    "meaning_en": "once; long ago (literary)",
+    "examples": [
+      {
+        "fr": "Ce château appartenait jadis à un duc.",
+        "en": "This castle once belonged to a duke."
+      },
+      {
+        "fr": "On croyait jadis à ces légendes.",
+        "en": "People once believed in these legends."
+      }
+    ]
+  },
+  {
+    "adverb": "bientôt",
+    "gender": "invariable",
+    "pronunciation": "bjɛ̃to",
+    "english_approximate_pronunciation": "byan-toh",
+    "meaning_en": "soon",
+    "examples": [
+      {
+        "fr": "Je reviens bientôt.",
+        "en": "I'll be back soon."
+      },
+      {
+        "fr": "Les vacances arrivent bientôt.",
+        "en": "The holidays are coming soon."
+      }
+    ]
+  },
+  {
+    "adverb": "tardivement",
+    "gender": "invariable",
+    "pronunciation": "taʁdivmɑ̃",
+    "english_approximate_pronunciation": "tar-deev-man",
+    "meaning_en": "late; belatedly",
+    "examples": [
+      {
+        "fr": "Il a répondu tardivement à la lettre.",
+        "en": "He replied to the letter late."
+      },
+      {
+        "fr": "La décision est arrivée trop tardivement.",
+        "en": "The decision came too late."
+      }
+    ]
+  },
+  {
+    "adverb": "volontiers",
+    "gender": "invariable",
+    "pronunciation": "vɔlɔ̃tje",
+    "english_approximate_pronunciation": "vo-lon-tyay",
+    "meaning_en": "willingly; gladly",
+    "examples": [
+      {
+        "fr": "J'accepte volontiers ton invitation.",
+        "en": "I gladly accept your invitation."
+      },
+      {
+        "fr": "Il aide volontiers ses voisins.",
+        "en": "He willingly helps his neighbours."
+      }
+    ]
+  },
+  {
+    "adverb": "brièvement",
+    "gender": "invariable",
+    "pronunciation": "bʁijɛvmɑ̃",
+    "english_approximate_pronunciation": "bree-ev-man",
+    "meaning_en": "briefly",
+    "examples": [
+      {
+        "fr": "Je vais parler brièvement du contexte.",
+        "en": "I am going to speak briefly about the context."
+      },
+      {
+        "fr": "Elle l'a vu brièvement hier.",
+        "en": "She saw him briefly yesterday."
+      }
+    ]
+  },
+  {
+    "adverb": "nettement",
+    "gender": "invariable",
+    "pronunciation": "nɛtmɑ̃",
+    "english_approximate_pronunciation": "net-man",
+    "meaning_en": "clearly; distinctly; markedly",
+    "examples": [
+      {
+        "fr": "C'est nettement mieux qu'avant.",
+        "en": "It's clearly better than before."
+      },
+      {
+        "fr": "Il parle nettement plus vite que moi.",
+        "en": "He speaks markedly faster than I do."
+      }
+    ]
+  },
+  {
+    "adverb": "relativement",
+    "gender": "invariable",
+    "pronunciation": "ʁəlativmɑ̃",
+    "english_approximate_pronunciation": "ruh-la-teev-man",
+    "meaning_en": "relatively",
+    "examples": [
+      {
+        "fr": "Le trajet est relativement court.",
+        "en": "The journey is relatively short."
+      },
+      {
+        "fr": "Elle est relativement calme aujourd'hui.",
+        "en": "She is relatively calm today."
+      }
+    ]
+  },
+  {
+    "adverb": "sérieusement",
+    "gender": "invariable",
+    "pronunciation": "seʁjøzmɑ̃",
+    "english_approximate_pronunciation": "say-ree-uz-man",
+    "meaning_en": "seriously",
+    "examples": [
+      {
+        "fr": "Tu le penses sérieusement ?",
+        "en": "Do you seriously think that?"
+      },
+      {
+        "fr": "Il faut réfléchir sérieusement à la question.",
+        "en": "We must think seriously about the question."
+      }
+    ]
+  },
+  {
+    "adverb": "gentiment",
+    "gender": "invariable",
+    "pronunciation": "ʒɑ̃timɑ̃",
+    "english_approximate_pronunciation": "zhon-tee-man",
+    "meaning_en": "nicely; kindly",
+    "examples": [
+      {
+        "fr": "Elle lui a répondu gentiment.",
+        "en": "She replied to him nicely."
+      },
+      {
+        "fr": "Les enfants jouent gentiment.",
+        "en": "The children are playing nicely."
+      }
+    ]
+  },
+  {
+    "adverb": "rarement",
+    "gender": "invariable",
+    "pronunciation": "ʁaʁmɑ̃",
+    "english_approximate_pronunciation": "rahr-man",
+    "meaning_en": "rarely; seldom",
+    "examples": [
+      {
+        "fr": "Nous sortons rarement le soir.",
+        "en": "We rarely go out in the evening."
+      },
+      {
+        "fr": "Il regarde rarement la télévision.",
+        "en": "He seldom watches television."
+      }
+    ]
+  },
+  {
+    "adverb": "éventuellement",
+    "gender": "invariable",
+    "pronunciation": "evɑ̃tɥɛlmɑ̃",
+    "english_approximate_pronunciation": "ay-van-twel-man",
+    "meaning_en": "possibly; if necessary",
+    "examples": [
+      {
+        "fr": "Nous pourrons éventuellement changer la date.",
+        "en": "We can possibly change the date."
+      },
+      {
+        "fr": "Je t'appellerai éventuellement plus tard.",
+        "en": "I might call you later."
+      }
+    ]
+  },
+  {
+    "adverb": "apparemment",
+    "gender": "invariable",
+    "pronunciation": "apaʁamɑ̃",
+    "english_approximate_pronunciation": "ap-par-a-man",
+    "meaning_en": "apparently",
+    "examples": [
+      {
+        "fr": "Apparemment, il a changé d'avis.",
+        "en": "Apparently, he has changed his mind."
+      },
+      {
+        "fr": "Le train a, apparemment, déjà quitté la gare.",
+        "en": "Apparently, the train has already left the station."
+      }
+    ]
+  },
+  {
+    "adverb": "légèrement",
+    "gender": "invariable",
+    "pronunciation": "leʒɛʁmɑ̃",
+    "english_approximate_pronunciation": "lay-zhair-man",
+    "meaning_en": "slightly; lightly",
+    "examples": [
+      {
+        "fr": "Il est légèrement blessé.",
+        "en": "He is slightly injured."
+      },
+      {
+        "fr": "Le vent souffle légèrement.",
+        "en": "The wind is blowing lightly."
+      }
+    ]
+  },
+  {
+    "adverb": "profondément",
+    "gender": "invariable",
+    "pronunciation": "pʁɔfɔ̃demɑ̃",
+    "english_approximate_pronunciation": "proh-fon-day-man",
+    "meaning_en": "deeply; profoundly",
+    "examples": [
+      {
+        "fr": "Elle respire profondément.",
+        "en": "She breathes deeply."
+      },
+      {
+        "fr": "Il est profondément touché par cette nouvelle.",
+        "en": "He is deeply affected by this news."
+      }
+    ]
+  },
+  {
+    "adverb": "énormément",
+    "gender": "invariable",
+    "pronunciation": "enɔʁmémɑ̃",
+    "english_approximate_pronunciation": "ay-nor-may-man",
+    "meaning_en": "enormously; a great deal",
+    "examples": [
+      {
+        "fr": "Ce projet m'intéresse énormément.",
+        "en": "This project interests me enormously."
+      },
+      {
+        "fr": "Il a énormément travaillé.",
+        "en": "He has worked a great deal."
+      }
+    ]
+  },
+  {
+    "adverb": "totalement",
+    "gender": "invariable",
+    "pronunciation": "tɔtalmɑ̃",
+    "english_approximate_pronunciation": "to-tal-man",
+    "meaning_en": "totally; completely",
+    "examples": [
+      {
+        "fr": "Je suis totalement d'accord avec toi.",
+        "en": "I totally agree with you."
+      },
+      {
+        "fr": "Il a totalement oublié le rendez-vous.",
+        "en": "He completely forgot the appointment."
+      }
+    ]
+  },
+  {
+    "adverb": "complètement",
+    "gender": "invariable",
+    "pronunciation": "kɔ̃plɛtmɑ̃",
+    "english_approximate_pronunciation": "com-pleht-man",
+    "meaning_en": "completely",
+    "examples": [
+      {
+        "fr": "Je suis complètement perdu.",
+        "en": "I am completely lost."
+      },
+      {
+        "fr": "La salle était complètement vide.",
+        "en": "The room was completely empty."
+      }
+    ]
+  },
+  {
+    "adverb": "absolument",
+    "gender": "invariable",
+    "pronunciation": "apsɔlymɑ̃",
+    "english_approximate_pronunciation": "ab-so-lu-man",
+    "meaning_en": "absolutely",
+    "examples": [
+      {
+        "fr": "C'est absolument nécessaire.",
+        "en": "It is absolutely necessary."
+      },
+      {
+        "fr": "Je suis absolument certain de ma réponse.",
+        "en": "I am absolutely sure of my answer."
+      }
+    ]
+  },
+  {
+    "adverb": "partiellement",
+    "gender": "invariable",
+    "pronunciation": "paʁsjelmɑ̃",
+    "english_approximate_pronunciation": "par-syel-man",
+    "meaning_en": "partially",
+    "examples": [
+      {
+        "fr": "Le problème a été seulement partiellement résolu.",
+        "en": "The problem has only been partially solved."
+      },
+      {
+        "fr": "Il est partiellement responsable.",
+        "en": "He is partially responsible."
+      }
+    ]
+  },
+  {
+    "adverb": "intensément",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃tɑ̃semɑ̃",
+    "english_approximate_pronunciation": "an-tan-say-man",
+    "meaning_en": "intensely",
+    "examples": [
+      {
+        "fr": "Elle travaille intensément avant les examens.",
+        "en": "She works intensely before exams."
+      },
+      {
+        "fr": "Il ressent intensément chaque émotion.",
+        "en": "He feels every emotion intensely."
+      }
+    ]
+  },
+  {
+    "adverb": "suffisamment",
+    "gender": "invariable",
+    "pronunciation": "syfizamɑ̃",
+    "english_approximate_pronunciation": "soo-fee-za-man",
+    "meaning_en": "sufficiently; enough",
+    "examples": [
+      {
+        "fr": "Tu n'as pas suffisamment étudié.",
+        "en": "You have not studied enough."
+      },
+      {
+        "fr": "Il parle suffisamment bien français.",
+        "en": "He speaks French well enough."
+      }
+    ]
+  },
+  {
+    "adverb": "précocement",
+    "gender": "invariable",
+    "pronunciation": "pʁekɔsamɑ̃",
+    "english_approximate_pronunciation": "pray-koh-suh-man",
+    "meaning_en": "early; prematurely",
+    "examples": [
+      {
+        "fr": "L'arbre a fleuri précocement cette année.",
+        "en": "The tree blossomed early this year."
+      },
+      {
+        "fr": "Il a commencé précocement sa carrière.",
+        "en": "He started his career early."
+      }
+    ]
+  },
+  {
+    "adverb": "amplement",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃pləmɑ̃",
+    "english_approximate_pronunciation": "an-pluh-man",
+    "meaning_en": "amply; fully",
+    "examples": [
+      {
+        "fr": "Le sujet a été amplement discuté.",
+        "en": "The subject has been amply discussed."
+      },
+      {
+        "fr": "Il a amplement la capacité de réussir.",
+        "en": "He fully has the ability to succeed."
+      }
+    ]
+  },
+  {
+    "adverb": "mutuellement",
+    "gender": "invariable",
+    "pronunciation": "mytɥɛlmɑ̃",
+    "english_approximate_pronunciation": "mew-twel-man",
+    "meaning_en": "mutually",
+    "examples": [
+      {
+        "fr": "Ils se respectent mutuellement.",
+        "en": "They respect each other mutually."
+      },
+      {
+        "fr": "Les deux parties se sont mutuellement excusées.",
+        "en": "Both parties apologised to each other."
+      }
+    ]
+  },
+  {
+    "adverb": "fréquemment",
+    "gender": "invariable",
+    "pronunciation": "fʁekamɑ̃",
+    "english_approximate_pronunciation": "fray-ka-man",
+    "meaning_en": "frequently",
+    "examples": [
+      {
+        "fr": "Ce bus passe fréquemment.",
+        "en": "This bus comes frequently."
+      },
+      {
+        "fr": "Il voyage fréquemment à l'étranger.",
+        "en": "He travels abroad frequently."
+      }
+    ]
+  },
+  {
+    "adverb": "inconsciemment",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃kɔ̃sjaman",
+    "english_approximate_pronunciation": "an-kon-sya-man",
+    "meaning_en": "unconsciously",
+    "examples": [
+      {
+        "fr": "Il a agi inconsciemment.",
+        "en": "He acted unconsciously."
+      },
+      {
+        "fr": "Nous imitons inconsciemment nos parents.",
+        "en": "We unconsciously imitate our parents."
+      }
+    ]
+  },
+  {
+    "adverb": "brillamment",
+    "gender": "invariable",
+    "pronunciation": "bʁijamɑ̃",
+    "english_approximate_pronunciation": "bree-ya-man",
+    "meaning_en": "brilliantly",
+    "examples": [
+      {
+        "fr": "Elle a brillamment réussi son examen.",
+        "en": "She passed her exam brilliantly."
+      },
+      {
+        "fr": "L'équipe a joué brillamment.",
+        "en": "The team played brilliantly."
+      }
+    ]
+  },
+  {
+    "adverb": "curieusement",
+    "gender": "invariable",
+    "pronunciation": "kyʁjøzmɑ̃",
+    "english_approximate_pronunciation": "kyu-ryuhz-man",
+    "meaning_en": "curiously; strangely",
+    "examples": [
+      {
+        "fr": "Curieusement, personne n'a répondu.",
+        "en": "Curiously, no one answered."
+      },
+      {
+        "fr": "Le chat me regarde curieusement.",
+        "en": "The cat is looking at me curiously."
+      }
+    ]
+  },
+  {
+    "adverb": "indéfiniment",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃definimɑ̃",
+    "english_approximate_pronunciation": "an-deh-fee-nee-man",
+    "meaning_en": "indefinitely",
+    "examples": [
+      {
+        "fr": "On ne peut pas attendre indéfiniment.",
+        "en": "We cannot wait indefinitely."
+      },
+      {
+        "fr": "Le contrat peut être renouvelé indéfiniment.",
+        "en": "The contract can be renewed indefinitely."
+      }
+    ]
+  },
+  {
+    "adverb": "désormais",
+    "gender": "invariable",
+    "pronunciation": "dezɔʁmɛ",
+    "english_approximate_pronunciation": "day-zor-may",
+    "meaning_en": "from now on; henceforth",
+    "examples": [
+      {
+        "fr": "Désormais, je prendrai le train.",
+        "en": "From now on, I will take the train."
+      },
+      {
+        "fr": "Tu es désormais responsable du projet.",
+        "en": "You are henceforth responsible for the project."
+      }
+    ]
+  },
+  {
+    "adverb": "dorénavant",
+    "gender": "invariable",
+    "pronunciation": "dɔʁenavɑ̃",
+    "english_approximate_pronunciation": "do-ray-na-van",
+    "meaning_en": "from now on",
+    "examples": [
+      {
+        "fr": "Dorénavant, je ferai plus attention.",
+        "en": "From now on, I will be more careful."
+      },
+      {
+        "fr": "Dorénavant, les réunions auront lieu le lundi.",
+        "en": "From now on, the meetings will take place on Mondays."
+      }
+    ]
+  },
+  {
+    "adverb": "aussitôt",
+    "gender": "invariable",
+    "pronunciation": "osito",
+    "english_approximate_pronunciation": "oh-see-toh",
+    "meaning_en": "immediately; at once",
+    "examples": [
+      {
+        "fr": "Il est parti aussitôt.",
+        "en": "He left immediately."
+      },
+      {
+        "fr": "Réponds-moi aussitôt que possible.",
+        "en": "Answer me as soon as possible."
+      }
+    ]
+  },
+  {
+    "adverb": "immédiatement",
+    "gender": "invariable",
+    "pronunciation": "imedjatmɑ̃",
+    "english_approximate_pronunciation": "ee-may-dee-aht-man",
+    "meaning_en": "immediately",
+    "examples": [
+      {
+        "fr": "Elle a réagi immédiatement.",
+        "en": "She reacted immediately."
+      },
+      {
+        "fr": "Appelez-moi immédiatement si vous avez un problème.",
+        "en": "Call me immediately if you have a problem."
+      }
+    ]
+  },
+  {
+    "adverb": "patiemment",
+    "gender": "invariable",
+    "pronunciation": "pasjɑ̃mɑ̃",
+    "english_approximate_pronunciation": "pa-sya-man",
+    "meaning_en": "patiently",
+    "examples": [
+      {
+        "fr": "Il attend patiemment son tour.",
+        "en": "He is waiting patiently for his turn."
+      },
+      {
+        "fr": "Elle a expliqué patiemment la règle.",
+        "en": "She explained the rule patiently."
+      }
+    ]
+  },
+  {
+    "adverb": "impatiemment",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃pasjɑ̃mɑ̃",
+    "english_approximate_pronunciation": "am-pa-sya-man",
+    "meaning_en": "impatiently",
+    "examples": [
+      {
+        "fr": "Les enfants attendent impatiemment Noël.",
+        "en": "The children are waiting impatiently for Christmas."
+      },
+      {
+        "fr": "Il répond impatiemment à chaque question.",
+        "en": "He answers every question impatiently."
+      }
+    ]
+  },
+  {
+    "adverb": "poliment",
+    "gender": "invariable",
+    "pronunciation": "pɔlimɑ̃",
+    "english_approximate_pronunciation": "po-lee-man",
+    "meaning_en": "politely",
+    "examples": [
+      {
+        "fr": "Elle a refusé poliment.",
+        "en": "She refused politely."
+      },
+      {
+        "fr": "Réponds-lui poliment.",
+        "en": "Answer him politely."
+      }
+    ]
+  },
+  {
+    "adverb": "impoliment",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃pɔlimɑ̃",
+    "english_approximate_pronunciation": "am-po-lee-man",
+    "meaning_en": "rudely; impolitely",
+    "examples": [
+      {
+        "fr": "Il a parlé impoliment à ses professeurs.",
+        "en": "He spoke rudely to his teachers."
+      },
+      {
+        "fr": "Elle a été renvoyée pour avoir agi impoliment.",
+        "en": "She was dismissed for having acted impolitely."
+      }
+    ]
+  },
+  {
+    "adverb": "clairement",
+    "gender": "invariable",
+    "pronunciation": "klɛʁmɑ̃",
+    "english_approximate_pronunciation": "klair-man",
+    "meaning_en": "clearly",
+    "examples": [
+      {
+        "fr": "Tu n'as pas expliqué le problème clairement.",
+        "en": "You did not explain the problem clearly."
+      },
+      {
+        "fr": "Les instructions sont clairement écrites.",
+        "en": "The instructions are clearly written."
+      }
+    ]
+  },
+  {
+    "adverb": "confusément",
+    "gender": "invariable",
+    "pronunciation": "kɔ̃fyzemɑ̃",
+    "english_approximate_pronunciation": "kon-fu-zay-man",
+    "meaning_en": "confusedly; in a confused way",
+    "examples": [
+      {
+        "fr": "Il a parlé confusément de son projet.",
+        "en": "He spoke confusedly about his project."
+      },
+      {
+        "fr": "Elle répond confusément aux questions.",
+        "en": "She answers the questions in a confused way."
+      }
+    ]
+  },
+  {
+    "adverb": "calmement",
+    "gender": "invariable",
+    "pronunciation": "kalməmɑ̃",
+    "english_approximate_pronunciation": "kalm-uh-man",
+    "meaning_en": "calmly",
+    "examples": [
+      {
+        "fr": "Elle a réagi très calmement.",
+        "en": "She reacted very calmly."
+      },
+      {
+        "fr": "Parle calmement, s'il te plaît.",
+        "en": "Speak calmly, please."
+      }
+    ]
+  },
+  {
+    "adverb": "bruyamment",
+    "gender": "invariable",
+    "pronunciation": "bʁɥijamɑ̃",
+    "english_approximate_pronunciation": "brwee-ya-man",
+    "meaning_en": "noisily",
+    "examples": [
+      {
+        "fr": "Les voisins fêtent bruyamment l'anniversaire.",
+        "en": "The neighbours are noisily celebrating the birthday."
+      },
+      {
+        "fr": "Les enfants jouent bruyamment dans le jardin.",
+        "en": "The children are playing noisily in the garden."
+      }
+    ]
+  },
+  {
+    "adverb": "prudemment",
+    "gender": "invariable",
+    "pronunciation": "pʁydamɑ̃",
+    "english_approximate_pronunciation": "pru-duh-man",
+    "meaning_en": "carefully; cautiously",
+    "examples": [
+      {
+        "fr": "Conduis prudemment sur cette route.",
+        "en": "Drive carefully on this road."
+      },
+      {
+        "fr": "Il avance prudemment dans l'obscurité.",
+        "en": "He moves forward cautiously in the dark."
+      }
+    ]
+  },
+  {
+    "adverb": "courageusement",
+    "gender": "invariable",
+    "pronunciation": "kuʁaʒøzmɑ̃",
+    "english_approximate_pronunciation": "koo-ra-zheuz-man",
+    "meaning_en": "bravely; courageously",
+    "examples": [
+      {
+        "fr": "Elle a parlé courageusement devant le public.",
+        "en": "She spoke bravely in front of the audience."
+      },
+      {
+        "fr": "Ils ont affronté la difficulté courageusement.",
+        "en": "They faced the difficulty courageously."
+      }
+    ]
+  },
+  {
+    "adverb": "gratuitement",
+    "gender": "invariable",
+    "pronunciation": "ɡʁatɥitəmɑ̃",
+    "english_approximate_pronunciation": "gra-twee-tuh-man",
+    "meaning_en": "for free",
+    "examples": [
+      {
+        "fr": "Ce service est offert gratuitement.",
+        "en": "This service is offered free of charge."
+      },
+      {
+        "fr": "On peut visiter le musée gratuitement le dimanche.",
+        "en": "You can visit the museum for free on Sundays."
+      }
+    ]
+  },
+  {
+    "adverb": "automatiquement",
+    "gender": "invariable",
+    "pronunciation": "otomatikmɑ̃",
+    "english_approximate_pronunciation": "oh-to-ma-teek-man",
+    "meaning_en": "automatically",
+    "examples": [
+      {
+        "fr": "Les données sont sauvegardées automatiquement.",
+        "en": "The data is saved automatically."
+      },
+      {
+        "fr": "La porte se ferme automatiquement.",
+        "en": "The door closes automatically."
+      }
+    ]
+  },
+  {
+    "adverb": "différemment",
+    "gender": "invariable",
+    "pronunciation": "difeʁamɑ̃",
+    "english_approximate_pronunciation": "dee-feh-ra-man",
+    "meaning_en": "differently",
+    "examples": [
+      {
+        "fr": "Ils voient les choses différemment.",
+        "en": "They see things differently."
+      },
+      {
+        "fr": "Essaie de faire le travail différemment.",
+        "en": "Try to do the work differently."
+      }
+    ]
+  },
+  {
+    "adverb": "séparément",
+    "gender": "invariable",
+    "pronunciation": "sepaʁemɑ̃",
+    "english_approximate_pronunciation": "say-pa-ray-man",
+    "meaning_en": "separately",
+    "examples": [
+      {
+        "fr": "Les factures sont envoyées séparément.",
+        "en": "The invoices are sent separately."
+      },
+      {
+        "fr": "On paiera séparément.",
+        "en": "We will pay separately."
+      }
+    ]
+  },
+  {
+    "adverb": "conjointement",
+    "gender": "invariable",
+    "pronunciation": "kɔ̃ʒwɛ̃tmɑ̃",
+    "english_approximate_pronunciation": "kon-zhwan-tman",
+    "meaning_en": "jointly; together",
+    "examples": [
+      {
+        "fr": "Le projet est mené conjointement par deux équipes.",
+        "en": "The project is carried out jointly by two teams."
+      },
+      {
+        "fr": "Ils ont signé le contrat conjointement.",
+        "en": "They signed the contract jointly."
+      }
+    ]
+  },
+  {
+    "adverb": "discrètement",
+    "gender": "invariable",
+    "pronunciation": "diskʁɛtmɑ̃",
+    "english_approximate_pronunciation": "dis-kret-man",
+    "meaning_en": "discreetly",
+    "examples": [
+      {
+        "fr": "Elle s'est éclipsée discrètement.",
+        "en": "She slipped away discreetly."
+      },
+      {
+        "fr": "Il a discrètement changé de sujet.",
+        "en": "He discreetly changed the subject."
+      }
+    ]
+  },
+  {
+    "adverb": "visiblement",
+    "gender": "invariable",
+    "pronunciation": "vizibləmɑ̃",
+    "english_approximate_pronunciation": "vee-zee-bluh-man",
+    "meaning_en": "visibly; clearly",
+    "examples": [
+      {
+        "fr": "Il était visiblement nerveux.",
+        "en": "He was visibly nervous."
+      },
+      {
+        "fr": "Elle est visiblement surprise par la nouvelle.",
+        "en": "She is clearly surprised by the news."
+      }
+    ]
+  },
+  {
+    "adverb": "sincèrement",
+    "gender": "invariable",
+    "pronunciation": "sɛ̃sɛʁmɑ̃",
+    "english_approximate_pronunciation": "san-sair-man",
+    "meaning_en": "sincerely",
+    "examples": [
+      {
+        "fr": "Je te remercie sincèrement.",
+        "en": "I sincerely thank you."
+      },
+      {
+        "fr": "Il s'excuse sincèrement.",
+        "en": "He apologises sincerely."
+      }
+    ]
+  },
+  {
+    "adverb": "honnêtement",
+    "gender": "invariable",
+    "pronunciation": "ɔnɛtmɑ̃",
+    "english_approximate_pronunciation": "on-et-man",
+    "meaning_en": "honestly",
+    "examples": [
+      {
+        "fr": "Honnêtement, je n'en sais rien.",
+        "en": "Honestly, I have no idea."
+      },
+      {
+        "fr": "Elle a répondu honnêtement à toutes les questions.",
+        "en": "She answered all the questions honestly."
+      }
+    ]
+  },
+  {
+    "adverb": "loyalement",
+    "gender": "invariable",
+    "pronunciation": "lwajaləmɑ̃",
+    "english_approximate_pronunciation": "lwa-yal-uh-man",
+    "meaning_en": "loyally; fairly",
+    "examples": [
+      {
+        "fr": "Ils ont agi loyalement.",
+        "en": "They acted loyally."
+      },
+      {
+        "fr": "Le débat s'est déroulé loyalement.",
+        "en": "The debate took place fairly."
+      }
+    ]
+  },
+  {
+    "adverb": "typiquement",
+    "gender": "invariable",
+    "pronunciation": "tipikmɑ̃",
+    "english_approximate_pronunciation": "tee-peak-man",
+    "meaning_en": "typically",
+    "examples": [
+      {
+        "fr": "C'est typiquement français.",
+        "en": "That is typically French."
+      },
+      {
+        "fr": "Il réagit typiquement de cette manière.",
+        "en": "He typically reacts in that way."
+      }
+    ]
+  },
+  {
+    "adverb": "littéralement",
+    "gender": "invariable",
+    "pronunciation": "liteʁalmɑ̃",
+    "english_approximate_pronunciation": "lee-tay-ral-man",
+    "meaning_en": "literally",
+    "examples": [
+      {
+        "fr": "Il a littéralement couru toute la journée.",
+        "en": "He literally ran all day."
+      },
+      {
+        "fr": "La pièce est littéralement vide.",
+        "en": "The room is literally empty."
+      }
+    ]
+  },
+  {
+    "adverb": "théoriquement",
+    "gender": "invariable",
+    "pronunciation": "teoʁikmɑ̃",
+    "english_approximate_pronunciation": "tay-oh-reek-man",
+    "meaning_en": "theoretically",
+    "examples": [
+      {
+        "fr": "Théoriquement, cela devrait fonctionner.",
+        "en": "Theoretically, that should work."
+      },
+      {
+        "fr": "C'est possible, du moins théoriquement.",
+        "en": "It is possible, at least theoretically."
+      }
+    ]
+  },
+  {
+    "adverb": "pratiquement",
+    "gender": "invariable",
+    "pronunciation": "pʁatikmɑ̃",
+    "english_approximate_pronunciation": "pra-teek-man",
+    "meaning_en": "practically; almost",
+    "examples": [
+      {
+        "fr": "C'est pratiquement impossible.",
+        "en": "It is practically impossible."
+      },
+      {
+        "fr": "La salle est pratiquement pleine.",
+        "en": "The room is practically full."
+      }
+    ]
+  },
+  {
+    "adverb": "sûrement",
+    "gender": "invariable",
+    "pronunciation": "syʁmɑ̃",
+    "english_approximate_pronunciation": "syur-man",
+    "meaning_en": "surely; certainly",
+    "examples": [
+      {
+        "fr": "Il viendra sûrement demain.",
+        "en": "He will surely come tomorrow."
+      },
+      {
+        "fr": "Tu as sûrement raison.",
+        "en": "You are surely right."
+      }
+    ]
+  },
+  {
+    "adverb": "certainement",
+    "gender": "invariable",
+    "pronunciation": "sɛʁtɛnəmɑ̃",
+    "english_approximate_pronunciation": "sair-ten-uh-man",
+    "meaning_en": "certainly",
+    "examples": [
+      {
+        "fr": "Je viendrai certainement à ta fête.",
+        "en": "I will certainly come to your party."
+      },
+      {
+        "fr": "Il a certainement fait une erreur.",
+        "en": "He has certainly made a mistake."
+      }
+    ]
+  },
+  {
+    "adverb": "possiblement",
+    "gender": "invariable",
+    "pronunciation": "pɔsibləmɑ̃",
+    "english_approximate_pronunciation": "po-see-bluh-man",
+    "meaning_en": "possibly",
+    "examples": [
+      {
+        "fr": "Il viendra possiblement plus tard.",
+        "en": "He may possibly come later."
+      },
+      {
+        "fr": "C'est possiblement la meilleure solution.",
+        "en": "It is possibly the best solution."
+      }
+    ]
+  },
+  {
+    "adverb": "vaguement",
+    "gender": "invariable",
+    "pronunciation": "vagmɑ̃",
+    "english_approximate_pronunciation": "vag-man",
+    "meaning_en": "vaguely",
+    "examples": [
+      {
+        "fr": "Je me souviens vaguement de cette histoire.",
+        "en": "I vaguely remember that story."
+      },
+      {
+        "fr": "Il a vaguement répondu à la question.",
+        "en": "He answered the question vaguely."
+      }
+    ]
+  },
+  {
+    "adverb": "rudement",
+    "gender": "invariable",
+    "pronunciation": "ʁydmɑ̃",
+    "english_approximate_pronunciation": "ruud-man",
+    "meaning_en": "harshly; very (colloquial intensifier)",
+    "examples": [
+      {
+        "fr": "Il lui a parlé rudement.",
+        "en": "He spoke to her harshly."
+      },
+      {
+        "fr": "C'est rudement compliqué.",
+        "en": "It's jolly complicated."
+      }
+    ]
+  },
+  {
+    "adverb": "carrément",
+    "gender": "invariable",
+    "pronunciation": "kaʁemɑ̃",
+    "english_approximate_pronunciation": "ka-ray-man",
+    "meaning_en": "completely; totally; frankly",
+    "examples": [
+      {
+        "fr": "C'est carrément faux.",
+        "en": "That is completely wrong."
+      },
+      {
+        "fr": "Il a carrément refusé l'offre.",
+        "en": "He flatly refused the offer."
+      }
+    ]
+  },
+  {
+    "adverb": "plutôt",
+    "gender": "invariable",
+    "pronunciation": "plyto",
+    "english_approximate_pronunciation": "ploo-toh",
+    "meaning_en": "rather; quite; instead",
+    "examples": [
+      {
+        "fr": "Je suis plutôt fatigué.",
+        "en": "I am rather tired."
+      },
+      {
+        "fr": "On pourrait plutôt rester ici.",
+        "en": "We could rather stay here."
+      }
+    ]
+  },
+  {
+    "adverb": "tellement",
+    "gender": "invariable",
+    "pronunciation": "tɛlmɑ̃",
+    "english_approximate_pronunciation": "tel-man",
+    "meaning_en": "so (much); so (many)",
+    "examples": [
+      {
+        "fr": "Je suis tellement content de te voir.",
+        "en": "I am so happy to see you."
+      },
+      {
+        "fr": "Il y avait tellement de monde.",
+        "en": "There were so many people."
+      }
+    ]
+  },
+  {
+    "adverb": "extrêmement",
+    "gender": "invariable",
+    "pronunciation": "ɛkstʁɛməmɑ̃",
+    "english_approximate_pronunciation": "eks-tray-muh-man",
+    "meaning_en": "extremely",
+    "examples": [
+      {
+        "fr": "Ce travail est extrêmement important.",
+        "en": "This work is extremely important."
+      },
+      {
+        "fr": "Elle est extrêmement douée.",
+        "en": "She is extremely gifted."
+      }
+    ]
+  },
+  {
+    "adverb": "hautement",
+    "gender": "invariable",
+    "pronunciation": "otmɑ̃",
+    "english_approximate_pronunciation": "ote-man",
+    "meaning_en": "highly",
+    "examples": [
+      {
+        "fr": "C'est un poste hautement qualifié.",
+        "en": "It is a highly skilled position."
+      },
+      {
+        "fr": "Ce risque est hautement probable.",
+        "en": "This risk is highly likely."
+      }
+    ]
+  },
+  {
+    "adverb": "fortement",
+    "gender": "invariable",
+    "pronunciation": "fɔʁtmɑ̃",
+    "english_approximate_pronunciation": "for(t)-man",
+    "meaning_en": "strongly",
+    "examples": [
+      {
+        "fr": "Je te le déconseille fortement.",
+        "en": "I strongly advise you against it."
+      },
+      {
+        "fr": "Ils sont fortement influencés par la mode.",
+        "en": "They are strongly influenced by fashion."
+      }
+    ]
+  },
+  {
+    "adverb": "quasi",
+    "gender": "invariable",
+    "pronunciation": "kazi",
+    "english_approximate_pronunciation": "ka-zee",
+    "meaning_en": "almost; virtually",
+    "examples": [
+      {
+        "fr": "C'est quasi impossible.",
+        "en": "It is almost impossible."
+      },
+      {
+        "fr": "Il est quasi certain de gagner.",
+        "en": "He is virtually certain to win."
+      }
+    ]
+  },
+  {
+    "adverb": "quasiment",
+    "gender": "invariable",
+    "pronunciation": "kazimɑ̃",
+    "english_approximate_pronunciation": "ka-zee-man",
+    "meaning_en": "almost; nearly",
+    "examples": [
+      {
+        "fr": "La salle est quasiment pleine.",
+        "en": "The room is almost full."
+      },
+      {
+        "fr": "Il a quasiment fini son travail.",
+        "en": "He has nearly finished his work."
+      }
+    ]
+  },
+  {
+    "adverb": "entièrement",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃tjɛʁmɑ̃",
+    "english_approximate_pronunciation": "an-tyair-man",
+    "meaning_en": "entirely; completely",
+    "examples": [
+      {
+        "fr": "Je suis entièrement d'accord.",
+        "en": "I entirely agree."
+      },
+      {
+        "fr": "Le bâtiment a été entièrement rénové.",
+        "en": "The building has been completely renovated."
+      }
+    ]
+  },
+  {
+    "adverb": "à peine",
+    "gender": "invariable",
+    "pronunciation": "a pɛn",
+    "english_approximate_pronunciation": "ah pen",
+    "meaning_en": "barely; hardly",
+    "examples": [
+      {
+        "fr": "Je le connais à peine.",
+        "en": "I hardly know him."
+      },
+      {
+        "fr": "Elle a à peine mangé ce matin.",
+        "en": "She barely ate this morning."
+      }
+    ]
+  },
+  {
+    "adverb": "n'importe où",
+    "gender": "invariable",
+    "pronunciation": "nɛ̃pɔʁt u",
+    "english_approximate_pronunciation": "nan-port oo",
+    "meaning_en": "anywhere",
+    "examples": [
+      {
+        "fr": "Je pourrais vivre n'importe où.",
+        "en": "I could live anywhere."
+      },
+      {
+        "fr": "Ne pose pas ton sac n'importe où.",
+        "en": "Don't put your bag just anywhere."
+      }
+    ]
+  },
+  {
+    "adverb": "quelque part",
+    "gender": "invariable",
+    "pronunciation": "kɛlkəpaʁ",
+    "english_approximate_pronunciation": "kel-kuh-par",
+    "meaning_en": "somewhere",
+    "examples": [
+      {
+        "fr": "Tes clés sont sûrement quelque part ici.",
+        "en": "Your keys are surely somewhere here."
+      },
+      {
+        "fr": "Je l'ai déjà vu quelque part.",
+        "en": "I have seen him somewhere before."
+      }
+    ]
+  },
+  {
+    "adverb": "nulle part",
+    "gender": "invariable",
+    "pronunciation": "nylpaʁ",
+    "english_approximate_pronunciation": "nyul-par",
+    "meaning_en": "nowhere",
+    "examples": [
+      {
+        "fr": "On ne le trouve nulle part.",
+        "en": "We can't find it anywhere."
+      },
+      {
+        "fr": "Je ne me sens à ma place nulle part.",
+        "en": "I don't feel at home anywhere."
+      }
+    ]
+  },
+  {
+    "adverb": "exprès",
+    "gender": "invariable",
+    "pronunciation": "ɛkspʁɛ",
+    "english_approximate_pronunciation": "ex-press",
+    "meaning_en": "on purpose; deliberately",
+    "examples": [
+      {
+        "fr": "Tu l'as fait exprès ?",
+        "en": "Did you do that on purpose?"
+      },
+      {
+        "fr": "Il est venu exprès pour te voir.",
+        "en": "He came especially to see you."
+      }
+    ]
+  },
+  {
+    "adverb": "volontairement",
+    "gender": "invariable",
+    "pronunciation": "vɔlɔ̃tɛʁmɑ̃",
+    "english_approximate_pronunciation": "vo-lon-tair-man",
+    "meaning_en": "deliberately; willingly",
+    "examples": [
+      {
+        "fr": "Elle a quitté son poste volontairement.",
+        "en": "She left her position voluntarily."
+      },
+      {
+        "fr": "Il a agi volontairement.",
+        "en": "He acted deliberately."
+      }
+    ]
+  },
+  {
+    "adverb": "involontairement",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃vɔlɔ̃tɛʁmɑ̃",
+    "english_approximate_pronunciation": "an-vo-lon-tair-man",
+    "meaning_en": "involuntarily; unintentionally",
+    "examples": [
+      {
+        "fr": "Je t'ai blessé involontairement.",
+        "en": "I hurt you unintentionally."
+      },
+      {
+        "fr": "Ils ont involontairement oublié son anniversaire.",
+        "en": "They unintentionally forgot his birthday."
+      }
+    ]
+  },
+  {
+    "adverb": "illégalement",
+    "gender": "invariable",
+    "pronunciation": "ilegalmɑ̃",
+    "english_approximate_pronunciation": "ee-lay-gal-man",
+    "meaning_en": "illegally",
+    "examples": [
+      {
+        "fr": "Ils ont agi illégalement.",
+        "en": "They acted illegally."
+      },
+      {
+        "fr": "Le bâtiment a été construit illégalement.",
+        "en": "The building was constructed illegally."
+      }
+    ]
+  },
+  {
+    "adverb": "légalement",
+    "gender": "invariable",
+    "pronunciation": "leɡalmɑ̃",
+    "english_approximate_pronunciation": "lay-gal-man",
+    "meaning_en": "legally",
+    "examples": [
+      {
+        "fr": "Ils sont légalement mariés.",
+        "en": "They are legally married."
+      },
+      {
+        "fr": "Ce document n'est pas légalement valide.",
+        "en": "This document is not legally valid."
+      }
+    ]
+  },
+  {
+    "adverb": "quotidiennement",
+    "gender": "invariable",
+    "pronunciation": "kɔtidjɛnəmɑ̃",
+    "english_approximate_pronunciation": "ko-tee-dyen-uh-man",
+    "meaning_en": "daily",
+    "examples": [
+      {
+        "fr": "Il lit le journal quotidiennement.",
+        "en": "He reads the newspaper daily."
+      },
+      {
+        "fr": "Elle médite quotidiennement.",
+        "en": "She meditates every day."
+      }
+    ]
+  },
+  {
+    "adverb": "annuellement",
+    "gender": "invariable",
+    "pronunciation": "anɥɛlmɑ̃",
+    "english_approximate_pronunciation": "an-nu-el-man",
+    "meaning_en": "annually; yearly",
+    "examples": [
+      {
+        "fr": "Le rapport est publié annuellement.",
+        "en": "The report is published annually."
+      },
+      {
+        "fr": "Nous nous réunissons annuellement.",
+        "en": "We meet once a year."
+      }
+    ]
+  },
+  {
+    "adverb": "mensuellement",
+    "gender": "invariable",
+    "pronunciation": "mɑ̃sɥɛlmɑ̃",
+    "english_approximate_pronunciation": "mon-swe-el-man",
+    "meaning_en": "monthly",
+    "examples": [
+      {
+        "fr": "Le loyer est payé mensuellement.",
+        "en": "The rent is paid monthly."
+      },
+      {
+        "fr": "La revue paraît mensuellement.",
+        "en": "The magazine is published monthly."
+      }
+    ]
+  },
+  {
+    "adverb": "hebdomadairement",
+    "gender": "invariable",
+    "pronunciation": "ɛbdɔmadɛʁmɑ̃",
+    "english_approximate_pronunciation": "eb-do-ma-dair-man",
+    "meaning_en": "weekly",
+    "examples": [
+      {
+        "fr": "Nous avons une réunion hebdomadairement.",
+        "en": "We have a meeting every week."
+      },
+      {
+        "fr": "Il est payé hebdomadairement.",
+        "en": "He is paid weekly."
+      }
+    ]
+  },
+  {
+    "adverb": "régulièrement",
+    "gender": "invariable",
+    "pronunciation": "ʁeɡyljɛʁmɑ̃",
+    "english_approximate_pronunciation": "ray-gyu-lyair-man",
+    "meaning_en": "regularly",
+    "examples": [
+      {
+        "fr": "Elle fait du sport régulièrement.",
+        "en": "She does sport regularly."
+      },
+      {
+        "fr": "Nous nous voyons régulièrement.",
+        "en": "We see each other regularly."
+      }
+    ]
+  },
+  {
+    "adverb": "habituellement",
+    "gender": "invariable",
+    "pronunciation": "abitɥɛlmɑ̃",
+    "english_approximate_pronunciation": "a-bi-tyel-man",
+    "meaning_en": "usually; habitually",
+    "examples": [
+      {
+        "fr": "Habituellement, je me lève à sept heures.",
+        "en": "I usually get up at seven."
+      },
+      {
+        "fr": "Elle arrive habituellement en avance.",
+        "en": "She usually arrives early."
+      }
+    ]
+  },
+  {
+    "adverb": "occasionnellement",
+    "gender": "invariable",
+    "pronunciation": "ɔkazjɔnɛlmɑ̃",
+    "english_approximate_pronunciation": "o-ka-zyo-nel-man",
+    "meaning_en": "occasionally",
+    "examples": [
+      {
+        "fr": "Nous sortons occasionnellement au restaurant.",
+        "en": "We occasionally go out to a restaurant."
+      },
+      {
+        "fr": "Il boit occasionnellement du vin.",
+        "en": "He drinks wine occasionally."
+      }
+    ]
+  },
+  {
+    "adverb": "précédemment",
+    "gender": "invariable",
+    "pronunciation": "pʁesedamɑ̃",
+    "english_approximate_pronunciation": "pray-say-da-man",
+    "meaning_en": "previously; earlier",
+    "examples": [
+      {
+        "fr": "Comme mentionné précédemment, le budget est limité.",
+        "en": "As mentioned previously, the budget is limited."
+      },
+      {
+        "fr": "Nous avions déjà parlé de cela précédemment.",
+        "en": "We already spoke about that earlier."
+      }
+    ]
+  },
+  {
+    "adverb": "auparavant",
+    "gender": "invariable",
+    "pronunciation": "opavaʁɑ̃",
+    "english_approximate_pronunciation": "oh-pa-va-van",
+    "meaning_en": "before; previously",
+    "examples": [
+      {
+        "fr": "Je ne le connaissais pas auparavant.",
+        "en": "I did not know him before."
+      },
+      {
+        "fr": "Nous vivions à Paris auparavant.",
+        "en": "We lived in Paris previously."
+      }
+    ]
+  },
+  {
+    "adverb": "simultanément",
+    "gender": "invariable",
+    "pronunciation": "simyltanemɑ̃",
+    "english_approximate_pronunciation": "see-mul-ta-nay-man",
+    "meaning_en": "simultaneously",
+    "examples": [
+      {
+        "fr": "Les deux spectacles ont lieu simultanément.",
+        "en": "The two shows take place simultaneously."
+      },
+      {
+        "fr": "Il travaille sur plusieurs projets simultanément.",
+        "en": "He works on several projects at the same time."
+      }
+    ]
+  },
+  {
+    "adverb": "progressivement",
+    "gender": "invariable",
+    "pronunciation": "pʁɔɡʁesivmɑ̃",
+    "english_approximate_pronunciation": "pro-gres-eve-man",
+    "meaning_en": "gradually",
+    "examples": [
+      {
+        "fr": "La situation s'améliore progressivement.",
+        "en": "The situation is gradually improving."
+      },
+      {
+        "fr": "Augmente la difficulté progressivement.",
+        "en": "Increase the difficulty gradually."
+      }
+    ]
+  },
+  {
+    "adverb": "successivement",
+    "gender": "invariable",
+    "pronunciation": "syksɛsivmɑ̃",
+    "english_approximate_pronunciation": "suk-say-siv-man",
+    "meaning_en": "successively; one after another",
+    "examples": [
+      {
+        "fr": "Ils ont pris la parole successivement.",
+        "en": "They spoke one after another."
+      },
+      {
+        "fr": "Les tâches seront effectuées successivement.",
+        "en": "The tasks will be carried out successively."
+      }
+    ]
+  },
+  {
+    "adverb": "respectivement",
+    "gender": "invariable",
+    "pronunciation": "ʁɛspɛktivmɑ̃",
+    "english_approximate_pronunciation": "res-pek-teev-man",
+    "meaning_en": "respectively",
+    "examples": [
+      {
+        "fr": "Ils ont gagné 10 et 15 points respectivement.",
+        "en": "They scored 10 and 15 points respectively."
+      },
+      {
+        "fr": "Les deux équipes ont, respectivement, perdu et gagné.",
+        "en": "The two teams have, respectively, lost and won."
+      }
+    ]
+  },
+  {
+    "adverb": "officiellement",
+    "gender": "invariable",
+    "pronunciation": "ɔfisjɛlmɑ̃",
+    "english_approximate_pronunciation": "o-fee-syel-man",
+    "meaning_en": "officially",
+    "examples": [
+      {
+        "fr": "Le résultat sera annoncé officiellement demain.",
+        "en": "The result will be announced officially tomorrow."
+      },
+      {
+        "fr": "Ils ne sont pas encore officiellement mariés.",
+        "en": "They are not officially married yet."
+      }
+    ]
+  },
+  {
+    "adverb": "officieusement",
+    "gender": "invariable",
+    "pronunciation": "ɔfisjøzmɑ̃",
+    "english_approximate_pronunciation": "o-fee-syuhz-man",
+    "meaning_en": "unofficially",
+    "examples": [
+      {
+        "fr": "Officieusement, tout le monde est au courant.",
+        "en": "Unofficially, everyone knows."
+      },
+      {
+        "fr": "La décision a été prise officieusement.",
+        "en": "The decision was taken unofficially."
+      }
+    ]
+  },
+  {
+    "adverb": "paradoxalement",
+    "gender": "invariable",
+    "pronunciation": "paʁadɔksalmɑ̃",
+    "english_approximate_pronunciation": "pa-ra-dok-sal-man",
+    "meaning_en": "paradoxically",
+    "examples": [
+      {
+        "fr": "Paradoxalement, plus il travaille, moins il réussit.",
+        "en": "Paradoxically, the more he works, the less he succeeds."
+      },
+      {
+        "fr": "La solution est paradoxalement très simple.",
+        "en": "The solution is paradoxically very simple."
+      }
+    ]
+  },
+  {
+    "adverb": "douloureusement",
+    "gender": "invariable",
+    "pronunciation": "duluʁøzmɑ̃",
+    "english_approximate_pronunciation": "doo-loo-ruhz-man",
+    "meaning_en": "painfully",
+    "examples": [
+      {
+        "fr": "Il a appris la nouvelle douloureusement.",
+        "en": "He learnt the news painfully."
+      },
+      {
+        "fr": "L'expérience s'est révélée douloureusement difficile.",
+        "en": "The experience turned out to be painfully difficult."
+      }
+    ]
+  },
+  {
+    "adverb": "réellement",
+    "gender": "invariable",
+    "pronunciation": "ʁeɛlmɑ̃",
+    "english_approximate_pronunciation": "ray-el-man",
+    "meaning_en": "really; actually",
+    "examples": [
+      {
+        "fr": "Est-ce réellement nécessaire ?",
+        "en": "Is that really necessary?"
+      },
+      {
+        "fr": "Il ne l'a jamais réellement accepté.",
+        "en": "He never really accepted it."
+      }
+    ]
+  },
+  {
+    "adverb": "virtuellement",
+    "gender": "invariable",
+    "pronunciation": "viʁtɥɛlmɑ̃",
+    "english_approximate_pronunciation": "veer-twel-man",
+    "meaning_en": "virtually; online",
+    "examples": [
+      {
+        "fr": "La réunion aura lieu virtuellement.",
+        "en": "The meeting will take place virtually."
+      },
+      {
+        "fr": "Il participe virtuellement au cours.",
+        "en": "He takes part in the class online."
+      }
+    ]
+  },
+  {
+    "adverb": "initialement",
+    "gender": "invariable",
+    "pronunciation": "inisjalmɑ̃",
+    "english_approximate_pronunciation": "ee-nee-syal-man",
+    "meaning_en": "initially",
+    "examples": [
+      {
+        "fr": "Initialement, le projet devait durer un an.",
+        "en": "Initially, the project was meant to last a year."
+      },
+      {
+        "fr": "Le plan était initialement différent.",
+        "en": "The plan was initially different."
+      }
+    ]
+  },
+  {
+    "adverb": "ultimement",
+    "gender": "invariable",
+    "pronunciation": "yltiməmɑ̃",
+    "english_approximate_pronunciation": "ul-tee-muh-man",
+    "meaning_en": "ultimately",
+    "examples": [
+      {
+        "fr": "Ultimement, c'est toi qui décides.",
+        "en": "Ultimately, it is you who decide."
+      },
+      {
+        "fr": "La décision revient ultimement au directeur.",
+        "en": "The decision ultimately rests with the director."
+      }
+    ]
+  },
+  {
+    "adverb": "durablement",
+    "gender": "invariable",
+    "pronunciation": "dyʁabləmɑ̃",
+    "english_approximate_pronunciation": "du-ra-bluh-man",
+    "meaning_en": "sustainably; lastingly",
+    "examples": [
+      {
+        "fr": "Nous voulons agir durablement.",
+        "en": "We want to act in a sustainable way."
+      },
+      {
+        "fr": "Ce changement influencera durablement l'économie.",
+        "en": "This change will influence the economy in a lasting way."
+      }
+    ]
+  },
+  {
+    "adverb": "temporairement",
+    "gender": "invariable",
+    "pronunciation": "tɑ̃pɔʁɛʁmɑ̃",
+    "english_approximate_pronunciation": "tom-po-rer-man",
+    "meaning_en": "temporarily",
+    "examples": [
+      {
+        "fr": "Le magasin est temporairement fermé.",
+        "en": "The shop is temporarily closed."
+      },
+      {
+        "fr": "Il habite temporairement chez ses parents.",
+        "en": "He is living temporarily with his parents."
+      }
+    ]
+  },
+  {
+    "adverb": "définitivement",
+    "gender": "invariable",
+    "pronunciation": "definitivmɑ̃",
+    "english_approximate_pronunciation": "day-fee-nee-teev-man",
+    "meaning_en": "definitively; for good",
+    "examples": [
+      {
+        "fr": "Ils ont quitté la ville définitivement.",
+        "en": "They left the city for good."
+      },
+      {
+        "fr": "Le problème est définitivement réglé.",
+        "en": "The problem is definitively settled."
+      }
+    ]
+  },
+  {
+    "adverb": "provisoirement",
+    "gender": "invariable",
+    "pronunciation": "pʁɔvizwaʁmɑ̃",
+    "english_approximate_pronunciation": "pro-vee-swahr-man",
+    "meaning_en": "provisionally; for the time being",
+    "examples": [
+      {
+        "fr": "Il occupe ce poste provisoirement.",
+        "en": "He is occupying this post for the time being."
+      },
+      {
+        "fr": "Nous resterons provisoirement ici.",
+        "en": "We will stay here for now."
+      }
+    ]
+  },
+  {
+    "adverb": "localement",
+    "gender": "invariable",
+    "pronunciation": "lɔkalmɑ̃",
+    "english_approximate_pronunciation": "lo-kal-man",
+    "meaning_en": "locally",
+    "examples": [
+      {
+        "fr": "Le produit est fabriqué localement.",
+        "en": "The product is made locally."
+      },
+      {
+        "fr": "Agissons d'abord localement.",
+        "en": "Let's act locally first."
+      }
+    ]
+  },
+  {
+    "adverb": "nationalement",
+    "gender": "invariable",
+    "pronunciation": "nasjɔnalmɑ̃",
+    "english_approximate_pronunciation": "na-syo-nal-man",
+    "meaning_en": "nationally",
+    "examples": [
+      {
+        "fr": "Cette réforme sera appliquée nationalement.",
+        "en": "This reform will be applied nationwide."
+      },
+      {
+        "fr": "L'événement est connu nationalement.",
+        "en": "The event is known nationally."
+      }
+    ]
+  },
+  {
+    "adverb": "internationalement",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃tɛʁnasjɔnalmɑ̃",
+    "english_approximate_pronunciation": "an-ter-na-syo-nal-man",
+    "meaning_en": "internationally",
+    "examples": [
+      {
+        "fr": "La marque est reconnue internationalement.",
+        "en": "The brand is recognised internationally."
+      },
+      {
+        "fr": "Le film a été distribué internationalement.",
+        "en": "The film was distributed internationally."
+      }
+    ]
+  },
+  {
+    "adverb": "historiquement",
+    "gender": "invariable",
+    "pronunciation": "istɔʁikmɑ̃",
+    "english_approximate_pronunciation": "iss-to-reek-man",
+    "meaning_en": "historically",
+    "examples": [
+      {
+        "fr": "Historiquement, la région était agricole.",
+        "en": "Historically, the region was agricultural."
+      },
+      {
+        "fr": "C'est, historiquement, un moment clé.",
+        "en": "It is, historically, a key moment."
+      }
+    ]
+  },
+  {
+    "adverb": "culturellement",
+    "gender": "invariable",
+    "pronunciation": "kyltyʁɛlmɑ̃",
+    "english_approximate_pronunciation": "kul-tyu-rel-man",
+    "meaning_en": "culturally",
+    "examples": [
+      {
+        "fr": "La ville est culturellement très riche.",
+        "en": "The city is very rich culturally."
+      },
+      {
+        "fr": "Les deux pays sont culturellement proches.",
+        "en": "The two countries are culturally close."
+      }
+    ]
+  },
+  {
+    "adverb": "politiquement",
+    "gender": "invariable",
+    "pronunciation": "pɔlitikmɑ̃",
+    "english_approximate_pronunciation": "po-lee-teek-man",
+    "meaning_en": "politically",
+    "examples": [
+      {
+        "fr": "Politiquement, la question est sensible.",
+        "en": "Politically, the issue is sensitive."
+      },
+      {
+        "fr": "Le pays est politiquement divisé.",
+        "en": "The country is politically divided."
+      }
+    ]
+  },
+  {
+    "adverb": "économiquement",
+    "gender": "invariable",
+    "pronunciation": "ekɔnɔmikmɑ̃",
+    "english_approximate_pronunciation": "ay-ko-no-meek-man",
+    "meaning_en": "economically",
+    "examples": [
+      {
+        "fr": "La région dépend économiquement du tourisme.",
+        "en": "The region depends economically on tourism."
+      },
+      {
+        "fr": "C'est économiquement risqué.",
+        "en": "It is economically risky."
+      }
+    ]
+  },
+  {
+    "adverb": "socialement",
+    "gender": "invariable",
+    "pronunciation": "sɔsjalmɑ̃",
+    "english_approximate_pronunciation": "so-syal-man",
+    "meaning_en": "socially",
+    "examples": [
+      {
+        "fr": "Socialement, il se sent isolé.",
+        "en": "Socially, he feels isolated."
+      },
+      {
+        "fr": "Le projet est socialement utile.",
+        "en": "The project is socially useful."
+      }
+    ]
+  },
+  {
+    "adverb": "artistiquement",
+    "gender": "invariable",
+    "pronunciation": "aʁtistikmɑ̃",
+    "english_approximate_pronunciation": "ar-tee-steek-man",
+    "meaning_en": "artistically",
+    "examples": [
+      {
+        "fr": "Le film est très réussi artistiquement.",
+        "en": "The film is very successful artistically."
+      },
+      {
+        "fr": "Elle s'exprime artistiquement depuis l'enfance.",
+        "en": "She has expressed herself artistically since childhood."
+      }
+    ]
+  },
+  {
+    "adverb": "musicalement",
+    "gender": "invariable",
+    "pronunciation": "myzikalmɑ̃",
+    "english_approximate_pronunciation": "myu-zee-kal-man",
+    "meaning_en": "musically",
+    "examples": [
+      {
+        "fr": "Le groupe est très fort musicalement.",
+        "en": "The band is very strong musically."
+      },
+      {
+        "fr": "C'est une œuvre riche musicalement.",
+        "en": "It is a musically rich work."
+      }
+    ]
+  },
+  {
+    "adverb": "techniquement",
+    "gender": "invariable",
+    "pronunciation": "tɛknikmɑ̃",
+    "english_approximate_pronunciation": "tek-neek-man",
+    "meaning_en": "technically",
+    "examples": [
+      {
+        "fr": "Techniquement, le projet est réalisable.",
+        "en": "Technically, the project is feasible."
+      },
+      {
+        "fr": "Le film est impressionnant techniquement.",
+        "en": "The film is technically impressive."
+      }
+    ]
+  },
+  {
+    "adverb": "scientifiquement",
+    "gender": "invariable",
+    "pronunciation": "sjɑ̃tifikmɑ̃",
+    "english_approximate_pronunciation": "syan-tee-feek-man",
+    "meaning_en": "scientifically",
+    "examples": [
+      {
+        "fr": "La théorie n'est pas scientifiquement prouvée.",
+        "en": "The theory is not scientifically proven."
+      },
+      {
+        "fr": "Le résultat est scientifiquement intéressant.",
+        "en": "The result is scientifically interesting."
+      }
+    ]
+  },
+  {
+    "adverb": "mécaniquement",
+    "gender": "invariable",
+    "pronunciation": "mekanikmɑ̃",
+    "english_approximate_pronunciation": "may-ka-neek-man",
+    "meaning_en": "mechanically",
+    "examples": [
+      {
+        "fr": "Il répète la phrase mécaniquement.",
+        "en": "He repeats the sentence mechanically."
+      },
+      {
+        "fr": "La porte s'ouvre mécaniquement.",
+        "en": "The door opens mechanically."
+      }
+    ]
+  },
+  {
+    "adverb": "logiquement",
+    "gender": "invariable",
+    "pronunciation": "lɔʒikmɑ̃",
+    "english_approximate_pronunciation": "lo-zheek-man",
+    "meaning_en": "logically",
+    "examples": [
+      {
+        "fr": "Logiquement, tu devrais accepter.",
+        "en": "Logically, you should accept."
+      },
+      {
+        "fr": "La conclusion s'impose logiquement.",
+        "en": "The conclusion follows logically."
+      }
+    ]
+  },
+  {
+    "adverb": "mathématiquement",
+    "gender": "invariable",
+    "pronunciation": "matematikmɑ̃",
+    "english_approximate_pronunciation": "ma-tay-ma-teek-man",
+    "meaning_en": "mathematically",
+    "examples": [
+      {
+        "fr": "Le résultat est mathématiquement correct.",
+        "en": "The result is mathematically correct."
+      },
+      {
+        "fr": "C'est impossible mathématiquement.",
+        "en": "It is mathematically impossible."
+      }
+    ]
+  },
+  {
+    "adverb": "personnellement",
+    "gender": "invariable",
+    "pronunciation": "pɛʁsɔnɛlmɑ̃",
+    "english_approximate_pronunciation": "pair-so-nel-man",
+    "meaning_en": "personally",
+    "examples": [
+      {
+        "fr": "Personnellement, je préfère attendre.",
+        "en": "Personally, I prefer to wait."
+      },
+      {
+        "fr": "Je l'ai rencontré personnellement.",
+        "en": "I met him personally."
+      }
+    ]
+  },
+  {
+    "adverb": "intérieurement",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃teʁjœʁmɑ̃",
+    "english_approximate_pronunciation": "an-tair-yur-man",
+    "meaning_en": "inwardly; internally",
+    "examples": [
+      {
+        "fr": "Intérieurement, il était très ému.",
+        "en": "Inwardly, he was very moved."
+      },
+      {
+        "fr": "Elle souriait, mais intérieurement elle souffrait.",
+        "en": "She smiled, but inwardly she was suffering."
+      }
+    ]
+  },
+  {
+    "adverb": "extérieurement",
+    "gender": "invariable",
+    "pronunciation": "ɛkstɛʁjœʁmɑ̃",
+    "english_approximate_pronunciation": "eks-tair-yur-man",
+    "meaning_en": "outwardly; externally",
+    "examples": [
+      {
+        "fr": "Extérieurement, tout paraît calme.",
+        "en": "Outwardly, everything seems calm."
+      },
+      {
+        "fr": "Le bâtiment est simple extérieurement.",
+        "en": "The building is simple on the outside."
+      }
+    ]
+  },
+  {
+    "adverb": "mentalement",
+    "gender": "invariable",
+    "pronunciation": "mɑ̃talmɑ̃",
+    "english_approximate_pronunciation": "mon-tal-man",
+    "meaning_en": "mentally",
+    "examples": [
+      {
+        "fr": "Il se prépare mentalement à l'épreuve.",
+        "en": "He is preparing himself mentally for the test."
+      },
+      {
+        "fr": "C'est mentalement épuisant.",
+        "en": "It is mentally exhausting."
+      }
+    ]
+  },
+  {
+    "adverb": "physiquement",
+    "gender": "invariable",
+    "pronunciation": "fizikmɑ̃",
+    "english_approximate_pronunciation": "fee-zee-ke-man",
+    "meaning_en": "physically",
+    "examples": [
+      {
+        "fr": "Elle est physiquement épuisée.",
+        "en": "She is physically exhausted."
+      },
+      {
+        "fr": "Le travail est physiquement difficile.",
+        "en": "The work is physically hard."
+      }
+    ]
+  },
+  {
+    "adverb": "moralement",
+    "gender": "invariable",
+    "pronunciation": "mɔʁalmɑ̃",
+    "english_approximate_pronunciation": "mo-ral-man",
+    "meaning_en": "morally; emotionally",
+    "examples": [
+      {
+        "fr": "Il est très touché moralement.",
+        "en": "He is very affected emotionally."
+      },
+      {
+        "fr": "Moralement, c'est difficile à accepter.",
+        "en": "Morally, it is difficult to accept."
+      }
+    ]
+  },
+  {
+    "adverb": "spirituellement",
+    "gender": "invariable",
+    "pronunciation": "spiʁitɥɛlmɑ̃",
+    "english_approximate_pronunciation": "spee-ree-tyu-el-man",
+    "meaning_en": "spiritually",
+    "examples": [
+      {
+        "fr": "Il se sent spirituellement apaisé.",
+        "en": "He feels spiritually at peace."
+      },
+      {
+        "fr": "Le livre est spirituellement riche.",
+        "en": "The book is spiritually rich."
+      }
+    ]
+  },
+  {
+    "adverb": "émotionnellement",
+    "gender": "invariable",
+    "pronunciation": "emɔsjɔnɛlmɑ̃",
+    "english_approximate_pronunciation": "ay-mo-syo-nel-man",
+    "meaning_en": "emotionally",
+    "examples": [
+      {
+        "fr": "Elle est émotionnellement épuisée.",
+        "en": "She is emotionally exhausted."
+      },
+      {
+        "fr": "Le film est émotionnellement fort.",
+        "en": "The film is emotionally powerful."
+      }
+    ]
+  },
+  {
+    "adverb": "financièrement",
+    "gender": "invariable",
+    "pronunciation": "finɑ̃sjɛʁmɑ̃",
+    "english_approximate_pronunciation": "fee-nan-syair-man",
+    "meaning_en": "financially",
+    "examples": [
+      {
+        "fr": "Il est financièrement indépendant.",
+        "en": "He is financially independent."
+      },
+      {
+        "fr": "Le projet est financièrement risqué.",
+        "en": "The project is financially risky."
+      }
+    ]
+  },
+  {
+    "adverb": "agréablement",
+    "gender": "invariable",
+    "pronunciation": "aɡʁeabləmɑ̃",
+    "english_approximate_pronunciation": "ah-grey-ah-bluh-mon",
+    "meaning_en": "pleasantly",
+    "examples": [
+      {
+        "fr": "La pièce est agréablement décorée.",
+        "en": "The room is pleasantly decorated."
+      },
+      {
+        "fr": "Je suis agréablement surpris par le résultat.",
+        "en": "I am pleasantly surprised by the result."
+      }
+    ]
+  },
+  {
+    "adverb": "joyeusement",
+    "gender": "invariable",
+    "pronunciation": "ʒwajøzmɑ̃",
+    "english_approximate_pronunciation": "zhwa-yuhz-mon",
+    "meaning_en": "joyfully; cheerfully",
+    "examples": [
+      {
+        "fr": "Les enfants jouent joyeusement dans le jardin.",
+        "en": "The children are playing joyfully in the garden."
+      },
+      {
+        "fr": "Elle a accepté l'invitation joyeusement.",
+        "en": "She accepted the invitation cheerfully."
+      }
+    ]
+  },
+  {
+    "adverb": "tristement",
+    "gender": "invariable",
+    "pronunciation": "tʁistmɑ̃",
+    "english_approximate_pronunciation": "treest-mon",
+    "meaning_en": "sadly",
+    "examples": [
+      {
+        "fr": "Il sourit tristement.",
+        "en": "He smiles sadly."
+      },
+      {
+        "fr": "Tristement, la fête s'est terminée trop tôt.",
+        "en": "Sadly, the party ended too early."
+      }
+    ]
+  },
+  {
+    "adverb": "méchamment",
+    "gender": "invariable",
+    "pronunciation": "meʃamɑ̃",
+    "english_approximate_pronunciation": "may-sha-mon",
+    "meaning_en": "spitefully; nastily",
+    "examples": [
+      {
+        "fr": "Il a répondu méchamment.",
+        "en": "He replied nastily."
+      },
+      {
+        "fr": "Elle se moque méchamment de lui.",
+        "en": "She spitefully makes fun of him."
+      }
+    ]
+  },
+  {
+    "adverb": "bêtement",
+    "gender": "invariable",
+    "pronunciation": "bɛtmɑ̃",
+    "english_approximate_pronunciation": "bet-mon",
+    "meaning_en": "stupidly; foolishly",
+    "examples": [
+      {
+        "fr": "J'ai bêtement oublié mon passeport.",
+        "en": "I stupidly forgot my passport."
+      },
+      {
+        "fr": "Il a agi bêtement dans cette situation.",
+        "en": "He acted foolishly in that situation."
+      }
+    ]
+  },
+  {
+    "adverb": "intelligemment",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃teliʒamɑ̃",
+    "english_approximate_pronunciation": "an-teh-lee-zhah-mon",
+    "meaning_en": "intelligently",
+    "examples": [
+      {
+        "fr": "Elle répond toujours intelligemment.",
+        "en": "She always answers intelligently."
+      },
+      {
+        "fr": "Le problème a été résolu intelligemment.",
+        "en": "The problem was solved intelligently."
+      }
+    ]
+  },
+  {
+    "adverb": "habilement",
+    "gender": "invariable",
+    "pronunciation": "abilmɑ̃",
+    "english_approximate_pronunciation": "ah-beel-mon",
+    "meaning_en": "skillfully; cleverly",
+    "examples": [
+      {
+        "fr": "Il a joué habilement ses cartes.",
+        "en": "He played his cards skilfully."
+      },
+      {
+        "fr": "Elle négocie très habilement.",
+        "en": "She negotiates very cleverly."
+      }
+    ]
+  },
+  {
+    "adverb": "soigneusement",
+    "gender": "invariable",
+    "pronunciation": "swaɲøzmɑ̃",
+    "english_approximate_pronunciation": "swah-nyuhz-mon",
+    "meaning_en": "carefully",
+    "examples": [
+      {
+        "fr": "Range tes affaires soigneusement.",
+        "en": "Put your things away carefully."
+      },
+      {
+        "fr": "Il a lu le contrat soigneusement.",
+        "en": "He read the contract carefully."
+      }
+    ]
+  },
+  {
+    "adverb": "vivement",
+    "gender": "invariable",
+    "pronunciation": "vivmɑ̃",
+    "english_approximate_pronunciation": "veev-mon",
+    "meaning_en": "strongly; deeply; vividly",
+    "examples": [
+      {
+        "fr": "Je te remercie vivement.",
+        "en": "I thank you deeply."
+      },
+      {
+        "fr": "Cette scène est vivement décrite.",
+        "en": "That scene is vividly described."
+      }
+    ]
+  },
+  {
+    "adverb": "lourdement",
+    "gender": "invariable",
+    "pronunciation": "luʁdmɑ̃",
+    "english_approximate_pronunciation": "loor-d-mon",
+    "meaning_en": "heavily",
+    "examples": [
+      {
+        "fr": "Il marche lourdement.",
+        "en": "He walks heavily."
+      },
+      {
+        "fr": "La pluie tombe lourdement.",
+        "en": "The rain is falling heavily."
+      }
+    ]
+  },
+  {
+    "adverb": "violemment",
+    "gender": "invariable",
+    "pronunciation": "vjɔlɑ̃mɑ̃",
+    "english_approximate_pronunciation": "vee-oh-lan-mon",
+    "meaning_en": "violently",
+    "examples": [
+      {
+        "fr": "Le vent souffle violemment.",
+        "en": "The wind is blowing violently."
+      },
+      {
+        "fr": "Ils se sont disputés violemment.",
+        "en": "They argued violently."
+      }
+    ]
+  },
+  {
+    "adverb": "brutalement",
+    "gender": "invariable",
+    "pronunciation": "bʁytalmɑ̃",
+    "english_approximate_pronunciation": "bru-taal-mon",
+    "meaning_en": "brutally; abruptly",
+    "examples": [
+      {
+        "fr": "La conversation s'est arrêtée brutalement.",
+        "en": "The conversation stopped abruptly."
+      },
+      {
+        "fr": "Il a été brutalement réveillé.",
+        "en": "He was brutally woken up."
+      }
+    ]
+  },
+  {
+    "adverb": "joliment",
+    "gender": "invariable",
+    "pronunciation": "ʒɔlimɑ̃",
+    "english_approximate_pronunciation": "zho-lee-mon",
+    "meaning_en": "nicely; prettily",
+    "examples": [
+      {
+        "fr": "La table est joliment dressée.",
+        "en": "The table is nicely laid."
+      },
+      {
+        "fr": "Elle s'en est joliment sortie.",
+        "en": "She got out of it very nicely."
+      }
+    ]
+  },
+  {
+    "adverb": "correctement",
+    "gender": "invariable",
+    "pronunciation": "kɔʁɛktəmɑ̃",
+    "english_approximate_pronunciation": "ko-rekt-uh-mon",
+    "meaning_en": "correctly; properly",
+    "examples": [
+      {
+        "fr": "Tu n'as pas rempli le formulaire correctement.",
+        "en": "You didn't fill in the form correctly."
+      },
+      {
+        "fr": "Il prononce ce mot correctement.",
+        "en": "He pronounces that word correctly."
+      }
+    ]
+  },
+  {
+    "adverb": "incorrectement",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃kɔʁɛktəmɑ̃",
+    "english_approximate_pronunciation": "an-ko-rekt-uh-mon",
+    "meaning_en": "incorrectly",
+    "examples": [
+      {
+        "fr": "Le devoir a été fait incorrectement.",
+        "en": "The homework was done incorrectly."
+      },
+      {
+        "fr": "Il a cité la source incorrectement.",
+        "en": "He cited the source incorrectly."
+      }
+    ]
+  },
+  {
+    "adverb": "indirectement",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃diʁɛktəmɑ̃",
+    "english_approximate_pronunciation": "an-dee-rekt-uh-mon",
+    "meaning_en": "indirectly",
+    "examples": [
+      {
+        "fr": "Je l'ai appris indirectement.",
+        "en": "I learnt it indirectly."
+      },
+      {
+        "fr": "Ses décisions nous affectent indirectement.",
+        "en": "His decisions affect us indirectly."
+      }
+    ]
+  },
+  {
+    "adverb": "constamment",
+    "gender": "invariable",
+    "pronunciation": "kɔ̃stamɑ̃",
+    "english_approximate_pronunciation": "kon-sta-mon",
+    "meaning_en": "constantly",
+    "examples": [
+      {
+        "fr": "Elle se plaint constamment.",
+        "en": "She complains constantly."
+      },
+      {
+        "fr": "Il est constamment au téléphone.",
+        "en": "He is constantly on the phone."
+      }
+    ]
+  },
+  {
+    "adverb": "continuellement",
+    "gender": "invariable",
+    "pronunciation": "kɔ̃tinɥɛlmɑ̃",
+    "english_approximate_pronunciation": "kon-tee-nu-el-mon",
+    "meaning_en": "continually",
+    "examples": [
+      {
+        "fr": "La situation évolue continuellement.",
+        "en": "The situation is continually evolving."
+      },
+      {
+        "fr": "Il pleut continuellement depuis ce matin.",
+        "en": "It has been raining continually since this morning."
+      }
+    ]
+  },
+  {
+    "adverb": "exceptionnellement",
+    "gender": "invariable",
+    "pronunciation": "ɛksɛpsjɔnɛlmɑ̃",
+    "english_approximate_pronunciation": "ek-sep-syo-nel-mon",
+    "meaning_en": "exceptionally",
+    "examples": [
+      {
+        "fr": "Le musée est ouvert exceptionnellement ce soir.",
+        "en": "The museum is exceptionally open this evening."
+      },
+      {
+        "fr": "Elle est exceptionnellement douée.",
+        "en": "She is exceptionally gifted."
+      }
+    ]
+  },
+  {
+    "adverb": "spécialement",
+    "gender": "invariable",
+    "pronunciation": "spesjalmɑ̃",
+    "english_approximate_pronunciation": "spay-syal-mon",
+    "meaning_en": "specially; particularly",
+    "examples": [
+      {
+        "fr": "Ce gâteau a été préparé spécialement pour toi.",
+        "en": "This cake was made especially for you."
+      },
+      {
+        "fr": "Je suis venu spécialement pour cette réunion.",
+        "en": "I came specially for this meeting."
+      }
+    ]
+  },
+  {
+    "adverb": "prioritairement",
+    "gender": "invariable",
+    "pronunciation": "pʁiɔʁitɛʁmɑ̃",
+    "english_approximate_pronunciation": "pree-oh-ree-tair-mon",
+    "meaning_en": "as a priority; first",
+    "examples": [
+      {
+        "fr": "Traitez ce dossier prioritairement.",
+        "en": "Deal with this file as a priority."
+      },
+      {
+        "fr": "Nous devons agir prioritairement sur ce point.",
+        "en": "We must act first on this point."
+      }
+    ]
+  },
+  {
+    "adverb": "secondairement",
+    "gender": "invariable",
+    "pronunciation": "səɡɔ̃dɛʁmɑ̃",
+    "english_approximate_pronunciation": "suh-gon-dair-mon",
+    "meaning_en": "secondarily; in second place",
+    "examples": [
+      {
+        "fr": "L'argent vient secondairement.",
+        "en": "Money comes second."
+      },
+      {
+        "fr": "Secondairement, nous verrons les détails.",
+        "en": "Secondly, we will look at the details."
+      }
+    ]
+  },
+  {
+    "adverb": "amicalement",
+    "gender": "invariable",
+    "pronunciation": "amikalmɑ̃",
+    "english_approximate_pronunciation": "ah-mee-kal-mon",
+    "meaning_en": "in a friendly way",
+    "examples": [
+      {
+        "fr": "Ils ont discuté amicalement.",
+        "en": "They talked in a friendly way."
+      },
+      {
+        "fr": "Je te salue amicalement.",
+        "en": "I greet you in a friendly way."
+      }
+    ]
+  },
+  {
+    "adverb": "cordialement",
+    "gender": "invariable",
+    "pronunciation": "kɔʁdjalmɑ̃",
+    "english_approximate_pronunciation": "kor-dyal-mon",
+    "meaning_en": "cordially",
+    "examples": [
+      {
+        "fr": "Vous êtes cordialement invités.",
+        "en": "You are cordially invited."
+      },
+      {
+        "fr": "Ils se sont salués cordialement.",
+        "en": "They greeted each other cordially."
+      }
+    ]
+  },
+  {
+    "adverb": "respectueusement",
+    "gender": "invariable",
+    "pronunciation": "ʁɛspɛktɥøzmɑ̃",
+    "english_approximate_pronunciation": "res-pek-tuehz-mon",
+    "meaning_en": "respectfully",
+    "examples": [
+      {
+        "fr": "Parlez-lui respectueusement.",
+        "en": "Speak to him respectfully."
+      },
+      {
+        "fr": "Elle a toujours agi respectueusement.",
+        "en": "She has always acted respectfully."
+      }
+    ]
+  },
+  {
+    "adverb": "froidement",
+    "gender": "invariable",
+    "pronunciation": "fʁwadmɑ̃",
+    "english_approximate_pronunciation": "frwahd-mon",
+    "meaning_en": "coldly",
+    "examples": [
+      {
+        "fr": "Il lui a répondu froidement.",
+        "en": "He answered her coldly."
+      },
+      {
+        "fr": "Ils l'ont accueilli assez froidement.",
+        "en": "They welcomed him rather coldly."
+      }
+    ]
+  },
+  {
+    "adverb": "chaleureusement",
+    "gender": "invariable",
+    "pronunciation": "ʃalœʁøzmɑ̃",
+    "english_approximate_pronunciation": "sha-lur-uhz-mon",
+    "meaning_en": "warmly",
+    "examples": [
+      {
+        "fr": "Ils nous ont reçus chaleureusement.",
+        "en": "They received us warmly."
+      },
+      {
+        "fr": "Elle a été chaleureusement applaudie.",
+        "en": "She was warmly applauded."
+      }
+    ]
+  },
+  {
+    "adverb": "systématiquement",
+    "gender": "invariable",
+    "pronunciation": "sistematikmɑ̃",
+    "english_approximate_pronunciation": "see-ste-ma-teek-man",
+    "meaning_en": "systematically",
+    "examples": [
+      {
+        "fr": "Il vérifie systématiquement ses mails.",
+        "en": "He systematically checks his emails."
+      },
+      {
+        "fr": "Les données sont systématiquement analysées.",
+        "en": "The data is systematically analysed."
+      }
+    ]
+  },
+  {
+    "adverb": "expressément",
+    "gender": "invariable",
+    "pronunciation": "ɛkspʁesemɑ̃",
+    "english_approximate_pronunciation": "eks-press-ay-mon",
+    "meaning_en": "explicitly; expressly",
+    "examples": [
+      {
+        "fr": "C'est expressément indiqué dans le contrat.",
+        "en": "It is expressly stated in the contract."
+      },
+      {
+        "fr": "Je te le demande expressément.",
+        "en": "I expressly ask you for it."
+      }
+    ]
+  },
+  {
+    "adverb": "strictement",
+    "gender": "invariable",
+    "pronunciation": "stʁiktəmɑ̃",
+    "english_approximate_pronunciation": "streekt-uh-mon",
+    "meaning_en": "strictly",
+    "examples": [
+      {
+        "fr": "L'accès est strictement interdit.",
+        "en": "Access is strictly forbidden."
+      },
+      {
+        "fr": "Ils ont appliqué la règle strictement.",
+        "en": "They applied the rule strictly."
+      }
+    ]
+  },
+  {
+    "adverb": "étroitement",
+    "gender": "invariable",
+    "pronunciation": "etʁwatəmɑ̃",
+    "english_approximate_pronunciation": "ay-trow-ah-tuh-mon",
+    "meaning_en": "closely",
+    "examples": [
+      {
+        "fr": "Les deux sujets sont étroitement liés.",
+        "en": "The two topics are closely linked."
+      },
+      {
+        "fr": "Nous travaillons étroitement avec eux.",
+        "en": "We work closely with them."
+      }
+    ]
+  },
+  {
+    "adverb": "essentiellement",
+    "gender": "invariable",
+    "pronunciation": "esɑ̃sjelmɑ̃",
+    "english_approximate_pronunciation": "eh-san-syel-mon",
+    "meaning_en": "essentially; mainly",
+    "examples": [
+      {
+        "fr": "Le film traite essentiellement de la famille.",
+        "en": "The film is essentially about family."
+      },
+      {
+        "fr": "Le quartier est habité essentiellement par des étudiants.",
+        "en": "The area is mainly inhabited by students."
+      }
+    ]
+  },
+  {
+    "adverb": "accessoirement",
+    "gender": "invariable",
+    "pronunciation": "akseswaʁɛmɑ̃",
+    "english_approximate_pronunciation": "ak-ses-war-eh-mon",
+    "meaning_en": "incidentally; secondarily",
+    "examples": [
+      {
+        "fr": "Je suis professeur, et accessoirement musicien.",
+        "en": "I am a teacher, and incidentally a musician."
+      },
+      {
+        "fr": "Ce détail est accessoirement intéressant.",
+        "en": "That detail is interesting incidentally."
+      }
+    ]
+  },
+  {
+    "adverb": "approximativement",
+    "gender": "invariable",
+    "pronunciation": "apʁɔksimativmɑ̃",
+    "english_approximate_pronunciation": "ap-prok-see-ma-teev-mon",
+    "meaning_en": "approximately",
+    "examples": [
+      {
+        "fr": "La réunion a duré approximativement deux heures.",
+        "en": "The meeting lasted approximately two hours."
+      },
+      {
+        "fr": "Ils étaient approximativement cinquante.",
+        "en": "There were approximately fifty of them."
+      }
+    ]
+  },
+  {
+    "adverb": "succinctement",
+    "gender": "invariable",
+    "pronunciation": "syksɛ̃ktəmɑ̃",
+    "english_approximate_pronunciation": "suk-sank-tuh-mon",
+    "meaning_en": "briefly; succinctly",
+    "examples": [
+      {
+        "fr": "Il a résumé l'histoire succinctement.",
+        "en": "He summarised the story briefly."
+      },
+      {
+        "fr": "Explique-le plus succinctement.",
+        "en": "Explain it more succinctly."
+      }
+    ]
+  },
+  {
+    "adverb": "désespérément",
+    "gender": "invariable",
+    "pronunciation": "dezɛspeʁemɑ̃",
+    "english_approximate_pronunciation": "day-zes-pay-ray-mon",
+    "meaning_en": "desperately; hopelessly",
+    "examples": [
+      {
+        "fr": "Elle le cherche désespérément.",
+        "en": "She is desperately looking for him."
+      },
+      {
+        "fr": "Il est désespérément en retard.",
+        "en": "He is hopelessly late."
+      }
+    ]
+  },
+  {
+    "adverb": "furieusement",
+    "gender": "invariable",
+    "pronunciation": "fyʁjøzmɑ̃",
+    "english_approximate_pronunciation": "fyu-ree-uhz-mon",
+    "meaning_en": "furiously",
+    "examples": [
+      {
+        "fr": "Il a réagi furieusement à la critique.",
+        "en": "He reacted furiously to the criticism."
+      },
+      {
+        "fr": "Le vent soufflait furieusement.",
+        "en": "The wind was blowing furiously."
+      }
+    ]
+  },
+  {
+    "adverb": "nerveusement",
+    "gender": "invariable",
+    "pronunciation": "nɛʁvøzmɑ̃",
+    "english_approximate_pronunciation": "nair-vuhz-mon",
+    "meaning_en": "nervously",
+    "examples": [
+      {
+        "fr": "Elle rit nerveusement.",
+        "en": "She laughs nervously."
+      },
+      {
+        "fr": "Il tapote nerveusement la table.",
+        "en": "He taps the table nervously."
+      }
+    ]
+  },
+  {
+    "adverb": "énergiquement",
+    "gender": "invariable",
+    "pronunciation": "eneʁʒikmɑ̃",
+    "english_approximate_pronunciation": "ay-nair-zheek-mon",
+    "meaning_en": "energetically; vigorously",
+    "examples": [
+      {
+        "fr": "Elle défend énergiquement son point de vue.",
+        "en": "She energetically defends her point of view."
+      },
+      {
+        "fr": "Ils ont protesté énergiquement.",
+        "en": "They protested vigorously."
+      }
+    ]
+  },
+  {
+    "adverb": "intensivement",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃tɑ̃sivmɑ̃",
+    "english_approximate_pronunciation": "an-tan-seev-mon",
+    "meaning_en": "intensively",
+    "examples": [
+      {
+        "fr": "Il étudie intensivement pour l'examen.",
+        "en": "He is studying intensively for the exam."
+      },
+      {
+        "fr": "La terre est cultivée intensivement.",
+        "en": "The land is farmed intensively."
+      }
+    ]
+  },
+  {
+    "adverb": "ouvertement",
+    "gender": "invariable",
+    "pronunciation": "uvɛʁtəmɑ̃",
+    "english_approximate_pronunciation": "oo-vair-tuh-mon",
+    "meaning_en": "openly",
+    "examples": [
+      {
+        "fr": "Elle critique ouvertement la décision.",
+        "en": "She openly criticises the decision."
+      },
+      {
+        "fr": "Ils ont parlé ouvertement de leurs problèmes.",
+        "en": "They spoke openly about their problems."
+      }
+    ]
+  },
+  {
+    "adverb": "secrètement",
+    "gender": "invariable",
+    "pronunciation": "səkʁɛtmɑ̃",
+    "english_approximate_pronunciation": "suh-kret-mon",
+    "meaning_en": "secretly",
+    "examples": [
+      {
+        "fr": "Il espère secrètement une promotion.",
+        "en": "He secretly hopes for a promotion."
+      },
+      {
+        "fr": "Ils se rencontrent secrètement.",
+        "en": "They meet in secret."
+      }
+    ]
+  },
+  {
+    "adverb": "publiquement",
+    "gender": "invariable",
+    "pronunciation": "pyblikmɑ̃",
+    "english_approximate_pronunciation": "pyu-bleek-mon",
+    "meaning_en": "publicly",
+    "examples": [
+      {
+        "fr": "Il s'est excusé publiquement.",
+        "en": "He apologised publicly."
+      },
+      {
+        "fr": "La décision a été annoncée publiquement.",
+        "en": "The decision was announced publicly."
+      }
+    ]
+  },
+  {
+    "adverb": "anonymement",
+    "gender": "invariable",
+    "pronunciation": "anɔnimɑ̃",
+    "english_approximate_pronunciation": "a-no-nee-mon",
+    "meaning_en": "anonymously",
+    "examples": [
+      {
+        "fr": "Le don a été fait anonymement.",
+        "en": "The donation was made anonymously."
+      },
+      {
+        "fr": "Vous pouvez répondre anonymement au questionnaire.",
+        "en": "You can answer the questionnaire anonymously."
+      }
+    ]
+  },
+  {
+    "adverb": "collectivement",
+    "gender": "invariable",
+    "pronunciation": "kɔlɛktivmɑ̃",
+    "english_approximate_pronunciation": "ko-lek-teev-mon",
+    "meaning_en": "collectively",
+    "examples": [
+      {
+        "fr": "La décision a été prise collectivement.",
+        "en": "The decision was taken collectively."
+      },
+      {
+        "fr": "Ils travaillent collectivement au projet.",
+        "en": "They work collectively on the project."
+      }
+    ]
+  },
+  {
+    "adverb": "individuellement",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃dividɥɛlmɑ̃",
+    "english_approximate_pronunciation": "an-dee-vee-dyu-el-mon",
+    "meaning_en": "individually",
+    "examples": [
+      {
+        "fr": "Les élèves seront évalués individuellement.",
+        "en": "The pupils will be assessed individually."
+      },
+      {
+        "fr": "Chacun est responsable individuellement.",
+        "en": "Each person is individually responsible."
+      }
+    ]
+  },
+  {
+    "adverb": "unanimement",
+    "gender": "invariable",
+    "pronunciation": "ynanimɑ̃",
+    "english_approximate_pronunciation": "yu-na-nee-mon",
+    "meaning_en": "unanimously",
+    "examples": [
+      {
+        "fr": "La proposition a été acceptée unanimement.",
+        "en": "The proposal was accepted unanimously."
+      },
+      {
+        "fr": "Ils ont unanimement soutenu le projet.",
+        "en": "They unanimously supported the project."
+      }
+    ]
+  },
+  {
+    "adverb": "réciproquement",
+    "gender": "invariable",
+    "pronunciation": "ʁesipʁɔkmɑ̃",
+    "english_approximate_pronunciation": "ray-see-prok-mon",
+    "meaning_en": "reciprocally; mutually",
+    "examples": [
+      {
+        "fr": "Ils se respectent réciproquement.",
+        "en": "They respect each other reciprocally."
+      },
+      {
+        "fr": "Les deux États se reconnaissent réciproquement.",
+        "en": "The two states recognise each other mutually."
+      }
+    ]
+  },
+  {
+    "adverb": "idéalement",
+    "gender": "invariable",
+    "pronunciation": "idealəmɑ̃",
+    "english_approximate_pronunciation": "ee-day-al-mon",
+    "meaning_en": "ideally",
+    "examples": [
+      {
+        "fr": "Idéalement, il faudrait plus de temps.",
+        "en": "Ideally, we would need more time."
+      },
+      {
+        "fr": "Idéalement, on partirait en semaine.",
+        "en": "Ideally, we would go during the week."
+      }
+    ]
+  },
+  {
+    "adverb": "passivement",
+    "gender": "invariable",
+    "pronunciation": "pasivmɑ̃",
+    "english_approximate_pronunciation": "pa-seev-mon",
+    "meaning_en": "passively",
+    "examples": [
+      {
+        "fr": "Il observe passivement la scène.",
+        "en": "He passively observes the scene."
+      },
+      {
+        "fr": "Ils ont accepté passivement la décision.",
+        "en": "They passively accepted the decision."
+      }
+    ]
+  },
+  {
+    "adverb": "activement",
+    "gender": "invariable",
+    "pronunciation": "aktivmɑ̃",
+    "english_approximate_pronunciation": "ak-teev-mon",
+    "meaning_en": "actively",
+    "examples": [
+      {
+        "fr": "Elle participe activement au projet.",
+        "en": "She actively takes part in the project."
+      },
+      {
+        "fr": "Ils recherchent activement un emploi.",
+        "en": "They are actively looking for a job."
+      }
+    ]
+  },
+  {
+    "adverb": "momentanément",
+    "gender": "invariable",
+    "pronunciation": "mɔmɑ̃tanemɑ̃",
+    "english_approximate_pronunciation": "mo-man-ta-nay-mon",
+    "meaning_en": "momentarily; for the moment",
+    "examples": [
+      {
+        "fr": "Le service est momentanément indisponible.",
+        "en": "The service is momentarily unavailable."
+      },
+      {
+        "fr": "Je suis momentanément occupé.",
+        "en": "I am busy for the moment."
+      }
+    ]
+  },
+  {
+    "adverb": "périodiquement",
+    "gender": "invariable",
+    "pronunciation": "peʁjɔdikmɑ̃",
+    "english_approximate_pronunciation": "pay-ree-oh-deek-man",
+    "meaning_en": "periodically",
+    "examples": [
+      {
+        "fr": "Nous contrôlons périodiquement les installations.",
+        "en": "We periodically check the facilities."
+      },
+      {
+        "fr": "Les données sont mises à jour périodiquement.",
+        "en": "The data is updated periodically."
+      }
+    ]
+  },
+  {
+    "adverb": "précipitamment",
+    "gender": "invariable",
+    "pronunciation": "pʁesipitamɑ̃",
+    "english_approximate_pronunciation": "pray-see-pee-ta-mon",
+    "meaning_en": "hastily; in a rush",
+    "examples": [
+      {
+        "fr": "Il est parti précipitamment.",
+        "en": "He left in a rush."
+      },
+      {
+        "fr": "Ne réponds pas trop précipitamment.",
+        "en": "Don't answer too hastily."
+      }
+    ]
+  },
+  {
+    "adverb": "librement",
+    "gender": "invariable",
+    "pronunciation": "libʁəmɑ̃",
+    "english_approximate_pronunciation": "lee-bruh-mon",
+    "meaning_en": "freely",
+    "examples": [
+      {
+        "fr": "Chacun s'exprime librement.",
+        "en": "Everyone speaks freely."
+      },
+      {
+        "fr": "On peut circuler librement ici.",
+        "en": "You can move about freely here."
+      }
+    ]
+  },
+  {
+    "adverb": "comment",
+    "gender": "invariable",
+    "pronunciation": "kɔmɑ̃",
+    "english_approximate_pronunciation": "koh-mon",
+    "meaning_en": "how",
+    "examples": [
+      {
+        "fr": "Comment fonctionne cette machine ?",
+        "en": "How does this machine work?"
+      },
+      {
+        "fr": "Je ne sais pas comment répondre.",
+        "en": "I don't know how to answer."
+      }
+    ]
+  },
+  {
+    "adverb": "pourquoi",
+    "gender": "invariable",
+    "pronunciation": "puʁkwa",
+    "english_approximate_pronunciation": "poor-kwah",
+    "meaning_en": "why",
+    "examples": [
+      {
+        "fr": "Pourquoi es-tu en retard ?",
+        "en": "Why are you late?"
+      },
+      {
+        "fr": "Explique-moi pourquoi tu refuses.",
+        "en": "Explain to me why you refuse."
+      }
+    ]
+  },
+  {
+    "adverb": "quand",
+    "gender": "invariable",
+    "pronunciation": "kɑ̃",
+    "english_approximate_pronunciation": "kan (nasal)",
+    "meaning_en": "when",
+    "examples": [
+      {
+        "fr": "Tu pars quand ?",
+        "en": "When are you leaving?"
+      },
+      {
+        "fr": "Je ne sais pas quand il reviendra.",
+        "en": "I don't know when he will come back."
+      }
+    ]
+  },
+  {
+    "adverb": "où",
+    "gender": "invariable",
+    "pronunciation": "u",
+    "english_approximate_pronunciation": "oo",
+    "meaning_en": "where",
+    "examples": [
+      {
+        "fr": "Où habites-tu ?",
+        "en": "Where do you live?"
+      },
+      {
+        "fr": "Je me demande où ils sont allés.",
+        "en": "I wonder where they went."
+      }
+    ]
+  },
+  {
+    "adverb": "combien",
+    "gender": "invariable",
+    "pronunciation": "kɔ̃bjɛ̃",
+    "english_approximate_pronunciation": "kon-byen",
+    "meaning_en": "how much; how many",
+    "examples": [
+      {
+        "fr": "Combien ça coûte ?",
+        "en": "How much does that cost?"
+      },
+      {
+        "fr": "Combien de temps as-tu ?",
+        "en": "How much time do you have?"
+      }
+    ]
+  },
+  {
+    "adverb": "d'habitude",
+    "gender": "invariable",
+    "pronunciation": "dabityd",
+    "english_approximate_pronunciation": "da-bee-tyood",
+    "meaning_en": "usually; as usual",
+    "examples": [
+      {
+        "fr": "D'habitude, je prends le bus.",
+        "en": "Usually, I take the bus."
+      },
+      {
+        "fr": "Il arrive à l'heure, d'habitude.",
+        "en": "He arrives on time, as usual."
+      }
+    ]
+  },
+  {
+    "adverb": "de temps en temps",
+    "gender": "invariable",
+    "pronunciation": "də tɑ̃zɑ̃ tɑ̃",
+    "english_approximate_pronunciation": "duh tonz-an ton",
+    "meaning_en": "from time to time",
+    "examples": [
+      {
+        "fr": "Je vais au théâtre de temps en temps.",
+        "en": "I go to the theatre from time to time."
+      },
+      {
+        "fr": "Nous sortons de temps en temps au restaurant.",
+        "en": "We go out to a restaurant from time to time."
+      }
+    ]
+  },
+  {
+    "adverb": "tout le temps",
+    "gender": "invariable",
+    "pronunciation": "tul tɑ̃",
+    "english_approximate_pronunciation": "too luh ton",
+    "meaning_en": "all the time",
+    "examples": [
+      {
+        "fr": "Il se plaint tout le temps.",
+        "en": "He complains all the time."
+      },
+      {
+        "fr": "Je pense à toi tout le temps.",
+        "en": "I think about you all the time."
+      }
+    ]
+  },
+  {
+    "adverb": "à jamais",
+    "gender": "invariable",
+    "pronunciation": "a ʒamɛ",
+    "english_approximate_pronunciation": "ah zha-may",
+    "meaning_en": "for ever; never again (context-dependent)",
+    "examples": [
+      {
+        "fr": "Ce jour restera gravé à jamais.",
+        "en": "That day will remain engraved for ever."
+      },
+      {
+        "fr": "Ils ont quitté le pays à jamais.",
+        "en": "They left the country for good."
+      }
+    ]
+  },
+  {
+    "adverb": "pour toujours",
+    "gender": "invariable",
+    "pronunciation": "puʁ tuʒuʁ",
+    "english_approximate_pronunciation": "poor too-zhoor",
+    "meaning_en": "for ever",
+    "examples": [
+      {
+        "fr": "Je t'aimerai pour toujours.",
+        "en": "I will love you for ever."
+      },
+      {
+        "fr": "Ils ont fermé la boutique pour toujours.",
+        "en": "They closed the shop for ever."
+      }
+    ]
+  },
+  {
+    "adverb": "tout à coup",
+    "gender": "invariable",
+    "pronunciation": "tut a ku",
+    "english_approximate_pronunciation": "toot ah koo",
+    "meaning_en": "suddenly; all of a sudden",
+    "examples": [
+      {
+        "fr": "Tout à coup, la lumière s'est éteinte.",
+        "en": "All of a sudden, the light went out."
+      },
+      {
+        "fr": "Il s'est levé tout à coup.",
+        "en": "He suddenly stood up."
+      }
+    ]
+  },
+  {
+    "adverb": "tout de suite",
+    "gender": "invariable",
+    "pronunciation": "tud sɥit",
+    "english_approximate_pronunciation": "toot duh sweet",
+    "meaning_en": "right away; immediately",
+    "examples": [
+      {
+        "fr": "Viens ici tout de suite.",
+        "en": "Come here right away."
+      },
+      {
+        "fr": "Je reviens tout de suite.",
+        "en": "I'll be back straight away."
+      }
+    ]
+  },
+  {
+    "adverb": "peu à peu",
+    "gender": "invariable",
+    "pronunciation": "pø a pø",
+    "english_approximate_pronunciation": "puh ah puh",
+    "meaning_en": "little by little",
+    "examples": [
+      {
+        "fr": "Peu à peu, il a repris confiance.",
+        "en": "Little by little, he regained confidence."
+      },
+      {
+        "fr": "La salle se remplit peu à peu.",
+        "en": "The room is filling up little by little."
+      }
+    ]
+  },
+  {
+    "adverb": "petit à petit",
+    "gender": "invariable",
+    "pronunciation": "pəti a pəti",
+    "english_approximate_pronunciation": "puh-tee ah puh-tee",
+    "meaning_en": "bit by bit",
+    "examples": [
+      {
+        "fr": "Petit à petit, on y arrive.",
+        "en": "Bit by bit, we get there."
+      },
+      {
+        "fr": "Il a amélioré son français petit à petit.",
+        "en": "He improved his French bit by bit."
+      }
+    ]
+  },
+  {
+    "adverb": "d'un coup",
+    "gender": "invariable",
+    "pronunciation": "dœ̃ ku",
+    "english_approximate_pronunciation": "dun koo",
+    "meaning_en": "in one go; suddenly",
+    "examples": [
+      {
+        "fr": "Il a bu son café d'un coup.",
+        "en": "He drank his coffee in one go."
+      },
+      {
+        "fr": "Tout s'est arrêté d'un coup.",
+        "en": "Everything stopped all at once."
+      }
+    ]
+  },
+  {
+    "adverb": "d'un seul coup",
+    "gender": "invariable",
+    "pronunciation": "dœ̃ sœl ku",
+    "english_approximate_pronunciation": "dun sull koo",
+    "meaning_en": "all at once; in a single go",
+    "examples": [
+      {
+        "fr": "Les invités sont arrivés d'un seul coup.",
+        "en": "The guests all arrived at once."
+      },
+      {
+        "fr": "Il a réglé la facture d'un seul coup.",
+        "en": "He paid the bill in one go."
+      }
+    ]
+  },
+  {
+    "adverb": "devant",
+    "gender": "invariable",
+    "pronunciation": "dəvɑ̃",
+    "english_approximate_pronunciation": "duh-van",
+    "meaning_en": "in front; ahead",
+    "examples": [
+      {
+        "fr": "Il s'est garé devant.",
+        "en": "He parked in front."
+      },
+      {
+        "fr": "Le bus est juste devant.",
+        "en": "The bus is just ahead."
+      }
+    ]
+  },
+  {
+    "adverb": "derrière",
+    "gender": "invariable",
+    "pronunciation": "dɛʁjɛʁ",
+    "english_approximate_pronunciation": "dair-ryair",
+    "meaning_en": "behind",
+    "examples": [
+      {
+        "fr": "La voiture est garée derrière.",
+        "en": "The car is parked behind."
+      },
+      {
+        "fr": "Ne reste pas derrière.",
+        "en": "Don't stay behind."
+      }
+    ]
+  },
+  {
+    "adverb": "au loin",
+    "gender": "invariable",
+    "pronunciation": "o lwɛ̃",
+    "english_approximate_pronunciation": "oh lwang",
+    "meaning_en": "in the distance; far away",
+    "examples": [
+      {
+        "fr": "On voit la mer au loin.",
+        "en": "You can see the sea in the distance."
+      },
+      {
+        "fr": "Des lumières brillent au loin.",
+        "en": "Lights are shining far away."
+      }
+    ]
+  },
+  {
+    "adverb": "à proximité",
+    "gender": "invariable",
+    "pronunciation": "a pʁɔksimitɛ",
+    "english_approximate_pronunciation": "ah prok-see-mee-tay",
+    "meaning_en": "nearby; in the vicinity",
+    "examples": [
+      {
+        "fr": "Il n'y a pas de station à proximité.",
+        "en": "There is no station nearby."
+      },
+      {
+        "fr": "Un café se trouve à proximité.",
+        "en": "There is a café in the vicinity."
+      }
+    ]
+  },
+  {
+    "adverb": "à l'intérieur",
+    "gender": "invariable",
+    "pronunciation": "a lɛ̃teʁjœʁ",
+    "english_approximate_pronunciation": "ah lan-tair-yeur",
+    "meaning_en": "inside",
+    "examples": [
+      {
+        "fr": "Il fait chaud à l'intérieur.",
+        "en": "It is warm inside."
+      },
+      {
+        "fr": "Restez à l'intérieur, s'il vous plaît.",
+        "en": "Please stay inside."
+      }
+    ]
+  },
+  {
+    "adverb": "à l'extérieur",
+    "gender": "invariable",
+    "pronunciation": "a lɛkstɛʁjœʁ",
+    "english_approximate_pronunciation": "ah leks-tair-yeur",
+    "meaning_en": "outside",
+    "examples": [
+      {
+        "fr": "Les enfants jouent à l'extérieur.",
+        "en": "The children are playing outside."
+      },
+      {
+        "fr": "Il fait froid à l'extérieur.",
+        "en": "It is cold outside."
+      }
+    ]
+  },
+  {
+    "adverb": "en douceur",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃ dusœʁ",
+    "english_approximate_pronunciation": "on doo-sur",
+    "meaning_en": "gently; softly",
+    "examples": [
+      {
+        "fr": "Ferme la porte en douceur.",
+        "en": "Close the door gently."
+      },
+      {
+        "fr": "La musique commence en douceur.",
+        "en": "The music starts softly."
+      }
+    ]
+  },
+  {
+    "adverb": "en silence",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃ silɑ̃s",
+    "english_approximate_pronunciation": "on see-lans",
+    "meaning_en": "in silence; silently",
+    "examples": [
+      {
+        "fr": "Ils ont écouté en silence.",
+        "en": "They listened in silence."
+      },
+      {
+        "fr": "Elle est partie en silence.",
+        "en": "She left silently."
+      }
+    ]
+  },
+  {
+    "adverb": "en vain",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃ vɛ̃",
+    "english_approximate_pronunciation": "on vang",
+    "meaning_en": "in vain",
+    "examples": [
+      {
+        "fr": "Il a essayé en vain.",
+        "en": "He tried in vain."
+      },
+      {
+        "fr": "Nous l'avons cherché en vain.",
+        "en": "We looked for him in vain."
+      }
+    ]
+  },
+  {
+    "adverb": "en secret",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃ səkʁɛ",
+    "english_approximate_pronunciation": "on suh-kreh",
+    "meaning_en": "in secret",
+    "examples": [
+      {
+        "fr": "Ils se voient en secret.",
+        "en": "They see each other in secret."
+      },
+      {
+        "fr": "Elle prépare en secret une surprise.",
+        "en": "She is secretly preparing a surprise."
+      }
+    ]
+  },
+  {
+    "adverb": "en retard",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃ ʁətaʁ",
+    "english_approximate_pronunciation": "on ruh-tar",
+    "meaning_en": "late",
+    "examples": [
+      {
+        "fr": "Je suis encore en retard.",
+        "en": "I am late again."
+      },
+      {
+        "fr": "Le train est arrivé en retard.",
+        "en": "The train arrived late."
+      }
+    ]
+  },
+  {
+    "adverb": "à l'heure",
+    "gender": "invariable",
+    "pronunciation": "a lœʁ",
+    "english_approximate_pronunciation": "ah lur",
+    "meaning_en": "on time",
+    "examples": [
+      {
+        "fr": "Il est toujours à l'heure.",
+        "en": "He is always on time."
+      },
+      {
+        "fr": "Le bus n'est pas arrivé à l'heure.",
+        "en": "The bus did not arrive on time."
+      }
+    ]
+  },
+  {
+    "adverb": "à fond",
+    "gender": "invariable",
+    "pronunciation": "a fɔ̃",
+    "english_approximate_pronunciation": "ah fon(g)",
+    "meaning_en": "fully; completely; at full volume/speed",
+    "examples": [
+      {
+        "fr": "Elle travaille à fond.",
+        "en": "She is working flat out."
+      },
+      {
+        "fr": "La musique est à fond.",
+        "en": "The music is at full volume."
+      }
+    ]
+  },
+  {
+    "adverb": "à moitié",
+    "gender": "invariable",
+    "pronunciation": "a mwatje",
+    "english_approximate_pronunciation": "ah mwa-tyay",
+    "meaning_en": "half; halfway",
+    "examples": [
+      {
+        "fr": "Le travail n'est fait qu'à moitié.",
+        "en": "The work is only half done."
+      },
+      {
+        "fr": "Il écoute à moitié.",
+        "en": "He's only half listening."
+      }
+    ]
+  },
+  {
+    "adverb": "à tout prix",
+    "gender": "invariable",
+    "pronunciation": "a tu pʁi",
+    "english_approximate_pronunciation": "ah too pree",
+    "meaning_en": "at all costs",
+    "examples": [
+      {
+        "fr": "Il veut réussir à tout prix.",
+        "en": "He wants to succeed at all costs."
+      },
+      {
+        "fr": "Évite ce problème à tout prix.",
+        "en": "Avoid this problem at all costs."
+      }
+    ]
+  },
+  {
+    "adverb": "à voix basse",
+    "gender": "invariable",
+    "pronunciation": "a vwa bas",
+    "english_approximate_pronunciation": "ah vwah bass",
+    "meaning_en": "in a low voice",
+    "examples": [
+      {
+        "fr": "Ils parlent à voix basse.",
+        "en": "They are speaking in a low voice."
+      },
+      {
+        "fr": "Réponds à voix basse, s'il te plaît.",
+        "en": "Answer in a low voice, please."
+      }
+    ]
+  },
+  {
+    "adverb": "à voix haute",
+    "gender": "invariable",
+    "pronunciation": "a vwa ot",
+    "english_approximate_pronunciation": "ah vwah oat",
+    "meaning_en": "out loud",
+    "examples": [
+      {
+        "fr": "Lis le texte à voix haute.",
+        "en": "Read the text out loud."
+      },
+      {
+        "fr": "Elle pense à voix haute.",
+        "en": "She thinks out loud."
+      }
+    ]
+  },
+  {
+    "adverb": "sans doute",
+    "gender": "invariable",
+    "pronunciation": "sɑ̃ dut",
+    "english_approximate_pronunciation": "son doot",
+    "meaning_en": "probably; no doubt",
+    "examples": [
+      {
+        "fr": "Il viendra, sans doute.",
+        "en": "He will probably come."
+      },
+      {
+        "fr": "Sans doute as-tu raison.",
+        "en": "You are probably right."
+      }
+    ]
+  },
+  {
+    "adverb": "bien sûr",
+    "gender": "invariable",
+    "pronunciation": "bjɛ̃ syʁ",
+    "english_approximate_pronunciation": "byan syr",
+    "meaning_en": "of course",
+    "examples": [
+      {
+        "fr": "Bien sûr, je peux t'aider.",
+        "en": "Of course, I can help you."
+      },
+      {
+        "fr": "Tu viens ce soir ? — Bien sûr.",
+        "en": "Are you coming tonight? — Of course."
+      }
+    ]
+  },
+  {
+    "adverb": "en principe",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃ pʁɛ̃sip",
+    "english_approximate_pronunciation": "on pran-seep",
+    "meaning_en": "in principle",
+    "examples": [
+      {
+        "fr": "En principe, tout est prêt.",
+        "en": "In principle, everything is ready."
+      },
+      {
+        "fr": "En principe, il devrait accepter.",
+        "en": "In principle, he should accept."
+      }
+    ]
+  },
+  {
+    "adverb": "en général",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃ ʒeneʁal",
+    "english_approximate_pronunciation": "on zhay-nay-ral",
+    "meaning_en": "in general; generally",
+    "examples": [
+      {
+        "fr": "En général, il fait doux ici.",
+        "en": "In general, it's mild here."
+      },
+      {
+        "fr": "En général, les gens arrivent à l'heure.",
+        "en": "People usually arrive on time."
+      }
+    ]
+  },
+  {
+    "adverb": "en particulier",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃ paʁtikylje",
+    "english_approximate_pronunciation": "on par-tee-kyu-lyay",
+    "meaning_en": "in particular",
+    "examples": [
+      {
+        "fr": "En particulier, ce point me pose problème.",
+        "en": "This point, in particular, is a problem for me."
+      },
+      {
+        "fr": "Je pense à toi en particulier.",
+        "en": "I am thinking of you in particular."
+      }
+    ]
+  },
+  {
+    "adverb": "en résumé",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃ ʁezɥme",
+    "english_approximate_pronunciation": "on ray-zu-may",
+    "meaning_en": "in summary; to sum up",
+    "examples": [
+      {
+        "fr": "En résumé, tout s'est bien passé.",
+        "en": "To sum up, everything went well."
+      },
+      {
+        "fr": "En résumé, il refuse l'offre.",
+        "en": "In summary, he is refusing the offer."
+      }
+    ]
+  },
+  {
+    "adverb": "en gros",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃ ɡʁo",
+    "english_approximate_pronunciation": "on groh",
+    "meaning_en": "roughly; broadly speaking",
+    "examples": [
+      {
+        "fr": "En gros, le projet est accepté.",
+        "en": "Roughly speaking, the project is accepted."
+      },
+      {
+        "fr": "Explique-moi en gros ce qui s'est passé.",
+        "en": "Explain roughly what happened."
+      }
+    ]
+  },
+  {
+    "adverb": "grosso modo",
+    "gender": "invariable",
+    "pronunciation": "ɡʁoso modo",
+    "english_approximate_pronunciation": "groh-soh moh-doh",
+    "meaning_en": "roughly; more or less",
+    "examples": [
+      {
+        "fr": "Grosso modo, ça devrait coûter mille euros.",
+        "en": "Roughly, it should cost a thousand euros."
+      },
+      {
+        "fr": "Grosso modo, tout le monde est d'accord.",
+        "en": "More or less, everyone agrees."
+      }
+    ]
+  },
+  {
+    "adverb": "n'importe quand",
+    "gender": "invariable",
+    "pronunciation": "nɛ̃pɔʁt kɑ̃",
+    "english_approximate_pronunciation": "nan-port kan",
+    "meaning_en": "anytime",
+    "examples": [
+      {
+        "fr": "Tu peux m'appeler n'importe quand.",
+        "en": "You can call me anytime."
+      },
+      {
+        "fr": "Je suis disponible n'importe quand demain.",
+        "en": "I'm available anytime tomorrow."
+      }
+    ]
+  },
+  {
+    "adverb": "n'importe comment",
+    "gender": "invariable",
+    "pronunciation": "nɛ̃pɔʁt kɔmɑ̃",
+    "english_approximate_pronunciation": "nan-port koh-mon",
+    "meaning_en": "any old way; haphazardly",
+    "examples": [
+      {
+        "fr": "Il a répondu n'importe comment.",
+        "en": "He answered in any old way."
+      },
+      {
+        "fr": "Ne range pas tes affaires n'importe comment.",
+        "en": "Don't put your things away haphazardly."
+      }
+    ]
+  },
+  {
+    "adverb": "n'importe qui",
+    "gender": "invariable",
+    "pronunciation": "nɛ̃pɔʁt ki",
+    "english_approximate_pronunciation": "nan-port kee",
+    "meaning_en": "anyone",
+    "examples": [
+      {
+        "fr": "N'importe qui peut participer.",
+        "en": "Anyone can take part."
+      },
+      {
+        "fr": "Je ne confie pas mes clés à n'importe qui.",
+        "en": "I don't give my keys to just anyone."
+      }
+    ]
+  },
+  {
+    "adverb": "n'importe quoi",
+    "gender": "invariable",
+    "pronunciation": "nɛ̃pɔʁt kwa",
+    "english_approximate_pronunciation": "nan-port kwah",
+    "meaning_en": "anything; nonsense (colloquial)",
+    "examples": [
+      {
+        "fr": "Tu racontes n'importe quoi.",
+        "en": "You're talking nonsense."
+      },
+      {
+        "fr": "On ne peut pas faire n'importe quoi ici.",
+        "en": "You can't just do anything you like here."
+      }
+    ]
+  },
+  {
+    "adverb": "donc",
+    "gender": "invariable",
+    "pronunciation": "dɔ̃",
+    "english_approximate_pronunciation": "donk (nasal n)",
+    "meaning_en": "so; therefore",
+    "examples": [
+      {
+        "fr": "Il pleut, donc nous restons à la maison.",
+        "en": "It is raining, so we are staying at home."
+      },
+      {
+        "fr": "Tu es d'accord, donc on continue.",
+        "en": "You agree, so we carry on."
+      }
+    ]
+  },
+  {
+    "adverb": "sinon",
+    "gender": "invariable",
+    "pronunciation": "sinɔ̃",
+    "english_approximate_pronunciation": "see-non (nasal n)",
+    "meaning_en": "otherwise; if not",
+    "examples": [
+      {
+        "fr": "Dépêche-toi, sinon tu vas être en retard.",
+        "en": "Hurry up, otherwise you will be late."
+      },
+      {
+        "fr": "Écris-le, sinon tu vas l'oublier.",
+        "en": "Write it down, otherwise you will forget it."
+      }
+    ]
+  },
+  {
+    "adverb": "néanmoins",
+    "gender": "invariable",
+    "pronunciation": "neamwɛ̃",
+    "english_approximate_pronunciation": "nay-an-mwang",
+    "meaning_en": "nonetheless; nevertheless",
+    "examples": [
+      {
+        "fr": "Il était fatigué, néanmoins il a fini le travail.",
+        "en": "He was tired, nevertheless he finished the work."
+      },
+      {
+        "fr": "La route est longue, néanmoins le paysage est beau.",
+        "en": "The road is long, nonetheless the scenery is beautiful."
+      }
+    ]
+  },
+  {
+    "adverb": "d'ailleurs",
+    "gender": "invariable",
+    "pronunciation": "dajœʁ",
+    "english_approximate_pronunciation": "dye-yeur",
+    "meaning_en": "besides; incidentally",
+    "examples": [
+      {
+        "fr": "Je n'ai pas le temps, d'ailleurs je n'ai pas envie.",
+        "en": "I do not have the time; besides, I do not feel like it."
+      },
+      {
+        "fr": "C'est trop cher et, d'ailleurs, inutile.",
+        "en": "It is too expensive and, incidentally, unnecessary."
+      }
+    ]
+  },
+  {
+    "adverb": "par contre",
+    "gender": "invariable",
+    "pronunciation": "paʁ kɔ̃tʁ",
+    "english_approximate_pronunciation": "par kon-tr (nasal n)",
+    "meaning_en": "on the other hand",
+    "examples": [
+      {
+        "fr": "La chambre est petite, par contre elle est lumineuse.",
+        "en": "The room is small; on the other hand, it is bright."
+      },
+      {
+        "fr": "Je n'aime pas ce film, par contre la musique est superbe.",
+        "en": "I do not like this film; on the other hand, the music is superb."
+      }
+    ]
+  },
+  {
+    "adverb": "en revanche",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃ ʁəvɑ̃ʃ",
+    "english_approximate_pronunciation": "on ruh-vansh",
+    "meaning_en": "conversely; in contrast",
+    "examples": [
+      {
+        "fr": "Je ne peux pas venir ce soir, en revanche je suis libre demain.",
+        "en": "I cannot come this evening; in contrast, I am free tomorrow."
+      },
+      {
+        "fr": "Il travaille peu, en revanche il est très efficace.",
+        "en": "He does not work many hours; in contrast, he is very efficient."
+      }
+    ]
+  },
+  {
+    "adverb": "du coup",
+    "gender": "invariable",
+    "pronunciation": "dy ku",
+    "english_approximate_pronunciation": "dyu koo",
+    "meaning_en": "so; as a result (informal)",
+    "examples": [
+      {
+        "fr": "Il a raté son train, du coup il arrive plus tard.",
+        "en": "He missed his train, so he is arriving later."
+      },
+      {
+        "fr": "Il pleuvait, du coup on est restés au café.",
+        "en": "It was raining, so we stayed in the café."
+      }
+    ]
+  },
+  {
+    "adverb": "bref",
+    "gender": "invariable",
+    "pronunciation": "bʁɛf",
+    "english_approximate_pronunciation": "bref",
+    "meaning_en": "in short; anyway",
+    "examples": [
+      {
+        "fr": "Bref, tout s'est bien passé.",
+        "en": "In short, everything went well."
+      },
+      {
+        "fr": "Bref, on verra demain.",
+        "en": "Anyway, we shall see tomorrow."
+      }
+    ]
+  },
+  {
+    "adverb": "quand même",
+    "gender": "invariable",
+    "pronunciation": "kɑ̃ mɛm",
+    "english_approximate_pronunciation": "kan mem (nasal n)",
+    "meaning_en": "all the same; still",
+    "examples": [
+      {
+        "fr": "Il fait froid, mais je vais sortir quand même.",
+        "en": "It is cold, but I am going out all the same."
+      },
+      {
+        "fr": "Tu exagères quand même un peu.",
+        "en": "You are still exaggerating a bit."
+      }
+    ]
+  },
+  {
+    "adverb": "tout de même",
+    "gender": "invariable",
+    "pronunciation": "tu də mɛm",
+    "english_approximate_pronunciation": "too duh mem",
+    "meaning_en": "all the same; nevertheless",
+    "examples": [
+      {
+        "fr": "C'est cher, mais je vais l'acheter tout de même.",
+        "en": "It is expensive, but I will buy it nevertheless."
+      },
+      {
+        "fr": "Tu aurais pu prévenir, tout de même.",
+        "en": "You might at least have warned me, you know."
+      }
+    ]
+  },
+  {
+    "adverb": "tout à fait",
+    "gender": "invariable",
+    "pronunciation": "tu ta fɛ",
+    "english_approximate_pronunciation": "too ta feh",
+    "meaning_en": "completely; absolutely; exactly",
+    "examples": [
+      {
+        "fr": "Je suis tout à fait d'accord avec toi.",
+        "en": "I completely agree with you."
+      },
+      {
+        "fr": "C'est tout à fait normal.",
+        "en": "That is absolutely normal."
+      }
+    ]
+  },
+  {
+    "adverb": "à peu près",
+    "gender": "invariable",
+    "pronunciation": "a pø pʁɛ",
+    "english_approximate_pronunciation": "ah puh preh",
+    "meaning_en": "roughly; about",
+    "examples": [
+      {
+        "fr": "Ils étaient à peu près cinquante.",
+        "en": "There were about fifty of them."
+      },
+      {
+        "fr": "J'ai compris à peu près l'idée.",
+        "en": "I more or less understood the idea."
+      }
+    ]
+  },
+  {
+    "adverb": "drôlement",
+    "gender": "invariable",
+    "pronunciation": "dʁoləmɑ̃",
+    "english_approximate_pronunciation": "dro-leu-mon",
+    "meaning_en": "really; jolly (colloquial intensifier)",
+    "examples": [
+      {
+        "fr": "C'est drôlement intéressant, ton projet.",
+        "en": "Your project is really interesting."
+      },
+      {
+        "fr": "Il fait drôlement froid ce matin.",
+        "en": "It is jolly cold this morning."
+      }
+    ]
+  },
+  {
+    "adverb": "terriblement",
+    "gender": "invariable",
+    "pronunciation": "teʁibləmɑ̃",
+    "english_approximate_pronunciation": "teh-ree-bleu-mon",
+    "meaning_en": "terribly; awfully",
+    "examples": [
+      {
+        "fr": "Je suis terriblement en retard.",
+        "en": "I am terribly late."
+      },
+      {
+        "fr": "Elle s'ennuie terriblement.",
+        "en": "She is terribly bored."
+      }
+    ]
+  },
+  {
+    "adverb": "incroyablement",
+    "gender": "invariable",
+    "pronunciation": "ɛ̃kʁwajabləmɑ̃",
+    "english_approximate_pronunciation": "an-krwa-ya-bleu-mon",
+    "meaning_en": "incredibly",
+    "examples": [
+      {
+        "fr": "Il est incroyablement patient.",
+        "en": "He is incredibly patient."
+      },
+      {
+        "fr": "Le paysage est incroyablement beau.",
+        "en": "The landscape is incredibly beautiful."
+      }
+    ]
+  },
+  {
+    "adverb": "affreusement",
+    "gender": "invariable",
+    "pronunciation": "afʁøzmɑ̃",
+    "english_approximate_pronunciation": "af-ruh-zuh-mon",
+    "meaning_en": "awfully; dreadfully",
+    "examples": [
+      {
+        "fr": "Je me sens affreusement fatigué.",
+        "en": "I feel dreadfully tired."
+      },
+      {
+        "fr": "Ils se sont affreusement trompés.",
+        "en": "They were awfully mistaken."
+      }
+    ]
+  },
+  {
+    "adverb": "horriblement",
+    "gender": "invariable",
+    "pronunciation": "ɔʁibləmɑ̃",
+    "english_approximate_pronunciation": "o-ree-bleu-mon",
+    "meaning_en": "horribly",
+    "examples": [
+      {
+        "fr": "Il a été horriblement blessé.",
+        "en": "He was horribly injured."
+      },
+      {
+        "fr": "Ce film est horriblement ennuyeux.",
+        "en": "This film is horribly boring."
+      }
+    ]
+  },
+  {
+    "adverb": "magnifiquement",
+    "gender": "invariable",
+    "pronunciation": "maɲifikmɑ̃",
+    "english_approximate_pronunciation": "mag-nee-feek-mon",
+    "meaning_en": "magnificently; beautifully",
+    "examples": [
+      {
+        "fr": "Le château est magnifiquement restauré.",
+        "en": "The castle is magnificently restored."
+      },
+      {
+        "fr": "Elle chante magnifiquement.",
+        "en": "She sings beautifully."
+      }
+    ]
+  },
+  {
+    "adverb": "délicatement",
+    "gender": "invariable",
+    "pronunciation": "delikatmɑ̃",
+    "english_approximate_pronunciation": "day-lee-ka-mon",
+    "meaning_en": "delicately; gently",
+    "examples": [
+      {
+        "fr": "Elle pose délicatement la tasse sur la table.",
+        "en": "She gently puts the cup on the table."
+      },
+      {
+        "fr": "Le sujet doit être abordé délicatement.",
+        "en": "The subject must be approached delicately."
+      }
+    ]
+  },
+  {
+    "adverb": "grossièrement",
+    "gender": "invariable",
+    "pronunciation": "ɡʁosjɛʁəmɑ̃",
+    "english_approximate_pronunciation": "groh-syeh-ruh-mon",
+    "meaning_en": "roughly; rudely",
+    "examples": [
+      {
+        "fr": "Il a répondu grossièrement au client.",
+        "en": "He answered the customer rudely."
+      },
+      {
+        "fr": "On peut grossièrement estimer le coût.",
+        "en": "We can roughly estimate the cost."
+      }
+    ]
+  },
+  {
+    "adverb": "silencieusement",
+    "gender": "invariable",
+    "pronunciation": "silɑ̃sjøzmɑ̃",
+    "english_approximate_pronunciation": "see-lon-syuhz-mon",
+    "meaning_en": "silently",
+    "examples": [
+      {
+        "fr": "Elle est sortie silencieusement de la pièce.",
+        "en": "She left the room silently."
+      },
+      {
+        "fr": "Les spectateurs regardaient silencieusement.",
+        "en": "The spectators watched in silence."
+      }
+    ]
+  },
+  {
+    "adverb": "aléatoirement",
+    "gender": "invariable",
+    "pronunciation": "aleatwaʁmɑ̃",
+    "english_approximate_pronunciation": "ah-lay-a-twar-mon",
+    "meaning_en": "randomly",
+    "examples": [
+      {
+        "fr": "Les numéros sont tirés aléatoirement.",
+        "en": "The numbers are drawn randomly."
+      },
+      {
+        "fr": "Les questions apparaissent aléatoirement à l'écran.",
+        "en": "The questions appear randomly on the screen."
+      }
+    ]
+  },
+  {
+    "adverb": "longuement",
+    "gender": "invariable",
+    "pronunciation": "lɔ̃gmɑ̃",
+    "english_approximate_pronunciation": "long-mon (nasal n)",
+    "meaning_en": "at length; for a long time",
+    "examples": [
+      {
+        "fr": "Ils ont discuté longuement du projet.",
+        "en": "They discussed the project at length."
+      },
+      {
+        "fr": "Je l'ai longuement observé.",
+        "en": "I observed it for a long time."
+      }
+    ]
+  },
+  {
+    "adverb": "méthodiquement",
+    "gender": "invariable",
+    "pronunciation": "metɔdikmɑ̃",
+    "english_approximate_pronunciation": "may-to-deek-mon",
+    "meaning_en": "methodically",
+    "examples": [
+      {
+        "fr": "Elle classe ses dossiers méthodiquement.",
+        "en": "She files her documents methodically."
+      },
+      {
+        "fr": "Ils ont fouillé la maison méthodiquement.",
+        "en": "They searched the house methodically."
+      }
+    ]
+  },
+  {
+    "adverb": "fermement",
+    "gender": "invariable",
+    "pronunciation": "fɛʁmɑ̃",
+    "english_approximate_pronunciation": "fair-mon",
+    "meaning_en": "firmly",
+    "examples": [
+      {
+        "fr": "Il s'est opposé fermement à la décision.",
+        "en": "He firmly opposed the decision."
+      },
+      {
+        "fr": "Tiens la corde fermement.",
+        "en": "Hold the rope firmly."
+      }
+    ]
+  },
+  {
+    "adverb": "faiblement",
+    "gender": "invariable",
+    "pronunciation": "fɛbləmɑ̃",
+    "english_approximate_pronunciation": "fay-bleu-mon",
+    "meaning_en": "weakly; faintly",
+    "examples": [
+      {
+        "fr": "La lumière brille faiblement.",
+        "en": "The light is shining faintly."
+      },
+      {
+        "fr": "Il parlait faiblement après l'opération.",
+        "en": "He spoke weakly after the operation."
+      }
+    ]
+  },
+  {
+    "adverb": "lâchement",
+    "gender": "invariable",
+    "pronunciation": "laʃmɑ̃",
+    "english_approximate_pronunciation": "lash-mon",
+    "meaning_en": "cowardly; in a cowardly way",
+    "examples": [
+      {
+        "fr": "Il est parti lâchement sans prévenir.",
+        "en": "He left in a cowardly way without saying anything."
+      },
+      {
+        "fr": "Ils l'ont abandonné lâchement.",
+        "en": "They abandoned him cowardly."
+      }
+    ]
+  },
+  {
+    "adverb": "inutilement",
+    "gender": "invariable",
+    "pronunciation": "inytilmɑ̃",
+    "english_approximate_pronunciation": "ee-nyu-teel-mon",
+    "meaning_en": "needlessly; uselessly",
+    "examples": [
+      {
+        "fr": "Tu t'inquiètes inutilement.",
+        "en": "You are worrying needlessly."
+      },
+      {
+        "fr": "Il a dépensé de l'argent inutilement.",
+        "en": "He spent money for no good reason."
+      }
+    ]
+  },
+  {
+    "adverb": "guère",
+    "gender": "invariable",
+    "pronunciation": "ɡɛʁ",
+    "english_approximate_pronunciation": "gair",
+    "meaning_en": "hardly; scarcely",
+    "examples": [
+      {
+        "fr": "Il n'y a guère de solutions.",
+        "en": "There are hardly any solutions."
+      },
+      {
+        "fr": "Je ne sors guère le soir.",
+        "en": "I hardly ever go out in the evening."
+      }
+    ]
+  },
+  {
+    "adverb": "aucunement",
+    "gender": "invariable",
+    "pronunciation": "okynmɑ̃",
+    "english_approximate_pronunciation": "oh-keun-mon",
+    "meaning_en": "in no way; not at all",
+    "examples": [
+      {
+        "fr": "Je ne suis aucunement surpris.",
+        "en": "I am not at all surprised."
+      },
+      {
+        "fr": "Cela ne m'intéresse aucunement.",
+        "en": "That does not interest me in the slightest."
+      }
+    ]
+  },
+  {
+    "adverb": "nullement",
+    "gender": "invariable",
+    "pronunciation": "nylmɑ̃",
+    "english_approximate_pronunciation": "nyul-mon",
+    "meaning_en": "not at all; in no way (formal)",
+    "examples": [
+      {
+        "fr": "Vous n'êtes nullement obligé de répondre.",
+        "en": "You are in no way obliged to answer."
+      },
+      {
+        "fr": "Je ne suis nullement contre cette idée.",
+        "en": "I am not at all opposed to this idea."
+      }
+    ]
+  },
+  {
+    "adverb": "tantôt",
+    "gender": "invariable",
+    "pronunciation": "tɑ̃to",
+    "english_approximate_pronunciation": "tan-to (nasal n)",
+    "meaning_en": "sometimes; at one moment ... at another",
+    "examples": [
+      {
+        "fr": "Il est tantôt joyeux, tantôt mélancolique.",
+        "en": "He is sometimes cheerful, sometimes melancholic."
+      },
+      {
+        "fr": "Le temps est changeant : tantôt soleil, tantôt pluie.",
+        "en": "The weather is changeable: now sun, now rain."
+      }
+    ]
+  },
+  {
+    "adverb": "ci-dessous",
+    "gender": "invariable",
+    "pronunciation": "si dəsu",
+    "english_approximate_pronunciation": "see duh-soo",
+    "meaning_en": "below; hereunder",
+    "examples": [
+      {
+        "fr": "Vous trouverez ci-dessous la liste complète.",
+        "en": "You will find the complete list below."
+      },
+      {
+        "fr": "Les réponses sont indiquées ci-dessous.",
+        "en": "The answers are shown below."
+      }
+    ]
+  },
+  {
+    "adverb": "ci-dessus",
+    "gender": "invariable",
+    "pronunciation": "si dəsy",
+    "english_approximate_pronunciation": "see duh-sue",
+    "meaning_en": "above; hereabove",
+    "examples": [
+      {
+        "fr": "Les règles sont précisées ci-dessus.",
+        "en": "The rules are set out above."
+      },
+      {
+        "fr": "Comme indiqué ci-dessus, l'entrée est gratuite.",
+        "en": "As indicated above, admission is free."
+      }
+    ]
+  },
+  {
+    "adverb": "à droite",
+    "gender": "invariable",
+    "pronunciation": "a dʁwat",
+    "english_approximate_pronunciation": "ah drwaht",
+    "meaning_en": "to the right; on the right",
+    "examples": [
+      {
+        "fr": "Tournez à droite après le feu.",
+        "en": "Turn right after the traffic lights."
+      },
+      {
+        "fr": "Le musée se trouve à droite de l'église.",
+        "en": "The museum is to the right of the church."
+      }
+    ]
+  },
+  {
+    "adverb": "à gauche",
+    "gender": "invariable",
+    "pronunciation": "a ɡoʃ",
+    "english_approximate_pronunciation": "ah gosh",
+    "meaning_en": "to the left; on the left",
+    "examples": [
+      {
+        "fr": "La pharmacie est juste à gauche.",
+        "en": "The chemist's is just on the left."
+      },
+      {
+        "fr": "Regarde à gauche avant de traverser.",
+        "en": "Look to the left before crossing."
+      }
+    ]
+  },
+  {
+    "adverb": "au-dessus",
+    "gender": "invariable",
+    "pronunciation": "o dəsy",
+    "english_approximate_pronunciation": "oh duh-sue",
+    "meaning_en": "above; over",
+    "examples": [
+      {
+        "fr": "L'avion passait au-dessus de la ville.",
+        "en": "The plane was flying above the town."
+      },
+      {
+        "fr": "Il a accroché le tableau au-dessus du lit.",
+        "en": "He hung the picture above the bed."
+      }
+    ]
+  },
+  {
+    "adverb": "au-dessous",
+    "gender": "invariable",
+    "pronunciation": "o dəsu",
+    "english_approximate_pronunciation": "oh duh-soo",
+    "meaning_en": "below; underneath",
+    "examples": [
+      {
+        "fr": "Il fait plus frais au-dessous des arbres.",
+        "en": "It is cooler underneath the trees."
+      },
+      {
+        "fr": "Le chat se cache au-dessous du canapé.",
+        "en": "The cat is hiding underneath the sofa."
+      }
+    ]
+  },
+  {
+    "adverb": "à côté",
+    "gender": "invariable",
+    "pronunciation": "a kote",
+    "english_approximate_pronunciation": "ah koh-tay",
+    "meaning_en": "next to; beside",
+    "examples": [
+      {
+        "fr": "Il habite à côté de chez nous.",
+        "en": "He lives next door to us."
+      },
+      {
+        "fr": "Assieds-toi à côté de moi.",
+        "en": "Sit down next to me."
+      }
+    ]
+  },
+  {
+    "adverb": "au centre",
+    "gender": "invariable",
+    "pronunciation": "o sɑ̃tʁ",
+    "english_approximate_pronunciation": "oh san-tr (nasal n)",
+    "meaning_en": "in the centre",
+    "examples": [
+      {
+        "fr": "La fontaine se trouve au centre de la place.",
+        "en": "The fountain is in the centre of the square."
+      },
+      {
+        "fr": "Mets la table au centre de la pièce.",
+        "en": "Put the table in the centre of the room."
+      }
+    ]
+  },
+  {
+    "adverb": "au milieu",
+    "gender": "invariable",
+    "pronunciation": "o miljø",
+    "english_approximate_pronunciation": "oh mee-lyeu",
+    "meaning_en": "in the middle",
+    "examples": [
+      {
+        "fr": "Il s'est arrêté au milieu de la rue.",
+        "en": "He stopped in the middle of the street."
+      },
+      {
+        "fr": "Le livre est posé au milieu de la table.",
+        "en": "The book is placed in the middle of the table."
+      }
+    ]
+  },
+  {
+    "adverb": "antérieurement",
+    "gender": "invariable",
+    "pronunciation": "ɑ̃teʁjœʁmɑ̃",
+    "english_approximate_pronunciation": "an-tair-yeur-mon",
+    "meaning_en": "previously; earlier (formal)",
+    "examples": [
+      {
+        "fr": "Comme indiqué antérieurement, les places sont limitées.",
+        "en": "As stated previously, places are limited."
+      },
+      {
+        "fr": "Antérieurement, il travaillait à Paris.",
+        "en": "Previously, he worked in Paris."
+      }
+    ]
+  },
+  {
+    "adverb": "postérieurement",
+    "gender": "invariable",
+    "pronunciation": "pɔsteʁjœʁmɑ̃",
+    "english_approximate_pronunciation": "pos-tair-yeur-mon",
+    "meaning_en": "subsequently; later (formal)",
+    "examples": [
+      {
+        "fr": "Les détails seront fournis postérieurement.",
+        "en": "The details will be provided later."
+      },
+      {
+        "fr": "Ce point a été ajouté postérieurement.",
+        "en": "This point was added subsequently."
+      }
+    ]
+  },
+  {
+    "adverb": "juridiquement",
+    "gender": "invariable",
+    "pronunciation": "ʒyʁidikmɑ̃",
+    "english_approximate_pronunciation": "zhu-ree-deek-mon",
+    "meaning_en": "legally; from a legal point of view",
+    "examples": [
+      {
+        "fr": "Juridiquement, le contrat est valable.",
+        "en": "Legally, the contract is valid."
+      },
+      {
+        "fr": "La situation est compliquée juridiquement.",
+        "en": "The situation is legally complicated."
+      }
+    ]
+  },
+  {
+    "adverb": "éthiquement",
+    "gender": "invariable",
+    "pronunciation": "etikmɑ̃",
+    "english_approximate_pronunciation": "eh-teek-mon",
+    "meaning_en": "ethically",
+    "examples": [
+      {
+        "fr": "Ce choix est difficile à justifier éthiquement.",
+        "en": "This choice is hard to justify ethically."
+      },
+      {
+        "fr": "Éthiquement, il faudrait refuser cette proposition.",
+        "en": "Ethically, we ought to refuse this proposal."
+      }
+    ]
+  },
+  {
+    "adverb": "esthétiquement",
+    "gender": "invariable",
+    "pronunciation": "ɛstetikmɑ̃",
+    "english_approximate_pronunciation": "es-tay-tee-kmon",
+    "meaning_en": "aesthetically",
+    "examples": [
+      {
+        "fr": "Le bâtiment est esthétiquement discutable.",
+        "en": "The building is aesthetically debatable."
+      },
+      {
+        "fr": "Esthétiquement, j'aime beaucoup ce tableau.",
+        "en": "Aesthetically, I like this painting a lot."
+      }
+    ]
+  },
+  {
+    "adverb": "ergonomiquement",
+    "gender": "invariable",
+    "pronunciation": "ɛʁɡɔnomikmɑ̃",
+    "english_approximate_pronunciation": "air-go-no-meek-mon",
+    "meaning_en": "ergonomically",
+    "examples": [
+      {
+        "fr": "Le bureau est ergonomiquement bien conçu.",
+        "en": "The office is well designed ergonomically."
+      },
+      {
+        "fr": "Ce siège n'est pas ergonomiquement correct.",
+        "en": "This chair is not ergonomically suitable."
+      }
+    ]
+  },
+  {
+    "adverb": "psychologiquement",
+    "gender": "invariable",
+    "pronunciation": "psikɔlɔʒikmɑ̃",
+    "english_approximate_pronunciation": "psee-ko-lo-zheek-mon",
+    "meaning_en": "psychologically",
+    "examples": [
+      {
+        "fr": "C'est psychologiquement éprouvant.",
+        "en": "It is psychologically exhausting."
+      },
+      {
+        "fr": "Psychologiquement, il se sent mieux.",
+        "en": "Psychologically, he feels better."
+      }
+    ]
+  },
+  {
+    "adverb": "effectivement",
+    "gender": "invariable",
+    "pronunciation": "efɛktivmɑ̃",
+    "english_approximate_pronunciation": "eh-fek-teev-mon",
+    "meaning_en": "indeed; actually; effectively",
+    "examples": [
+      {
+        "fr": "Effectivement, tu avais raison.",
+        "en": "Indeed, you were right."
+      },
+      {
+        "fr": "Le service fonctionne effectivement mieux qu'avant.",
+        "en": "The service does in fact work better than before."
+      }
+    ]
+  },
+  {
+    "adverb": "également",
+    "gender": "invariable",
+    "pronunciation": "egaləmɑ̃",
+    "english_approximate_pronunciation": "ay-gal-uh-mon",
+    "meaning_en": "also; as well; equally",
+    "examples": [
+      {
+        "fr": "Je viendrai, et ma sœur viendra également.",
+        "en": "I will come, and my sister will come as well."
+      },
+      {
+        "fr": "Ce point est également important.",
+        "en": "This point is equally important."
+      }
+    ]
+  }
+]
