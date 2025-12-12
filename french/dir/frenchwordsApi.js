@@ -2,12 +2,12 @@ const ARTICLE_PREFIXES = ["l'", "l’"];
 const DETACHED_ARTICLES = new Set(["le", "la", "les", "un", "une", "des", "l'", "l’"]);
 
 const WORD_FILES = {
-  nouns: 'words/bignounlist.json',
-  pluralNouns: 'words/bignounlist-plural.json',
-  verbs: 'words/BigVerbList.json',
-  adjectives: 'words/adjectivelist.json',
-  adverbs: 'words/adverblist.json',
-  idioms: 'words/bigidiomlist.json'
+  nouns: '../dir/words/bignounlist.json',
+  pluralNouns: '../dir/words/bignounlist-plural.json',
+  verbs: '../dir/words/BigVerbList.json',
+  adjectives: '../dir/words/adjectivelist.json',
+  adverbs: '../dir/words/adverblist.json',
+  idioms: '../dir/words/bigidiomlist.json'
 };
 
 const dataCache = {
@@ -462,7 +462,8 @@ async function preloadFrenchWordData() {
   buildIndex(wordData);
 }
 
-const api = { lookupFrenchWords, preloadFrenchWordData };
+const debug = { parseJsonContent, loadJsonFile, loadWordData };
+const api = { lookupFrenchWords, preloadFrenchWordData, debug };
 
 if (typeof window !== 'undefined') {
   window.frenchWordsApi = api;
