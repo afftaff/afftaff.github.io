@@ -532,7 +532,8 @@
       const ul = document.createElement('ul');
       entries.forEach((val) => {
         const li = document.createElement('li');
-        li.textContent = val;
+        const content = typeof val === 'string' ? val : String(val);
+        li.innerHTML = content;
         ul.appendChild(li);
       });
       return ul;
