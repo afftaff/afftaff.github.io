@@ -306,6 +306,13 @@ function collectSentences(conjugation) {
   return pairs.length ? pairs : null;
 }
 
+function ensureArrayOrNull(value) {
+  if (value === null || value === undefined) return null;
+  const arrayValue = Array.isArray(value) ? value : [value];
+  const filtered = arrayValue.filter(Boolean);
+  return filtered.length ? filtered : null;
+}
+
 function splitMeanings(value) {
   if (!value) return null;
   if (Array.isArray(value)) return value.length ? value : null;
@@ -365,8 +372,8 @@ function formatVerbConjugationMatch(originalText, normalizedWord, match) {
   result.meanings = meaningCandidates.length
     ? meaningCandidates
     : splitMeanings(verb.definitions);
-  result.pronouns = conjugation.pronoun ? [conjugation.pronoun] : null;
-  result.tense = [conjugation.mood, conjugation.tense].filter(Boolean);
+  result.pronouns = ensureArrayOrNull(conjugation.pronoun);
+  result.tense = ensureArrayOrNull([conjugation.mood, conjugation.tense].filter(Boolean));
   result.conjugatedFrom = verb.verb;
   result.conjugatedFromMeaning = splitMeanings(verb.definitions);
   result.exampleSentences = collectSentences(conjugation);

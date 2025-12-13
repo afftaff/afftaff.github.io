@@ -122,6 +122,16 @@
     .flashcard .not-found { color: var(--muted); font-style: italic; }
     .flashcard .sentence-context { background: #f5f7fa; border-radius: 8px; padding: 0.65rem; font-size: 0.95rem; }
 
+    .mini-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; margin-top: 0.75rem; }
+    .mini-card { perspective: 900px; position: relative; cursor: pointer; min-height: 140px; }
+    .mini-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.5s ease; transform-style: preserve-3d; }
+    .mini-card.flipped .mini-card-inner { transform: rotateY(180deg); }
+    .mini-card-face { position: absolute; inset: 0; border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem; background: #fff; backface-visibility: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 0.35rem; }
+    .mini-card-front { background: #eef1f5; color: var(--accent); font-weight: 700; justify-content: center; }
+    .mini-card-back { transform: rotateY(180deg); color: var(--accent); overflow: auto; }
+    .mini-card-back ul { margin: 0; padding-left: 1.1rem; }
+    .mini-card-back p { margin: 0.15rem 0; }
+
     .grade-buttons { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.5rem; }
     .grade-buttons button { width: 100%; }
 
@@ -443,6 +453,7 @@
       if (!currentDeck.queue.length) {
         dom.cardTerm.textContent = 'No cards due';
         dom.cardSubtitle.textContent = '';
+        dom.cardMeanings.className = '';
         dom.cardMeanings.innerHTML = '<p class="not-found">Add more sentences to review.</p>';
         dom.cardContext.textContent = '';
         return;
@@ -452,29 +463,105 @@
       updateDeckProgress();
     }
 
+    function createList(values) {
+      const entries = (Array.isArray(values) ? values : [values]).filter(Boolean);
+      if (!entries.length) return null;
+      const ul = document.createElement('ul');
+      entries.forEach((val) => {
+        const li = document.createElement('li');
+        li.textContent = val;
+        ul.appendChild(li);
+      });
+      return ul;
+    }
+
+    function createExampleList(examples) {
+      const cleaned = (examples || [])
+        .map((pair) => ({
+          french: pair?.french?.trim() || '',
+          english: pair?.english?.trim() || ''
+        }))
+        .filter((pair) => pair.french || pair.english);
+      if (!cleaned.length) return null;
+      const wrapper = document.createElement('div');
+      cleaned.forEach((pair) => {
+        const p = document.createElement('p');
+        if (pair.french) {
+          const fr = document.createElement('strong');
+          fr.textContent = pair.french;
+          p.appendChild(fr);
+        }
+        if (pair.english) {
+          if (pair.french) p.appendChild(document.createTextNode(' — '));
+          const en = document.createElement('span');
+          en.textContent = pair.english;
+          p.appendChild(en);
+        }
+        wrapper.appendChild(p);
+      });
+      return wrapper;
+    }
+
+    function appendMiniCard(container, label, rawValue, renderer) {
+      if (rawValue === null || rawValue === undefined) return;
+      const content = renderer ? renderer(rawValue) : rawValue;
+      if (content === null || content === undefined) return;
+      if (Array.isArray(content) && content.length === 0) return;
+      if (typeof content === 'string' && content.trim() === '') return;
+
+      const miniCard = document.createElement('div');
+      miniCard.className = 'mini-card';
+      const inner = document.createElement('div');
+      inner.className = 'mini-card-inner';
+      miniCard.appendChild(inner);
+
+      const front = document.createElement('div');
+      front.className = 'mini-card-face mini-card-front';
+      front.textContent = label;
+      inner.appendChild(front);
+
+      const back = document.createElement('div');
+      back.className = 'mini-card-face mini-card-back';
+
+      if (content instanceof Node) {
+        back.appendChild(content);
+      } else if (Array.isArray(content)) {
+        const list = createList(content);
+        if (list) back.appendChild(list); else return;
+      } else {
+        back.textContent = content;
+      }
+
+      inner.appendChild(back);
+      miniCard.addEventListener('click', () => miniCard.classList.toggle('flipped'));
+      container.appendChild(miniCard);
+    }
+
     function renderCard(card) {
       dom.cardTerm.textContent = card.display || card.original || '—';
       const parts = [];
       if (card.gender) parts.push(card.gender);
-      if (card.pronouns) parts.push(card.pronouns.join(', '));
-      if (card.tense) parts.push(card.tense.filter(Boolean).join(' · '));
+      if (card.pronouns?.length) parts.push(card.pronouns.join(', '));
+      if (card.tense?.length) parts.push(card.tense.filter(Boolean).join(' · '));
       dom.cardSubtitle.textContent = parts.join(' • ');
 
       dom.cardMeanings.innerHTML = '';
-      if (!card.found) {
-        dom.cardMeanings.innerHTML = '<p class="not-found">Not found in dictionary</p>';
-      } else if (card.meanings?.length) {
-        const ul = document.createElement('ul');
-        card.meanings.forEach(m => { const li = document.createElement('li'); li.textContent = m; ul.appendChild(li); });
-        dom.cardMeanings.appendChild(ul);
-      }
-      if (card.exampleSentences?.length) {
-        card.exampleSentences.slice(0,2).forEach((pair) => {
-          const p = document.createElement('p');
-          p.className = 'subtitle';
-          p.textContent = `${pair.french || ''} ${pair.english ? '— ' + pair.english : ''}`;
-          dom.cardMeanings.appendChild(p);
-        });
+      dom.cardMeanings.className = 'mini-card-grid';
+
+      appendMiniCard(dom.cardMeanings, 'Original Text', card.original || card.originalText || card.display);
+      appendMiniCard(dom.cardMeanings, 'Word', card.word || card.display);
+      appendMiniCard(dom.cardMeanings, 'Meanings', card.meanings, createList);
+      appendMiniCard(dom.cardMeanings, 'Gender', card.gender);
+      appendMiniCard(dom.cardMeanings, 'Pronouns', card.pronouns, createList);
+      appendMiniCard(dom.cardMeanings, 'Tense', card.tense, createList);
+      appendMiniCard(dom.cardMeanings, 'Conjugated From', card.conjugatedFrom);
+      appendMiniCard(dom.cardMeanings, 'Conjugated Meaning', card.conjugatedFromMeaning, createList);
+      appendMiniCard(dom.cardMeanings, 'Example Sentences', card.exampleSentences, createExampleList);
+      appendMiniCard(dom.cardMeanings, 'Found', typeof card.found === 'boolean' ? (card.found ? 'Yes' : 'No') : null);
+
+      if (!dom.cardMeanings.childElementCount) {
+        dom.cardMeanings.classList.remove('mini-card-grid');
+        dom.cardMeanings.innerHTML = '<p class="not-found">No details available.</p>';
       }
       dom.cardContext.textContent = card.sentence || '';
     }
