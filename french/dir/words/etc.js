@@ -297,5 +297,51 @@
     "expression": "car",
     "category": "coordinating conjunction",
     "meaning_en": ["for", "because"]
+  },
+  {
+    "expression": "je",
+    "category": "subject pronoun",
+    "meaning_en": ["I"]
+  },
+  {
+    "expression": "tu",
+    "category": "subject pronoun",
+    "meaning_en": ["you (singular informal)"]
+  },
+  {
+    "expression": "il",
+    "category": "subject pronoun",
+    "meaning_en": ["he", "it (masculine)"]
+  },
+  {
+    "expression": "elle",
+    "category": "subject pronoun",
+    "meaning_en": ["she", "it (feminine)"]
+  },
+  {
+    "expression": "on",
+    "category": "subject pronoun",
+    "meaning_en": ["one", "we (informal)", "people in general"]
+  },
+  {
+    "expression": "nous",
+    "category": "subject pronoun",
+    "meaning_en": ["we"],
+    "notes": "Also used for polite first-person plural." 
+  },
+  {
+    "expression": "vous",
+    "category": "subject pronoun",
+    "meaning_en": ["you (plural or formal singular)"]
+  },
+  {
+    "expression": "ils",
+    "category": "subject pronoun",
+    "meaning_en": ["they (masculine or mixed group)"]
+  },
+  {
+    "expression": "elles",
+    "category": "subject pronoun",
+    "meaning_en": ["they (feminine)"]
   }
 ]

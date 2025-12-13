@@ -39,6 +39,36 @@ const dataCache = {
   index: null
 };
 
+async function fetchWiktionaryMeaning(word) {
+  if (!word || typeof fetch !== 'function') return null;
+
+  const url = `https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(word)}`;
+
+  try {
+    const response = await fetch(url, { headers: { accept: 'application/json' } });
+    if (!response.ok) return null;
+
+    const payload = await response.json();
+    const languageEntries = payload?.fr || payload?.French || [];
+    const definitions = new Set();
+
+    languageEntries.forEach((entry) => {
+      (entry.senses || []).forEach((sense) => {
+        const definition = sense.definition;
+        if (Array.isArray(definition)) {
+          definition.forEach((item) => item && definitions.add(item));
+        } else if (definition) {
+          definitions.add(definition);
+        }
+      });
+    });
+
+    return definitions.size ? Array.from(definitions) : null;
+  } catch (error) {
+    return null;
+  }
+}
+
 function collectNounExamples(entry) {
   const examples = [];
   ['', '_2', '_3'].forEach((suffix) => {
@@ -445,6 +475,14 @@ function formatFunctionWordMatch(originalText, normalizedWord, item) {
   return result;
 }
 
+function formatWiktionaryMatch(originalText, normalizedWord, definitions) {
+  const result = buildResultTemplate(originalText, normalizedWord);
+  result.meanings = definitions || null;
+  result.category = 'wiktionary';
+  result.notes = 'Definition sourced from Wiktionary.';
+  return result;
+}
+
 function createNotFoundResult(originalText, normalizedWord) {
   return {
     originalText,
@@ -538,14 +576,20 @@ async function lookupFrenchWords(text) {
   const tokens = tokenizeInput(text);
   const allResults = [];
 
-  tokens.forEach(({ original, normalized, hasArticle }) => {
+  for (const { original, normalized, hasArticle } of tokens) {
     const matches = findMatchesForWord(normalized, hasArticle, index, original);
+
     if (matches.length === 0) {
+      const wiktionaryMeanings = await fetchWiktionaryMeaning(normalized);
+      if (wiktionaryMeanings?.length) {
+        allResults.push(formatWiktionaryMatch(original, normalized, wiktionaryMeanings));
+        continue;
+      }
       allResults.push(createNotFoundResult(original, normalized));
     } else {
       allResults.push(...matches);
     }
-  });
+  }
 
   return allResults;
 }
