@@ -18,6 +18,29 @@ const dataCache = {
 
 const isBrowser = typeof window !== 'undefined';
 
+function deriveVerbKeys(conjugatedForm) {
+  const normalized = normalizeKey(conjugatedForm || '');
+  if (!normalized) return [];
+
+  const keys = new Set([normalized]);
+
+  const apostropheStripped = normalized.replace(/^[^\s']+'/, '');
+  if (apostropheStripped && apostropheStripped !== normalized) {
+    keys.add(apostropheStripped);
+  }
+
+  const parts = normalized.split(/\s+/).filter(Boolean);
+  if (parts.length > 1) {
+    keys.add(parts.slice(1).join(' '));
+  }
+
+  if (parts.length > 2) {
+    keys.add(parts.slice(2).join(' '));
+  }
+
+  return Array.from(keys).filter(Boolean);
+}
+
 function extractObjectsFromArray(rawContent) {
   let depth = 0;
   let inString = false;
@@ -198,11 +221,14 @@ function buildIndex(wordData) {
     addToMap(verbInfinitiveMap, infinitiveKey, { type: 'verb-infinitive', verb });
 
     (verb.conjugations || []).forEach((conjugation) => {
-      const conjugationKey = normalizeKey(conjugation.conjugated_form || verb.verb);
-      addToMap(verbMap, conjugationKey, {
-        type: 'verb-conjugation',
-        verb,
-        conjugation
+      const keys = deriveVerbKeys(conjugation.conjugated_form || verb.verb);
+
+      keys.forEach((conjugationKey) => {
+        addToMap(verbMap, conjugationKey, {
+          type: 'verb-conjugation',
+          verb,
+          conjugation
+        });
       });
     });
   });
