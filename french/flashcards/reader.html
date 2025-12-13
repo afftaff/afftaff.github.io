@@ -132,6 +132,14 @@
     .mini-card-back ul { margin: 0; padding-left: 1.1rem; }
     .mini-card-back p { margin: 0.15rem 0; }
 
+    .multi-match { display: none; flex-direction: column; gap: 0.35rem; padding: 0.75rem; border: 1px dashed var(--border); border-radius: 10px; background: #f9f7f4; margin: 0.75rem 0; }
+    .multi-match.active { display: flex; }
+    .multi-match .notice { font-weight: 600; color: var(--accent-2); }
+    .multi-match .variant-buttons { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    .multi-match .variant-buttons button { background: #fff; color: var(--accent); border-color: var(--border); }
+    .multi-match .variant-buttons button:hover { border-color: var(--accent); }
+    .multi-match .variant-buttons .variant-position { color: var(--muted); font-size: 0.9rem; }
+
     .grade-buttons { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.5rem; }
     .grade-buttons button { width: 100%; }
 
@@ -182,6 +190,14 @@
         <span class="pill" id="deckLabel">Deck</span>
         <span class="pill" id="deckProgress">0 / 0</span>
       </div>
+      <div class="multi-match" id="multiMatch">
+        <span class="notice" id="multiMatchText">Multiple words matched this spelling.</span>
+        <div class="variant-buttons">
+          <button type="button" id="prevVariant" class="secondary">Previous meaning</button>
+          <button type="button" id="nextVariant" class="secondary">Next meaning</button>
+          <span class="variant-position" id="variantPosition"></span>
+        </div>
+      </div>
       <div class="flashcard" id="flashcard">
         <p class="term" id="cardTerm">—</p>
         <p class="subtitle" id="cardSubtitle"></p>
@@ -218,6 +234,11 @@
       overlay: document.getElementById('overlay'),
       deckLabel: document.getElementById('deckLabel'),
       deckProgress: document.getElementById('deckProgress'),
+      multiMatch: document.getElementById('multiMatch'),
+      multiMatchText: document.getElementById('multiMatchText'),
+      variantPosition: document.getElementById('variantPosition'),
+      prevVariant: document.getElementById('prevVariant'),
+      nextVariant: document.getElementById('nextVariant'),
       flashcard: document.getElementById('flashcard'),
       cardTerm: document.getElementById('cardTerm'),
       cardSubtitle: document.getElementById('cardSubtitle'),
@@ -348,29 +369,44 @@
         const lookup = await window.frenchWordsApi.lookupFrenchWords(sentence);
         const key = sentenceKey(sentence);
         const record = progress[key] || { cards: {}, missingWords: [] };
-        const seen = new Set();
         const missing = [];
+        const grouped = new Map();
+
         lookup.forEach((entry, idx) => {
-          const id = `${key}-${(entry.word || entry.originalText || idx).toLowerCase()}`;
-          if (seen.has(id)) return;
-          seen.add(id);
-          const card = record.cards[id]?.card || {
-            id,
-            display: entry.word || entry.originalText || 'Unknown',
-            original: entry.originalText,
-            meanings: entry.meanings,
-            gender: entry.gender,
-            pronouns: entry.pronouns,
-            tense: entry.tense,
-            conjugatedFrom: entry.conjugatedFrom,
-            conjugatedFromMeaning: entry.conjugatedFromMeaning,
-            exampleSentences: entry.exampleSentences,
-            found: entry.found,
-            sentence
-          };
-          cards.push({ ...card });
-          record.cards[id] = record.cards[id] || { card, state: null };
-          if (!entry.found) missing.push(card.original?.toLowerCase() || card.display.toLowerCase());
+          const displayKey = (entry.word || entry.originalText || entry.original || `${idx}`).toLowerCase();
+          if (!grouped.has(displayKey)) grouped.set(displayKey, []);
+          grouped.get(displayKey).push({ entry, idx });
+        });
+
+        grouped.forEach((entries, displayKey) => {
+          entries.forEach(({ entry, idx }, variantIdx) => {
+            const variantId = `${key}-${displayKey}-${variantIdx}`;
+            const existingCard = record.cards[variantId]?.card;
+            const card = existingCard || {
+              id: variantId,
+              display: entry.word || entry.originalText || 'Unknown',
+              original: entry.originalText,
+              meanings: entry.meanings,
+              gender: entry.gender,
+              pronouns: entry.pronouns,
+              tense: entry.tense,
+              conjugatedFrom: entry.conjugatedFrom,
+              conjugatedFromMeaning: entry.conjugatedFromMeaning,
+              exampleSentences: entry.exampleSentences,
+              found: entry.found,
+              sentence
+            };
+
+            card.groupId = `${key}-${displayKey}`;
+            card.groupIndex = variantIdx + 1;
+            card.groupTotal = entries.length;
+            card.sentence = sentence;
+
+            cards.push({ ...card });
+            record.cards[variantId] = record.cards[variantId] || { card, state: null };
+            record.cards[variantId].card = card;
+            if (!entry.found) missing.push(card.original?.toLowerCase() || card.display.toLowerCase());
+          });
         });
         record.missingWords = Array.from(new Set(missing));
         progress[key] = record;
@@ -451,6 +487,7 @@
 
     function showNextCard() {
       if (!currentDeck.queue.length) {
+        dom.multiMatch.classList.remove('active');
         dom.cardTerm.textContent = 'No cards due';
         dom.cardSubtitle.textContent = '';
         dom.cardMeanings.className = '';
@@ -537,6 +574,41 @@
       container.appendChild(miniCard);
     }
 
+    function getVariantItems(card) {
+      if (!card?.groupId) return [];
+      return currentDeck.queue.filter((item) => item.card.groupId === card.groupId);
+    }
+
+    function switchVariant(card, direction) {
+      const variants = getVariantItems(card).sort((a, b) => (a.card.groupIndex || 0) - (b.card.groupIndex || 0));
+      if (variants.length <= 1) return;
+      const currentIdx = variants.findIndex(item => cardId(item.card) === cardId(card));
+      if (currentIdx === -1) return;
+      const target = variants[(currentIdx + direction + variants.length) % variants.length];
+      const globalIndex = currentDeck.queue.findIndex(item => cardId(item.card) === cardId(target.card));
+      if (globalIndex >= 0) {
+        currentDeck.pointer = globalIndex;
+        showNextCard();
+      }
+    }
+
+    function updateVariantNotice(card) {
+      const hasVariants = (card?.groupTotal || 0) > 1;
+      if (!hasVariants) {
+        dom.multiMatch.classList.remove('active');
+        dom.variantPosition.textContent = '';
+        dom.prevVariant.onclick = null;
+        dom.nextVariant.onclick = null;
+        return;
+      }
+
+      dom.multiMatch.classList.add('active');
+      dom.multiMatchText.textContent = 'Multiple words matched this spelling.';
+      dom.variantPosition.textContent = `Meaning ${card.groupIndex || 1} of ${card.groupTotal}`;
+      dom.prevVariant.onclick = () => switchVariant(card, -1);
+      dom.nextVariant.onclick = () => switchVariant(card, 1);
+    }
+
     function renderCard(card) {
       dom.cardTerm.textContent = card.display || card.original || '—';
       const parts = [];
@@ -564,6 +636,7 @@
         dom.cardMeanings.innerHTML = '<p class="not-found">No details available.</p>';
       }
       dom.cardContext.textContent = card.sentence || '';
+      updateVariantNotice(card);
     }
 
     function gradeCurrent(grade) {

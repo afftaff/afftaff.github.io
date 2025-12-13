@@ -22538,5 +22538,70 @@
     "pronunciation_ipa": "/kaʁt də kʁe.di/",
     "example_en": "Pay by credit card.",
     "example_fr": "Payer par carte de crédit."
+  },
+  {
+    "id": 2301,
+    "english": "time, occasion",
+    "french": "fois",
+    "gender": "feminine",
+    "example_en": "This time, I will stay.",
+    "example_fr": "Cette fois, je resterai."
+  },
+  {
+    "id": 2302,
+    "english": "god",
+    "french": "dieu",
+    "gender": "masculine",
+    "example_en": "They pray to God every evening.",
+    "example_fr": "Ils prient Dieu chaque soir."
+  },
+  {
+    "id": 2303,
+    "english": "need",
+    "french": "besoin",
+    "gender": "masculine",
+    "example_en": "I need help.",
+    "example_fr": "J'ai besoin d'aide."
+  },
+  {
+    "id": 2305,
+    "english": "evening",
+    "french": "soir",
+    "gender": "masculine",
+    "example_en": "In the evening, we have dinner as a family.",
+    "example_fr": "Le soir, nous dînons en famille."
+  },
+  {
+    "id": 2306,
+    "english": "greeting, hi",
+    "french": "salut",
+    "gender": "masculine",
+    "example_en": "Hi, how are you?",
+    "example_fr": "Salut, comment ça va ?"
+  },
+  {
+    "id": 2307,
+    "english": "rest, remainder",
+    "french": "reste",
+    "gender": "masculine",
+    "example_en": "Keep the rest of the cake.",
+    "example_fr": "Garde le reste du gâteau."
+  },
+  {
+    "id": 2308,
+    "english": "love",
+    "french": "amour",
+    "gender": "masculine",
+    "example_en": "Love is powerful.",
+    "example_fr": "L'amour est puissant."
+  },
+  {
+    "id": 2309,
+    "english": "friend",
+    "french": "ami",
+    "gender": "masculine",
+    "example_en": "My friend is coming tonight.",
+    "example_fr": "Mon ami vient ce soir."
   }
+
 ]
