@@ -1,11 +1,13 @@
 [
   {
     "id": 1,
-    "english": "time",
+    "english": "time, weather",
     "french": "temps",
     "gender": "masculine",
     "example_en": "I don't have much time.",
-    "example_fr": "Je n'ai pas beaucoup de temps."
+    "example_fr": "Je n'ai pas beaucoup de temps.",
+    "example_en_2": "The weather is changing quickly.",
+    "example_fr_2": "Le temps change rapidement."
   },
   {
     "id": 2,
@@ -17,11 +19,13 @@
   },
   {
     "id": 3,
-    "english": "way",
+    "english": "way, manner",
     "french": "façon",
     "gender": "feminine",
     "example_en": "I like the way you think.",
-    "example_fr": "J'aime ta façon de penser."
+    "example_fr": "J'aime ta façon de penser.",
+    "example_en_2": "He spoke in a polite manner.",
+    "example_fr_2": "Il a parlé de façon polie."
   },
   {
     "id": 4,
@@ -49,19 +53,23 @@
   },
   {
     "id": 7,
-    "english": "work",
+    "english": "work, job",
     "french": "travail",
     "gender": "masculine",
     "example_en": "I have a lot of work to do.",
-    "example_fr": "J'ai beaucoup de travail à faire."
+    "example_fr": "J'ai beaucoup de travail à faire.",
+    "example_en_2": "He is looking for a stable job.",
+    "example_fr_2": "Il cherche un travail stable."
   },
   {
     "id": 8,
-    "english": "call",
+    "english": "call, appeal",
     "french": "appel",
     "gender": "masculine",
     "example_en": "I am waiting for a call.",
-    "example_fr": "J'attends un appel."
+    "example_fr": "J'attends un appel.",
+    "example_en_2": "The court dismissed the appeal.",
+    "example_fr_2": "Le tribunal a rejeté l'appel."
   },
   {
     "id": 9,
@@ -73,11 +81,13 @@
   },
   {
     "id": 10,
-    "english": "home",
+    "english": "house, home",
     "french": "maison",
     "gender": "feminine",
     "example_en": "I am going home.",
-    "example_fr": "Je rentre à la maison."
+    "example_fr": "Je rentre à la maison.",
+    "example_en_2": "Their house is at the end of the street.",
+    "example_fr_2": "Leur maison est au bout de la rue."
   },
   {
     "id": 11,
@@ -89,11 +99,13 @@
   },
   {
     "id": 12,
-    "english": "money",
+    "english": "money, silver",
     "french": "argent",
     "gender": "masculine",
     "example_en": "Time is money.",
-    "example_fr": "Le temps, c'est de l'argent."
+    "example_fr": "Le temps, c'est de l'argent.",
+    "example_en_2": "This bracelet is made of silver.",
+    "example_fr_2": "Ce bracelet est en argent."
   },
   {
     "id": 13,
@@ -113,35 +125,43 @@
   },
   {
     "id": 15,
-    "english": "guy",
+    "english": "guy, dude",
     "french": "mec",
     "gender": "masculine",
     "example_en": "He is a cool guy.",
-    "example_fr": "C'est un mec cool."
+    "example_fr": "C'est un mec cool.",
+    "example_en_2": "The dudes were joking at the bar.",
+    "example_fr_2": "Les mecs rigolaient au bar."
   },
   {
     "id": 16,
-    "english": "place",
+    "english": "seat, place",
     "french": "place",
     "gender": "feminine",
     "example_en": "Is this place free?",
-    "example_fr": "Est-ce que cette place est libre ?"
+    "example_fr": "Est-ce que cette place est libre ?",
+    "example_en_2": "There is a beautiful square in the city center.",
+    "example_fr_2": "Il y a une belle place au centre-ville."
   },
   {
     "id": 17,
-    "english": "feel",
+    "english": "feeling, sentiment",
     "french": "sentiment",
     "gender": "masculine",
     "example_en": "It is a strange feeling.",
-    "example_fr": "C'est un sentiment étrange."
+    "example_fr": "C'est un sentiment étrange.",
+    "example_en_2": "His sentiment about the project is positive.",
+    "example_fr_2": "Son sentiment à propos du projet est positif."
   },
   {
     "id": 18,
-    "english": "girl",
+    "english": "girl, daughter",
     "french": "fille",
     "gender": "feminine",
     "example_en": "The girl is playing outside.",
-    "example_fr": "La fille joue dehors."
+    "example_fr": "La fille joue dehors.",
+    "example_en_2": "His daughter is starting university.",
+    "example_fr_2": "Sa fille entre à l'université."
   },
   {
     "id": 19,
@@ -161,11 +181,13 @@
   },
   {
     "id": 21,
-    "english": "right",
+    "english": "right, law",
     "french": "droit",
     "gender": "masculine",
     "example_en": "You have the right to speak.",
-    "example_fr": "Tu as le droit de parler."
+    "example_fr": "Tu as le droit de parler.",
+    "example_en_2": "He studies law at university.",
+    "example_fr_2": "Il étudie le droit à l'université."
   },
   {
     "id": 22,
@@ -177,11 +199,15 @@
   },
   {
     "id": 23,
-    "english": "course",
+    "english": "class, course, lesson",
     "french": "cours",
     "gender": "masculine",
     "example_en": "The math course is difficult.",
-    "example_fr": "Le cours de maths est difficile."
+    "example_fr": "Le cours de maths est difficile.",
+    "example_en_2": "Class starts at nine o'clock.",
+    "example_fr_2": "La classe commence à neuf heures.",
+    "example_en_3": "I missed yesterday's lesson.",
+    "example_fr_3": "J'ai raté la leçon d'hier."
   },
   {
     "id": 24,
@@ -193,11 +219,13 @@
   },
   {
     "id": 25,
-    "english": "world",
+    "english": "world, people",
     "french": "monde",
     "gender": "masculine",
     "example_en": "She wants to travel the world.",
-    "example_fr": "Elle veut voyager à travers le monde."
+    "example_fr": "Elle veut voyager à travers le monde.",
+    "example_en_2": "All the people were there.",
+    "example_fr_2": "Tout le monde était là."
   },
   {
     "id": 26,
@@ -217,11 +245,13 @@
   },
   {
     "id": 28,
-    "english": "woman",
+    "english": "woman, wife",
     "french": "femme",
     "gender": "feminine",
     "example_en": "She is an intelligent woman.",
-    "example_fr": "C'est une femme intelligente."
+    "example_fr": "C'est une femme intelligente.",
+    "example_en_2": "His wife is arriving soon.",
+    "example_fr_2": "Sa femme arrive bientôt."
   },
   {
     "id": 29,
@@ -233,11 +263,13 @@
   },
   {
     "id": 30,
-    "english": "mind",
+    "english": "mind, spirit",
     "french": "esprit",
     "gender": "masculine",
     "example_en": "He has a sharp mind.",
-    "example_fr": "Il a l'esprit vif."
+    "example_fr": "Il a l'esprit vif.",
+    "example_en_2": "The team spirit is excellent this year.",
+    "example_fr_2": "L'esprit d'équipe est excellent cette année."
   },
   {
     "id": 31,
@@ -257,19 +289,23 @@
   },
   {
     "id": 33,
-    "english": "boy",
+    "english": "boy, waiter",
     "french": "garçon",
     "gender": "masculine",
     "example_en": "The boy is running fast.",
-    "example_fr": "Le garçon court vite."
+    "example_fr": "Le garçon court vite.",
+    "example_en_2": "The waiter is bringing the bill.",
+    "example_fr_2": "Le garçon apporte l'addition."
   },
   {
     "id": 34,
-    "english": "job",
+    "english": "job, employment",
     "french": "emploi",
     "gender": "masculine",
     "example_en": "He is looking for a job.",
-    "example_fr": "Il cherche un emploi."
+    "example_fr": "Il cherche un emploi.",
+    "example_en_2": "The employment rate is rising.",
+    "example_fr_2": "Le taux d'emploi augmente."
   },
   {
     "id": 35,
@@ -289,11 +325,13 @@
   },
   {
     "id": 37,
-    "english": "room",
+    "english": "bedroom, room",
     "french": "chambre",
     "gender": "feminine",
     "example_en": "Go to your room.",
-    "example_fr": "Va dans ta chambre."
+    "example_fr": "Va dans ta chambre.",
+    "example_en_2": "I booked a hotel room.",
+    "example_fr_2": "J'ai réservé une chambre d'hôtel."
   },
   {
     "id": 38,
@@ -321,19 +359,23 @@
   },
   {
     "id": 41,
-    "english": "wife",
+    "english": "wife, spouse",
     "french": "épouse",
     "gender": "feminine",
     "example_en": "He loves his wife.",
-    "example_fr": "Il aime son épouse."
+    "example_fr": "Il aime son épouse.",
+    "example_en_2": "Both spouses must sign the document.",
+    "example_fr_2": "Les deux époux doivent signer le document."
   },
   {
     "id": 42,
-    "english": "start",
+    "english": "beginning, start",
     "french": "début",
     "gender": "masculine",
     "example_en": "This is just the start.",
-    "example_fr": "C'est juste le début."
+    "example_fr": "C'est juste le début.",
+    "example_en_2": "The beginning of the movie is slow.",
+    "example_fr_2": "Le début du film est lent."
   },
   {
     "id": 43,
@@ -345,27 +387,33 @@
   },
   {
     "id": 44,
-    "english": "bit",
+    "english": "piece, bit",
     "french": "morceau",
     "gender": "masculine",
     "example_en": "Would you like a bit of cake?",
-    "example_fr": "Veux-tu un morceau de gâteau ?"
+    "example_fr": "Veux-tu un morceau de gâteau ?",
+    "example_en_2": "He ate a small bit of chocolate.",
+    "example_fr_2": "Il a mangé un petit morceau de chocolat."
   },
   {
     "id": 45,
-    "english": "matter",
+    "english": "matter, business",
     "french": "affaire",
     "gender": "feminine",
     "example_en": "It is a private matter.",
-    "example_fr": "C'est une affaire privée."
+    "example_fr": "C'est une affaire privée.",
+    "example_en_2": "She started her own business.",
+    "example_fr_2": "Elle a monté sa propre affaire."
   },
   {
     "id": 46,
-    "english": "run",
+    "english": "errand, race",
     "french": "course",
     "gender": "feminine",
     "example_en": "He went for a run.",
-    "example_fr": "Il est allé faire une course."
+    "example_fr": "Il est allé faire une course.",
+    "example_en_2": "She won the race yesterday.",
+    "example_fr_2": "Elle a gagné la course hier."
   },
   {
     "id": 47,
@@ -377,11 +425,13 @@
   },
   {
     "id": 48,
-    "english": "play",
+    "english": "game, play",
     "french": "jeu",
     "gender": "masculine",
     "example_en": "I don't like this game.",
-    "example_fr": "Je n'aime pas ce jeu."
+    "example_fr": "Je n'aime pas ce jeu.",
+    "example_en_2": "His play on stage was remarkable.",
+    "example_fr_2": "Son jeu sur scène était remarquable."
   },
   {
     "id": 49,
@@ -17989,7 +18039,6 @@
     "example_en": "Soak in the tub.",
     "example_fr": "Tremper dans la baignoire."
   },
-[
   {
     "id": 1851,
     "english": "pistol",
@@ -22489,5 +22538,5 @@
     "pronunciation_ipa": "/kaʁt də kʁe.di/",
     "example_en": "Pay by credit card.",
     "example_fr": "Payer par carte de crédit."
-  },
+  }
 ]
