@@ -39,34 +39,48 @@ const dataCache = {
   index: null
 };
 
+const wiktionaryCache = new Map();
+
 async function fetchWiktionaryMeaning(word) {
   if (!word || typeof fetch !== 'function') return null;
 
-  const url = `https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(word)}`;
-
-  try {
-    const response = await fetch(url, { headers: { accept: 'application/json' } });
-    if (!response.ok) return null;
-
-    const payload = await response.json();
-    const languageEntries = payload?.fr || payload?.French || [];
-    const definitions = new Set();
-
-    languageEntries.forEach((entry) => {
-      (entry.senses || []).forEach((sense) => {
-        const definition = sense.definition;
-        if (Array.isArray(definition)) {
-          definition.forEach((item) => item && definitions.add(item));
-        } else if (definition) {
-          definitions.add(definition);
-        }
-      });
-    });
-
-    return definitions.size ? Array.from(definitions) : null;
-  } catch (error) {
-    return null;
+  const normalized = word.toLowerCase();
+  if (wiktionaryCache.has(normalized)) {
+    return wiktionaryCache.get(normalized);
   }
+
+  const request = (async () => {
+    const url = `https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(word)}`;
+
+    try {
+      const response = await fetch(url, { headers: { accept: 'application/json' } });
+      if (!response.ok) return null;
+
+      const payload = await response.json();
+      const languageEntries = payload?.fr || payload?.French || [];
+      const definitions = new Set();
+
+      languageEntries.forEach((entry) => {
+        (entry.senses || []).forEach((sense) => {
+          const definition = sense.definition;
+          if (Array.isArray(definition)) {
+            definition.forEach((item) => item && definitions.add(item));
+          } else if (definition) {
+            definitions.add(definition);
+          }
+        });
+      });
+
+      return definitions.size ? Array.from(definitions) : null;
+    } catch (error) {
+      return null;
+    }
+  })();
+
+  wiktionaryCache.set(normalized, request);
+  const definitions = await request;
+  wiktionaryCache.set(normalized, definitions);
+  return definitions;
 }
 
 function collectNounExamples(entry) {
@@ -496,7 +510,8 @@ function createNotFoundResult(originalText, normalizedWord) {
     conjugatedFromMeaning: null,
     exampleSentences: null,
     notes: null,
-    found: false
+    found: false,
+    wiktionaryLookupWord: normalizedWord || null
   };
 }
 
@@ -580,11 +595,6 @@ async function lookupFrenchWords(text) {
     const matches = findMatchesForWord(normalized, hasArticle, index, original);
 
     if (matches.length === 0) {
-      const wiktionaryMeanings = await fetchWiktionaryMeaning(normalized);
-      if (wiktionaryMeanings?.length) {
-        allResults.push(formatWiktionaryMatch(original, normalized, wiktionaryMeanings));
-        continue;
-      }
       allResults.push(createNotFoundResult(original, normalized));
     } else {
       allResults.push(...matches);
@@ -601,7 +611,7 @@ async function preloadFrenchWordData() {
 }
 
 const debug = { parseJsonContent, loadJsonFile, loadWordData };
-const api = { lookupFrenchWords, preloadFrenchWordData, debug, getWordFilePaths };
+const api = { lookupFrenchWords, preloadFrenchWordData, debug, getWordFilePaths, fetchWiktionaryMeaning };
 
 if (typeof window !== 'undefined') {
   window.frenchWordsApi = api;
