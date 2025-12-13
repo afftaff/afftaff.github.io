@@ -145,6 +145,30 @@
 
     .pill-row { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; font-size: 0.9rem; color: var(--muted); }
     .pill { background: #eef1f5; border-radius: 999px; padding: 0.25rem 0.6rem; }
+
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 4px solid var(--border);
+      border-top-color: var(--accent);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -576,6 +600,30 @@
       container.appendChild(miniCard);
     }
 
+    function renderMeaningCard(label, content) {
+      dom.cardMeanings.innerHTML = '';
+      dom.cardMeanings.className = 'mini-card-grid';
+      appendMiniCard(dom.cardMeanings, label, content, (value) => {
+        if (Array.isArray(value)) return value;
+        if (value === null || value === undefined) return 'No definition found yet.';
+        return value;
+      });
+    }
+
+    function showLoadingState(word) {
+      dom.cardMeanings.className = '';
+      dom.cardMeanings.innerHTML = '';
+      const loader = document.createElement('div');
+      loader.className = 'loading-state';
+      const spinner = document.createElement('div');
+      spinner.className = 'spinner';
+      const message = document.createElement('p');
+      message.textContent = `Looking up "${word}" on Wiktionary...`;
+      loader.appendChild(spinner);
+      loader.appendChild(message);
+      dom.cardMeanings.appendChild(loader);
+    }
+
     function getVariantItems(card) {
       if (!card?.groupId) return [];
       return currentDeck.queue.filter((item) => item.card.groupId === card.groupId);
@@ -620,7 +668,7 @@
       if (card.tense?.length) parts.push(card.tense.filter(Boolean).join(' · '));
       dom.cardSubtitle.textContent = parts.join(' • ');
 
-      const needsWiktionaryLookup = (!card.meanings || card.meanings.length === 0) && card.wiktionaryLookupWord && !card.wiktionaryFetched;
+      const needsWiktionaryLookup = card.found !== false && (!card.meanings || card.meanings.length === 0) && card.wiktionaryLookupWord && !card.wiktionaryFetched;
       if (needsWiktionaryLookup) {
         card.wiktionaryFetched = true;
         dom.cardMeanings.className = '';
@@ -637,22 +685,33 @@
       dom.cardMeanings.innerHTML = '';
       dom.cardMeanings.className = 'mini-card-grid';
 
-      appendMiniCard(dom.cardMeanings, 'Original Text', card.original || card.originalText || card.display);
-      appendMiniCard(dom.cardMeanings, 'Word', card.word || card.display);
-      appendMiniCard(dom.cardMeanings, 'Meanings', card.meanings, createList);
-      appendMiniCard(dom.cardMeanings, 'Category', card.category);
-      appendMiniCard(dom.cardMeanings, 'Gender', card.gender);
-      appendMiniCard(dom.cardMeanings, 'Pronouns', card.pronouns, createList);
-      appendMiniCard(dom.cardMeanings, 'Tense', card.tense, createList);
-      appendMiniCard(dom.cardMeanings, 'Conjugated From', card.conjugatedFrom);
-      appendMiniCard(dom.cardMeanings, 'Conjugated Meaning', card.conjugatedFromMeaning, createList);
-      appendMiniCard(dom.cardMeanings, 'Example Sentences', card.exampleSentences, createExampleList);
-      appendMiniCard(dom.cardMeanings, 'Notes', card.notes);
-      appendMiniCard(dom.cardMeanings, 'Found', typeof card.found === 'boolean' ? (card.found ? 'Yes' : 'No') : null);
+      if (card.found === false) {
+        const lookupWord = card.wiktionaryLookupWord || card.display;
+        showLoadingState(lookupWord);
+        const definitions = await window.frenchWordsApi.fetchWiktionaryMeaning(lookupWord);
+        card.meanings = definitions;
+        card.category = card.category || 'wiktionary';
+        card.notes = card.notes || 'Definition sourced from Wiktionary.';
+        card.found = !!(definitions?.length);
+        renderMeaningCard('Meaning (raw)', definitions && definitions.length ? definitions : 'No definition found from the API.');
+      } else {
+        appendMiniCard(dom.cardMeanings, 'Original Text', card.original || card.originalText || card.display);
+        appendMiniCard(dom.cardMeanings, 'Word', card.word || card.display);
+        appendMiniCard(dom.cardMeanings, 'Meanings', card.meanings, createList);
+        appendMiniCard(dom.cardMeanings, 'Category', card.category);
+        appendMiniCard(dom.cardMeanings, 'Gender', card.gender);
+        appendMiniCard(dom.cardMeanings, 'Pronouns', card.pronouns, createList);
+        appendMiniCard(dom.cardMeanings, 'Tense', card.tense, createList);
+        appendMiniCard(dom.cardMeanings, 'Conjugated From', card.conjugatedFrom);
+        appendMiniCard(dom.cardMeanings, 'Conjugated Meaning', card.conjugatedFromMeaning, createList);
+        appendMiniCard(dom.cardMeanings, 'Example Sentences', card.exampleSentences, createExampleList);
+        appendMiniCard(dom.cardMeanings, 'Notes', card.notes);
+        appendMiniCard(dom.cardMeanings, 'Found', typeof card.found === 'boolean' ? (card.found ? 'Yes' : 'No') : null);
 
-      if (!dom.cardMeanings.childElementCount) {
-        dom.cardMeanings.classList.remove('mini-card-grid');
-        dom.cardMeanings.innerHTML = '<p class="not-found">No details available.</p>';
+        if (!dom.cardMeanings.childElementCount) {
+          dom.cardMeanings.classList.remove('mini-card-grid');
+          dom.cardMeanings.innerHTML = '<p class="not-found">No details available.</p>';
+        }
       }
       dom.cardContext.textContent = card.sentence || '';
       updateVariantNotice(card);
