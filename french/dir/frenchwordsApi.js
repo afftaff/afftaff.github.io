@@ -10,13 +10,33 @@ const WORD_FILES = {
   idioms: '../dir/words/bigidiomlist.json'
 };
 
+const isBrowser = typeof window !== 'undefined';
+
+function getWordFilePaths() {
+  return { ...WORD_FILES };
+}
+
+// Capture the script's directory so resource URLs resolve correctly regardless of the page location.
+const SCRIPT_BASE_URL = (() => {
+  if (!isBrowser || typeof document === 'undefined') return null;
+
+  const directScript = document.currentScript;
+  if (directScript?.src) {
+    return new URL('./', directScript.src).href;
+  }
+
+  const fallbackScript = Array.from(document.getElementsByTagName('script')).find((script) =>
+    script.src?.includes('frenchwordsApi.js')
+  );
+
+  return fallbackScript?.src ? new URL('./', fallbackScript.src).href : null;
+})();
+
 const dataCache = {
   loaded: false,
   data: null,
   index: null
 };
-
-const isBrowser = typeof window !== 'undefined';
 
 function deriveVerbKeys(conjugatedForm) {
   const normalized = normalizeKey(conjugatedForm || '');
@@ -156,9 +176,13 @@ function parseJsonContent(rawContent) {
 
 async function loadJsonFile(relativePath) {
   if (isBrowser && typeof fetch === 'function') {
-    const response = await fetch(relativePath);
+    const resolvedUrl = SCRIPT_BASE_URL
+      ? new URL(relativePath, SCRIPT_BASE_URL).href
+      : new URL(relativePath, window.location.href).href;
+
+    const response = await fetch(resolvedUrl);
     if (!response.ok) {
-      throw new Error(`Failed to load ${relativePath}: ${response.status}`);
+      throw new Error(`Failed to load ${resolvedUrl}: ${response.status}`);
     }
     const raw = await response.text();
     return parseJsonContent(raw);
@@ -489,7 +513,7 @@ async function preloadFrenchWordData() {
 }
 
 const debug = { parseJsonContent, loadJsonFile, loadWordData };
-const api = { lookupFrenchWords, preloadFrenchWordData, debug };
+const api = { lookupFrenchWords, preloadFrenchWordData, debug, getWordFilePaths };
 
 if (typeof window !== 'undefined') {
   window.frenchWordsApi = api;

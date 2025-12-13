@@ -1,15 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { debug } = require('./frenchwordsApi');
-
-const WORD_FILES = [
-  'bignounlist.json',
-  'bignounlist-plural.json',
-  'BigVerbList.json',
-  'adjectivelist.json',
-  'adverblist.json',
-  'bigidiomlist.json'
-];
+const { debug, getWordFilePaths } = require('./frenchwordsApi');
 
 function summarizeEntry(entry) {
   if (Array.isArray(entry)) {
@@ -41,11 +32,12 @@ function describeDataset(name, data) {
 }
 
 function inspectWordFiles() {
-  const baseDir = path.join(__dirname, 'words');
-  return WORD_FILES.map((file) => {
-    const raw = fs.readFileSync(path.join(baseDir, file), 'utf8');
+  const fileMap = getWordFilePaths();
+  return Object.values(fileMap).map((relativePath) => {
+    const absolutePath = path.resolve(__dirname, relativePath);
+    const raw = fs.readFileSync(absolutePath, 'utf8');
     const parsed = debug.parseJsonContent(raw);
-    return describeDataset(file, parsed);
+    return describeDataset(path.basename(relativePath), parsed);
   });
 }
 
