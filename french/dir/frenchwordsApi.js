@@ -38,6 +38,20 @@ const dataCache = {
   index: null
 };
 
+function collectNounExamples(entry) {
+  const examples = [];
+  ['', '_2', '_3'].forEach((suffix) => {
+    const english = entry[`example_en${suffix}`];
+    const french = entry[`example_fr${suffix}`];
+
+    if (english || french) {
+      examples.push({ english: english || null, french: french || null });
+    }
+  });
+
+  return examples.length ? examples : null;
+}
+
 function deriveVerbKeys(conjugatedForm) {
   const normalized = normalizeKey(conjugatedForm || '');
   if (!normalized) return [];
@@ -343,11 +357,7 @@ function formatNounMatch(originalText, normalizedWord, noun) {
   result.meanings = splitMeanings(noun.entry.english);
   result.gender = noun.entry.gender || null;
 
-  if (noun.entry.example_en || noun.entry.example_fr) {
-    result.exampleSentences = [
-      { english: noun.entry.example_en || null, french: noun.entry.example_fr || null }
-    ];
-  }
+  result.exampleSentences = collectNounExamples(noun.entry);
 
   return result;
 }
