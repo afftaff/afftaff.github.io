@@ -388,11 +388,13 @@
               original: entry.originalText,
               meanings: entry.meanings,
               gender: entry.gender,
+              category: entry.category,
               pronouns: entry.pronouns,
               tense: entry.tense,
               conjugatedFrom: entry.conjugatedFrom,
               conjugatedFromMeaning: entry.conjugatedFromMeaning,
               exampleSentences: entry.exampleSentences,
+              notes: entry.notes,
               found: entry.found,
               sentence
             };
@@ -612,6 +614,7 @@
     function renderCard(card) {
       dom.cardTerm.textContent = card.display || card.original || '—';
       const parts = [];
+      if (card.category) parts.push(card.category);
       if (card.gender) parts.push(card.gender);
       if (card.pronouns?.length) parts.push(card.pronouns.join(', '));
       if (card.tense?.length) parts.push(card.tense.filter(Boolean).join(' · '));
@@ -623,12 +626,14 @@
       appendMiniCard(dom.cardMeanings, 'Original Text', card.original || card.originalText || card.display);
       appendMiniCard(dom.cardMeanings, 'Word', card.word || card.display);
       appendMiniCard(dom.cardMeanings, 'Meanings', card.meanings, createList);
+      appendMiniCard(dom.cardMeanings, 'Category', card.category);
       appendMiniCard(dom.cardMeanings, 'Gender', card.gender);
       appendMiniCard(dom.cardMeanings, 'Pronouns', card.pronouns, createList);
       appendMiniCard(dom.cardMeanings, 'Tense', card.tense, createList);
       appendMiniCard(dom.cardMeanings, 'Conjugated From', card.conjugatedFrom);
       appendMiniCard(dom.cardMeanings, 'Conjugated Meaning', card.conjugatedFromMeaning, createList);
       appendMiniCard(dom.cardMeanings, 'Example Sentences', card.exampleSentences, createExampleList);
+      appendMiniCard(dom.cardMeanings, 'Notes', card.notes);
       appendMiniCard(dom.cardMeanings, 'Found', typeof card.found === 'boolean' ? (card.found ? 'Yes' : 'No') : null);
 
       if (!dom.cardMeanings.childElementCount) {

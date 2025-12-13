@@ -7,7 +7,8 @@ const WORD_FILES = {
   verbs: '../dir/words/BigVerbList.json',
   adjectives: '../dir/words/adjectivelist.json',
   adverbs: '../dir/words/adverblist.json',
-  idioms: '../dir/words/bigidiomlist.json'
+  idioms: '../dir/words/bigidiomlist.json',
+  functionWords: '../dir/words/etc.js'
 };
 
 const isBrowser = typeof window !== 'undefined';
@@ -243,6 +244,7 @@ function buildIndex(wordData) {
   const adjectiveMap = new Map();
   const adverbMap = new Map();
   const idiomMap = new Map();
+  const functionWordMap = new Map();
 
   (wordData.nouns || []).forEach((noun) => {
     const key = normalizeKey(noun.french);
@@ -296,13 +298,21 @@ function buildIndex(wordData) {
     addToMap(idiomMap, key, { type: 'idiom', entry: idiom });
   });
 
+  (wordData.functionWords || []).forEach((item) => {
+    const key = normalizeKey(item.expression);
+    if (key) {
+      addToMap(functionWordMap, key, { type: 'function-word', entry: item });
+    }
+  });
+
   dataCache.index = {
     nounMap,
     verbMap,
     verbInfinitiveMap,
     adjectiveMap,
     adverbMap,
-    idiomMap
+    idiomMap,
+    functionWordMap
   };
 
   return dataCache.index;
@@ -343,11 +353,13 @@ function buildResultTemplate(originalText, normalizedWord) {
     word: normalizedWord || null,
     meanings: null,
     gender: null,
+    category: null,
     pronouns: null,
     tense: null,
     conjugatedFrom: null,
     conjugatedFromMeaning: null,
     exampleSentences: null,
+    notes: null,
     found: true
   };
 }
@@ -425,17 +437,27 @@ function formatIdiomMatch(originalText, normalizedWord, idiom) {
   return result;
 }
 
+function formatFunctionWordMatch(originalText, normalizedWord, item) {
+  const result = buildResultTemplate(originalText, item.entry.expression || normalizedWord);
+  result.meanings = splitMeanings(item.entry.meaning_en);
+  result.category = item.entry.category || null;
+  result.notes = item.entry.notes || null;
+  return result;
+}
+
 function createNotFoundResult(originalText, normalizedWord) {
   return {
     originalText,
     word: normalizedWord || null,
     meanings: null,
     gender: null,
+    category: null,
     pronouns: null,
     tense: null,
     conjugatedFrom: null,
     conjugatedFromMeaning: null,
     exampleSentences: null,
+    notes: null,
     found: false
   };
 }
@@ -449,6 +471,7 @@ function findMatchesForWord(normalizedWord, hasArticle, index, originalText) {
   const adjectiveMatches = index.adjectiveMap.get(normalizedWord) || [];
   const adverbMatches = index.adverbMap.get(normalizedWord) || [];
   const idiomMatches = index.idiomMap.get(normalizedWord) || [];
+  const functionWordMatches = index.functionWordMap.get(normalizedWord) || [];
 
   if (nounMatches.length && verbConjugations.length && hasArticle) {
     // Article detected: prioritize noun usages over identically spelled verbs.
@@ -477,6 +500,10 @@ function findMatchesForWord(normalizedWord, hasArticle, index, originalText) {
 
   idiomMatches.forEach((idiom) => {
     matches.push(formatIdiomMatch(originalText, normalizedWord, idiom));
+  });
+
+  functionWordMatches.forEach((item) => {
+    matches.push(formatFunctionWordMatch(originalText, normalizedWord, item));
   });
 
   return matches;
