@@ -611,7 +611,7 @@
       dom.nextVariant.onclick = () => switchVariant(card, 1);
     }
 
-    function renderCard(card) {
+    async function renderCard(card) {
       dom.cardTerm.textContent = card.display || card.original || '—';
       const parts = [];
       if (card.category) parts.push(card.category);
@@ -619,6 +619,20 @@
       if (card.pronouns?.length) parts.push(card.pronouns.join(', '));
       if (card.tense?.length) parts.push(card.tense.filter(Boolean).join(' · '));
       dom.cardSubtitle.textContent = parts.join(' • ');
+
+      const needsWiktionaryLookup = (!card.meanings || card.meanings.length === 0) && card.wiktionaryLookupWord && !card.wiktionaryFetched;
+      if (needsWiktionaryLookup) {
+        card.wiktionaryFetched = true;
+        dom.cardMeanings.className = '';
+        dom.cardMeanings.innerHTML = '<p class="not-found">Looking up on Wiktionary...</p>';
+        const definitions = await window.frenchWordsApi.fetchWiktionaryMeaning(card.wiktionaryLookupWord);
+        if (definitions?.length) {
+          card.meanings = definitions;
+          card.category = card.category || 'wiktionary';
+          card.notes = card.notes || 'Definition sourced from Wiktionary.';
+          card.found = true;
+        }
+      }
 
       dom.cardMeanings.innerHTML = '';
       dom.cardMeanings.className = 'mini-card-grid';
