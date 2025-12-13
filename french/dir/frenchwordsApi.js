@@ -57,10 +57,29 @@ async function fetchWiktionaryMeaning(word) {
       if (!response.ok) return null;
 
       const payload = await response.json();
-      const languageEntries = payload?.fr || payload?.French || [];
+      let languageEntries = payload?.fr || payload?.French;
+
+      // Fallback to the first available language block if French isn't present.
+      if (!languageEntries && payload && typeof payload === 'object') {
+        const firstLanguage = Object.keys(payload).find((key) => Array.isArray(payload[key]));
+        if (firstLanguage) languageEntries = payload[firstLanguage];
+      }
+
       const definitions = new Set();
 
-      languageEntries.forEach((entry) => {
+      (languageEntries || []).forEach((entry) => {
+        // Newer Wiktionary REST responses use a `definitions` array.
+        if (Array.isArray(entry.definitions)) {
+          entry.definitions.forEach((item) => {
+            if (typeof item === 'string') {
+              definitions.add(item);
+            } else if (item?.definition) {
+              definitions.add(item.definition);
+            }
+          });
+        }
+
+        // Older responses may expose a `senses` array with nested definitions.
         (entry.senses || []).forEach((sense) => {
           const definition = sense.definition;
           if (Array.isArray(definition)) {
