@@ -12,16 +12,17 @@
       --bg: #f7f6f3;
       --paper: #ffffff;
       --text: #2c3e50;
-      --muted: #7f8c8d;
-      --border: #e0ded8;
+      --muted: #64748b;
+      --border: #e2e8f0;
       --highlight-sentence: #e3e8ef;
       --highlight-word: #cbd5e1;
       --success-bg: #dcfce7;
       --success-border: #86efac;
-      --accent: #2c3e50;
+      --accent: #334155;
+      --accent-blue: #2563eb;
       --radius: 12px;
       --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-      --font-read: 'Inter', sans-serif;
+      --font-read: 'Inter', system-ui, -apple-system, sans-serif;
     }
 
     * { box-sizing: border-box; }
@@ -144,12 +145,13 @@
       border-radius: 8px;
       padding: 0.8rem 1rem;
       font-family: inherit;
-      background: #f9f9f9;
+      background: #f8fafc;
       font-size: 1rem;
+      transition: all 0.2s;
     }
     
     textarea { min-height: 120px; resize: vertical; }
-    input[type="text"], textarea:focus { outline: 2px solid var(--accent); background: #fff; }
+    input[type="text"]:focus, textarea:focus { outline: 2px solid var(--accent); background: #fff; }
 
     button.primary-btn {
       background: var(--accent);
@@ -161,6 +163,7 @@
       cursor: pointer;
       font-size: 1rem;
       align-self: flex-start;
+      transition: opacity 0.2s;
     }
     button.primary-btn:hover { opacity: 0.9; }
 
@@ -173,7 +176,7 @@
       align-items: center;
       justify-content: center;
       z-index: 100;
-      backdrop-filter: blur(2px);
+      backdrop-filter: blur(4px);
     }
     .overlay.active { display: flex; }
 
@@ -212,12 +215,14 @@
       text-align: center;
       cursor: pointer;
       transition: all 0.2s;
+      background: #fff;
     }
     
     .option-card:hover {
       border-color: var(--accent);
       background: #f8fafc;
       transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
     
     .option-card strong { display: block; font-size: 1.1rem; margin-bottom: 0.5rem; }
@@ -239,42 +244,48 @@
     .flashcard-container { max-width: 700px; height: 85vh; }
     
     .flashcard-term { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 0.2rem; color: var(--accent); }
-    .flashcard-meta { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem; min-height: 1.2rem; }
+    .flashcard-meta { text-align: center; color: var(--muted); font-size: 0.95rem; margin-bottom: 1.5rem; min-height: 1.2rem; font-weight: 500; }
     
     .flashcard-details {
       flex: 1;
       overflow-y: auto;
       margin-bottom: 1rem;
-      padding: 4px; /* Space for shadow */
+      padding: 4px;
+      /* Hide Scrollbar */
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
     }
 
     .grade-buttons {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0.5rem;
+      gap: 0.75rem;
       margin-top: auto;
       flex-shrink: 0;
     }
     
     .grade-buttons button {
-      padding: 0.9rem;
+      padding: 1rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       color: white;
       font-weight: 600;
       cursor: pointer;
       font-size: 1rem;
+      transition: transform 0.1s, opacity 0.2s;
     }
+    .grade-buttons button:active { transform: scale(0.98); }
 
     /* --- FLIPPABLE MINI CARDS --- */
     .mini-card-grid { 
       display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
-      gap: 0.75rem; 
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+      gap: 1rem; 
       width: 100%;
+      padding-bottom: 1rem;
     }
 
-    /* Special Class for when there is only 1 item */
+    /* Single Item Mode */
     .mini-card-grid.single-mode {
       grid-template-columns: 1fr;
       height: 100%;
@@ -282,14 +293,13 @@
 
     .mini-card { 
       background: transparent;
-      perspective: 1000px; /* Enable 3D effect */
+      perspective: 1000px;
       cursor: pointer;
-      min-height: 140px;
+      min-height: 160px;
     }
 
-    /* Make the single card bigger */
     .mini-card-grid.single-mode .mini-card {
-      min-height: 100%; /* Fill the container */
+      min-height: 100%;
     }
 
     .mini-card-inner {
@@ -299,69 +309,104 @@
       text-align: center;
       transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       transform-style: preserve-3d;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
     }
 
-    .mini-card.flipped .mini-card-inner {
-      transform: rotateY(180deg);
-    }
+    .mini-card.flipped .mini-card-inner { transform: rotateY(180deg); }
 
     .mini-card-face {
       position: absolute;
-      inset: 0; /* fill parent */
-      width: 100%;
-      height: 100%;
+      inset: 0;
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
       border: 1px solid var(--border);
-      border-radius: 10px;
-      background: white;
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 1rem;
+      padding: 1.5rem;
+      background: white;
     }
 
-    /* Front Face Styles */
+    /* Front Face */
     .mini-card-front {
       background: #f8fafc;
       color: var(--accent);
     }
     .mini-card-front strong {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       color: var(--muted);
+      font-weight: 700;
     }
 
-    /* Back Face Styles */
+    /* Back Face - BEAUTIFIED */
     .mini-card-back {
       transform: rotateY(180deg);
       background: #fff;
-      overflow-y: auto; /* Allow scrolling if content is long */
-      align-items: flex-start; /* Align text top-left usually better for content */
-      text-align: left;
+      overflow-y: auto;
+      text-align: center;
+      /* Center everything nicely */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
     
-    /* Adjust text alignment for back card based on content type */
     .mini-card-back-content {
       width: 100%;
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.5;
     }
 
-    .mini-card ul { margin: 0; padding-left: 1.2rem; }
-    .mini-card li { margin-bottom: 0.2rem; }
-    
-    /* Example sentences styling */
-    .example-line { margin-bottom: 0.75rem; border-bottom: 1px dashed #eee; padding-bottom: 0.5rem; }
-    .example-line:last-child { border-bottom: none; }
-    .example-fr { font-weight: 600; color: var(--accent); margin-bottom: 0.1rem; }
-    .example-en { font-style: italic; color: var(--muted); font-size: 0.9rem; }
+    /* Styled Lists on Card Back */
+    .mini-card ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      width: 100%;
+    }
+    .mini-card li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .mini-card li:last-child {
+      border-bottom: none;
+    }
 
-    /* Single Card Mode Typography Boost */
-    .mini-card-grid.single-mode .mini-card-front strong { font-size: 1.2rem; }
-    .mini-card-grid.single-mode .mini-card-back { font-size: 1.1rem; padding: 2rem; justify-content: start; }
+    /* Styled Examples */
+    .example-line {
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .example-line:last-child { border: none; margin-bottom: 0; }
+    
+    .example-fr {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    .example-en {
+      font-size: 0.95rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* Large Typography for Single Card Mode */
+    .mini-card-grid.single-mode .mini-card-front strong { font-size: 1.25rem; }
+    .mini-card-grid.single-mode .mini-card-back-content { 
+      font-size: 1.25rem; 
+      line-height: 1.7; 
+      padding: 0 1rem;
+    }
+    .mini-card-grid.single-mode .example-fr { font-size: 1.5rem; }
+    .mini-card-grid.single-mode .example-en { font-size: 1.15rem; }
 
   </style>
 </head>
@@ -432,10 +477,10 @@
       </div>
 
       <div class="grade-buttons">
-        <button style="background:#e74c3c" data-grade="again">Again</button>
-        <button style="background:#e67e22" data-grade="hard">Hard</button>
-        <button style="background:#27ae60" data-grade="good">Good</button>
-        <button style="background:#16a085" data-grade="easy">Easy</button>
+        <button style="background:#ef4444; border-color:#ef4444" data-grade="again">Again</button>
+        <button style="background:#f97316; border-color:#f97316" data-grade="hard">Hard</button>
+        <button style="background:#22c55e; border-color:#22c55e" data-grade="good">Good</button>
+        <button style="background:#14b8a6; border-color:#14b8a6" data-grade="easy">Easy</button>
       </div>
     </div>
   </div>
@@ -481,7 +526,7 @@
     let progress = loadJson(STORAGE_KEYS.progress, {}); 
     let srsState = loadJson(STORAGE_KEYS.srs, {});
     
-    // Temp State for interactions
+    // Temp State
     let currentSelection = { word: '', sentenceIndex: null, sentenceText: '' };
     let activeDeck = { queue: [], pointer: 0, mode: 'word' }; 
 
@@ -678,15 +723,12 @@
 
       // Prepare Items
       const items = [];
-      
-      // Helper to push items to array
       const pushItem = (label, val, type='text') => {
          if(!val) return;
          if(Array.isArray(val) && val.length === 0) return;
          items.push({ label, val, type });
       };
 
-      // Exclude 'Original' and 'Word'
       pushItem('Meanings', card.meanings, 'list');
       pushItem('Category', card.category);
       pushItem('Gender', card.gender);
@@ -697,14 +739,11 @@
       pushItem('Examples', card.exampleSentences, 'examples');
       pushItem('Notes', card.notes);
       
-      // Removed Context as requested.
-
       // Render Grid
       dom.cardMeanings.innerHTML = '';
       const grid = document.createElement('div');
       grid.className = 'mini-card-grid';
       
-      // If only 1 item, switch to Single Mode (Big Card)
       if (items.length === 1) {
         grid.classList.add('single-mode');
       }
@@ -713,16 +752,15 @@
          const cardEl = document.createElement('div');
          cardEl.className = 'mini-card';
          
-         // Inner Flip Container
          const inner = document.createElement('div');
          inner.className = 'mini-card-inner';
          
-         // Front Face
+         // Front
          const front = document.createElement('div');
          front.className = 'mini-card-face mini-card-front';
          front.innerHTML = `<strong>${item.label}</strong>`;
          
-         // Back Face
+         // Back
          const back = document.createElement('div');
          back.className = 'mini-card-face mini-card-back';
          
@@ -746,9 +784,7 @@
          inner.appendChild(back);
          cardEl.appendChild(inner);
 
-         // Flip Logic
          cardEl.addEventListener('click', () => cardEl.classList.toggle('flipped'));
-         
          grid.appendChild(cardEl);
       });
       
