@@ -584,7 +584,8 @@
 
     .example-line { margin: 0 0 0.75rem 0; padding-bottom: 0.75rem; border-bottom: 1px solid #f1f5f9; }
     .example-line:last-child { border: none; margin-bottom: 0; padding-bottom: 0; }
-    .example-fr { font-size: 1.05rem; font-weight: 500; color: var(--text); }
+    .example-header { display: flex; align-items: flex-start; gap: 0.5rem; justify-content: space-between; }
+    .example-fr { font-size: 1.05rem; font-weight: 500; color: var(--text); flex: 1; }
     .example-en { font-size: 0.9rem; color: var(--muted); font-style: italic; margin-top: 2px; }
 
     .pronunciation-row { display: flex; align-items: center; gap: 0.75rem; }
@@ -601,7 +602,23 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
     .speak-btn:hover { background: #eef2ff; }
+    .speak-btn.icon-only { padding: 0.4rem 0.55rem; }
     .pronunciation-text { font-weight: 600; color: var(--accent); }
+
+    .exclusion-panel {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .exclusion-panel h4 { margin: 0; color: var(--accent); }
+    .exclusion-panel small { color: var(--muted); }
+    .exclusion-panel textarea { margin-top: 0.25rem; }
 
   </style>
 </head>
@@ -665,6 +682,12 @@
         <span class="value" id="allCount">0</span>
         <span class="hint">Unique words in this text</span>
       </div>
+    </div>
+
+    <div class="exclusion-panel">
+      <h4>Excluded words</h4>
+      <small>These words will be removed from sentences before sending them for lookup. Separate with commas or new lines.</small>
+      <textarea id="excludedWordsInput" placeholder="e.g., Jean, Marie, Netflix"></textarea>
     </div>
   </footer>
 
@@ -761,7 +784,8 @@
       progress: 'reader-progress-v2',
       srs: 'reader-srs',
       library: 'reader-library-v1',
-      activeId: 'reader-active-id'
+      activeId: 'reader-active-id',
+      excludedWords: 'reader-excluded-words'
     };
 
     const dom = {
@@ -812,7 +836,9 @@
       wordListTitle: document.getElementById('wordListTitle'),
       wordListSubtitle: document.getElementById('wordListSubtitle'),
       wordListContainer: document.getElementById('wordListContainer'),
-      studyWordListBtn: document.getElementById('studyWordListBtn')
+      studyWordListBtn: document.getElementById('studyWordListBtn'),
+
+      excludedWordsInput: document.getElementById('excludedWordsInput')
     };
 
     let library = loadJson(STORAGE_KEYS.library, null);
@@ -826,6 +852,7 @@
 
     let currentSelection = { word: '', sentenceIndex: null, sentenceText: '' };
     let activeDeck = { queue: [], pointer: 0, mode: 'word' };
+    let excludedWords = loadJson(STORAGE_KEYS.excludedWords, []);
 
     function loadJson(key, fallback) {
       try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : fallback; }
@@ -848,6 +875,36 @@
       if (activeDocId) {
         localStorage.setItem(STORAGE_KEYS.activeId, activeDocId);
       }
+    }
+
+    function parseExcludedWords(raw) {
+      return raw
+        .split(/[\n,]+/)
+        .map(w => w.trim())
+        .filter(Boolean);
+    }
+
+    function saveExcludedWords() {
+      localStorage.setItem(STORAGE_KEYS.excludedWords, JSON.stringify(excludedWords));
+    }
+
+    function renderExcludedWordsInput() {
+      dom.excludedWordsInput.value = excludedWords.join(', ');
+    }
+
+    function stripExcludedWords(sentence) {
+      if (!sentence || !excludedWords.length) return sentence;
+      const escaped = excludedWords
+        .map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+        .filter(Boolean);
+      if (!escaped.length) return sentence;
+
+      const pattern = new RegExp(`\\b(?:${escaped.join('|')})\\b`, 'gi');
+      return sentence
+        .replace(pattern, '')
+        .replace(/\s+([.,!?;:])/g, '$1')
+        .replace(/\s+/g, ' ')
+        .trim();
     }
 
     function loadDocument(doc) {
@@ -1102,6 +1159,11 @@
       refreshSavedList();
     });
 
+    dom.excludedWordsInput.addEventListener('input', () => {
+      excludedWords = parseExcludedWords(dom.excludedWordsInput.value);
+      saveExcludedWords();
+    });
+
     function openWordList(kind) {
       const { allWords, most, least } = computeWordStats();
       let words = [];
@@ -1146,7 +1208,7 @@
     async function buildDeckFromWords(words) {
       const cards = [];
       for (const word of words) {
-        const generated = await generateCardsFromText(word, word);
+        const generated = await generateCardsFromText(word, word, currentSelection.sentenceText);
         if (generated.length) {
           cards.push(...generated);
         } else {
@@ -1265,7 +1327,7 @@
       }
 
       if (mode === 'word') {
-        const cards = await generateCardsFromText(currentSelection.word, currentSelection.word);
+        const cards = await generateCardsFromText(currentSelection.word, currentSelection.word, currentSelection.sentenceText);
         const exactMatches = cards.filter(c => c.display.toLowerCase() === currentSelection.word.toLowerCase());
         const otherMatches = cards.filter(c => c.display.toLowerCase() !== currentSelection.word.toLowerCase());
 
@@ -1278,7 +1340,8 @@
         }
         dom.deckLabel.textContent = "Word Study";
       } else {
-        const cards = await generateCardsFromText(currentSelection.sentenceText);
+        const strippedSentence = stripExcludedWords(currentSelection.sentenceText) || currentSelection.sentenceText;
+        const cards = await generateCardsFromText(strippedSentence, undefined, currentSelection.sentenceText);
         activeDeck.queue = cards;
         dom.deckLabel.textContent = "Sentence Study";
       }
@@ -1286,10 +1349,11 @@
       showCard(0);
     }
 
-    async function generateCardsFromText(textStr, preferredDisplay) {
+    async function generateCardsFromText(textStr, preferredDisplay, sentenceOverride) {
       if(!window.frenchWordsApi) return [];
       const lookup = await window.frenchWordsApi.lookupFrenchWords(textStr);
       const cards = [];
+      const sentenceText = sentenceOverride || currentSelection.sentenceText || '';
       lookup.forEach((entry, idx) => {
         const displayText = preferredDisplay || entry.originalText || entry.word || textStr;
         const gender = entry.gender ?? null;
@@ -1309,7 +1373,7 @@
           notes: entry.notes,
           found: entry.found,
           wiktionaryLookupWord: entry.word || entry.originalText || displayText,
-          sentence: currentSelection.sentenceText
+          sentence: sentenceText
         });
       });
       return cards;
@@ -1362,7 +1426,7 @@
 
     async function addWordToDeck(cleanWord, sourceCard) {
       if (!activeDeck.queue) return;
-      const newCards = await generateCardsFromText(cleanWord, cleanWord);
+      const newCards = await generateCardsFromText(cleanWord, cleanWord, sourceCard?.sentence || currentSelection.sentenceText);
 
       if (newCards.length === 0) {
         newCards.push({
@@ -1529,8 +1593,34 @@
       examples.forEach(ex => {
           const div = document.createElement('div');
           div.className = 'example-line';
-          div.innerHTML = `<div class="example-fr">${ex.french || card.display}</div>` +
-                          (ex.english ? `<div class="example-en">${ex.english}</div>` : '');
+
+          const header = document.createElement('div');
+          header.className = 'example-header';
+
+          const frDiv = document.createElement('div');
+          frDiv.className = 'example-fr';
+          frDiv.textContent = ex.french || card.display;
+
+          const speakBtn = document.createElement('button');
+          speakBtn.className = 'speak-btn icon-only';
+          speakBtn.type = 'button';
+          speakBtn.setAttribute('aria-label', 'Play example sentence');
+          speakBtn.textContent = '🔊';
+          speakBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            speakText(ex.french || card.display);
+          });
+
+          header.append(frDiv, speakBtn);
+          div.appendChild(header);
+
+          if (ex.english) {
+            const enDiv = document.createElement('div');
+            enDiv.className = 'example-en';
+            enDiv.textContent = ex.english;
+            div.appendChild(enDiv);
+          }
+
           container.appendChild(div);
       });
     }
@@ -1582,6 +1672,7 @@
       });
     });
 
+    renderExcludedWordsInput();
     bootstrapDocuments();
     refreshSavedList();
   </script>
