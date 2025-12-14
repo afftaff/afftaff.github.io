@@ -264,6 +264,11 @@
     "meaning_en": ["these", "those"]
   },
   {
+    "expression": "sa",
+    "category": "possessive determiner",
+    "meaning_en": ["his (before feminine singular noun)", "her (before feminine singular noun)"]
+  },
+  {
     "expression": "et",
     "category": "coordinating conjunction",
     "meaning_en": ["and"]
