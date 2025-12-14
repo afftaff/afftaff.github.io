@@ -800,51 +800,52 @@
         return joined.trim();
       };
 
+      const isNestedListItem = (node, root) => {
+        let parent = node.parentElement;
+        while (parent && parent !== root) {
+          if (parent.tagName === 'LI' || parent.tagName === 'DD') return true;
+          parent = parent.parentElement;
+        }
+        return false;
+      };
+
       inputs.forEach(htmlStr => {
         if (!htmlStr) return;
 
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlStr;
 
+        const localResults = [];
+
         // STRATEGY: Find "Top Level" items only.
         // If we just do querySelectorAll('li'), we get the nested ones separately,
         // which breaks the context of the parent. We still group nested content
         // with its nearest top-level ancestor so we keep full sentences together.
         const allListItems = tempDiv.querySelectorAll('li, dd');
+        const topLevelItems = Array.from(allListItems).filter(li => !isNestedListItem(li, tempDiv));
 
-        if (allListItems.length > 0) {
-          allListItems.forEach(li => {
-            // Check if this LI is inside another LI that we are also parsing
-            let parent = li.parentElement;
-            while (parent && parent !== tempDiv) {
-              if (parent.tagName === 'LI' || parent.tagName === 'DD') {
-                // It is a nested child. Skip it, because it will be
-                // included in the Parent's collected text.
-                return;
-              }
-              parent = parent.parentElement;
-            }
-
-            // If we get here, it is a Top Level Item.
-            // Grab every text node inside (including nested children)
+        if (topLevelItems.length > 0) {
+          topLevelItems.forEach(li => {
             const text = collectAllText(li);
-            if (text) results.push(text);
+            if (text) localResults.push(text);
           });
         }
 
-        // Fallback: If no list items found, try paragraphs or raw text
-        if (results.length === 0) {
+        // Fallback: If no list items found for this snippet, try paragraphs or raw text
+        if (topLevelItems.length === 0) {
           const paragraphs = tempDiv.querySelectorAll('p');
           if (paragraphs.length > 0) {
             paragraphs.forEach(p => {
               const text = collectAllText(p);
-              if (text) results.push(text);
+              if (text) localResults.push(text);
             });
           } else {
             const text = collectAllText(tempDiv);
-            if (text) results.push(text);
+            if (text) localResults.push(text);
           }
         }
+
+        results.push(...localResults);
       });
 
       // Safety net
