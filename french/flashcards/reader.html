@@ -404,6 +404,15 @@
     .pagination-content-inner i, .pagination-content-inner em { color: var(--muted); font-style: italic; }
     .pagination-content-inner a { color: inherit; text-decoration: none; pointer-events: none; border-bottom: 1px dotted var(--muted); }
 
+    .meaning-word {
+      cursor: pointer;
+      padding: 0 2px;
+      border-radius: 4px;
+    }
+    .meaning-word:hover {
+      background: var(--highlight-word);
+    }
+
     .pagination-controls {
       display: flex;
       justify-content: space-between;
@@ -893,6 +902,69 @@
       return cards;
     }
 
+    function makeMeaningWordsClickable(rootEl, card) {
+      if (!rootEl) return;
+
+      const wrapTextNodes = (node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const text = node.textContent;
+          const parts = text.split(/(\b[\p{L}'’-]+\b)/u);
+          const frag = document.createDocumentFragment();
+
+          parts.forEach(part => {
+            if (!part) return;
+            if (/\b[\p{L}'’-]+\b/u.test(part)) {
+              const span = document.createElement('span');
+              span.className = 'meaning-word';
+              span.textContent = part;
+              span.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleMeaningWordClick(part, card);
+              });
+              frag.appendChild(span);
+            } else {
+              frag.appendChild(document.createTextNode(part));
+            }
+          });
+
+          node.replaceWith(frag);
+          return;
+        }
+
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          Array.from(node.childNodes).forEach(child => wrapTextNodes(child));
+        }
+      };
+
+      wrapTextNodes(rootEl);
+    }
+
+    async function handleMeaningWordClick(rawWord, card) {
+      const cleanWord = (rawWord || '').replace(/[^\p{L}'’-]/gu, '').trim();
+      if (!cleanWord) return;
+      const shouldAdd = confirm(`Add "${cleanWord}" to this deck?`);
+      if (!shouldAdd) return;
+      await addWordToDeck(cleanWord, card);
+    }
+
+    async function addWordToDeck(cleanWord, sourceCard) {
+      if (!activeDeck.queue) return;
+      const newCards = await generateCardsFromText(cleanWord);
+
+      if (newCards.length === 0) {
+        newCards.push({
+          id: `manual-${cleanWord}-${Date.now()}`,
+          display: cleanWord,
+          meanings: ['No definition found.'],
+          found: true,
+          sentence: sourceCard?.sentence || currentSelection.sentenceText
+        });
+      }
+
+      activeDeck.queue.push(...newCards);
+      dom.deckProgress.textContent = `${activeDeck.pointer + 1} / ${activeDeck.queue.length}`;
+    }
+
     async function showCard(index) {
       resetReveals();
       if (index >= activeDeck.queue.length) {
@@ -968,7 +1040,8 @@
              const innerContent = document.createElement('div');
              innerContent.className = 'pagination-content-inner';
              innerContent.innerHTML = item.val[0];
-             
+             makeMeaningWordsClickable(innerContent, card);
+
              contentDiv.appendChild(innerContent);
              
              // Controls
@@ -994,6 +1067,7 @@
              let pIndex = 0;
              const updatePage = () => {
                  innerContent.innerHTML = item.val[pIndex];
+                 makeMeaningWordsClickable(innerContent, card);
                  contentDiv.scrollTop = 0;
                  indicator.textContent = `${pIndex + 1} / ${item.val.length}`;
                  btnPrev.disabled = pIndex === 0;
