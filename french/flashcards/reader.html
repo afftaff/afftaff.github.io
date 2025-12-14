@@ -302,7 +302,7 @@
       background: transparent;
       perspective: 1000px;
       cursor: pointer;
-      min-height: 180px;
+      min-height: 200px; /* Increased slightly for better fit */
     }
 
     .mini-card-inner {
@@ -329,7 +329,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 1.5rem;
+      padding: 1rem;
       background: white;
     }
 
@@ -352,9 +352,11 @@
       background: #fff;
       display: flex;
       flex-direction: column;
-      justify-content: center; 
-      align-items: center;
+      /* Top alignment avoids cutting off content */
+      justify-content: flex-start; 
+      align-items: stretch;
       overflow: hidden; 
+      padding: 0;
     }
 
     .mini-card-back-content {
@@ -367,42 +369,58 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      padding: 1.5rem;
     }
 
-    /* --- PAGINATION STYLES --- */
+    /* --- PAGINATION STYLES (Content Extraction) --- */
     .pagination-wrapper {
       display: flex;
       flex-direction: column;
       height: 100%;
       width: 100%;
       justify-content: space-between;
+      padding: 1rem; 
     }
     
     .pagination-content {
       flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow-y: auto; /* Scroll inside the card if single page is huge */
-      padding: 0.5rem 0;
+      display: block; 
       width: 100%;
-      text-align: center;
+      overflow-y: auto; 
+      text-align: left; /* Keep left alignment for readability */
+      padding-right: 4px; 
+      font-size: 1rem;
+      line-height: 1.6;
+      /* Center visually if content is short */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
-    /* Ensure HTML content (like lists) inside definitions looks okay */
-    .pagination-content ul, .pagination-content ol { text-align: left; padding-left: 1.2rem; margin: 0; }
-    .pagination-content li { margin-bottom: 0.5rem; }
+    /* When content is long, let it expand naturally (overriding the center above) */
+    .pagination-content.long-text {
+      display: block;
+      justify-content: flex-start;
+    }
+
+    .pagination-content p { margin-top: 0; }
+    
+    /* Ensure formatting from API works */
+    .pagination-content b, .pagination-content strong { color: var(--accent); }
+    .pagination-content i, .pagination-content em { color: var(--muted); }
+    .pagination-content a { color: var(--accent-blue); text-decoration: none; pointer-events: none; /* Disable links inside flashcards */ }
 
     .pagination-controls {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-top: 0.5rem;
+      padding-top: 0.75rem;
       border-top: 1px solid #f1f5f9;
       margin-top: 0.5rem;
       font-size: 0.85rem;
       color: var(--muted);
       width: 100%;
+      flex-shrink: 0;
     }
 
     .pager-btn {
@@ -792,6 +810,55 @@
       card.classList.add('revealed');
     }
 
+    // --- HTML CLEANING & EXTRACTION ---
+    // This function takes HTML string (often from Wiktionary) and extracts 
+    // distinct, clean definition strings.
+    function cleanAndParseDefinitions(rawHtmlOrArray) {
+      let inputs = Array.isArray(rawHtmlOrArray) ? rawHtmlOrArray : [rawHtmlOrArray];
+      let results = [];
+
+      inputs.forEach(htmlStr => {
+        if (!htmlStr) return;
+        
+        // 1. Create a dummy DOM element to parse the string
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlStr;
+
+        // 2. Strategy: Look for specific semantic tags first
+        const listItems = tempDiv.querySelectorAll('li');
+        const paragraphs = tempDiv.querySelectorAll('p');
+
+        if (listItems.length > 0) {
+          // If we found <li>, these are likely the definitions.
+          listItems.forEach(li => {
+            // Get innerHTML to keep bold/italics, but trim whitespace
+            const text = li.innerHTML.trim(); 
+            if(text) results.push(text);
+          });
+        } else if (paragraphs.length > 0) {
+          // If no lists, but paragraphs exist
+          paragraphs.forEach(p => {
+             const text = p.innerHTML.trim();
+             if(text) results.push(text);
+          });
+        } else {
+          // 3. Fallback: It's just a text blob or uses <br>
+          // Replace <br> with special separator to split later
+          const raw = tempDiv.innerHTML.replace(/<br\s*\/?>/gi, '___BR___');
+          const parts = raw.split('___BR___');
+          parts.forEach(p => {
+            const clean = p.trim();
+            if(clean) results.push(clean);
+          });
+        }
+      });
+      
+      // If after all that we have nothing (e.g. empty string), return original as fallback
+      if (results.length === 0 && inputs.length > 0) return inputs;
+      
+      return results;
+    }
+
     // --- Flashcard / Deck Logic ---
     async function startDeck(mode) {
       dom.flashcardModal.classList.add('active');
@@ -802,7 +869,6 @@
       activeDeck.pointer = 0;
       activeDeck.queue = [];
 
-      // Assuming api is available
       if(window.frenchWordsApi && window.frenchWordsApi.preloadFrenchWordData) {
         await window.frenchWordsApi.preloadFrenchWordData();
       }
@@ -816,7 +882,6 @@
         activeDeck.queue = [...exactMatches, ...otherMatches];
 
         if (activeDeck.queue.length === 0) {
-          // Fallback card if no API result
           activeDeck.queue.push({
             id: 'fallback', display: currentSelection.word, meanings: ['No definition found.'], found: true
           });
@@ -886,16 +951,8 @@
          card.found = true;
       }
 
-      // --- LOGIC TO SPLIT BIG DATA ---
-      // If 'meanings' is a big string with newlines or breaks, split it for pagination
-      let processedMeanings = card.meanings;
-      if (typeof processedMeanings === 'string') {
-         // Split by newline or common list markers
-         processedMeanings = processedMeanings.split(/\n|<br\s*\/?>/i).filter(s => s.trim().length > 0);
-      }
-      if (!Array.isArray(processedMeanings)) {
-         processedMeanings = [String(processedMeanings)];
-      }
+      // --- USE THE NEW CLEANER FUNCTION ---
+      const cleanMeanings = cleanAndParseDefinitions(card.meanings);
 
       // Prepare Grid Items
       const items = [];
@@ -905,7 +962,7 @@
          items.push({ label, val, type });
       };
 
-      pushItem('Meanings', processedMeanings, 'paged-list'); // Forces paging
+      pushItem('Meanings', cleanMeanings, 'paged-list'); // Forces paging
       pushItem('Category', card.category);
       pushItem('Gender', card.gender);
       pushItem('Pronouns', card.pronouns, 'text');
@@ -939,10 +996,13 @@
              const wrapper = document.createElement('div');
              wrapper.className = 'pagination-wrapper';
              
-             // Content Container (Scrollable if single page is huge)
+             // Content Container
              const contentDiv = document.createElement('div');
              contentDiv.className = 'pagination-content';
-             // Use innerHTML to respect API data formatting
+             
+             // Check length to decide centering
+             if(item.val[0].length > 100) contentDiv.classList.add('long-text');
+             
              contentDiv.innerHTML = item.val[0];
              
              // Controls
@@ -969,6 +1029,11 @@
              let pIndex = 0;
              const updatePage = () => {
                  contentDiv.innerHTML = item.val[pIndex];
+                 
+                 // Handle CSS centering based on length
+                 if(item.val[pIndex].length > 100) contentDiv.classList.add('long-text');
+                 else contentDiv.classList.remove('long-text');
+
                  contentDiv.scrollTop = 0;
                  indicator.textContent = `${pIndex + 1} / ${item.val.length}`;
                  btnPrev.disabled = pIndex === 0;
