@@ -686,7 +686,7 @@
          items.push({ label, val, type });
       };
 
-      // Exclude 'Original' and 'Word' as requested
+      // Exclude 'Original' and 'Word'
       pushItem('Meanings', card.meanings, 'list');
       pushItem('Category', card.category);
       pushItem('Gender', card.gender);
@@ -696,7 +696,8 @@
       pushItem('Base Meaning', card.conjugatedFromMeaning, 'list');
       pushItem('Examples', card.exampleSentences, 'examples');
       pushItem('Notes', card.notes);
-      pushItem('Context', card.sentence);
+      
+      // Removed Context as requested.
 
       // Render Grid
       dom.cardMeanings.innerHTML = '';
@@ -750,8 +751,12 @@
          
          grid.appendChild(cardEl);
       });
-
-      dom.cardMeanings.appendChild(grid);
+      
+      if (items.length === 0) {
+        dom.cardMeanings.innerHTML = '<div style="padding:1rem; text-align:center; color:var(--muted)">No additional details.</div>';
+      } else {
+        dom.cardMeanings.appendChild(grid);
+      }
     }
 
     function finishDeck() {
