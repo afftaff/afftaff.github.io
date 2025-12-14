@@ -843,8 +843,8 @@
     async function startDeck(mode) {
       dom.flashcardModal.classList.add('active');
       dom.cardMeanings.innerHTML = '<div style="padding:2rem; text-align:center;">Loading cards...</div>';
-      resetReveals(); 
-      
+      resetReveals();
+
       activeDeck.mode = mode;
       activeDeck.pointer = 0;
       activeDeck.queue = [];
@@ -854,10 +854,10 @@
       }
 
       if (mode === 'word') {
-        const cards = await generateCardsFromText(currentSelection.word);
+        const cards = await generateCardsFromText(currentSelection.word, currentSelection.word);
         const exactMatches = cards.filter(c => c.display.toLowerCase() === currentSelection.word.toLowerCase());
         const otherMatches = cards.filter(c => c.display.toLowerCase() !== currentSelection.word.toLowerCase());
-        
+
         activeDeck.queue = [...exactMatches, ...otherMatches];
 
         if (activeDeck.queue.length === 0) {
@@ -875,17 +875,19 @@
       showCard(0);
     }
 
-    async function generateCardsFromText(textStr) {
+    async function generateCardsFromText(textStr, preferredDisplay) {
       if(!window.frenchWordsApi) return [];
       const lookup = await window.frenchWordsApi.lookupFrenchWords(textStr);
       const cards = [];
       lookup.forEach((entry, idx) => {
+        const displayText = preferredDisplay || entry.originalText || entry.word || textStr;
+        const gender = entry.gender ?? null;
         cards.push({
-          id: entry.word + '-' + idx,
-          display: entry.word || entry.originalText,
+          id: (entry.word || entry.originalText || displayText) + '-' + idx,
+          display: displayText,
           meanings: entry.meanings,
           category: entry.category,
-          gender: entry.gender,
+          gender,
           pronouns: entry.pronouns,
           pronunciationIpa: entry.pronunciationIpa,
           pronunciationEnglish: entry.pronunciationEnglish,
@@ -895,7 +897,7 @@
           exampleSentences: entry.exampleSentences,
           notes: entry.notes,
           found: entry.found,
-          wiktionaryLookupWord: entry.word || entry.originalText,
+          wiktionaryLookupWord: entry.word || entry.originalText || displayText,
           sentence: currentSelection.sentenceText
         });
       });
@@ -949,7 +951,7 @@
 
     async function addWordToDeck(cleanWord, sourceCard) {
       if (!activeDeck.queue) return;
-      const newCards = await generateCardsFromText(cleanWord);
+      const newCards = await generateCardsFromText(cleanWord, cleanWord);
 
       if (newCards.length === 0) {
         newCards.push({
