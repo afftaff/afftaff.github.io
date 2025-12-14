@@ -809,7 +809,20 @@
         return false;
       };
 
-      inputs.forEach(htmlStr => {
+      const collectTopLevelItems = (root) => {
+        const collected = [];
+        const candidates = root.querySelectorAll('li, dd');
+        const topLevel = Array.from(candidates).filter((node) => !isNestedListItem(node, root));
+
+        topLevel.forEach((node) => {
+          const text = collectAllText(node);
+          if (text) collected.push(text);
+        });
+
+        return collected;
+      };
+
+      inputs.forEach((htmlStr) => {
         if (!htmlStr) return;
 
         const tempDiv = document.createElement('div');
@@ -817,32 +830,26 @@
 
         const localResults = [];
 
-        // STRATEGY: Find "Top Level" items only.
-        // If we just do querySelectorAll('li'), we get the nested ones separately,
-        // which breaks the context of the parent. We still group nested content
-        // with its nearest top-level ancestor so we keep full sentences together.
-        const allListItems = tempDiv.querySelectorAll('li, dd');
-        const topLevelItems = Array.from(allListItems).filter(li => !isNestedListItem(li, tempDiv));
-
-        if (topLevelItems.length > 0) {
-          topLevelItems.forEach(li => {
-            const text = collectAllText(li);
-            if (text) localResults.push(text);
-          });
+        const listResults = collectTopLevelItems(tempDiv);
+        if (listResults.length > 0) {
+          localResults.push(...listResults);
         }
 
-        // Fallback: If no list items found for this snippet, try paragraphs or raw text
-        if (topLevelItems.length === 0) {
+        // Capture text that lives directly under the wrapper (outside list items)
+        if (localResults.length === 0) {
           const paragraphs = tempDiv.querySelectorAll('p');
           if (paragraphs.length > 0) {
-            paragraphs.forEach(p => {
+            paragraphs.forEach((p) => {
               const text = collectAllText(p);
               if (text) localResults.push(text);
             });
-          } else {
-            const text = collectAllText(tempDiv);
-            if (text) localResults.push(text);
           }
+        }
+
+        // Absolute fallback: take every text node in the snippet
+        if (localResults.length === 0) {
+          const text = collectAllText(tempDiv);
+          if (text) localResults.push(text);
         }
 
         results.push(...localResults);
