@@ -99,6 +99,8 @@
       font-style: italic;
     }
 
+    .muted { color: var(--muted); }
+
     /* Text Interaction Styles */
     .sentence-wrap {
       padding: 0.15rem 0.2rem;
@@ -139,6 +141,32 @@
     .input-section h3 { margin-top: 0; font-size: 1rem; margin-bottom: 1rem; }
     .input-group { display: flex; flex-direction: column; gap: 0.8rem; }
 
+    .manage-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .manage-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .manage-actions button {
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .manage-actions button:hover { background: #e2e8f0; }
+
     input[type="text"], textarea {
       width: 100%;
       border: 1px solid var(--border);
@@ -166,6 +194,47 @@
       transition: opacity 0.2s;
     }
     button.primary-btn:hover { opacity: 0.9; }
+
+    .text-library { margin-top: 1rem; }
+    .text-library h4 { margin: 0 0 0.5rem 0; font-size: 0.95rem; color: var(--accent); }
+    .text-library small { color: var(--muted); display: block; margin-bottom: 0.4rem; }
+
+    .word-footer {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      align-items: stretch;
+    }
+
+    .word-footer .stat-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.9rem;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .word-footer .stat-card:hover {
+      background: #e2e8f0;
+      transform: translateY(-1px);
+    }
+
+    .stat-card .label { font-size: 0.9rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-card .value { font-weight: 700; font-size: 1.2rem; color: var(--accent); }
+    .stat-card .hint { font-size: 0.85rem; color: var(--muted); }
+
+    .word-list { max-height: 360px; overflow: auto; border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem; background: #f8fafc; }
+    .word-list ul { margin: 0; padding-left: 1rem; }
+    .word-list li { margin-bottom: 0.35rem; }
+    .word-list strong { color: var(--accent); }
 
     /* OVERLAYS & MODALS */
     .overlay {
@@ -558,8 +627,46 @@
         <textarea id="textInput" placeholder="Paste French text here..."></textarea>
         <button class="primary-btn" id="addToReaderBtn">Add to Reader</button>
       </div>
+
+      <div class="text-library">
+        <h4>Saved Texts</h4>
+        <small>Save different passages and switch between them without losing progress.</small>
+
+        <div class="manage-row">
+          <select id="savedTextsSelect"></select>
+          <input type="text" id="saveNameInput" placeholder="Save name (e.g., Book A - Chapter 1)" />
+        </div>
+
+        <div class="manage-actions">
+          <button id="saveCurrentBtn">Save / Update</button>
+          <button id="saveAsBtn">Save As New</button>
+          <button id="loadTextBtn">Load Selected</button>
+          <button id="deleteTextBtn">Delete Selected</button>
+          <button id="newBlankBtn">New Blank</button>
+        </div>
+      </div>
     </div>
   </main>
+
+  <footer>
+    <div class="word-footer" id="wordFooter">
+      <div class="stat-card" data-kind="most">
+        <span class="label">Most frequent</span>
+        <span class="value" id="mostCount">0</span>
+        <span class="hint">Top 50 unique words</span>
+      </div>
+      <div class="stat-card" data-kind="least">
+        <span class="label">Least frequent</span>
+        <span class="value" id="leastCount">0</span>
+        <span class="hint">Up to 50 least seen words</span>
+      </div>
+      <div class="stat-card" data-kind="all">
+        <span class="label">All words</span>
+        <span class="value" id="allCount">0</span>
+        <span class="hint">Unique words in this text</span>
+      </div>
+    </div>
+  </footer>
 
   <div class="overlay" id="selectionModal">
     <div class="modal">
@@ -576,6 +683,19 @@
           <strong>Sentence</strong>
           <span>Study all words in this sentence.</span>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="wordListModal">
+    <div class="modal">
+      <button class="close-btn" id="closeWordList">×</button>
+      <h2 id="wordListTitle">Word List</h2>
+      <p id="wordListSubtitle" class="muted"></p>
+      <div class="word-list" id="wordListContainer"></div>
+      <div style="display:flex; gap:0.5rem; margin-top:1rem;">
+        <button class="primary-btn" id="studyWordListBtn">Study these words</button>
+        <button id="closeWordListSecondary" style="padding:0.65rem 0.75rem; background:#f8fafc; border:1px solid var(--border); color:var(--accent); border-radius:8px; cursor:pointer;">Close</button>
       </div>
     </div>
   </div>
@@ -637,9 +757,11 @@
   <script>
     const STORAGE_KEYS = {
       title: 'reader-title-v2',
-      textData: 'reader-sentences-v2', 
-      progress: 'reader-progress-v2',  
-      srs: 'reader-srs'
+      textData: 'reader-sentences-v2',
+      progress: 'reader-progress-v2',
+      srs: 'reader-srs',
+      library: 'reader-library-v1',
+      activeId: 'reader-active-id'
     };
 
     const dom = {
@@ -649,7 +771,15 @@
       textInput: document.getElementById('textInput'),
       addBtn: document.getElementById('addToReaderBtn'),
       headerStats: document.getElementById('headerStats'),
-      
+
+      savedTextsSelect: document.getElementById('savedTextsSelect'),
+      saveNameInput: document.getElementById('saveNameInput'),
+      saveBtn: document.getElementById('saveCurrentBtn'),
+      saveAsBtn: document.getElementById('saveAsBtn'),
+      loadBtn: document.getElementById('loadTextBtn'),
+      deleteBtn: document.getElementById('deleteTextBtn'),
+      newBlankBtn: document.getElementById('newBlankBtn'),
+
       selectionModal: document.getElementById('selectionModal'),
       selectedWordDisplay: document.getElementById('selectedWordDisplay'),
       btnStudyWord: document.getElementById('btnStudyWord'),
@@ -667,35 +797,159 @@
       examplesContent: document.getElementById('examplesContent'),
       pronunciationText: document.getElementById('pronunciationText'),
       speakButton: document.getElementById('speakButton'),
-      
+
       examplesCard: document.getElementById('examplesCard'),
-      pronunciationCard: document.getElementById('pronunciationCard')
+      pronunciationCard: document.getElementById('pronunciationCard'),
+
+      wordFooter: document.getElementById('wordFooter'),
+      mostCount: document.getElementById('mostCount'),
+      leastCount: document.getElementById('leastCount'),
+      allCount: document.getElementById('allCount'),
+
+      wordListModal: document.getElementById('wordListModal'),
+      closeWordList: document.getElementById('closeWordList'),
+      closeWordListSecondary: document.getElementById('closeWordListSecondary'),
+      wordListTitle: document.getElementById('wordListTitle'),
+      wordListSubtitle: document.getElementById('wordListSubtitle'),
+      wordListContainer: document.getElementById('wordListContainer'),
+      studyWordListBtn: document.getElementById('studyWordListBtn')
     };
 
-    let sentenceData = loadJson(STORAGE_KEYS.textData, []); 
-    let currentTitle = localStorage.getItem(STORAGE_KEYS.title) || '';
-    let progress = loadJson(STORAGE_KEYS.progress, {}); 
+    let library = loadJson(STORAGE_KEYS.library, null);
+    let activeDocId = localStorage.getItem(STORAGE_KEYS.activeId) || null;
+    let sentenceData = [];
+    let currentTitle = '';
+    let progress = {};
     let srsState = loadJson(STORAGE_KEYS.srs, {});
-    
+
+    let currentWordList = [];
+
     let currentSelection = { word: '', sentenceIndex: null, sentenceText: '' };
-    let activeDeck = { queue: [], pointer: 0, mode: 'word' }; 
+    let activeDeck = { queue: [], pointer: 0, mode: 'word' };
 
     function loadJson(key, fallback) {
       try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : fallback; }
       catch { return fallback; }
     }
-    
+
+    function createDocId() {
+      return 'doc-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
+    }
+
+    function ensureLibrary() {
+      if (!library || !library.documents) {
+        library = { documents: {} };
+      }
+    }
+
+    function persistLibrary() {
+      ensureLibrary();
+      localStorage.setItem(STORAGE_KEYS.library, JSON.stringify(library));
+      if (activeDocId) {
+        localStorage.setItem(STORAGE_KEYS.activeId, activeDocId);
+      }
+    }
+
+    function loadDocument(doc) {
+      sentenceData = Array.isArray(doc?.textData) ? [...doc.textData] : [];
+      currentTitle = doc?.title || doc?.name || '';
+      progress = doc?.progress || {};
+      dom.saveNameInput.value = doc?.name || '';
+      renderReader();
+      updateWordFooter();
+    }
+
+    function bootstrapDocuments() {
+      const legacySentences = loadJson(STORAGE_KEYS.textData, []);
+      const legacyTitle = localStorage.getItem(STORAGE_KEYS.title) || '';
+      const legacyProgress = loadJson(STORAGE_KEYS.progress, {});
+
+      if (library && library.documents && Object.keys(library.documents).length) {
+        if (activeDocId && library.documents[activeDocId]) {
+          loadDocument(library.documents[activeDocId]);
+        } else {
+          const firstId = Object.keys(library.documents)[0];
+          activeDocId = firstId;
+          loadDocument(library.documents[firstId]);
+        }
+        return;
+      }
+
+      if (legacySentences.length || legacyTitle || Object.keys(legacyProgress).length) {
+        ensureLibrary();
+        const newId = createDocId();
+        library.documents[newId] = {
+          name: legacyTitle || 'Imported Text',
+          title: legacyTitle,
+          textData: legacySentences,
+          progress: legacyProgress
+        };
+        activeDocId = newId;
+        persistLibrary();
+      }
+
+      sentenceData = legacySentences;
+      currentTitle = legacyTitle;
+      progress = legacyProgress;
+      renderReader();
+      updateWordFooter();
+    }
+
     function saveState() {
       localStorage.setItem(STORAGE_KEYS.textData, JSON.stringify(sentenceData));
       localStorage.setItem(STORAGE_KEYS.title, currentTitle);
       localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify(progress));
       localStorage.setItem(STORAGE_KEYS.srs, JSON.stringify(srsState));
+
+      if (!sentenceData.length && !currentTitle) return;
+      ensureLibrary();
+      if (!activeDocId) {
+        activeDocId = createDocId();
+      }
+      const name = dom.saveNameInput.value.trim() || currentTitle || 'Untitled text';
+      library.documents[activeDocId] = {
+        name,
+        title: currentTitle,
+        textData: sentenceData,
+        progress
+      };
+      persistLibrary();
+      refreshSavedList();
     }
 
     function parseText(rawText) {
       const clean = rawText.replace(/\n+/g, ' ');
       const rawSentences = clean.split(/(?<=[.!?…])\s+/);
       return rawSentences.map(s => s.trim()).filter(Boolean);
+    }
+
+    function getWordFrequency() {
+      const freq = new Map();
+      const matcher = /[\p{L}'’-]+/gu;
+      sentenceData.forEach(sentence => {
+        const matches = sentence.match(matcher) || [];
+        matches.forEach(word => {
+          const key = word.toLowerCase();
+          freq.set(key, (freq.get(key) || 0) + 1);
+        });
+      });
+      return freq;
+    }
+
+    function computeWordStats() {
+      const freq = getWordFrequency();
+      const entries = Array.from(freq.entries());
+      const allWords = entries.map(([word]) => word).sort((a, b) => a.localeCompare(b));
+
+      const most = entries
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .slice(0, 50);
+
+      const least = entries
+        .sort((a, b) => a[1] - b[1] || a[0].localeCompare(b[0]))
+        .slice(0, 50);
+
+      return { allWords, most, least };
     }
 
     function renderReader() {
@@ -709,6 +963,7 @@
       if (sentenceData.length === 0) {
         dom.readerContent.innerHTML = `<div class="empty-state">Paste text below and click "Add to Reader" to get started.</div>`;
         dom.headerStats.textContent = "0 Sentences";
+        updateWordFooter();
         return;
       }
 
@@ -746,6 +1001,7 @@
 
       dom.readerContent.appendChild(fragment);
       dom.headerStats.textContent = `${sentenceData.length} Sentences`;
+      updateWordFooter();
     }
 
     dom.addBtn.addEventListener('click', () => {
@@ -763,11 +1019,147 @@
       renderReader();
     });
 
+    function refreshSavedList() {
+      ensureLibrary();
+      const select = dom.savedTextsSelect;
+      select.innerHTML = '';
+      const docs = Object.entries(library.documents);
+      if (!docs.length) {
+        const opt = document.createElement('option');
+        opt.textContent = 'No saved texts yet';
+        opt.disabled = true;
+        opt.selected = true;
+        select.appendChild(opt);
+        return;
+      }
+
+      docs.forEach(([id, doc]) => {
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.textContent = doc.name || doc.title || 'Untitled text';
+        if (id === activeDocId) opt.selected = true;
+        select.appendChild(opt);
+      });
+    }
+
+    function updateWordFooter() {
+      const { allWords, most, least } = computeWordStats();
+      dom.mostCount.textContent = most.length;
+      dom.leastCount.textContent = least.length;
+      dom.allCount.textContent = allWords.length;
+    }
+
+    dom.saveBtn.addEventListener('click', () => {
+      saveState();
+    });
+
+    dom.saveAsBtn.addEventListener('click', () => {
+      activeDocId = createDocId();
+      saveState();
+    });
+
+    dom.loadBtn.addEventListener('click', () => {
+      const chosen = dom.savedTextsSelect.value;
+      if (!chosen || !library?.documents?.[chosen]) return;
+      activeDocId = chosen;
+      persistLibrary();
+      loadDocument(library.documents[chosen]);
+      refreshSavedList();
+    });
+
+    dom.deleteBtn.addEventListener('click', () => {
+      const chosen = dom.savedTextsSelect.value;
+      if (!chosen || !library?.documents?.[chosen]) return;
+      const confirmed = confirm('Delete this saved text?');
+      if (!confirmed) return;
+      delete library.documents[chosen];
+      if (activeDocId === chosen) {
+        activeDocId = Object.keys(library.documents)[0] || null;
+        if (activeDocId) {
+          loadDocument(library.documents[activeDocId]);
+        } else {
+          sentenceData = [];
+          currentTitle = '';
+          progress = {};
+          renderReader();
+          updateWordFooter();
+        }
+      }
+      persistLibrary();
+      refreshSavedList();
+    });
+
+    dom.newBlankBtn.addEventListener('click', () => {
+      activeDocId = null;
+      sentenceData = [];
+      currentTitle = '';
+      progress = {};
+      dom.saveNameInput.value = '';
+      dom.titleInput.value = '';
+      dom.textInput.value = '';
+      renderReader();
+      updateWordFooter();
+      refreshSavedList();
+    });
+
+    function openWordList(kind) {
+      const { allWords, most, least } = computeWordStats();
+      let words = [];
+      let subtitle = '';
+
+      if (kind === 'most') {
+        words = most.map(([word, count]) => ({ word, count }));
+        subtitle = 'Top 50 most frequent words in this text.';
+        dom.wordListTitle.textContent = 'Words with most occurrences';
+      } else if (kind === 'least') {
+        words = least.map(([word, count]) => ({ word, count }));
+        subtitle = 'Up to 50 least frequent words.';
+        dom.wordListTitle.textContent = 'Words with least occurrences';
+      } else {
+        words = allWords.map(word => ({ word, count: getWordFrequency().get(word) || 0 }));
+        subtitle = 'Every unique word in the current text.';
+        dom.wordListTitle.textContent = 'All words';
+      }
+
+      currentWordList = words.map(w => w.word);
+      dom.wordListSubtitle.textContent = subtitle;
+
+      const ul = document.createElement('ul');
+      words.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${item.word}</strong>${item.count ? ` — ${item.count}` : ''}`;
+        ul.appendChild(li);
+      });
+
+      dom.wordListContainer.innerHTML = '';
+      dom.wordListContainer.appendChild(ul);
+      dom.wordListModal.classList.add('active');
+    }
+
     function openSelectionModal(word, sIndex, sText) {
       const cleanWord = word.replace(/[^\p{L}'’-]/gu, '');
       currentSelection = { word: cleanWord, sentenceIndex: sIndex, sentenceText: sText };
       dom.selectedWordDisplay.textContent = cleanWord;
       dom.selectionModal.classList.add('active');
+    }
+
+    async function buildDeckFromWords(words) {
+      const cards = [];
+      for (const word of words) {
+        const generated = await generateCardsFromText(word, word);
+        if (generated.length) {
+          cards.push(...generated);
+        } else {
+          cards.push({
+            id: `manual-${word}-${Date.now()}`,
+            display: word,
+            meanings: ['No definition found.'],
+            found: true,
+            sentence: ''
+          });
+        }
+      }
+      return cards;
     }
 
     dom.btnStudyWord.addEventListener('click', async () => {
@@ -780,8 +1172,27 @@
       await startDeck('sentence');
     });
 
+    dom.studyWordListBtn.addEventListener('click', async () => {
+      dom.wordListModal.classList.remove('active');
+      if (!currentWordList.length) return;
+      dom.flashcardModal.classList.add('active');
+      dom.cardMeanings.innerHTML = '<div style="padding:2rem; text-align:center;">Loading cards...</div>';
+      resetReveals();
+      activeDeck.mode = 'word';
+      activeDeck.pointer = 0;
+      activeDeck.queue = await buildDeckFromWords(currentWordList);
+      dom.deckLabel.textContent = 'Word List Study';
+      showCard(0);
+    });
+
     dom.closeSelection.addEventListener('click', () => dom.selectionModal.classList.remove('active'));
     dom.closeFlashcard.addEventListener('click', () => dom.flashcardModal.classList.remove('active'));
+    dom.closeWordList.addEventListener('click', () => dom.wordListModal.classList.remove('active'));
+    dom.closeWordListSecondary.addEventListener('click', () => dom.wordListModal.classList.remove('active'));
+
+    dom.wordFooter.querySelectorAll('.stat-card').forEach(card => {
+      card.addEventListener('click', () => openWordList(card.dataset.kind));
+    });
 
     function resetReveals() {
       dom.examplesCard.classList.remove('revealed');
@@ -1171,7 +1582,8 @@
       });
     });
 
-    renderReader();
+    bootstrapDocuments();
+    refreshSavedList();
   </script>
 </body>
 </html>
