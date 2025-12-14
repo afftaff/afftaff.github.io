@@ -6,7 +6,7 @@
   <title>French Reader</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #f7f6f3;
@@ -14,11 +14,12 @@
       --text: #2c3e50;
       --muted: #7f8c8d;
       --border: #e0ded8;
-      --highlight-sentence: #e3e8ef; /* Light blue-grey for sentence hover */
-      --highlight-word: #cbd5e1;     /* Darker grey for word hover */
-      --success-bg: #dcfce7;         /* Light green for learnt sentences */
+      --highlight-sentence: #e3e8ef;
+      --highlight-word: #cbd5e1;
+      --success-bg: #dcfce7;
       --success-border: #86efac;
       --accent: #2c3e50;
+      --accent-2: #c0392b;
       --radius: 12px;
       --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
       --font-read: 'Inter', sans-serif;
@@ -56,7 +57,7 @@
     main {
       flex: 1;
       width: 100%;
-      max-width: 800px; /* Blog post width */
+      max-width: 800px;
       margin: 0 auto;
       padding: 2rem 1rem;
       display: flex;
@@ -69,14 +70,26 @@
       background: var(--paper);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 3rem;
+      padding: 4rem 3rem; /* More padding for blog feel */
       min-height: 200px;
       line-height: 1.8;
-      font-size: 1.125rem; /* 18px for better reading */
+      font-size: 1.125rem;
     }
+
+    .blog-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-top: 0;
+      margin-bottom: 2rem;
+      line-height: 1.2;
+      color: var(--text);
+      display: none; /* Hidden if empty */
+    }
+    .blog-title.visible { display: block; }
 
     @media (max-width: 600px) {
       .reader-container { padding: 1.5rem; font-size: 1rem; }
+      .blog-title { font-size: 1.8rem; }
     }
 
     .empty-state {
@@ -92,22 +105,16 @@
       border-radius: 6px;
       transition: background 0.1s ease;
       cursor: pointer;
-      margin-right: 4px; /* Space between sentences */
+      margin-right: 4px;
     }
 
-    /* Learned State */
     .sentence-wrap.learned {
       background-color: var(--success-bg);
       box-shadow: 0 0 0 1px var(--success-border);
     }
 
-    /* Hover States - Logic: Highlight sentence light, Highlight word dark */
-    .sentence-wrap:hover {
-      background-color: var(--highlight-sentence);
-    }
-    .sentence-wrap.learned:hover {
-      background-color: #bbf7d0; /* Darker green on hover */
-    }
+    .sentence-wrap:hover { background-color: var(--highlight-sentence); }
+    .sentence-wrap.learned:hover { background-color: #bbf7d0; }
 
     .word-span {
       padding: 2px 1px;
@@ -129,31 +136,33 @@
       padding: 1.5rem;
     }
     
-    .input-section h3 { margin-top: 0; font-size: 1rem; margin-bottom: 0.5rem; }
+    .input-section h3 { margin-top: 0; font-size: 1rem; margin-bottom: 1rem; }
     
-    textarea {
+    .input-group { display: flex; flex-direction: column; gap: 0.8rem; }
+
+    input[type="text"], textarea {
       width: 100%;
-      min-height: 100px;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 1rem;
+      padding: 0.8rem 1rem;
       font-family: inherit;
-      resize: vertical;
-      margin-bottom: 1rem;
       background: #f9f9f9;
+      font-size: 1rem;
     }
     
-    textarea:focus { outline: 2px solid var(--accent); background: #fff; }
+    textarea { min-height: 120px; resize: vertical; }
+    input[type="text"], textarea:focus { outline: 2px solid var(--accent); background: #fff; }
 
     button.primary-btn {
       background: var(--accent);
       color: white;
       border: none;
-      padding: 0.75rem 1.5rem;
+      padding: 0.85rem 1.5rem;
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
-      font-size: 0.95rem;
+      font-size: 1rem;
+      align-self: flex-start;
     }
     button.primary-btn:hover { opacity: 0.9; }
 
@@ -179,6 +188,9 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
       position: relative;
       animation: slideUp 0.2s ease-out;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
     }
 
     @keyframes slideUp {
@@ -188,7 +200,6 @@
 
     .modal h2 { margin-top: 0; }
     
-    /* Selection Modal Specifics */
     .selection-options {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -223,12 +234,11 @@
       font-size: 1.5rem;
       cursor: pointer;
       color: var(--muted);
+      z-index: 10;
     }
 
-    /* Flashcard UI (Reused/Adapted) */
-    .flashcard-container {
-      max-width: 650px; /* Wider for flashcards */
-    }
+    /* Flashcard UI */
+    .flashcard-container { max-width: 650px; }
     
     .flashcard-term { font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; }
     .flashcard-meta { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
@@ -238,8 +248,8 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 1rem;
-      max-height: 40vh;
       overflow-y: auto;
+      flex: 1; /* take remaining height */
     }
 
     .grade-buttons {
@@ -247,6 +257,7 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 0.5rem;
       margin-top: 1.5rem;
+      flex-shrink: 0;
     }
     
     .grade-buttons button {
@@ -258,10 +269,35 @@
       cursor: pointer;
     }
 
-    /* Mini Card Grid (from original) */
-    .mini-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.5rem; }
-    .mini-card { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem; font-size: 0.9rem; }
-    .mini-card strong { display: block; margin-bottom: 0.25rem; color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    /* Mini Card Grid (Restored) */
+    .mini-card-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+      gap: 0.75rem; 
+    }
+    .mini-card { 
+      background: white; 
+      border: 1px solid var(--border); 
+      border-radius: 8px; 
+      padding: 0.75rem; 
+      font-size: 0.9rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .mini-card strong { 
+      display: block; 
+      margin-bottom: 0.4rem; 
+      color: var(--muted); 
+      font-size: 0.75rem; 
+      text-transform: uppercase; 
+      letter-spacing: 0.5px; 
+      font-weight: 700;
+    }
+    .mini-card ul { margin: 0; padding-left: 1.2rem; }
+    .mini-card li { margin-bottom: 0.2rem; }
+    
+    /* Example sentences styling inside mini cards */
+    .example-line { margin-bottom: 0.5rem; border-bottom: 1px dashed #eee; padding-bottom: 0.25rem; }
+    .example-line:last-child { border-bottom: none; }
 
   </style>
 </head>
@@ -275,16 +311,22 @@
   <main>
     <!-- 1. The Reader Area -->
     <div class="reader-container" id="readerView">
-      <div class="empty-state">
-        Paste text below and click "Add to Reader" to get started.
+      <h1 class="blog-title" id="blogTitleDisplay"></h1>
+      <div id="readerContent">
+        <div class="empty-state">
+          Paste text below and click "Add to Reader" to get started.
+        </div>
       </div>
     </div>
 
     <!-- 2. The Input Area (Bottom) -->
     <div class="input-section">
       <h3>Add Text</h3>
-      <textarea id="textInput" placeholder="Paste French text here..."></textarea>
-      <button class="primary-btn" id="addToReaderBtn">Add to Reader</button>
+      <div class="input-group">
+        <input type="text" id="titleInput" placeholder="Title (e.g., Chapter 1, Daily News)" />
+        <textarea id="textInput" placeholder="Paste French text here..."></textarea>
+        <button class="primary-btn" id="addToReaderBtn">Add to Reader</button>
+      </div>
     </div>
   </main>
 
@@ -313,12 +355,12 @@
     <div class="modal flashcard-container">
       <button class="close-btn" id="closeFlashcard">×</button>
       
-      <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:1rem; flex-shrink:0;">
         <span class="pill" id="deckLabel">Deck</span>
         <span class="pill" id="deckProgress">0 / 0</span>
       </div>
 
-      <div id="flashcardContent">
+      <div style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
         <div class="flashcard-term" id="cardTerm">Bonjour</div>
         <div class="flashcard-meta" id="cardSubtitle">...</div>
         <div class="flashcard-details" id="cardMeanings">
@@ -339,13 +381,16 @@
   <script>
     // --- State Management ---
     const STORAGE_KEYS = {
-      textData: 'reader-sentences-v2', // Stores array of sentence strings
-      progress: 'reader-progress-v2',  // Stores learned status
+      title: 'reader-title-v2',
+      textData: 'reader-sentences-v2', 
+      progress: 'reader-progress-v2',  
       srs: 'reader-srs'
     };
 
     const dom = {
-      readerView: document.getElementById('readerView'),
+      readerContent: document.getElementById('readerContent'),
+      blogTitleDisplay: document.getElementById('blogTitleDisplay'),
+      titleInput: document.getElementById('titleInput'),
       textInput: document.getElementById('textInput'),
       addBtn: document.getElementById('addToReaderBtn'),
       headerStats: document.getElementById('headerStats'),
@@ -369,12 +414,13 @@
     };
 
     let sentenceData = loadJson(STORAGE_KEYS.textData, []); 
-    let progress = loadJson(STORAGE_KEYS.progress, {}); // Map: sentenceText -> { status: 'complete', cards: {} }
+    let currentTitle = localStorage.getItem(STORAGE_KEYS.title) || '';
+    let progress = loadJson(STORAGE_KEYS.progress, {}); 
     let srsState = loadJson(STORAGE_KEYS.srs, {});
     
     // Temp State for interactions
     let currentSelection = { word: '', sentenceIndex: null, sentenceText: '' };
-    let activeDeck = { queue: [], pointer: 0, mode: 'word' }; // mode: 'word' | 'sentence'
+    let activeDeck = { queue: [], pointer: 0, mode: 'word' }; 
 
     function loadJson(key, fallback) {
       try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : fallback; }
@@ -383,6 +429,7 @@
     
     function saveState() {
       localStorage.setItem(STORAGE_KEYS.textData, JSON.stringify(sentenceData));
+      localStorage.setItem(STORAGE_KEYS.title, currentTitle);
       localStorage.setItem(STORAGE_KEYS.progress, JSON.stringify(progress));
       localStorage.setItem(STORAGE_KEYS.srs, JSON.stringify(srsState));
     }
@@ -390,22 +437,28 @@
     // --- Parsing & Rendering ---
 
     function parseText(rawText) {
-      // Simple parse: split by common sentence delimiters, keep delimiter
-      // Clean newlines
       const clean = rawText.replace(/\n+/g, ' ');
-      // Split looking behind for . ! ?
       const rawSentences = clean.split(/(?<=[.!?…])\s+/);
       return rawSentences.map(s => s.trim()).filter(Boolean);
     }
 
     function renderReader() {
+      // 1. Render Title
+      if (currentTitle) {
+        dom.blogTitleDisplay.textContent = currentTitle;
+        dom.blogTitleDisplay.classList.add('visible');
+      } else {
+        dom.blogTitleDisplay.classList.remove('visible');
+      }
+
+      // 2. Render Text
       if (sentenceData.length === 0) {
-        dom.readerView.innerHTML = `<div class="empty-state">Paste text below and click "Add to Reader" to get started.</div>`;
+        dom.readerContent.innerHTML = `<div class="empty-state">Paste text below and click "Add to Reader" to get started.</div>`;
         dom.headerStats.textContent = "0 Sentences";
         return;
       }
 
-      dom.readerView.innerHTML = '';
+      dom.readerContent.innerHTML = '';
       const fragment = document.createDocumentFragment();
 
       sentenceData.forEach((text, index) => {
@@ -413,39 +466,32 @@
         wrap.className = 'sentence-wrap';
         wrap.dataset.index = index;
         
-        // Check if learned
         const key = text.trim().toLowerCase();
         if (progress[key]?.status === 'complete') {
           wrap.classList.add('learned');
         }
 
-        // Tokenize words
-        const tokens = text.split(/(\s+|[.,!?;:()"]+)/); // Split keeping separators
+        const tokens = text.split(/(\s+|[.,!?;:()"]+)/);
         
         tokens.forEach(token => {
           if (token.trim().length === 0 || /^[.,!?;:()"]+$/.test(token)) {
-            // Punctuation or space: just append
             wrap.appendChild(document.createTextNode(token));
           } else {
-            // Interactive word
             const wordSpan = document.createElement('span');
             wordSpan.className = 'word-span';
             wordSpan.textContent = token;
-            // Interaction Event
             wordSpan.onclick = (e) => {
-              e.stopPropagation(); // Prevent sentence click if we had one
+              e.stopPropagation(); 
               openSelectionModal(token, index, text);
             };
             wrap.appendChild(wordSpan);
           }
         });
 
-        // Optional: Wrap sentences in paragraphs visually if needed, 
-        // but for now strictly inline-block flow usually works best for "blog" feel
         fragment.appendChild(wrap);
       });
 
-      dom.readerView.appendChild(fragment);
+      dom.readerContent.appendChild(fragment);
       dom.headerStats.textContent = `${sentenceData.length} Sentences`;
     }
 
@@ -453,18 +499,24 @@
 
     dom.addBtn.addEventListener('click', () => {
       const text = dom.textInput.value;
-      if (!text.trim()) return;
+      const title = dom.titleInput.value;
+
+      if (!text.trim() && !title.trim()) return;
       
-      const newSentences = parseText(text);
-      sentenceData = [...newSentences, ...sentenceData]; // Add new text to TOP
+      if (title.trim()) currentTitle = title.trim();
+      
+      if (text.trim()) {
+        const newSentences = parseText(text);
+        sentenceData = [...sentenceData, ...newSentences]; 
+      }
       
       dom.textInput.value = '';
+      dom.titleInput.value = '';
       saveState();
       renderReader();
     });
 
     function openSelectionModal(word, sIndex, sText) {
-      // Clean word (remove punctuation if any stuck)
       const cleanWord = word.replace(/[^\p{L}'’-]/gu, '');
       currentSelection = { word: cleanWord, sentenceIndex: sIndex, sentenceText: sText };
       
@@ -472,7 +524,6 @@
       dom.selectionModal.classList.add('active');
     }
 
-    // Modal Buttons
     dom.btnStudyWord.addEventListener('click', async () => {
       dom.selectionModal.classList.remove('active');
       await startDeck('word');
@@ -499,17 +550,15 @@
       await window.frenchWordsApi.preloadFrenchWordData();
 
       if (mode === 'word') {
-        // Just look up the specific word
         const cards = await generateCardsFromText(currentSelection.word);
-        // Filter to ensure we only get the word we clicked roughly
+        // Filter specifically for the clicked word
         activeDeck.queue = cards.filter(c => 
           c.display.toLowerCase().includes(currentSelection.word.toLowerCase()) || 
           currentSelection.word.toLowerCase().includes(c.display.toLowerCase())
         );
-        if (activeDeck.queue.length === 0 && cards.length > 0) activeDeck.queue = cards; // Fallback
+        if (activeDeck.queue.length === 0 && cards.length > 0) activeDeck.queue = cards;
         dom.deckLabel.textContent = "Word Study";
       } else {
-        // Sentence mode
         const cards = await generateCardsFromText(currentSelection.sentenceText);
         activeDeck.queue = cards;
         dom.deckLabel.textContent = "Sentence Study";
@@ -524,22 +573,26 @@
     }
 
     async function generateCardsFromText(textStr) {
-      // Use existing API logic
       const lookup = await window.frenchWordsApi.lookupFrenchWords(textStr);
       const cards = [];
       
-      // Convert API lookup format to Flashcard format
       lookup.forEach((entry, idx) => {
+        // Map ALL available API fields to the card
         const card = {
-          id: entry.word + '-' + idx, // Simple ID
+          id: entry.word + '-' + idx,
           display: entry.word || entry.originalText,
           original: entry.originalText,
           meanings: entry.meanings,
           category: entry.category,
           gender: entry.gender,
+          pronouns: entry.pronouns,
+          tense: entry.tense,
+          conjugatedFrom: entry.conjugatedFrom,
+          conjugatedFromMeaning: entry.conjugatedFromMeaning,
+          exampleSentences: entry.exampleSentences,
+          notes: entry.notes,
           found: entry.found,
           wiktionaryLookupWord: entry.word || entry.originalText,
-          // Context
           sentence: currentSelection.sentenceText
         };
         cards.push(card);
@@ -549,7 +602,6 @@
 
     async function showCard(index) {
       if (index >= activeDeck.queue.length) {
-        // Deck Complete
         finishDeck();
         return;
       }
@@ -557,11 +609,14 @@
       const card = activeDeck.queue[index];
       dom.deckProgress.textContent = `${index + 1} / ${activeDeck.queue.length}`;
       
-      // Render Card Front
       dom.cardTerm.textContent = card.display;
-      dom.cardSubtitle.textContent = (card.category || '') + (card.gender ? ` • ${card.gender}` : '');
       
-      // Wiktionary fallback logic (copied from your snippet idea)
+      // Subtitle: Category • Gender
+      let sub = [];
+      if(card.category) sub.push(card.category);
+      if(card.gender) sub.push(card.gender);
+      dom.cardSubtitle.textContent = sub.join(' • ');
+      
       if (!card.found && !card.meanings) {
          dom.cardMeanings.innerHTML = 'Looking up...';
          const defs = await window.frenchWordsApi.fetchWiktionaryMeaning(card.wiktionaryLookupWord);
@@ -569,21 +624,48 @@
          card.found = true;
       }
 
-      // Render Body
+      // --- Mini Cards Renderer ---
       let html = `<div class="mini-card-grid">`;
       
-      const addToGrid = (label, val) => {
+      const addToGrid = (label, val, type='text') => {
          if(!val) return;
          if(Array.isArray(val) && val.length === 0) return;
+         
+         let content = '';
+         if (type === 'list' && Array.isArray(val)) {
+            content = `<ul>${val.map(v=>`<li>${v}</li>`).join('')}</ul>`;
+         } else if (type === 'examples' && Array.isArray(val)) {
+            // Special formatter for example sentences
+            content = val.map(ex => `
+              <div class="example-line">
+                <div><strong>${ex.french}</strong></div>
+                ${ex.english ? `<div style="color:var(--muted)">${ex.english}</div>` : ''}
+              </div>
+            `).join('');
+         } else {
+            content = val;
+         }
+
          html += `
           <div class="mini-card">
             <strong>${label}</strong>
-            <div>${Array.isArray(val) ? `<ul>${val.map(v=>`<li>${v}</li>`).join('')}</ul>` : val}</div>
+            <div>${content}</div>
           </div>`;
       };
 
-      addToGrid('Meanings', card.meanings);
-      addToGrid('Context', card.sentence);
+      // Add all the mini cards back!
+      addToGrid('Original', card.original);
+      addToGrid('Word', card.display);
+      addToGrid('Meanings', card.meanings, 'list');
+      addToGrid('Category', card.category);
+      addToGrid('Gender', card.gender);
+      addToGrid('Pronouns', card.pronouns, 'list');
+      addToGrid('Tense', card.tense, 'list');
+      addToGrid('Conjugated From', card.conjugatedFrom);
+      addToGrid('Base Meaning', card.conjugatedFromMeaning, 'list');
+      addToGrid('Examples', card.exampleSentences, 'examples');
+      addToGrid('Notes', card.notes);
+      addToGrid('Context', card.sentence); // Added Context back as a card too
       
       html += `</div>`;
       dom.cardMeanings.innerHTML = html;
@@ -591,45 +673,26 @@
 
     function finishDeck() {
       dom.flashcardModal.classList.remove('active');
-      
       if (activeDeck.mode === 'sentence') {
-        // Mark sentence as Green
         const key = currentSelection.sentenceText.trim().toLowerCase();
         if (!progress[key]) progress[key] = { cards: {} };
         progress[key].status = 'complete';
         saveState();
-        renderReader(); // Re-render to show green
+        renderReader(); 
       }
-      
-      // Word mode does nothing on completion per request
     }
 
-    // --- Grading Logic ---
     dom.gradeButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        const grade = btn.dataset.grade; // again, hard, good, easy
-        
-        // In this specific simplified logic:
-        // If "Again", we re-queue the card at the end? 
-        // Or simply proceed. The request says "If I complete the sentence deck show it as green."
-        // implying getting to the end is enough, or getting them right. 
-        // Let's implement simple queueing: if grade is 'again', push to end of queue.
-        
-        const currentCard = activeDeck.queue[activeDeck.pointer];
-        
-        // Save SRS Data (Optional for persistence, though prompt focused on UI flow)
-        // scheduleCard(currentCard.id, grade); // Call SRS logic if you want persistent intervals
-        
+        const grade = btn.dataset.grade;
         if (grade === 'again') {
-          activeDeck.queue.push(currentCard); // Add to back
+          activeDeck.queue.push(activeDeck.queue[activeDeck.pointer]);
         }
-
         activeDeck.pointer++;
         showCard(activeDeck.pointer);
       });
     });
 
-    // Initial Load
     renderReader();
 
   </script>
