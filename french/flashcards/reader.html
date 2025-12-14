@@ -189,7 +189,7 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
       position: relative;
       animation: slideUp 0.2s ease-out;
-      max-height: 90vh; /* Keeps modal inside viewport */
+      max-height: 90vh; 
       display: flex;
       flex-direction: column;
     }
@@ -241,7 +241,6 @@
     }
 
     /* --- FLASHCARD UI --- */
-    /* Fixed height container to allow internal scrolling */
     .flashcard-container { max-width: 700px; height: 90vh; padding: 0; overflow: hidden; }
     
     .flashcard-header {
@@ -254,7 +253,6 @@
     .flashcard-term { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 0.2rem; color: var(--accent); }
     .flashcard-meta { text-align: center; color: var(--muted); font-size: 0.95rem; margin-bottom: 0.5rem; min-height: 1.2rem; font-weight: 500; }
 
-    /* The Scrollable Area */
     .flashcard-scroll-area {
       flex: 1;
       overflow-y: auto;
@@ -284,7 +282,7 @@
     }
     .grade-buttons button:active { transform: scale(0.98); }
 
-    /* --- FLIPPABLE MINI CARDS --- */
+    /* --- MINI CARDS --- */
     .mini-card-grid { 
       display: grid; 
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
@@ -293,7 +291,6 @@
       margin-bottom: 1.5rem;
     }
 
-    /* Single Item Mode */
     .mini-card-grid.single-mode {
       grid-template-columns: 1fr;
     }
@@ -333,7 +330,6 @@
       background: white;
     }
 
-    /* Front Face */
     .mini-card-front {
       background: #f8fafc;
       color: var(--accent);
@@ -346,77 +342,67 @@
       font-weight: 700;
     }
 
-    /* Back Face - Centered but Scrollable */
     .mini-card-back {
       transform: rotateY(180deg);
       background: #fff;
       display: flex;
       flex-direction: column;
-      /* 
-        We use flex-direction column.
-        We do NOT use justify-content: center here because that causes the top cut-off bug.
-        Instead we handle centering inside the child wrapper.
-      */
       padding: 0;
     }
 
     .mini-card-back-content {
-      /* Fallback for simple text cards */
       width: 100%;
       font-size: 1rem;
       color: var(--text);
       line-height: 1.5;
       text-align: center;
       padding: 1.5rem;
-      margin: auto 0; /* Centers vertically */
+      margin: auto 0;
     }
 
-    /* --- PAGINATION STYLES --- */
+    /* --- PAGINATION & CONTENT --- */
     .pagination-wrapper {
       display: flex;
       flex-direction: column;
       height: 100%;
       width: 100%;
       padding: 1rem 1.5rem;
-      overflow: hidden; /* Contains the scrollable area */
+      overflow: hidden; 
     }
     
     .pagination-content {
-      /* 
-         This is the magic fix:
-         1. overflow-y: auto -> allows scrolling if text is huge.
-         2. margin: auto 0 -> Pushes it to the middle if small, but starts at top if big.
-      */
       flex: 1;
       overflow-y: auto; 
       display: flex;
       flex-direction: column;
-      margin: 0; /* Reset */
+      margin: 0; 
     }
 
     .pagination-content-inner {
-        margin: auto 0; /* Centers the text block vertically */
+        /* This centers vertically, but allows scroll if content > height */
+        margin: auto 0; 
         width: 100%;
-        text-align: center; /* Center alignment requested */
+        text-align: center;
         font-size: 1.1rem;
         line-height: 1.6;
     }
 
-    /* Ensure list items inside the content look nice */
     .pagination-content-inner p { margin-top: 0; }
+    
+    /* Ensure lists inside definitions are aligned nicely */
     .pagination-content-inner ul, .pagination-content-inner ol { 
-        text-align: left; /* Keep lists left-aligned for readability */
+        text-align: left; 
         padding-left: 1.5rem; 
-        margin: 0.5rem auto;
-        display: inline-block; /* Helps center the list block itself */
+        margin: 0.5rem 0;
+        display: inline-block; 
         width: 100%;
     }
     
-    /* Formatting from API */
+    /* Ensure spans and links are visible */
+    .pagination-content-inner span { display: inline; color: var(--text); }
     .pagination-content-inner b, .pagination-content-inner strong { color: var(--accent); font-weight: 700; }
     .pagination-content-inner i, .pagination-content-inner em { color: var(--muted); font-style: italic; }
     .pagination-content-inner a { color: inherit; text-decoration: none; pointer-events: none; border-bottom: 1px dotted var(--muted); }
-    .pagination-content-inner span { display: inline; } /* Ensure spans are shown */
 
     .pagination-controls {
       display: flex;
@@ -424,7 +410,7 @@
       align-items: center;
       padding-top: 0.75rem;
       border-top: 1px solid #f1f5f9;
-      margin-top: auto; /* Pushes to bottom */
+      margin-top: auto;
       font-size: 0.85rem;
       color: var(--muted);
       width: 100%;
@@ -447,7 +433,7 @@
     .pager-btn:hover { background: #f1f5f9; }
     .pager-btn:disabled { opacity: 0.3; cursor: default; }
 
-    /* --- REVEAL / SPOILER CARDS --- */
+    /* --- REVEAL CARDS --- */
     .special-cards {
       display: flex;
       flex-direction: column;
@@ -547,7 +533,6 @@
     <div class="stats" id="headerStats">0 Sentences Loaded</div>
   </header>
   <main>
-    <!-- 1. The Reader Area -->
     <div class="reader-container" id="readerView">
       <h1 class="blog-title" id="blogTitleDisplay"></h1>
       <div id="readerContent">
@@ -557,7 +542,6 @@
       </div>
     </div>
     
-    <!-- 2. The Input Area (Bottom) -->
     <div class="input-section">
       <h3>Add Text</h3>
       <div class="input-group">
@@ -800,8 +784,7 @@
       card.classList.add('revealed');
     }
 
-    // --- HTML CLEANING & EXTRACTION ---
-    // Updated to be more robust for nested spans and "dd" tags
+    // --- UPDATED HTML CLEANING ---
     function cleanAndParseDefinitions(rawHtmlOrArray) {
       let inputs = Array.isArray(rawHtmlOrArray) ? rawHtmlOrArray : [rawHtmlOrArray];
       let results = [];
@@ -812,36 +795,50 @@
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlStr;
 
-        // 1. Look for list items (li) OR definitions (dd)
-        const items = tempDiv.querySelectorAll('li, dd');
-
-        if (items.length > 0) {
-          items.forEach(item => {
-            // Get innerHTML to keep spans/formatting. 
-            // We use item.innerHTML so spans inside are preserved.
-            const text = item.innerHTML.trim(); 
-            if(text) results.push(text);
-          });
-        } else {
-          // 2. Fallback: No list found. 
-          // If the text contains <p>, use those.
-          const paragraphs = tempDiv.querySelectorAll('p');
-          if (paragraphs.length > 0) {
-              paragraphs.forEach(p => {
-                 const text = p.innerHTML.trim();
-                 if(text) results.push(text);
-              });
-          } else {
-              // 3. Absolute Fallback: It's just a blob.
-              // Just return the innerHTML of the wrapper. 
-              // This catches case where user just has a single <span> text.
-              const text = tempDiv.innerHTML.trim();
-              if (text) results.push(text);
-          }
+        // STRATEGY: Find "Top Level" items only.
+        // If we just do querySelectorAll('li'), we get the nested ones separately,
+        // which breaks the context of the parent.
+        const allListItems = tempDiv.querySelectorAll('li, dd');
+        
+        if (allListItems.length > 0) {
+            allListItems.forEach(li => {
+                // Check if this LI is inside another LI that we are also parsing
+                let parent = li.parentElement;
+                while(parent && parent !== tempDiv) {
+                    if(parent.tagName === 'LI' || parent.tagName === 'DD') {
+                        // It is a nested child. Skip it, because it will be
+                        // included in the Parent's innerHTML.
+                        return; 
+                    }
+                    parent = parent.parentElement;
+                }
+                
+                // If we get here, it is a Top Level Item.
+                // We preserve the full innerHTML (spans, sub-lists, etc.)
+                const text = li.innerHTML.trim(); 
+                if(text) results.push(text);
+            });
+        } 
+        
+        // Fallback: If no list items found, try paragraphs or raw text
+        if (results.length === 0) {
+            const paragraphs = tempDiv.querySelectorAll('p');
+            if (paragraphs.length > 0) {
+                paragraphs.forEach(p => {
+                    const text = p.innerHTML.trim();
+                    if(text) results.push(text);
+                });
+            } else {
+                // Just text or span
+                const text = tempDiv.innerHTML.trim();
+                if(text) results.push(text);
+            }
         }
       });
       
+      // Safety net
       if (results.length === 0 && inputs.length > 0) return inputs;
+      
       return results;
     }
 
