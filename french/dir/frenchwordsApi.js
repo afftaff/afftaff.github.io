@@ -418,6 +418,8 @@ function buildResultTemplate(originalText, normalizedWord) {
     gender: null,
     category: null,
     pronouns: null,
+    pronunciationIpa: null,
+    pronunciationEnglish: null,
     tense: null,
     conjugatedFrom: null,
     conjugatedFromMeaning: null,
@@ -442,6 +444,7 @@ function formatVerbInfinitiveMatch(originalText, normalizedWord, verb) {
   result.meanings = splitMeanings(verb.verb.definitions);
   result.conjugatedFrom = verb.verb.verb || null;
   result.conjugatedFromMeaning = splitMeanings(verb.verb.definitions);
+  result.pronunciationIpa = verb.verb.ipa || null;
   return result;
 }
 
@@ -462,6 +465,8 @@ function formatVerbConjugationMatch(originalText, normalizedWord, match) {
   result.conjugatedFrom = verb.verb;
   result.conjugatedFromMeaning = splitMeanings(verb.definitions);
   result.exampleSentences = collectSentences(conjugation);
+  result.pronunciationIpa = conjugation.ipa || verb.ipa || null;
+  result.pronunciationEnglish = conjugation.pronunciation_en || conjugation.word_en_1 || null;
   return result;
 }
 
@@ -524,6 +529,8 @@ function createNotFoundResult(originalText, normalizedWord) {
     gender: null,
     category: null,
     pronouns: null,
+    pronunciationIpa: null,
+    pronunciationEnglish: null,
     tense: null,
     conjugatedFrom: null,
     conjugatedFromMeaning: null,

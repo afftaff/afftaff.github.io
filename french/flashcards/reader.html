@@ -363,6 +363,67 @@
       line-height: 1.5;
     }
 
+    /* Special wide cards */
+    .special-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .special-card {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #f8fafc;
+      padding: 1rem 1.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .special-card h4 {
+      margin: 0 0 0.5rem 0;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .special-card .card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .special-card .example-line { margin: 0; border: none; padding: 0.35rem 0; }
+    .special-card .example-fr { font-size: 1rem; }
+    .special-card .example-en { font-size: 0.9rem; }
+
+    .pronunciation-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .speak-btn {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      cursor: pointer;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .speak-btn:hover { background: #eef2ff; }
+
+    .pronunciation-text { font-weight: 600; color: var(--accent); word-break: break-word; }
+
     /* Styled Lists on Card Back */
     .mini-card ul {
       margin: 0;
@@ -471,9 +532,26 @@
 
       <div class="flashcard-term" id="cardTerm">Bonjour</div>
       <div class="flashcard-meta" id="cardSubtitle">...</div>
-      
+
       <div class="flashcard-details" id="cardMeanings">
         <!-- Grid of flippable cards goes here -->
+      </div>
+
+      <div class="special-cards">
+        <div class="special-card" id="examplesCard">
+          <h4>Example Sentences</h4>
+          <div class="card-body" id="examplesContent"></div>
+        </div>
+
+        <div class="special-card" id="pronunciationCard">
+          <h4>Pronunciation</h4>
+          <div class="card-body">
+            <div class="pronunciation-row">
+              <button class="speak-btn" id="speakButton" type="button" aria-label="Play pronunciation">🔊 <span>Play</span></button>
+              <div class="pronunciation-text" id="pronunciationText"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="grade-buttons">
@@ -518,7 +596,10 @@
       cardMeanings: document.getElementById('cardMeanings'),
       deckLabel: document.getElementById('deckLabel'),
       deckProgress: document.getElementById('deckProgress'),
-      gradeButtons: document.querySelectorAll('.grade-buttons button')
+      gradeButtons: document.querySelectorAll('.grade-buttons button'),
+      examplesContent: document.getElementById('examplesContent'),
+      pronunciationText: document.getElementById('pronunciationText'),
+      speakButton: document.getElementById('speakButton')
     };
 
     let sentenceData = loadJson(STORAGE_KEYS.textData, []); 
@@ -685,6 +766,8 @@
           category: entry.category,
           gender: entry.gender,
           pronouns: entry.pronouns,
+          pronunciationIpa: entry.pronunciationIpa,
+          pronunciationEnglish: entry.pronunciationEnglish,
           tense: entry.tense,
           conjugatedFrom: entry.conjugatedFrom,
           conjugatedFromMeaning: entry.conjugatedFromMeaning,
@@ -793,6 +876,55 @@
       } else {
         dom.cardMeanings.appendChild(grid);
       }
+
+      renderExamples(card);
+      renderPronunciation(card);
+    }
+
+    function renderExamples(card) {
+      const container = dom.examplesContent;
+      container.innerHTML = '';
+
+      const examples = Array.isArray(card.exampleSentences) && card.exampleSentences.length
+        ? card.exampleSentences
+        : (card.sentence ? [{ french: card.sentence, english: null }] : []);
+
+      if (!examples.length) {
+        container.innerHTML = '<div class="example-line"><div class="example-fr" style="color:var(--muted)">No examples available.</div></div>';
+        return;
+      }
+
+      container.innerHTML = examples.map(ex => `
+        <div class="example-line">
+          <div class="example-fr">${ex.french || card.display}</div>
+          ${ex.english ? `<div class="example-en">${ex.english}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function formatPronunciation(card) {
+      const hasIpa = !!card.pronunciationIpa;
+      const hasEnglish = !!card.pronunciationEnglish;
+      if (hasIpa || hasEnglish) {
+        const ipaPart = card.pronunciationIpa || '';
+        const enPart = card.pronunciationEnglish || '';
+        const separator = (hasIpa && hasEnglish) ? ' / ' : '';
+        return `${ipaPart}${separator}${enPart}`.trim();
+      }
+      return card.display;
+    }
+
+    function speakText(text) {
+      if (!window.speechSynthesis || !text) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'fr-FR';
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function renderPronunciation(card) {
+      dom.pronunciationText.textContent = formatPronunciation(card);
+      dom.speakButton.onclick = () => speakText(card.display || card.word || '');
     }
 
     function finishDeck() {
