@@ -19,7 +19,6 @@
       --success-bg: #dcfce7;
       --success-border: #86efac;
       --accent: #2c3e50;
-      --accent-2: #c0392b;
       --radius: 12px;
       --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
       --font-read: 'Inter', sans-serif;
@@ -70,7 +69,7 @@
       background: var(--paper);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 4rem 3rem; /* More padding for blog feel */
+      padding: 4rem 3rem;
       min-height: 200px;
       line-height: 1.8;
       font-size: 1.125rem;
@@ -83,7 +82,7 @@
       margin-bottom: 2rem;
       line-height: 1.2;
       color: var(--text);
-      display: none; /* Hidden if empty */
+      display: none;
     }
     .blog-title.visible { display: block; }
 
@@ -137,7 +136,6 @@
     }
     
     .input-section h3 { margin-top: 0; font-size: 1rem; margin-bottom: 1rem; }
-    
     .input-group { display: flex; flex-direction: column; gap: 0.8rem; }
 
     input[type="text"], textarea {
@@ -237,67 +235,133 @@
       z-index: 10;
     }
 
-    /* Flashcard UI */
-    .flashcard-container { max-width: 650px; }
+    /* --- FLASHCARD UI --- */
+    .flashcard-container { max-width: 700px; height: 85vh; }
     
-    .flashcard-term { font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; }
-    .flashcard-meta { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .flashcard-term { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 0.2rem; color: var(--accent); }
+    .flashcard-meta { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem; min-height: 1.2rem; }
     
     .flashcard-details {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem;
+      flex: 1;
       overflow-y: auto;
-      flex: 1; /* take remaining height */
+      margin-bottom: 1rem;
+      padding: 4px; /* Space for shadow */
     }
 
     .grade-buttons {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 0.5rem;
-      margin-top: 1.5rem;
+      margin-top: auto;
       flex-shrink: 0;
     }
     
     .grade-buttons button {
-      padding: 0.8rem;
+      padding: 0.9rem;
       border: none;
       border-radius: 8px;
       color: white;
       font-weight: 600;
       cursor: pointer;
+      font-size: 1rem;
     }
 
-    /* Mini Card Grid (Restored) */
+    /* --- FLIPPABLE MINI CARDS --- */
     .mini-card-grid { 
       display: grid; 
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
       gap: 0.75rem; 
+      width: 100%;
     }
+
+    /* Special Class for when there is only 1 item */
+    .mini-card-grid.single-mode {
+      grid-template-columns: 1fr;
+      height: 100%;
+    }
+
     .mini-card { 
-      background: white; 
-      border: 1px solid var(--border); 
-      border-radius: 8px; 
-      padding: 0.75rem; 
+      background: transparent;
+      perspective: 1000px; /* Enable 3D effect */
+      cursor: pointer;
+      min-height: 140px;
+    }
+
+    /* Make the single card bigger */
+    .mini-card-grid.single-mode .mini-card {
+      min-height: 100%; /* Fill the container */
+    }
+
+    .mini-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-style: preserve-3d;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .mini-card.flipped .mini-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .mini-card-face {
+      position: absolute;
+      inset: 0; /* fill parent */
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    /* Front Face Styles */
+    .mini-card-front {
+      background: #f8fafc;
+      color: var(--accent);
+    }
+    .mini-card-front strong {
       font-size: 0.9rem;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
     }
-    .mini-card strong { 
-      display: block; 
-      margin-bottom: 0.4rem; 
-      color: var(--muted); 
-      font-size: 0.75rem; 
-      text-transform: uppercase; 
-      letter-spacing: 0.5px; 
-      font-weight: 700;
+
+    /* Back Face Styles */
+    .mini-card-back {
+      transform: rotateY(180deg);
+      background: #fff;
+      overflow-y: auto; /* Allow scrolling if content is long */
+      align-items: flex-start; /* Align text top-left usually better for content */
+      text-align: left;
     }
+    
+    /* Adjust text alignment for back card based on content type */
+    .mini-card-back-content {
+      width: 100%;
+    }
+
     .mini-card ul { margin: 0; padding-left: 1.2rem; }
     .mini-card li { margin-bottom: 0.2rem; }
     
-    /* Example sentences styling inside mini cards */
-    .example-line { margin-bottom: 0.5rem; border-bottom: 1px dashed #eee; padding-bottom: 0.25rem; }
+    /* Example sentences styling */
+    .example-line { margin-bottom: 0.75rem; border-bottom: 1px dashed #eee; padding-bottom: 0.5rem; }
     .example-line:last-child { border-bottom: none; }
+    .example-fr { font-weight: 600; color: var(--accent); margin-bottom: 0.1rem; }
+    .example-en { font-style: italic; color: var(--muted); font-size: 0.9rem; }
+
+    /* Single Card Mode Typography Boost */
+    .mini-card-grid.single-mode .mini-card-front strong { font-size: 1.2rem; }
+    .mini-card-grid.single-mode .mini-card-back { font-size: 1.1rem; padding: 2rem; justify-content: start; }
 
   </style>
 </head>
@@ -355,17 +419,16 @@
     <div class="modal flashcard-container">
       <button class="close-btn" id="closeFlashcard">×</button>
       
-      <div style="display:flex; justify-content:space-between; margin-bottom:1rem; flex-shrink:0;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; flex-shrink:0;">
         <span class="pill" id="deckLabel">Deck</span>
         <span class="pill" id="deckProgress">0 / 0</span>
       </div>
 
-      <div style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
-        <div class="flashcard-term" id="cardTerm">Bonjour</div>
-        <div class="flashcard-meta" id="cardSubtitle">...</div>
-        <div class="flashcard-details" id="cardMeanings">
-          <!-- Content injected via JS -->
-        </div>
+      <div class="flashcard-term" id="cardTerm">Bonjour</div>
+      <div class="flashcard-meta" id="cardSubtitle">...</div>
+      
+      <div class="flashcard-details" id="cardMeanings">
+        <!-- Grid of flippable cards goes here -->
       </div>
 
       <div class="grade-buttons">
@@ -443,7 +506,6 @@
     }
 
     function renderReader() {
-      // 1. Render Title
       if (currentTitle) {
         dom.blogTitleDisplay.textContent = currentTitle;
         dom.blogTitleDisplay.classList.add('visible');
@@ -451,7 +513,6 @@
         dom.blogTitleDisplay.classList.remove('visible');
       }
 
-      // 2. Render Text
       if (sentenceData.length === 0) {
         dom.readerContent.innerHTML = `<div class="empty-state">Paste text below and click "Add to Reader" to get started.</div>`;
         dom.headerStats.textContent = "0 Sentences";
@@ -502,14 +563,11 @@
       const title = dom.titleInput.value;
 
       if (!text.trim() && !title.trim()) return;
-      
       if (title.trim()) currentTitle = title.trim();
-      
       if (text.trim()) {
         const newSentences = parseText(text);
         sentenceData = [...sentenceData, ...newSentences]; 
       }
-      
       dom.textInput.value = '';
       dom.titleInput.value = '';
       saveState();
@@ -551,7 +609,6 @@
 
       if (mode === 'word') {
         const cards = await generateCardsFromText(currentSelection.word);
-        // Filter specifically for the clicked word
         activeDeck.queue = cards.filter(c => 
           c.display.toLowerCase().includes(currentSelection.word.toLowerCase()) || 
           currentSelection.word.toLowerCase().includes(c.display.toLowerCase())
@@ -575,13 +632,10 @@
     async function generateCardsFromText(textStr) {
       const lookup = await window.frenchWordsApi.lookupFrenchWords(textStr);
       const cards = [];
-      
       lookup.forEach((entry, idx) => {
-        // Map ALL available API fields to the card
         const card = {
           id: entry.word + '-' + idx,
           display: entry.word || entry.originalText,
-          original: entry.originalText,
           meanings: entry.meanings,
           category: entry.category,
           gender: entry.gender,
@@ -608,10 +662,8 @@
 
       const card = activeDeck.queue[index];
       dom.deckProgress.textContent = `${index + 1} / ${activeDeck.queue.length}`;
-      
       dom.cardTerm.textContent = card.display;
       
-      // Subtitle: Category • Gender
       let sub = [];
       if(card.category) sub.push(card.category);
       if(card.gender) sub.push(card.gender);
@@ -624,51 +676,82 @@
          card.found = true;
       }
 
-      // --- Mini Cards Renderer ---
-      let html = `<div class="mini-card-grid">`;
+      // Prepare Items
+      const items = [];
       
-      const addToGrid = (label, val, type='text') => {
+      // Helper to push items to array
+      const pushItem = (label, val, type='text') => {
          if(!val) return;
          if(Array.isArray(val) && val.length === 0) return;
+         items.push({ label, val, type });
+      };
+
+      // Exclude 'Original' and 'Word' as requested
+      pushItem('Meanings', card.meanings, 'list');
+      pushItem('Category', card.category);
+      pushItem('Gender', card.gender);
+      pushItem('Pronouns', card.pronouns, 'list');
+      pushItem('Tense', card.tense, 'list');
+      pushItem('Conjugated From', card.conjugatedFrom);
+      pushItem('Base Meaning', card.conjugatedFromMeaning, 'list');
+      pushItem('Examples', card.exampleSentences, 'examples');
+      pushItem('Notes', card.notes);
+      pushItem('Context', card.sentence);
+
+      // Render Grid
+      dom.cardMeanings.innerHTML = '';
+      const grid = document.createElement('div');
+      grid.className = 'mini-card-grid';
+      
+      // If only 1 item, switch to Single Mode (Big Card)
+      if (items.length === 1) {
+        grid.classList.add('single-mode');
+      }
+
+      items.forEach(item => {
+         const cardEl = document.createElement('div');
+         cardEl.className = 'mini-card';
          
-         let content = '';
-         if (type === 'list' && Array.isArray(val)) {
-            content = `<ul>${val.map(v=>`<li>${v}</li>`).join('')}</ul>`;
-         } else if (type === 'examples' && Array.isArray(val)) {
-            // Special formatter for example sentences
-            content = val.map(ex => `
+         // Inner Flip Container
+         const inner = document.createElement('div');
+         inner.className = 'mini-card-inner';
+         
+         // Front Face
+         const front = document.createElement('div');
+         front.className = 'mini-card-face mini-card-front';
+         front.innerHTML = `<strong>${item.label}</strong>`;
+         
+         // Back Face
+         const back = document.createElement('div');
+         back.className = 'mini-card-face mini-card-back';
+         
+         let contentHtml = '';
+         if (item.type === 'list' && Array.isArray(item.val)) {
+            contentHtml = `<ul>${item.val.map(v=>`<li>${v}</li>`).join('')}</ul>`;
+         } else if (item.type === 'examples' && Array.isArray(item.val)) {
+            contentHtml = item.val.map(ex => `
               <div class="example-line">
-                <div><strong>${ex.french}</strong></div>
-                ${ex.english ? `<div style="color:var(--muted)">${ex.english}</div>` : ''}
+                <div class="example-fr">${ex.french}</div>
+                ${ex.english ? `<div class="example-en">${ex.english}</div>` : ''}
               </div>
             `).join('');
          } else {
-            content = val;
+            contentHtml = item.val;
          }
+         
+         back.innerHTML = `<div class="mini-card-back-content">${contentHtml}</div>`;
 
-         html += `
-          <div class="mini-card">
-            <strong>${label}</strong>
-            <div>${content}</div>
-          </div>`;
-      };
+         inner.appendChild(front);
+         inner.appendChild(back);
+         cardEl.appendChild(inner);
 
-      // Add all the mini cards back!
-      addToGrid('Original', card.original);
-      addToGrid('Word', card.display);
-      addToGrid('Meanings', card.meanings, 'list');
-      addToGrid('Category', card.category);
-      addToGrid('Gender', card.gender);
-      addToGrid('Pronouns', card.pronouns, 'list');
-      addToGrid('Tense', card.tense, 'list');
-      addToGrid('Conjugated From', card.conjugatedFrom);
-      addToGrid('Base Meaning', card.conjugatedFromMeaning, 'list');
-      addToGrid('Examples', card.exampleSentences, 'examples');
-      addToGrid('Notes', card.notes);
-      addToGrid('Context', card.sentence); // Added Context back as a card too
-      
-      html += `</div>`;
-      dom.cardMeanings.innerHTML = html;
+         // Flip Logic
+         cardEl.addEventListener('click', () => cardEl.classList.toggle('flipped'));
+         
+         grid.appendChild(cardEl);
+      });
+
+      dom.cardMeanings.appendChild(grid);
     }
 
     function finishDeck() {
