@@ -320,7 +320,6 @@
     }
 
     .flashcard-term { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 0.2rem; color: var(--accent); }
-    .flashcard-meta { text-align: center; color: var(--muted); font-size: 0.95rem; margin-bottom: 0.5rem; min-height: 1.2rem; font-weight: 500; }
 
     .flashcard-scroll-area {
       flex: 1;
@@ -733,7 +732,6 @@
           <span class="pill" id="deckProgress">0 / 0</span>
         </div>
         <div class="flashcard-term" id="cardTerm">Bonjour</div>
-        <div class="flashcard-meta" id="cardSubtitle">...</div>
       </div>
 
       <div class="flashcard-scroll-area">
@@ -813,7 +811,6 @@
       flashcardModal: document.getElementById('flashcardModal'),
       closeFlashcard: document.getElementById('closeFlashcard'),
       cardTerm: document.getElementById('cardTerm'),
-      cardSubtitle: document.getElementById('cardSubtitle'),
       cardMeanings: document.getElementById('cardMeanings'),
       deckLabel: document.getElementById('deckLabel'),
       deckProgress: document.getElementById('deckProgress'),
@@ -1452,12 +1449,7 @@
       const card = activeDeck.queue[index];
       dom.deckProgress.textContent = `${index + 1} / ${activeDeck.queue.length}`;
       dom.cardTerm.textContent = card.display;
-      
-      let sub = [];
-      if(card.category) sub.push(card.category);
-      if(card.gender) sub.push(card.gender);
-      dom.cardSubtitle.textContent = sub.join(' • ');
-      
+
       if (!card.found && !card.meanings) {
          dom.cardMeanings.innerHTML = 'Looking up...';
          try {
