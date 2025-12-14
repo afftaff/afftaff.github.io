@@ -1231,6 +1231,10 @@
       await startDeck('sentence');
     });
 
+    function confirmExitFlashcards() {
+      return confirm('Leave the current flashcard session?');
+    }
+
     dom.studyWordListBtn.addEventListener('click', async () => {
       dom.wordListModal.classList.remove('active');
       if (!currentWordList.length) return;
@@ -1245,7 +1249,18 @@
     });
 
     dom.closeSelection.addEventListener('click', () => dom.selectionModal.classList.remove('active'));
-    dom.closeFlashcard.addEventListener('click', () => dom.flashcardModal.classList.remove('active'));
+    dom.closeFlashcard.addEventListener('click', () => {
+      if (confirmExitFlashcards()) {
+        dom.flashcardModal.classList.remove('active');
+      }
+    });
+    dom.flashcardModal.addEventListener('click', (event) => {
+      if (event.target === dom.flashcardModal && dom.flashcardModal.classList.contains('active')) {
+        if (confirmExitFlashcards()) {
+          dom.flashcardModal.classList.remove('active');
+        }
+      }
+    });
     dom.closeWordList.addEventListener('click', () => dom.wordListModal.classList.remove('active'));
     dom.closeWordListSecondary.addEventListener('click', () => dom.wordListModal.classList.remove('active'));
 
