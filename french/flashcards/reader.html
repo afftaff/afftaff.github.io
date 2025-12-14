@@ -302,7 +302,7 @@
       background: transparent;
       perspective: 1000px;
       cursor: pointer;
-      min-height: 200px; /* Increased slightly for better fit */
+      min-height: 200px; 
     }
 
     .mini-card-inner {
@@ -346,69 +346,77 @@
       font-weight: 700;
     }
 
-    /* Back Face */
+    /* Back Face - Centered but Scrollable */
     .mini-card-back {
       transform: rotateY(180deg);
       background: #fff;
       display: flex;
       flex-direction: column;
-      /* Top alignment avoids cutting off content */
-      justify-content: flex-start; 
-      align-items: stretch;
-      overflow: hidden; 
+      /* 
+        We use flex-direction column.
+        We do NOT use justify-content: center here because that causes the top cut-off bug.
+        Instead we handle centering inside the child wrapper.
+      */
       padding: 0;
     }
 
     .mini-card-back-content {
+      /* Fallback for simple text cards */
       width: 100%;
       font-size: 1rem;
       color: var(--text);
       line-height: 1.5;
       text-align: center;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
       padding: 1.5rem;
+      margin: auto 0; /* Centers vertically */
     }
 
-    /* --- PAGINATION STYLES (Content Extraction) --- */
+    /* --- PAGINATION STYLES --- */
     .pagination-wrapper {
       display: flex;
       flex-direction: column;
       height: 100%;
       width: 100%;
-      justify-content: space-between;
-      padding: 1rem; 
+      padding: 1rem 1.5rem;
+      overflow: hidden; /* Contains the scrollable area */
     }
     
     .pagination-content {
+      /* 
+         This is the magic fix:
+         1. overflow-y: auto -> allows scrolling if text is huge.
+         2. margin: auto 0 -> Pushes it to the middle if small, but starts at top if big.
+      */
       flex: 1;
-      display: block; 
-      width: 100%;
       overflow-y: auto; 
-      text-align: left; /* Keep left alignment for readability */
-      padding-right: 4px; 
-      font-size: 1rem;
-      line-height: 1.6;
-      /* Center visually if content is short */
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      margin: 0; /* Reset */
     }
 
-    /* When content is long, let it expand naturally (overriding the center above) */
-    .pagination-content.long-text {
-      display: block;
-      justify-content: flex-start;
+    .pagination-content-inner {
+        margin: auto 0; /* Centers the text block vertically */
+        width: 100%;
+        text-align: center; /* Center alignment requested */
+        font-size: 1.1rem;
+        line-height: 1.6;
     }
 
-    .pagination-content p { margin-top: 0; }
+    /* Ensure list items inside the content look nice */
+    .pagination-content-inner p { margin-top: 0; }
+    .pagination-content-inner ul, .pagination-content-inner ol { 
+        text-align: left; /* Keep lists left-aligned for readability */
+        padding-left: 1.5rem; 
+        margin: 0.5rem auto;
+        display: inline-block; /* Helps center the list block itself */
+        width: 100%;
+    }
     
-    /* Ensure formatting from API works */
-    .pagination-content b, .pagination-content strong { color: var(--accent); }
-    .pagination-content i, .pagination-content em { color: var(--muted); }
-    .pagination-content a { color: var(--accent-blue); text-decoration: none; pointer-events: none; /* Disable links inside flashcards */ }
+    /* Formatting from API */
+    .pagination-content-inner b, .pagination-content-inner strong { color: var(--accent); font-weight: 700; }
+    .pagination-content-inner i, .pagination-content-inner em { color: var(--muted); font-style: italic; }
+    .pagination-content-inner a { color: inherit; text-decoration: none; pointer-events: none; border-bottom: 1px dotted var(--muted); }
+    .pagination-content-inner span { display: inline; } /* Ensure spans are shown */
 
     .pagination-controls {
       display: flex;
@@ -416,7 +424,7 @@
       align-items: center;
       padding-top: 0.75rem;
       border-top: 1px solid #f1f5f9;
-      margin-top: 0.5rem;
+      margin-top: auto; /* Pushes to bottom */
       font-size: 0.85rem;
       color: var(--muted);
       width: 100%;
@@ -476,7 +484,6 @@
       color: var(--muted);
     }
 
-    /* The Reveal Overlay */
     .reveal-overlay {
       position: absolute;
       inset: 0;
@@ -501,7 +508,6 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
-    /* The Content */
     .special-card-body {
       padding: 1rem 1.25rem;
       background: white;
@@ -509,7 +515,6 @@
       transition: opacity 0.3s;
     }
 
-    /* Active State for Special Card */
     .special-card.revealed .reveal-overlay { opacity: 0; pointer-events: none; }
     .special-card.revealed .special-card-body { opacity: 1; }
 
@@ -563,7 +568,6 @@
     </div>
   </main>
 
-  <!-- OVERLAY 1: Selection Mode (Word vs Sentence) -->
   <div class="overlay" id="selectionModal">
     <div class="modal">
       <button class="close-btn" id="closeSelection">×</button>
@@ -583,11 +587,9 @@
     </div>
   </div>
 
-  <!-- OVERLAY 2: Flashcard / Testing -->
   <div class="overlay" id="flashcardModal">
     <div class="modal flashcard-container">
       
-      <!-- Fixed Header -->
       <div class="flashcard-header">
         <button class="close-btn" id="closeFlashcard" style="position:static; float:right; margin-top:-0.5rem;">×</button>
         <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
@@ -598,14 +600,10 @@
         <div class="flashcard-meta" id="cardSubtitle">...</div>
       </div>
 
-      <!-- Scrollable Middle -->
       <div class="flashcard-scroll-area">
-        <div id="cardMeanings">
-          <!-- Grid of flippable cards goes here -->
-        </div>
+        <div id="cardMeanings"></div>
 
         <div class="special-cards">
-          <!-- Example Sentences: Default Hidden -->
           <div class="special-card" id="examplesCard">
             <div class="reveal-overlay" onclick="toggleReveal(this)">
               <button class="reveal-btn">Tap to Reveal Examples</button>
@@ -616,7 +614,6 @@
             <div class="special-card-body" id="examplesContent"></div>
           </div>
 
-          <!-- Pronunciation: Default Hidden -->
           <div class="special-card" id="pronunciationCard">
              <div class="reveal-overlay" onclick="toggleReveal(this)">
               <button class="reveal-btn">Tap to Reveal Pronunciation</button>
@@ -634,7 +631,6 @@
         </div>
       </div>
 
-      <!-- Fixed Footer -->
       <div class="grade-buttons">
         <button style="background:#ef4444; border-color:#ef4444" data-grade="again">Again</button>
         <button style="background:#f97316; border-color:#f97316" data-grade="hard">Hard</button>
@@ -646,7 +642,6 @@
 
   <script src="../dir/frenchwordsApi.js"></script>
   <script>
-    // --- State Management ---
     const STORAGE_KEYS = {
       title: 'reader-title-v2',
       textData: 'reader-sentences-v2', 
@@ -680,7 +675,6 @@
       pronunciationText: document.getElementById('pronunciationText'),
       speakButton: document.getElementById('speakButton'),
       
-      // Reveal cards
       examplesCard: document.getElementById('examplesCard'),
       pronunciationCard: document.getElementById('pronunciationCard')
     };
@@ -705,7 +699,6 @@
       localStorage.setItem(STORAGE_KEYS.srs, JSON.stringify(srsState));
     }
 
-    // --- Parsing & Rendering ---
     function parseText(rawText) {
       const clean = rawText.replace(/\n+/g, ' ');
       const rawSentences = clean.split(/(?<=[.!?…])\s+/);
@@ -762,7 +755,6 @@
       dom.headerStats.textContent = `${sentenceData.length} Sentences`;
     }
 
-    // --- Interaction Logic ---
     dom.addBtn.addEventListener('click', () => {
       const text = dom.textInput.value;
       const title = dom.titleInput.value;
@@ -798,21 +790,18 @@
     dom.closeSelection.addEventListener('click', () => dom.selectionModal.classList.remove('active'));
     dom.closeFlashcard.addEventListener('click', () => dom.flashcardModal.classList.remove('active'));
 
-    // --- Helper: Reset Reveals ---
     function resetReveals() {
       dom.examplesCard.classList.remove('revealed');
       dom.pronunciationCard.classList.remove('revealed');
     }
 
-    // Global toggle function
     window.toggleReveal = function(overlayEl) {
       const card = overlayEl.closest('.special-card');
       card.classList.add('revealed');
     }
 
     // --- HTML CLEANING & EXTRACTION ---
-    // This function takes HTML string (often from Wiktionary) and extracts 
-    // distinct, clean definition strings.
+    // Updated to be more robust for nested spans and "dd" tags
     function cleanAndParseDefinitions(rawHtmlOrArray) {
       let inputs = Array.isArray(rawHtmlOrArray) ? rawHtmlOrArray : [rawHtmlOrArray];
       let results = [];
@@ -820,46 +809,42 @@
       inputs.forEach(htmlStr => {
         if (!htmlStr) return;
         
-        // 1. Create a dummy DOM element to parse the string
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlStr;
 
-        // 2. Strategy: Look for specific semantic tags first
-        const listItems = tempDiv.querySelectorAll('li');
-        const paragraphs = tempDiv.querySelectorAll('p');
+        // 1. Look for list items (li) OR definitions (dd)
+        const items = tempDiv.querySelectorAll('li, dd');
 
-        if (listItems.length > 0) {
-          // If we found <li>, these are likely the definitions.
-          listItems.forEach(li => {
-            // Get innerHTML to keep bold/italics, but trim whitespace
-            const text = li.innerHTML.trim(); 
+        if (items.length > 0) {
+          items.forEach(item => {
+            // Get innerHTML to keep spans/formatting. 
+            // We use item.innerHTML so spans inside are preserved.
+            const text = item.innerHTML.trim(); 
             if(text) results.push(text);
           });
-        } else if (paragraphs.length > 0) {
-          // If no lists, but paragraphs exist
-          paragraphs.forEach(p => {
-             const text = p.innerHTML.trim();
-             if(text) results.push(text);
-          });
         } else {
-          // 3. Fallback: It's just a text blob or uses <br>
-          // Replace <br> with special separator to split later
-          const raw = tempDiv.innerHTML.replace(/<br\s*\/?>/gi, '___BR___');
-          const parts = raw.split('___BR___');
-          parts.forEach(p => {
-            const clean = p.trim();
-            if(clean) results.push(clean);
-          });
+          // 2. Fallback: No list found. 
+          // If the text contains <p>, use those.
+          const paragraphs = tempDiv.querySelectorAll('p');
+          if (paragraphs.length > 0) {
+              paragraphs.forEach(p => {
+                 const text = p.innerHTML.trim();
+                 if(text) results.push(text);
+              });
+          } else {
+              // 3. Absolute Fallback: It's just a blob.
+              // Just return the innerHTML of the wrapper. 
+              // This catches case where user just has a single <span> text.
+              const text = tempDiv.innerHTML.trim();
+              if (text) results.push(text);
+          }
         }
       });
       
-      // If after all that we have nothing (e.g. empty string), return original as fallback
       if (results.length === 0 && inputs.length > 0) return inputs;
-      
       return results;
     }
 
-    // --- Flashcard / Deck Logic ---
     async function startDeck(mode) {
       dom.flashcardModal.classList.add('active');
       dom.cardMeanings.innerHTML = '<div style="padding:2rem; text-align:center;">Loading cards...</div>';
@@ -875,7 +860,6 @@
 
       if (mode === 'word') {
         const cards = await generateCardsFromText(currentSelection.word);
-        // prioritize exact match
         const exactMatches = cards.filter(c => c.display.toLowerCase() === currentSelection.word.toLowerCase());
         const otherMatches = cards.filter(c => c.display.toLowerCase() !== currentSelection.word.toLowerCase());
         
@@ -939,7 +923,6 @@
       if(card.gender) sub.push(card.gender);
       dom.cardSubtitle.textContent = sub.join(' • ');
       
-      // Lazy load meanings if missing
       if (!card.found && !card.meanings) {
          dom.cardMeanings.innerHTML = 'Looking up...';
          try {
@@ -951,10 +934,8 @@
          card.found = true;
       }
 
-      // --- USE THE NEW CLEANER FUNCTION ---
       const cleanMeanings = cleanAndParseDefinitions(card.meanings);
 
-      // Prepare Grid Items
       const items = [];
       const pushItem = (label, val, type='text') => {
          if(!val) return;
@@ -962,14 +943,13 @@
          items.push({ label, val, type });
       };
 
-      pushItem('Meanings', cleanMeanings, 'paged-list'); // Forces paging
+      pushItem('Meanings', cleanMeanings, 'paged-list');
       pushItem('Category', card.category);
       pushItem('Gender', card.gender);
       pushItem('Pronouns', card.pronouns, 'text');
       pushItem('Tense', card.tense, 'text');
       pushItem('Conjugated From', card.conjugatedFrom);
       
-      // Render
       dom.cardMeanings.innerHTML = '';
       const grid = document.createElement('div');
       grid.className = 'mini-card-grid';
@@ -982,28 +962,28 @@
          const inner = document.createElement('div');
          inner.className = 'mini-card-inner';
          
-         // Front
          const front = document.createElement('div');
          front.className = 'mini-card-face mini-card-front';
          front.innerHTML = `<strong>${item.label}</strong>`;
          
-         // Back
          const back = document.createElement('div');
          back.className = 'mini-card-face mini-card-back';
          
          if (item.type === 'paged-list' && Array.isArray(item.val)) {
-             // --- PAGINATION RENDERER ---
+             // Pagination Logic
              const wrapper = document.createElement('div');
              wrapper.className = 'pagination-wrapper';
              
-             // Content Container
+             // Scrollable Content Area
              const contentDiv = document.createElement('div');
              contentDiv.className = 'pagination-content';
              
-             // Check length to decide centering
-             if(item.val[0].length > 100) contentDiv.classList.add('long-text');
+             // Center Alignment Wrapper
+             const innerContent = document.createElement('div');
+             innerContent.className = 'pagination-content-inner';
+             innerContent.innerHTML = item.val[0];
              
-             contentDiv.innerHTML = item.val[0];
+             contentDiv.appendChild(innerContent);
              
              // Controls
              const controls = document.createElement('div');
@@ -1023,17 +1003,11 @@
              controls.append(btnPrev, indicator, btnNext);
              wrapper.append(contentDiv, controls);
              
-             // Stop flip on click
              wrapper.addEventListener('click', (e) => e.stopPropagation());
              
              let pIndex = 0;
              const updatePage = () => {
-                 contentDiv.innerHTML = item.val[pIndex];
-                 
-                 // Handle CSS centering based on length
-                 if(item.val[pIndex].length > 100) contentDiv.classList.add('long-text');
-                 else contentDiv.classList.remove('long-text');
-
+                 innerContent.innerHTML = item.val[pIndex];
                  contentDiv.scrollTop = 0;
                  indicator.textContent = `${pIndex + 1} / ${item.val.length}`;
                  btnPrev.disabled = pIndex === 0;
@@ -1048,15 +1022,12 @@
              back.appendChild(wrapper);
 
          } else {
-            // Standard Text
             back.innerHTML = `<div class="mini-card-back-content">${item.val}</div>`;
          }
 
          inner.appendChild(front);
          inner.appendChild(back);
          cardEl.appendChild(inner);
-         
-         // Only flip if not clicking internal controls (handled by stopPropagation above)
          cardEl.addEventListener('click', () => cardEl.classList.toggle('flipped'));
          grid.appendChild(cardEl);
       });
