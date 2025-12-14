@@ -784,42 +784,38 @@
       card.classList.add('revealed');
     }
 
-    // --- UPDATED HTML CLEANING ---
+    // --- UPDATED HTML CLEANING & PARSING ---
+    // Fix: This version explicitly extracts the parent text separately from nested lists
+    // by stopping recursion when it encounters a block-level list.
     function cleanAndParseDefinitions(rawHtmlOrArray) {
       const inputs = Array.isArray(rawHtmlOrArray) ? rawHtmlOrArray : [rawHtmlOrArray];
       const results = [];
 
-      const collectAllText = (el) => {
-        const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
-        const chunks = [];
-        while (walker.nextNode()) {
-          const value = walker.currentNode.nodeValue?.replace(/\s+/g, ' ').trim();
-          if (value) chunks.push(value);
-        }
-        const joined = chunks.join(' ').replace(/\s+([.,!?;:])/g, '$1');
-        return joined.trim();
-      };
-
-      const isNestedListItem = (node, root) => {
-        let parent = node.parentElement;
-        while (parent && parent !== root) {
-          if (parent.tagName === 'LI' || parent.tagName === 'DD') return true;
-          parent = parent.parentElement;
-        }
-        return false;
-      };
-
-      const collectTopLevelItems = (root) => {
-        const collected = [];
-        const candidates = root.querySelectorAll('li, dd');
-        const topLevel = Array.from(candidates).filter((node) => !isNestedListItem(node, root));
-
-        topLevel.forEach((node) => {
-          const text = collectAllText(node);
-          if (text) collected.push(text);
-        });
-
-        return collected;
+      // Helper: Extract text from a node, but SKIP nested list containers.
+      // This separates the "Header" text of a list item from its nested sub-items.
+      const getDirectText = (node) => {
+        let text = '';
+        
+        // Recursive walk that stops at block-level lists
+        const walk = (el) => {
+          el.childNodes.forEach(child => {
+            if (child.nodeType === Node.TEXT_NODE) {
+              text += child.nodeValue;
+            } else if (child.nodeType === Node.ELEMENT_NODE) {
+              // CRITICAL: If we hit a nested list, we STOP digging into this branch.
+              // Those nested lists will be picked up as their own items by the 
+              // querySelectorAll loop below.
+              if (['OL', 'UL', 'DL', 'TABLE'].includes(child.tagName)) return;
+              
+              // Otherwise, dig deeper (into spans, bold, links, etc.)
+              walk(child);
+            }
+          });
+        };
+        
+        walk(node);
+        // Clean up whitespace
+        return text.replace(/\s+/g, ' ').trim();
       };
 
       inputs.forEach((htmlStr) => {
@@ -828,37 +824,37 @@
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlStr;
 
-        const localResults = [];
+        // 1. Select ALL list items (flattening the structure)
+        const listItems = tempDiv.querySelectorAll('li, dd');
 
-        const listResults = collectTopLevelItems(tempDiv);
-        if (listResults.length > 0) {
-          localResults.push(...listResults);
-        }
-
-        // Capture text that lives directly under the wrapper (outside list items)
-        if (localResults.length === 0) {
+        if (listItems.length > 0) {
+          listItems.forEach(li => {
+            const txt = getDirectText(li);
+            // Only add if we actually found text (e.g. ignore an LI that only contains an OL)
+            if (txt) {
+              results.push(txt);
+            }
+          });
+        } 
+        // 2. Fallback: If no lists found, look for paragraphs
+        else {
           const paragraphs = tempDiv.querySelectorAll('p');
           if (paragraphs.length > 0) {
             paragraphs.forEach((p) => {
-              const text = collectAllText(p);
-              if (text) localResults.push(text);
+              const text = p.textContent.replace(/\s+/g, ' ').trim();
+              if (text) results.push(text);
             });
           }
+          // 3. Absolute fallback: Take the raw text
+          else {
+             const text = tempDiv.textContent.replace(/\s+/g, ' ').trim();
+             if (text) results.push(text);
+          }
         }
-
-        // Absolute fallback: take every text node in the snippet
-        if (localResults.length === 0) {
-          const text = collectAllText(tempDiv);
-          if (text) localResults.push(text);
-        }
-
-        results.push(...localResults);
       });
 
-      // Safety net
-      if (results.length === 0 && inputs.length > 0) return inputs;
-
-      return results;
+      // Final cleanup of punctuation (e.g., "word ." -> "word.")
+      return results.map(r => r.replace(/\s+([.,!?;:])/g, '$1')).filter(Boolean);
     }
 
     async function startDeck(mode) {
