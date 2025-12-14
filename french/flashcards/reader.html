@@ -24,7 +24,7 @@
       --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
       --font-read: 'Inter', system-ui, -apple-system, sans-serif;
     }
-
+    
     * { box-sizing: border-box; }
 
     body {
@@ -127,7 +127,7 @@
       background-color: var(--highlight-word);
       color: #000;
     }
-    
+
     /* Input Section */
     .input-section {
       background: var(--paper);
@@ -135,7 +135,7 @@
       border-radius: var(--radius);
       padding: 1.5rem;
     }
-    
+
     .input-section h3 { margin-top: 0; font-size: 1rem; margin-bottom: 1rem; }
     .input-group { display: flex; flex-direction: column; gap: 0.8rem; }
 
@@ -149,7 +149,7 @@
       font-size: 1rem;
       transition: all 0.2s;
     }
-    
+
     textarea { min-height: 120px; resize: vertical; }
     input[type="text"]:focus, textarea:focus { outline: 2px solid var(--accent); background: #fff; }
 
@@ -189,7 +189,7 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
       position: relative;
       animation: slideUp 0.2s ease-out;
-      max-height: 90vh;
+      max-height: 90vh; /* Keeps modal inside viewport */
       display: flex;
       flex-direction: column;
     }
@@ -200,14 +200,14 @@
     }
 
     .modal h2 { margin-top: 0; }
-    
+
     .selection-options {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
       margin-top: 1.5rem;
     }
-    
+
     .option-card {
       border: 2px solid var(--border);
       border-radius: 10px;
@@ -217,14 +217,14 @@
       transition: all 0.2s;
       background: #fff;
     }
-    
+
     .option-card:hover {
       border-color: var(--accent);
       background: #f8fafc;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
-    
+
     .option-card strong { display: block; font-size: 1.1rem; margin-bottom: 0.5rem; }
     .option-card span { font-size: 0.85rem; color: var(--muted); }
 
@@ -241,29 +241,39 @@
     }
 
     /* --- FLASHCARD UI --- */
-    .flashcard-container { max-width: 700px; height: 85vh; }
+    .flashcard-container { max-width: 700px; height: 90vh; padding: 0; overflow: hidden; }
     
+    .flashcard-header {
+      padding: 1.5rem 2rem 0.5rem 2rem;
+      flex-shrink: 0;
+      background: white;
+      z-index: 2;
+    }
+
     .flashcard-term { font-size: 2.2rem; font-weight: 700; text-align: center; margin-bottom: 0.2rem; color: var(--accent); }
-    .flashcard-meta { text-align: center; color: var(--muted); font-size: 0.95rem; margin-bottom: 1.5rem; min-height: 1.2rem; font-weight: 500; }
-    
-    .flashcard-details {
+    .flashcard-meta { text-align: center; color: var(--muted); font-size: 0.95rem; margin-bottom: 0.5rem; min-height: 1.2rem; font-weight: 500; }
+
+    /* The Scrollable Area */
+    .flashcard-scroll-area {
       flex: 1;
       overflow-y: auto;
-      margin-bottom: 1rem;
-      padding: 4px;
-      /* Hide Scrollbar */
-      scrollbar-width: thin;
-      scrollbar-color: var(--border) transparent;
+      padding: 1rem 2rem;
+      /* Smooth scroll */
+      scroll-behavior: smooth;
     }
+    
+    /* Hide header shadow logic, keeping it clean */
 
     .grade-buttons {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 0.75rem;
-      margin-top: auto;
+      padding: 1rem 2rem 2rem 2rem;
+      background: white;
+      border-top: 1px solid var(--border);
       flex-shrink: 0;
     }
-    
+
     .grade-buttons button {
       padding: 1rem;
       border: none;
@@ -282,24 +292,20 @@
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
       gap: 1rem; 
       width: 100%;
-      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     /* Single Item Mode */
     .mini-card-grid.single-mode {
       grid-template-columns: 1fr;
-      height: 100%;
+      /* remove height forcing, let content dictate */
     }
 
     .mini-card { 
       background: transparent;
       perspective: 1000px;
       cursor: pointer;
-      min-height: 160px;
-    }
-
-    .mini-card-grid.single-mode .mini-card {
-      min-height: 100%;
+      min-height: 180px;
     }
 
     .mini-card-inner {
@@ -343,27 +349,74 @@
       font-weight: 700;
     }
 
-    /* Back Face - BEAUTIFIED */
+    /* Back Face */
     .mini-card-back {
       transform: rotateY(180deg);
       background: #fff;
-      overflow-y: auto;
-      text-align: center;
-      /* Center everything nicely */
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: center; /* Center vertically */
       align-items: center;
+      overflow: hidden; /* Important for paging */
     }
-    
+
     .mini-card-back-content {
       width: 100%;
       font-size: 1rem;
       color: var(--text);
       line-height: 1.5;
+      text-align: center;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
-    /* Special wide cards */
+    /* --- PAGINATION STYLES (New) --- */
+    .pagination-wrapper {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+    }
+    
+    .pagination-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-y: auto;
+      padding: 0.5rem 0;
+    }
+
+    .pagination-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 0.5rem;
+      border-top: 1px solid #f1f5f9;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .pager-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--accent);
+      transition: background 0.1s;
+    }
+    .pager-btn:hover { background: #f1f5f9; }
+    .pager-btn:disabled { opacity: 0.3; cursor: default; }
+
+    /* --- REVEAL / SPOILER CARDS (New) --- */
     .special-cards {
       display: flex;
       flex-direction: column;
@@ -377,36 +430,72 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       background: #f8fafc;
-      padding: 1rem 1.25rem;
+      overflow: hidden; /* For overlay */
+      position: relative;
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
-    .special-card h4 {
-      margin: 0 0 0.5rem 0;
-      font-size: 0.95rem;
+    .special-card-header {
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f1f5f9;
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    .special-card-header h4 {
+      margin: 0;
+      font-size: 0.9rem;
       letter-spacing: 0.5px;
       text-transform: uppercase;
       color: var(--muted);
     }
 
-    .special-card .card-body {
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-      max-height: 220px;
-      overflow-y: auto;
-    }
-
-    .special-card .example-line { margin: 0; border: none; padding: 0.35rem 0; }
-    .special-card .example-fr { font-size: 1rem; }
-    .special-card .example-en { font-size: 0.9rem; }
-
-    .pronunciation-row {
+    /* The Reveal Overlay */
+    .reveal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      justify-content: center;
+      z-index: 10;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+    
+    .reveal-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 99px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
+    /* The Content */
+    .special-card-body {
+      padding: 1rem 1.25rem;
+      background: white;
+      opacity: 0; /* Hidden by default state in logic */
+      transition: opacity 0.3s;
+    }
+
+    /* Active State for Special Card */
+    .special-card.revealed .reveal-overlay { opacity: 0; pointer-events: none; }
+    .special-card.revealed .special-card-body { opacity: 1; }
+
+    .example-line { margin: 0 0 0.75rem 0; padding-bottom: 0.75rem; border-bottom: 1px solid #f1f5f9; }
+    .example-line:last-child { border: none; margin-bottom: 0; padding-bottom: 0; }
+    .example-fr { font-size: 1.05rem; font-weight: 500; color: var(--text); }
+    .example-en { font-size: 0.9rem; color: var(--muted); font-style: italic; margin-top: 2px; }
+
+    .pronunciation-row { display: flex; align-items: center; gap: 0.75rem; }
     .speak-btn {
       border: 1px solid var(--border);
       background: white;
@@ -419,95 +508,16 @@
       gap: 0.4rem;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
-
     .speak-btn:hover { background: #eef2ff; }
-
-    .pronunciation-text { font-weight: 600; color: var(--accent); word-break: break-word; }
-
-    /* Styled Lists on Card Back */
-    .mini-card ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      width: 100%;
-    }
-    .mini-card li {
-      padding: 0.5rem 0;
-      border-bottom: 1px solid #f1f5f9;
-    }
-    .mini-card li:last-child {
-      border-bottom: none;
-    }
-
-    /* Styled Examples */
-    .example-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
-      gap: 0.5rem;
-    }
-
-    .example-counter {
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-left: auto;
-    }
-
-    .example-nav button {
-      background: var(--accent);
-      color: white;
-      border: none;
-      padding: 0.35rem 0.75rem;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: var(--shadow);
-    }
-
-    .example-nav button:disabled {
-      opacity: 0.35;
-      cursor: default;
-      box-shadow: none;
-    }
-
-    .example-line {
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid #f1f5f9;
-    }
-    .example-line:last-child { border: none; margin-bottom: 0; }
-    
-    .example-fr {
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 0.25rem;
-    }
-    .example-en {
-      font-size: 0.95rem;
-      color: var(--muted);
-      font-style: italic;
-    }
-
-    /* Large Typography for Single Card Mode */
-    .mini-card-grid.single-mode .mini-card-front strong { font-size: 1.25rem; }
-    .mini-card-grid.single-mode .mini-card-back-content { 
-      font-size: 1.25rem; 
-      line-height: 1.7; 
-      padding: 0 1rem;
-    }
-    .mini-card-grid.single-mode .example-fr { font-size: 1.5rem; }
-    .mini-card-grid.single-mode .example-en { font-size: 1.15rem; }
+    .pronunciation-text { font-weight: 600; color: var(--accent); }
 
   </style>
 </head>
 <body>
-
   <header>
     <h1>French Reader</h1>
     <div class="stats" id="headerStats">0 Sentences Loaded</div>
   </header>
-
   <main>
     <!-- 1. The Reader Area -->
     <div class="reader-container" id="readerView">
@@ -518,7 +528,7 @@
         </div>
       </div>
     </div>
-
+    
     <!-- 2. The Input Area (Bottom) -->
     <div class="input-section">
       <h3>Add Text</h3>
@@ -544,7 +554,7 @@
         </div>
         <div class="option-card" id="btnStudySentence">
           <strong>Sentence</strong>
-          <span>Study all words in this sentence. (Mark green when done)</span>
+          <span>Study all words in this sentence.</span>
         </div>
       </div>
     </div>
@@ -553,37 +563,55 @@
   <!-- OVERLAY 2: Flashcard / Testing -->
   <div class="overlay" id="flashcardModal">
     <div class="modal flashcard-container">
-      <button class="close-btn" id="closeFlashcard">×</button>
       
-      <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; flex-shrink:0;">
-        <span class="pill" id="deckLabel">Deck</span>
-        <span class="pill" id="deckProgress">0 / 0</span>
+      <!-- Fixed Header -->
+      <div class="flashcard-header">
+        <button class="close-btn" id="closeFlashcard" style="position:static; float:right; margin-top:-0.5rem;">×</button>
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+          <span class="pill" id="deckLabel">Deck</span>
+          <span class="pill" id="deckProgress">0 / 0</span>
+        </div>
+        <div class="flashcard-term" id="cardTerm">Bonjour</div>
+        <div class="flashcard-meta" id="cardSubtitle">...</div>
       </div>
 
-      <div class="flashcard-term" id="cardTerm">Bonjour</div>
-      <div class="flashcard-meta" id="cardSubtitle">...</div>
-
-      <div class="flashcard-details" id="cardMeanings">
-        <!-- Grid of flippable cards goes here -->
-      </div>
-
-      <div class="special-cards">
-        <div class="special-card" id="examplesCard">
-          <h4>Example Sentences</h4>
-          <div class="card-body" id="examplesContent"></div>
+      <!-- Scrollable Middle -->
+      <div class="flashcard-scroll-area">
+        <div id="cardMeanings">
+          <!-- Grid of flippable cards goes here -->
         </div>
 
-        <div class="special-card" id="pronunciationCard">
-          <h4>Pronunciation</h4>
-          <div class="card-body">
-            <div class="pronunciation-row">
-              <button class="speak-btn" id="speakButton" type="button" aria-label="Play pronunciation">🔊 <span>Play</span></button>
-              <div class="pronunciation-text" id="pronunciationText"></div>
+        <div class="special-cards">
+          <!-- Example Sentences: Default Hidden -->
+          <div class="special-card" id="examplesCard">
+            <div class="reveal-overlay" onclick="toggleReveal(this)">
+              <button class="reveal-btn">Tap to Reveal Examples</button>
+            </div>
+            <div class="special-card-header">
+              <h4>Example Sentences</h4>
+            </div>
+            <div class="special-card-body" id="examplesContent"></div>
+          </div>
+
+          <!-- Pronunciation: Default Hidden -->
+          <div class="special-card" id="pronunciationCard">
+             <div class="reveal-overlay" onclick="toggleReveal(this)">
+              <button class="reveal-btn">Tap to Reveal Pronunciation</button>
+            </div>
+            <div class="special-card-header">
+              <h4>Pronunciation</h4>
+            </div>
+            <div class="special-card-body">
+              <div class="pronunciation-row">
+                <button class="speak-btn" id="speakButton" type="button">🔊 <span>Play</span></button>
+                <div class="pronunciation-text" id="pronunciationText"></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Fixed Footer -->
       <div class="grade-buttons">
         <button style="background:#ef4444; border-color:#ef4444" data-grade="again">Again</button>
         <button style="background:#f97316; border-color:#f97316" data-grade="hard">Hard</button>
@@ -611,14 +639,12 @@
       addBtn: document.getElementById('addToReaderBtn'),
       headerStats: document.getElementById('headerStats'),
       
-      // Selection Modal
       selectionModal: document.getElementById('selectionModal'),
       selectedWordDisplay: document.getElementById('selectedWordDisplay'),
       btnStudyWord: document.getElementById('btnStudyWord'),
       btnStudySentence: document.getElementById('btnStudySentence'),
       closeSelection: document.getElementById('closeSelection'),
 
-      // Flashcard Modal
       flashcardModal: document.getElementById('flashcardModal'),
       closeFlashcard: document.getElementById('closeFlashcard'),
       cardTerm: document.getElementById('cardTerm'),
@@ -629,7 +655,11 @@
       gradeButtons: document.querySelectorAll('.grade-buttons button'),
       examplesContent: document.getElementById('examplesContent'),
       pronunciationText: document.getElementById('pronunciationText'),
-      speakButton: document.getElementById('speakButton')
+      speakButton: document.getElementById('speakButton'),
+      
+      // Reveal cards
+      examplesCard: document.getElementById('examplesCard'),
+      pronunciationCard: document.getElementById('pronunciationCard')
     };
 
     let sentenceData = loadJson(STORAGE_KEYS.textData, []); 
@@ -637,7 +667,6 @@
     let progress = loadJson(STORAGE_KEYS.progress, {}); 
     let srsState = loadJson(STORAGE_KEYS.srs, {});
     
-    // Temp State
     let currentSelection = { word: '', sentenceIndex: null, sentenceText: '' };
     let activeDeck = { queue: [], pointer: 0, mode: 'word' }; 
 
@@ -654,7 +683,6 @@
     }
 
     // --- Parsing & Rendering ---
-
     function parseText(rawText) {
       const clean = rawText.replace(/\n+/g, ' ');
       const rawSentences = clean.split(/(?<=[.!?…])\s+/);
@@ -689,7 +717,6 @@
         }
 
         const tokens = text.split(/(\s+|[.,!?;:()"]+)/);
-        
         tokens.forEach(token => {
           if (token.trim().length === 0 || /^[.,!?;:()"]+$/.test(token)) {
             wrap.appendChild(document.createTextNode(token));
@@ -713,11 +740,9 @@
     }
 
     // --- Interaction Logic ---
-
     dom.addBtn.addEventListener('click', () => {
       const text = dom.textInput.value;
       const title = dom.titleInput.value;
-
       if (!text.trim() && !title.trim()) return;
       if (title.trim()) currentTitle = title.trim();
       if (text.trim()) {
@@ -733,7 +758,6 @@
     function openSelectionModal(word, sIndex, sText) {
       const cleanWord = word.replace(/[^\p{L}'’-]/gu, '');
       currentSelection = { word: cleanWord, sentenceIndex: sIndex, sentenceText: sText };
-      
       dom.selectedWordDisplay.textContent = cleanWord;
       dom.selectionModal.classList.add('active');
     }
@@ -751,11 +775,23 @@
     dom.closeSelection.addEventListener('click', () => dom.selectionModal.classList.remove('active'));
     dom.closeFlashcard.addEventListener('click', () => dom.flashcardModal.classList.remove('active'));
 
-    // --- Flashcard / Deck Logic ---
+    // --- Helper: Reset Reveals ---
+    function resetReveals() {
+      dom.examplesCard.classList.remove('revealed');
+      dom.pronunciationCard.classList.remove('revealed');
+    }
 
+    // Global toggle function for HTML access
+    window.toggleReveal = function(overlayEl) {
+      const card = overlayEl.closest('.special-card');
+      card.classList.add('revealed');
+    }
+
+    // --- Flashcard / Deck Logic ---
     async function startDeck(mode) {
       dom.flashcardModal.classList.add('active');
       dom.cardMeanings.innerHTML = '<div style="padding:2rem; text-align:center;">Loading cards...</div>';
+      resetReveals(); // Reset hidden state
       
       activeDeck.mode = mode;
       activeDeck.pointer = 0;
@@ -789,7 +825,7 @@
       const lookup = await window.frenchWordsApi.lookupFrenchWords(textStr);
       const cards = [];
       lookup.forEach((entry, idx) => {
-        const card = {
+        cards.push({
           id: entry.word + '-' + idx,
           display: entry.word || entry.originalText,
           meanings: entry.meanings,
@@ -806,13 +842,13 @@
           found: entry.found,
           wiktionaryLookupWord: entry.word || entry.originalText,
           sentence: currentSelection.sentenceText
-        };
-        cards.push(card);
+        });
       });
       return cards;
     }
 
     async function showCard(index) {
+      resetReveals(); // Hide examples/pronunciation again for the new card
       if (index >= activeDeck.queue.length) {
         finishDeck();
         return;
@@ -842,24 +878,19 @@
          items.push({ label, val, type });
       };
 
-      pushItem('Meanings', card.meanings, 'list');
+      // Meanings is now type 'paged-list' to force pagination
+      pushItem('Meanings', card.meanings, 'paged-list');
       pushItem('Category', card.category);
       pushItem('Gender', card.gender);
-      pushItem('Pronouns', card.pronouns, 'list');
-      pushItem('Tense', card.tense, 'list');
+      pushItem('Pronouns', card.pronouns, 'text'); // small list ok as text
+      pushItem('Tense', card.tense, 'text');
       pushItem('Conjugated From', card.conjugatedFrom);
-      pushItem('Base Meaning', card.conjugatedFromMeaning, 'list');
-      pushItem('Examples', card.exampleSentences, 'examples');
-      pushItem('Notes', card.notes);
       
       // Render Grid
       dom.cardMeanings.innerHTML = '';
       const grid = document.createElement('div');
       grid.className = 'mini-card-grid';
-      
-      if (items.length === 1) {
-        grid.classList.add('single-mode');
-      }
+      if (items.length === 1) grid.classList.add('single-mode');
 
       items.forEach(item => {
          const cardEl = document.createElement('div');
@@ -877,35 +908,70 @@
          const back = document.createElement('div');
          back.className = 'mini-card-face mini-card-back';
          
-         let contentHtml = '';
-         if (item.type === 'list' && Array.isArray(item.val)) {
-            contentHtml = `<ul>${item.val.map(v=>`<li>${v}</li>`).join('')}</ul>`;
-         } else if (item.type === 'examples' && Array.isArray(item.val)) {
-            contentHtml = item.val.map(ex => `
-              <div class="example-line">
-                <div class="example-fr">${ex.french}</div>
-                ${ex.english ? `<div class="example-en">${ex.english}</div>` : ''}
-              </div>
-            `).join('');
+         if (item.type === 'paged-list' && Array.isArray(item.val)) {
+             // --- PAGINATION LOGIC ---
+             // Create wrapper
+             const wrapper = document.createElement('div');
+             wrapper.className = 'pagination-wrapper';
+             
+             // Content area
+             const contentDiv = document.createElement('div');
+             contentDiv.className = 'pagination-content';
+             contentDiv.textContent = item.val[0];
+             
+             // Controls
+             const controls = document.createElement('div');
+             controls.className = 'pagination-controls';
+             
+             const btnPrev = document.createElement('button');
+             btnPrev.className = 'pager-btn';
+             btnPrev.innerHTML = '←';
+             
+             const indicator = document.createElement('span');
+             indicator.textContent = `1 / ${item.val.length}`;
+             
+             const btnNext = document.createElement('button');
+             btnNext.className = 'pager-btn';
+             btnNext.innerHTML = '→';
+             
+             controls.append(btnPrev, indicator, btnNext);
+             wrapper.append(contentDiv, controls);
+             
+             // Prevent "Flipping" when clicking buttons
+             wrapper.addEventListener('click', (e) => e.stopPropagation());
+             
+             // Logic
+             let pIndex = 0;
+             const updatePage = () => {
+                 contentDiv.textContent = item.val[pIndex];
+                 indicator.textContent = `${pIndex + 1} / ${item.val.length}`;
+                 btnPrev.disabled = pIndex === 0;
+                 btnNext.disabled = pIndex === item.val.length - 1;
+             };
+             
+             btnPrev.onclick = (e) => { e.stopPropagation(); if(pIndex > 0) pIndex--; updatePage(); }
+             btnNext.onclick = (e) => { e.stopPropagation(); if(pIndex < item.val.length - 1) pIndex++; updatePage(); }
+             
+             updatePage();
+             
+             back.innerHTML = '';
+             back.appendChild(wrapper);
+
          } else {
-            contentHtml = item.val;
+            // Standard Text
+            back.innerHTML = `<div class="mini-card-back-content">${item.val}</div>`;
          }
-         
-         back.innerHTML = `<div class="mini-card-back-content">${contentHtml}</div>`;
 
          inner.appendChild(front);
          inner.appendChild(back);
          cardEl.appendChild(inner);
 
+         // Click card to flip (unless clicking paging controls)
          cardEl.addEventListener('click', () => cardEl.classList.toggle('flipped'));
          grid.appendChild(cardEl);
       });
       
-      if (items.length === 0) {
-        dom.cardMeanings.innerHTML = '<div style="padding:1rem; text-align:center; color:var(--muted)">No additional details.</div>';
-      } else {
-        dom.cardMeanings.appendChild(grid);
-      }
+      dom.cardMeanings.appendChild(grid);
 
       renderExamples(card);
       renderPronunciation(card);
@@ -916,90 +982,40 @@
       container.innerHTML = '';
 
       const fallbackSentence = (currentSelection.sentenceIndex !== null && sentenceData[currentSelection.sentenceIndex])
-        || card.sentence
-        || '';
-
+        || card.sentence || '';
       const examples = Array.isArray(card.exampleSentences) && card.exampleSentences.length
         ? card.exampleSentences
         : (fallbackSentence ? [{ french: fallbackSentence, english: null }] : []);
 
       if (!examples.length) {
-        container.innerHTML = '<div class="example-line"><div class="example-fr" style="color:var(--muted)">No examples available.</div></div>';
+        container.innerHTML = '<div style="color:var(--muted)">No examples available.</div>';
         return;
       }
 
-      let activeIndex = 0;
-
-      const nav = document.createElement('div');
-      nav.className = 'example-nav';
-
-      const prevBtn = document.createElement('button');
-      prevBtn.type = 'button';
-      prevBtn.textContent = '←';
-
-      const counter = document.createElement('span');
-      counter.className = 'example-counter';
-
-      const nextBtn = document.createElement('button');
-      nextBtn.type = 'button';
-      nextBtn.textContent = '→';
-
-      const controls = document.createElement('div');
-      controls.style.display = 'flex';
-      controls.style.gap = '0.35rem';
-      controls.appendChild(prevBtn);
-      controls.appendChild(nextBtn);
-
-      nav.appendChild(controls);
-      nav.appendChild(counter);
-      container.appendChild(nav);
-
-      const display = document.createElement('div');
-      container.appendChild(display);
-
-      const updateView = () => {
-        const ex = examples[activeIndex];
-        display.innerHTML = `
-          <div class="example-line">
-            <div class="example-fr">${ex.french || card.display}</div>
-            ${ex.english ? `<div class="example-en">${ex.english}</div>` : ''}
-          </div>
-        `;
-
-        if (examples.length === 1) {
-          counter.textContent = '(1 sentence)';
-        } else {
-          counter.textContent = `(${activeIndex + 1} of ${examples.length} sentences)`;
-        }
-
-        const disabled = examples.length === 1;
-        prevBtn.disabled = disabled;
-        nextBtn.disabled = disabled;
-      };
-
-      prevBtn.addEventListener('click', () => {
-        activeIndex = (activeIndex - 1 + examples.length) % examples.length;
-        updateView();
+      examples.forEach(ex => {
+          const div = document.createElement('div');
+          div.className = 'example-line';
+          div.innerHTML = `<div class="example-fr">${ex.french || card.display}</div>` +
+                          (ex.english ? `<div class="example-en">${ex.english}</div>` : '');
+          container.appendChild(div);
       });
-
-      nextBtn.addEventListener('click', () => {
-        activeIndex = (activeIndex + 1) % examples.length;
-        updateView();
-      });
-
-      updateView();
     }
 
-    function formatPronunciation(card) {
+    function renderPronunciation(card) {
       const hasIpa = !!card.pronunciationIpa;
       const hasEnglish = !!card.pronunciationEnglish;
+      let text = card.display;
       if (hasIpa || hasEnglish) {
         const ipaPart = card.pronunciationIpa || '';
         const enPart = card.pronunciationEnglish || '';
         const separator = (hasIpa && hasEnglish) ? ' / ' : '';
-        return `${ipaPart}${separator}${enPart}`.trim();
+        text = `${ipaPart}${separator}${enPart}`.trim();
       }
-      return card.display;
+      dom.pronunciationText.textContent = text;
+      dom.speakButton.onclick = (e) => {
+        e.stopPropagation();
+        speakText(card.display || card.word || '');
+      };
     }
 
     function speakText(text) {
@@ -1008,11 +1024,6 @@
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'fr-FR';
       window.speechSynthesis.speak(utterance);
-    }
-
-    function renderPronunciation(card) {
-      dom.pronunciationText.textContent = formatPronunciation(card);
-      dom.speakButton.onclick = () => speakText(card.display || card.word || '');
     }
 
     function finishDeck() {
@@ -1038,7 +1049,6 @@
     });
 
     renderReader();
-
   </script>
 </body>
 </html>
