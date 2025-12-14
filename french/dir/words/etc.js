@@ -343,5 +343,53 @@
     "expression": "elles",
     "category": "subject pronoun",
     "meaning_en": ["they (feminine)"]
+  },
+  {
+    "expression": "me",
+    "category": "reflexive pronoun",
+    "meaning_en": ["myself", "me"],
+    "notes": "Used before consonant sounds."
+  },
+  {
+    "expression": "m'",
+    "category": "reflexive pronoun",
+    "meaning_en": ["myself", "me"],
+    "notes": "Used before vowel or mute h."
+  },
+  {
+    "expression": "te",
+    "category": "reflexive pronoun",
+    "meaning_en": ["yourself", "you"],
+    "notes": "Used before consonant sounds (informal singular)."
+  },
+  {
+    "expression": "t'",
+    "category": "reflexive pronoun",
+    "meaning_en": ["yourself", "you"],
+    "notes": "Used before vowel or mute h (informal singular)."
+  },
+  {
+    "expression": "se",
+    "category": "reflexive pronoun",
+    "meaning_en": ["himself", "herself", "itself", "oneself", "themselves"],
+    "notes": "Used before consonant sounds."
+  },
+  {
+    "expression": "s'",
+    "category": "reflexive pronoun",
+    "meaning_en": ["himself", "herself", "itself", "oneself", "themselves"],
+    "notes": "Used before vowel or mute h."
+  },
+  {
+    "expression": "nous",
+    "category": "reflexive pronoun",
+    "meaning_en": ["ourselves"],
+    "notes": "Shared form with subject pronoun."
+  },
+  {
+    "expression": "vous",
+    "category": "reflexive pronoun",
+    "meaning_en": ["yourself", "yourselves"],
+    "notes": "Shared form with subject pronoun."
   }
 ]

@@ -1,5 +1,28 @@
 const ARTICLE_PREFIXES = ["l'", "l’"];
 const DETACHED_ARTICLES = new Set(["le", "la", "les", "un", "une", "des", "l'", "l’"]);
+const REFLEXIVE_PREFIXES = [
+  "m'",
+  "m’",
+  'm-',
+  "t'",
+  "t’",
+  't-',
+  "s'",
+  "s’",
+  's-',
+  "d'",
+  "d’",
+  "l'",
+  "l’",
+  "j'",
+  "j’",
+  "c'",
+  "c’",
+  "n'",
+  "n’",
+  "qu'",
+  "qu’"
+];
 
 const WORD_FILES = {
   nouns: '../dir/words/bignounlist.json',
@@ -220,6 +243,16 @@ function stripLeadingArticle(word) {
   }
 
   return { word: stripped, hasArticle };
+}
+
+function stripReflexivePrefix(word) {
+  for (const prefix of REFLEXIVE_PREFIXES) {
+    if (word.startsWith(prefix)) {
+      return word.slice(prefix.length);
+    }
+  }
+
+  return word;
 }
 
 function isArticleWord(word) {
@@ -596,11 +629,12 @@ function tokenizeInput(text) {
   rawTokens.forEach((token) => {
     const cleanedLower = normalizeKey(token);
     const { word: baseWord, hasArticle } = stripLeadingArticle(cleanedLower);
+    const reflexiveStripped = stripReflexivePrefix(baseWord);
     const combinedArticle = hasArticle || isArticleWord(previousCleaned);
 
     tokens.push({
       original: token,
-      normalized: baseWord,
+      normalized: reflexiveStripped,
       hasArticle: combinedArticle
     });
 
