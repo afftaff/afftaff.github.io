@@ -241,6 +241,7 @@
     }
 
     /* --- FLASHCARD UI --- */
+    /* Fixed height container to allow internal scrolling */
     .flashcard-container { max-width: 700px; height: 90vh; padding: 0; overflow: hidden; }
     
     .flashcard-header {
@@ -258,11 +259,8 @@
       flex: 1;
       overflow-y: auto;
       padding: 1rem 2rem;
-      /* Smooth scroll */
       scroll-behavior: smooth;
     }
-    
-    /* Hide header shadow logic, keeping it clean */
 
     .grade-buttons {
       display: grid;
@@ -298,7 +296,6 @@
     /* Single Item Mode */
     .mini-card-grid.single-mode {
       grid-template-columns: 1fr;
-      /* remove height forcing, let content dictate */
     }
 
     .mini-card { 
@@ -355,9 +352,9 @@
       background: #fff;
       display: flex;
       flex-direction: column;
-      justify-content: center; /* Center vertically */
+      justify-content: center; 
       align-items: center;
-      overflow: hidden; /* Important for paging */
+      overflow: hidden; 
     }
 
     .mini-card-back-content {
@@ -372,11 +369,12 @@
       justify-content: center;
     }
 
-    /* --- PAGINATION STYLES (New) --- */
+    /* --- PAGINATION STYLES --- */
     .pagination-wrapper {
       display: flex;
       flex-direction: column;
       height: 100%;
+      width: 100%;
       justify-content: space-between;
     }
     
@@ -385,9 +383,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow-y: auto;
+      overflow-y: auto; /* Scroll inside the card if single page is huge */
       padding: 0.5rem 0;
+      width: 100%;
+      text-align: center;
     }
+
+    /* Ensure HTML content (like lists) inside definitions looks okay */
+    .pagination-content ul, .pagination-content ol { text-align: left; padding-left: 1.2rem; margin: 0; }
+    .pagination-content li { margin-bottom: 0.5rem; }
 
     .pagination-controls {
       display: flex;
@@ -398,6 +402,7 @@
       margin-top: 0.5rem;
       font-size: 0.85rem;
       color: var(--muted);
+      width: 100%;
     }
 
     .pager-btn {
@@ -416,7 +421,7 @@
     .pager-btn:hover { background: #f1f5f9; }
     .pager-btn:disabled { opacity: 0.3; cursor: default; }
 
-    /* --- REVEAL / SPOILER CARDS (New) --- */
+    /* --- REVEAL / SPOILER CARDS --- */
     .special-cards {
       display: flex;
       flex-direction: column;
@@ -430,7 +435,7 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       background: #f8fafc;
-      overflow: hidden; /* For overlay */
+      overflow: hidden; 
       position: relative;
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
@@ -482,7 +487,7 @@
     .special-card-body {
       padding: 1rem 1.25rem;
       background: white;
-      opacity: 0; /* Hidden by default state in logic */
+      opacity: 0; 
       transition: opacity 0.3s;
     }
 
@@ -781,7 +786,7 @@
       dom.pronunciationCard.classList.remove('revealed');
     }
 
-    // Global toggle function for HTML access
+    // Global toggle function
     window.toggleReveal = function(overlayEl) {
       const card = overlayEl.closest('.special-card');
       card.classList.add('revealed');
@@ -791,21 +796,31 @@
     async function startDeck(mode) {
       dom.flashcardModal.classList.add('active');
       dom.cardMeanings.innerHTML = '<div style="padding:2rem; text-align:center;">Loading cards...</div>';
-      resetReveals(); // Reset hidden state
+      resetReveals(); 
       
       activeDeck.mode = mode;
       activeDeck.pointer = 0;
       activeDeck.queue = [];
 
-      await window.frenchWordsApi.preloadFrenchWordData();
+      // Assuming api is available
+      if(window.frenchWordsApi && window.frenchWordsApi.preloadFrenchWordData) {
+        await window.frenchWordsApi.preloadFrenchWordData();
+      }
 
       if (mode === 'word') {
         const cards = await generateCardsFromText(currentSelection.word);
-        activeDeck.queue = cards.filter(c => 
-          c.display.toLowerCase().includes(currentSelection.word.toLowerCase()) || 
-          currentSelection.word.toLowerCase().includes(c.display.toLowerCase())
-        );
-        if (activeDeck.queue.length === 0 && cards.length > 0) activeDeck.queue = cards;
+        // prioritize exact match
+        const exactMatches = cards.filter(c => c.display.toLowerCase() === currentSelection.word.toLowerCase());
+        const otherMatches = cards.filter(c => c.display.toLowerCase() !== currentSelection.word.toLowerCase());
+        
+        activeDeck.queue = [...exactMatches, ...otherMatches];
+
+        if (activeDeck.queue.length === 0) {
+          // Fallback card if no API result
+          activeDeck.queue.push({
+            id: 'fallback', display: currentSelection.word, meanings: ['No definition found.'], found: true
+          });
+        }
         dom.deckLabel.textContent = "Word Study";
       } else {
         const cards = await generateCardsFromText(currentSelection.sentenceText);
@@ -813,15 +828,11 @@
         dom.deckLabel.textContent = "Sentence Study";
       }
 
-      if (activeDeck.queue.length === 0) {
-        dom.cardMeanings.innerHTML = '<div style="padding:1rem; text-align:center; color:red">No definitions found for this input.</div>';
-        return;
-      }
-
       showCard(0);
     }
 
     async function generateCardsFromText(textStr) {
+      if(!window.frenchWordsApi) return [];
       const lookup = await window.frenchWordsApi.lookupFrenchWords(textStr);
       const cards = [];
       lookup.forEach((entry, idx) => {
@@ -848,7 +859,7 @@
     }
 
     async function showCard(index) {
-      resetReveals(); // Hide examples/pronunciation again for the new card
+      resetReveals();
       if (index >= activeDeck.queue.length) {
         finishDeck();
         return;
@@ -863,14 +874,30 @@
       if(card.gender) sub.push(card.gender);
       dom.cardSubtitle.textContent = sub.join(' • ');
       
+      // Lazy load meanings if missing
       if (!card.found && !card.meanings) {
          dom.cardMeanings.innerHTML = 'Looking up...';
-         const defs = await window.frenchWordsApi.fetchWiktionaryMeaning(card.wiktionaryLookupWord);
-         card.meanings = defs || ['No definition found'];
+         try {
+           const defs = await window.frenchWordsApi.fetchWiktionaryMeaning(card.wiktionaryLookupWord);
+           card.meanings = defs || ['No definition found'];
+         } catch(e) {
+           card.meanings = ['Could not fetch definition.'];
+         }
          card.found = true;
       }
 
-      // Prepare Items
+      // --- LOGIC TO SPLIT BIG DATA ---
+      // If 'meanings' is a big string with newlines or breaks, split it for pagination
+      let processedMeanings = card.meanings;
+      if (typeof processedMeanings === 'string') {
+         // Split by newline or common list markers
+         processedMeanings = processedMeanings.split(/\n|<br\s*\/?>/i).filter(s => s.trim().length > 0);
+      }
+      if (!Array.isArray(processedMeanings)) {
+         processedMeanings = [String(processedMeanings)];
+      }
+
+      // Prepare Grid Items
       const items = [];
       const pushItem = (label, val, type='text') => {
          if(!val) return;
@@ -878,15 +905,14 @@
          items.push({ label, val, type });
       };
 
-      // Meanings is now type 'paged-list' to force pagination
-      pushItem('Meanings', card.meanings, 'paged-list');
+      pushItem('Meanings', processedMeanings, 'paged-list'); // Forces paging
       pushItem('Category', card.category);
       pushItem('Gender', card.gender);
-      pushItem('Pronouns', card.pronouns, 'text'); // small list ok as text
+      pushItem('Pronouns', card.pronouns, 'text');
       pushItem('Tense', card.tense, 'text');
       pushItem('Conjugated From', card.conjugatedFrom);
       
-      // Render Grid
+      // Render
       dom.cardMeanings.innerHTML = '';
       const grid = document.createElement('div');
       grid.className = 'mini-card-grid';
@@ -909,15 +935,15 @@
          back.className = 'mini-card-face mini-card-back';
          
          if (item.type === 'paged-list' && Array.isArray(item.val)) {
-             // --- PAGINATION LOGIC ---
-             // Create wrapper
+             // --- PAGINATION RENDERER ---
              const wrapper = document.createElement('div');
              wrapper.className = 'pagination-wrapper';
              
-             // Content area
+             // Content Container (Scrollable if single page is huge)
              const contentDiv = document.createElement('div');
              contentDiv.className = 'pagination-content';
-             contentDiv.textContent = item.val[0];
+             // Use innerHTML to respect API data formatting
+             contentDiv.innerHTML = item.val[0];
              
              // Controls
              const controls = document.createElement('div');
@@ -937,13 +963,13 @@
              controls.append(btnPrev, indicator, btnNext);
              wrapper.append(contentDiv, controls);
              
-             // Prevent "Flipping" when clicking buttons
+             // Stop flip on click
              wrapper.addEventListener('click', (e) => e.stopPropagation());
              
-             // Logic
              let pIndex = 0;
              const updatePage = () => {
-                 contentDiv.textContent = item.val[pIndex];
+                 contentDiv.innerHTML = item.val[pIndex];
+                 contentDiv.scrollTop = 0;
                  indicator.textContent = `${pIndex + 1} / ${item.val.length}`;
                  btnPrev.disabled = pIndex === 0;
                  btnNext.disabled = pIndex === item.val.length - 1;
@@ -953,7 +979,6 @@
              btnNext.onclick = (e) => { e.stopPropagation(); if(pIndex < item.val.length - 1) pIndex++; updatePage(); }
              
              updatePage();
-             
              back.innerHTML = '';
              back.appendChild(wrapper);
 
@@ -965,8 +990,8 @@
          inner.appendChild(front);
          inner.appendChild(back);
          cardEl.appendChild(inner);
-
-         // Click card to flip (unless clicking paging controls)
+         
+         // Only flip if not clicking internal controls (handled by stopPropagation above)
          cardEl.addEventListener('click', () => cardEl.classList.toggle('flipped'));
          grid.appendChild(cardEl);
       });
