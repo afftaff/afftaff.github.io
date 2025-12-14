@@ -786,59 +786,70 @@
 
     // --- UPDATED HTML CLEANING ---
     function cleanAndParseDefinitions(rawHtmlOrArray) {
-      let inputs = Array.isArray(rawHtmlOrArray) ? rawHtmlOrArray : [rawHtmlOrArray];
-      let results = [];
+      const inputs = Array.isArray(rawHtmlOrArray) ? rawHtmlOrArray : [rawHtmlOrArray];
+      const results = [];
+
+      const collectAllText = (el) => {
+        const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+        const chunks = [];
+        while (walker.nextNode()) {
+          const value = walker.currentNode.nodeValue?.replace(/\s+/g, ' ').trim();
+          if (value) chunks.push(value);
+        }
+        const joined = chunks.join(' ').replace(/\s+([.,!?;:])/g, '$1');
+        return joined.trim();
+      };
 
       inputs.forEach(htmlStr => {
         if (!htmlStr) return;
-        
+
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlStr;
 
         // STRATEGY: Find "Top Level" items only.
         // If we just do querySelectorAll('li'), we get the nested ones separately,
-        // which breaks the context of the parent.
+        // which breaks the context of the parent. We still group nested content
+        // with its nearest top-level ancestor so we keep full sentences together.
         const allListItems = tempDiv.querySelectorAll('li, dd');
-        
+
         if (allListItems.length > 0) {
-            allListItems.forEach(li => {
-                // Check if this LI is inside another LI that we are also parsing
-                let parent = li.parentElement;
-                while(parent && parent !== tempDiv) {
-                    if(parent.tagName === 'LI' || parent.tagName === 'DD') {
-                        // It is a nested child. Skip it, because it will be
-                        // included in the Parent's innerHTML.
-                        return; 
-                    }
-                    parent = parent.parentElement;
-                }
-                
-                // If we get here, it is a Top Level Item.
-                // We preserve the full innerHTML (spans, sub-lists, etc.)
-                const text = li.innerHTML.trim(); 
-                if(text) results.push(text);
-            });
-        } 
-        
+          allListItems.forEach(li => {
+            // Check if this LI is inside another LI that we are also parsing
+            let parent = li.parentElement;
+            while (parent && parent !== tempDiv) {
+              if (parent.tagName === 'LI' || parent.tagName === 'DD') {
+                // It is a nested child. Skip it, because it will be
+                // included in the Parent's collected text.
+                return;
+              }
+              parent = parent.parentElement;
+            }
+
+            // If we get here, it is a Top Level Item.
+            // Grab every text node inside (including nested children)
+            const text = collectAllText(li);
+            if (text) results.push(text);
+          });
+        }
+
         // Fallback: If no list items found, try paragraphs or raw text
         if (results.length === 0) {
-            const paragraphs = tempDiv.querySelectorAll('p');
-            if (paragraphs.length > 0) {
-                paragraphs.forEach(p => {
-                    const text = p.innerHTML.trim();
-                    if(text) results.push(text);
-                });
-            } else {
-                // Just text or span
-                const text = tempDiv.innerHTML.trim();
-                if(text) results.push(text);
-            }
+          const paragraphs = tempDiv.querySelectorAll('p');
+          if (paragraphs.length > 0) {
+            paragraphs.forEach(p => {
+              const text = collectAllText(p);
+              if (text) results.push(text);
+            });
+          } else {
+            const text = collectAllText(tempDiv);
+            if (text) results.push(text);
+          }
         }
       });
-      
+
       // Safety net
       if (results.length === 0 && inputs.length > 0) return inputs;
-      
+
       return results;
     }
 
