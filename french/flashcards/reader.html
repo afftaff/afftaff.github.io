@@ -784,76 +784,50 @@
       card.classList.add('revealed');
     }
 
-    // --- UPDATED HTML CLEANING & PARSING ---
-    // Fix: This version explicitly extracts the parent text separately from nested lists
-    // by stopping recursion when it encounters a block-level list.
+    // --- REVISED HTML CLEANING: THE "CLONE & NUKE" METHOD ---
     function cleanAndParseDefinitions(rawHtmlOrArray) {
       const inputs = Array.isArray(rawHtmlOrArray) ? rawHtmlOrArray : [rawHtmlOrArray];
       const results = [];
 
-      // Helper: Extract text from a node, but SKIP nested list containers.
-      // This separates the "Header" text of a list item from its nested sub-items.
-      const getDirectText = (node) => {
-        let text = '';
-        
-        // Recursive walk that stops at block-level lists
-        const walk = (el) => {
-          el.childNodes.forEach(child => {
-            if (child.nodeType === Node.TEXT_NODE) {
-              text += child.nodeValue;
-            } else if (child.nodeType === Node.ELEMENT_NODE) {
-              // CRITICAL: If we hit a nested list, we STOP digging into this branch.
-              // Those nested lists will be picked up as their own items by the 
-              // querySelectorAll loop below.
-              if (['OL', 'UL', 'DL', 'TABLE'].includes(child.tagName)) return;
-              
-              // Otherwise, dig deeper (into spans, bold, links, etc.)
-              walk(child);
-            }
-          });
-        };
-        
-        walk(node);
-        // Clean up whitespace
-        return text.replace(/\s+/g, ' ').trim();
-      };
-
-      inputs.forEach((htmlStr) => {
+      inputs.forEach(htmlStr => {
         if (!htmlStr) return;
-
+        
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = htmlStr;
 
-        // 1. Select ALL list items (flattening the structure)
+        // 1. Find every list item or description definition
         const listItems = tempDiv.querySelectorAll('li, dd');
 
         if (listItems.length > 0) {
-          listItems.forEach(li => {
-            const txt = getDirectText(li);
-            // Only add if we actually found text (e.g. ignore an LI that only contains an OL)
-            if (txt) {
-              results.push(txt);
-            }
-          });
-        } 
-        // 2. Fallback: If no lists found, look for paragraphs
-        else {
-          const paragraphs = tempDiv.querySelectorAll('p');
-          if (paragraphs.length > 0) {
-            paragraphs.forEach((p) => {
-              const text = p.textContent.replace(/\s+/g, ' ').trim();
-              if (text) results.push(text);
-            });
-          }
-          // 3. Absolute fallback: Take the raw text
-          else {
-             const text = tempDiv.textContent.replace(/\s+/g, ' ').trim();
-             if (text) results.push(text);
-          }
+           listItems.forEach(li => {
+             // 2. CLONE the list item. We work on the clone to avoid messing up the loop or the document.
+             const clone = li.cloneNode(true);
+
+             // 3. FORCEFULLY REMOVE nested lists from the clone.
+             // This strips out the <ol>...</ol> containing "(to) himself", etc.
+             // leaving only the text that belongs to THIS list item.
+             const nestedLists = clone.querySelectorAll('ol, ul, dl, table');
+             nestedLists.forEach(nested => nested.remove());
+
+             // 4. Get whatever text is left
+             const text = clone.textContent || "";
+             const clean = text.replace(/\s+/g, ' ').trim();
+             
+             if (clean) results.push(clean);
+           });
+        } else {
+           // Fallback for when there are no list items (just paragraphs)
+           const p = tempDiv.querySelectorAll('p');
+           if(p.length) {
+             p.forEach(para => results.push(para.textContent.replace(/\s+/g, ' ').trim()));
+           } else {
+             const raw = tempDiv.textContent.replace(/\s+/g, ' ').trim();
+             if (raw) results.push(raw);
+           }
         }
       });
-
-      // Final cleanup of punctuation (e.g., "word ." -> "word.")
+      
+      // Remove trailing punctuation spacing if any and filter empty strings
       return results.map(r => r.replace(/\s+([.,!?;:])/g, '$1')).filter(Boolean);
     }
 
