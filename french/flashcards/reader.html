@@ -440,6 +440,36 @@
     }
 
     /* Styled Examples */
+    .example-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      gap: 0.5rem;
+    }
+
+    .example-counter {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-left: auto;
+    }
+
+    .example-nav button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .example-nav button:disabled {
+      opacity: 0.35;
+      cursor: default;
+      box-shadow: none;
+    }
+
     .example-line {
       margin-bottom: 1rem;
       padding-bottom: 0.5rem;
@@ -885,21 +915,79 @@
       const container = dom.examplesContent;
       container.innerHTML = '';
 
+      const fallbackSentence = (currentSelection.sentenceIndex !== null && sentenceData[currentSelection.sentenceIndex])
+        || card.sentence
+        || '';
+
       const examples = Array.isArray(card.exampleSentences) && card.exampleSentences.length
         ? card.exampleSentences
-        : (card.sentence ? [{ french: card.sentence, english: null }] : []);
+        : (fallbackSentence ? [{ french: fallbackSentence, english: null }] : []);
 
       if (!examples.length) {
         container.innerHTML = '<div class="example-line"><div class="example-fr" style="color:var(--muted)">No examples available.</div></div>';
         return;
       }
 
-      container.innerHTML = examples.map(ex => `
-        <div class="example-line">
-          <div class="example-fr">${ex.french || card.display}</div>
-          ${ex.english ? `<div class="example-en">${ex.english}</div>` : ''}
-        </div>
-      `).join('');
+      let activeIndex = 0;
+
+      const nav = document.createElement('div');
+      nav.className = 'example-nav';
+
+      const prevBtn = document.createElement('button');
+      prevBtn.type = 'button';
+      prevBtn.textContent = '←';
+
+      const counter = document.createElement('span');
+      counter.className = 'example-counter';
+
+      const nextBtn = document.createElement('button');
+      nextBtn.type = 'button';
+      nextBtn.textContent = '→';
+
+      const controls = document.createElement('div');
+      controls.style.display = 'flex';
+      controls.style.gap = '0.35rem';
+      controls.appendChild(prevBtn);
+      controls.appendChild(nextBtn);
+
+      nav.appendChild(controls);
+      nav.appendChild(counter);
+      container.appendChild(nav);
+
+      const display = document.createElement('div');
+      container.appendChild(display);
+
+      const updateView = () => {
+        const ex = examples[activeIndex];
+        display.innerHTML = `
+          <div class="example-line">
+            <div class="example-fr">${ex.french || card.display}</div>
+            ${ex.english ? `<div class="example-en">${ex.english}</div>` : ''}
+          </div>
+        `;
+
+        if (examples.length === 1) {
+          counter.textContent = '(1 sentence)';
+        } else {
+          counter.textContent = `(${activeIndex + 1} of ${examples.length} sentences)`;
+        }
+
+        const disabled = examples.length === 1;
+        prevBtn.disabled = disabled;
+        nextBtn.disabled = disabled;
+      };
+
+      prevBtn.addEventListener('click', () => {
+        activeIndex = (activeIndex - 1 + examples.length) % examples.length;
+        updateView();
+      });
+
+      nextBtn.addEventListener('click', () => {
+        activeIndex = (activeIndex + 1) % examples.length;
+        updateView();
+      });
+
+      updateView();
     }
 
     function formatPronunciation(card) {
