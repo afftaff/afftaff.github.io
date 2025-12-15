@@ -60,12 +60,12 @@ async function callGemini(systemInstruction, userContent, model = 'gemini-flash-
   return botText;
 }
 
-const api = { callGemini, loadGeminiKey, saveGeminiKey };
+const geminiApi = { callGemini, loadGeminiKey, saveGeminiKey };
 
 if (typeof window !== 'undefined') {
-  window.geminiApi = api;
+  window.geminiApi = geminiApi;
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = api;
+  module.exports = geminiApi;
 }

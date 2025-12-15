@@ -694,7 +694,7 @@ async function getAllVerbInfinitives() {
     .filter(Boolean);
 }
 
-const api = {
+const frenchWordsApi = {
   lookupFrenchWords,
   preloadFrenchWordData,
   debug,
@@ -706,11 +706,11 @@ const api = {
 };
 
 if (typeof window !== 'undefined') {
-  window.frenchWordsApi = api;
+  window.frenchWordsApi = frenchWordsApi;
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = api;
+  module.exports = frenchWordsApi;
 }
 
 // Example result structure:

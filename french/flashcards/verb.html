@@ -197,6 +197,9 @@
             <input type="text" id="verbInput" placeholder="abaisser" />
           </div>
         </div>
+        <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="secondary" id="saveKey" type="button">Save Gemini key</button>
+        </div>
         <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
           <button id="startQuiz">Start meaning quiz</button>
           <button class="secondary" id="resetBtn" type="button">Reset</button>
@@ -261,6 +264,7 @@
     const startButton = document.getElementById('startQuiz');
     const checkButton = document.getElementById('checkMeanings');
     const resetBtn = document.getElementById('resetBtn');
+    const saveKeyBtn = document.getElementById('saveKey');
 
     let currentVerb = null;
     let currentVerbEntry = null;
@@ -694,6 +698,19 @@
     if (apiKeyInput) {
       apiKeyInput.addEventListener('input', () => {
         geminiApi.saveGeminiKey(apiKeyInput.value);
+      });
+    }
+    if (saveKeyBtn) {
+      saveKeyBtn.addEventListener('click', () => {
+        const value = (apiKeyInput?.value || '').trim();
+        if (!value) {
+          setupStatus.textContent = 'Enter a Gemini key before saving.';
+          setupStatus.className = 'status error';
+          return;
+        }
+        geminiApi.saveGeminiKey(value);
+        setupStatus.textContent = 'Gemini key saved locally.';
+        setupStatus.className = 'status success';
       });
     }
 
