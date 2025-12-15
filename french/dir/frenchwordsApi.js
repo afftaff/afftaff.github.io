@@ -671,7 +671,39 @@ async function preloadFrenchWordData() {
 }
 
 const debug = { parseJsonContent, loadJsonFile, loadWordData };
-const api = { lookupFrenchWords, preloadFrenchWordData, debug, getWordFilePaths, fetchWiktionaryMeaning };
+async function getVerbByInfinitive(infinitive) {
+  if (!infinitive) return null;
+
+  const wordData = await loadWordData();
+  const normalized = normalizeKey(infinitive);
+  return (wordData.verbs || []).find((verb) => normalizeKey(verb.verb) === normalized) || null;
+}
+
+async function getAllVerbDefinitions() {
+  const wordData = await loadWordData();
+  return (wordData.verbs || []).map((verb) => ({
+    verb: verb.verb,
+    definitions: splitMeanings(verb.definitions) || []
+  }));
+}
+
+async function getAllVerbInfinitives() {
+  const wordData = await loadWordData();
+  return (wordData.verbs || [])
+    .map((verb) => verb.verb)
+    .filter(Boolean);
+}
+
+const api = {
+  lookupFrenchWords,
+  preloadFrenchWordData,
+  debug,
+  getWordFilePaths,
+  fetchWiktionaryMeaning,
+  getVerbByInfinitive,
+  getAllVerbDefinitions,
+  getAllVerbInfinitives
+};
 
 if (typeof window !== 'undefined') {
   window.frenchWordsApi = api;
