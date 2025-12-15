@@ -245,6 +245,7 @@
     const SYSTEM_INSTRUCTION = `I type 'Abaisser'.\n\nyou return (Make sure sentences are different to the ones below):\n\n| Mood | Tense | Person | Pronoun | French sentence | Literal translation | Natural translation |\n| Infinitive | Present | — | — | Abaisser le volume est parfois nécessaire. | To lower the volume is sometimes necessary. | Sometimes it is necessary to lower the volume.\n| Indicative | Present | 1st person singular | je | J’abaisse le rideau chaque soir. | I lower the curtain each evening. | I lower the curtain every evening.\n| Indicative | Present | 2nd person singular | tu | Tu abaisses la voix en entrant. | You lower the voice on entering. | You lower your voice when you come in.\n| Indicative | Present | 3rd person singular | il/elle/on | Il abaisse la barrière lentement. | He lowers the barrier slowly. | He slowly lowers the barrier.\n| Indicative | Present | 1st person plural | nous | Nous abaissons les prix en hiver. | We lower the prices in winter. | We reduce prices in winter.\n| Indicative | Present | 2nd person plural | vous | Vous abaissez le dossier du siège. | You lower the back of the seat. | You recline the seat.\n| Indicative | Present | 3rd person plural | ils/elles | Ils abaissent le drapeau à la tombée de la nuit. | They lower the flag at the falling of the night. | They lower the flag at dusk.\n| Indicative | Imperfect | 1st person singular | je | J’abaissais la lumière pour lire. | I was lowering the light in order to read. | I used to dim the light to read.\n| Indicative | Imperfect | 2nd person singular | tu | Tu abaissais toujours tes attentes. | You were always lowering your expectations. | You always lowered your expectations.\n| Indicative | Imperfect | 3rd person singular | il/elle/on | Elle abaissait la tête en parlant. | She was lowering the head while speaking. | She lowered her head as she spoke.\n| Indicative | Imperfect | 1st person plural | nous | Nous abaissions le ton pendant la réunion. | We were lowering the tone during the meeting. | We kept our voices down during the meeting.\n| Indicative | Imperfect | 2nd person plural | vous | Vous abaissiez le store chaque matin. | You were lowering the blind each morning. | You lowered the blind every morning.\n| Indicative | Imperfect | 3rd person plural | ils/elles | Ils abaissaient leurs armes après le conflit. | They were lowering their weapons after the conflict. | They lowered their weapons after the conflict.\n| Indicative | Perfect (Passé Composé) | 1st person singular | je | J’ai abaissé le siège avant de m’asseoir. | I have lowered the seat before sitting down. | I lowered the seat before sitting down.\n| Indicative | Perfect (Passé Composé) | 2nd person singular | tu | Tu as abaissé le son trop tard. | You have lowered the sound too late. | You turned the volume down too late.\n| Indicative | Perfect (Passé Composé) | 3rd person singular | il/elle/on | Il a abaissé sa garde un instant. | He has lowered his guard for a moment. | He let his guard down for a moment.\n| Indicative | Perfect (Passé Composé) | 1st person plural | nous | Nous avons abaissé les coûts cette année. | We have lowered the costs this year. | We reduced costs this year.\n| Indicative | Perfect (Passé Composé) | 2nd person plural | vous | Vous avez abaissé vos standards inutilement. | You have lowered your standards unnecessarily. | You lowered your standards for no reason.\n| Indicative | Perfect (Passé Composé) | 3rd person plural | ils/elles | Elles ont abaissé les rideaux avant la fermeture. | They have lowered the curtains before the closing. | They closed the curtains before closing time.`;
 
     const setupStatus = document.getElementById('setupStatus');
+    const apiKeyInput = document.getElementById('apiKey');
     const meaningOptionsEl = document.getElementById('meaningOptions');
     const meaningStatus = document.getElementById('meaningStatus');
     const tableStatus = document.getElementById('tableStatus');
@@ -277,6 +278,22 @@
       } catch (error) {
         return raw;
       }
+    }
+
+    function updateUrlVerb(verb) {
+      if (typeof history === 'undefined' || typeof URL === 'undefined') return;
+      const url = new URL(window.location.href);
+      if (verb) {
+        url.searchParams.set('verb', verb);
+      } else {
+        url.searchParams.delete('verb');
+      }
+      history.replaceState({}, '', url.toString());
+    }
+
+    function applyStoredGeminiKey() {
+      if (!apiKeyInput) return;
+      geminiApi.loadGeminiKey(apiKeyInput);
     }
 
     function normalizeText(value) {
@@ -321,8 +338,7 @@
       meaningStatus.className = 'status';
 
       const verbInput = normalizeText(verbInputEl.value);
-      const apiInput = document.getElementById('apiKey');
-      geminiApi.loadGeminiKey(apiInput);
+      geminiApi.loadGeminiKey(apiKeyInput);
 
       if (!verbInput) {
         setupStatus.textContent = 'Enter an infinitive to get started.';
@@ -340,6 +356,7 @@
       }
 
       currentVerb = currentVerbEntry.verb;
+      updateUrlVerb(currentVerb);
       correctMeanings = (currentVerbEntry.definitions || []).map((d) => d.trim()).filter(Boolean);
 
       const allDefs = await frenchWordsApi.getAllVerbDefinitions();
@@ -398,7 +415,7 @@
       meaningStatus.textContent = 'Great! Meanings matched. Fetching Gemini sentences...';
       meaningStatus.className = 'status success';
 
-      geminiApi.saveGeminiKey(document.getElementById('apiKey').value);
+      geminiApi.saveGeminiKey(apiKeyInput.value);
       await requestGemini();
     }
 
@@ -631,6 +648,7 @@
       currentVerbEntry = null;
       currentVerb = null;
       parsedRows = [];
+      updateUrlVerb(null);
     }
 
     function renderVerbList(verbs) {
@@ -643,6 +661,7 @@
         pill.textContent = verb;
         pill.addEventListener('click', () => {
           verbInputEl.value = verb;
+          updateUrlVerb(verb);
           renderMeaningQuiz();
         });
         verbListEl.appendChild(pill);
@@ -669,6 +688,13 @@
     function bootstrapManualMode() {
       urlNotice.textContent = 'Paste your Gemini key, type a verb, or click one below to begin.';
       loadVerbList();
+    }
+
+    applyStoredGeminiKey();
+    if (apiKeyInput) {
+      apiKeyInput.addEventListener('input', () => {
+        geminiApi.saveGeminiKey(apiKeyInput.value);
+      });
     }
 
     startButton.addEventListener('click', renderMeaningQuiz);
