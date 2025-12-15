@@ -104,6 +104,14 @@
       align-items: flex-start;
     }
     .option input { margin-top: 3px; }
+    .option.option-correct {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+    .option.option-wrong {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 1px var(--danger);
+    }
 
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th, td { padding: 10px; border: 1px solid var(--border); text-align: left; }
@@ -217,9 +225,6 @@
       <h2>Step 1: What does the infinitive mean?</h2>
       <p class="lead">Choose every meaning that matches the infinitive. All options stay visible (no dropdowns).</p>
       <div id="meaningOptions" class="options"></div>
-      <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
-        <button id="checkMeanings">Check meanings</button>
-      </div>
       <div id="meaningStatus" class="status"></div>
     </section>
 
@@ -255,6 +260,8 @@
     const tableHead = document.querySelector('#resultsTable thead');
     const tableBody = document.querySelector('#resultsTable tbody');
     const flashcardWrap = document.getElementById('flashcards');
+    const tableCard = document.getElementById('tableCard');
+    const flashcardCard = document.getElementById('flashcardCard');
     const verbListEl = document.getElementById('verbList');
     const verbListSection = document.getElementById('verbListSection');
     const urlNotice = document.getElementById('urlNotice');
@@ -262,7 +269,6 @@
     const verbInputEl = document.getElementById('verbInput');
 
     const startButton = document.getElementById('startQuiz');
-    const checkButton = document.getElementById('checkMeanings');
     const resetBtn = document.getElementById('resetBtn');
     const saveKeyBtn = document.getElementById('saveKey');
 
@@ -272,6 +278,8 @@
     let correctMeanings = [];
     let conjugationOptions = [];
     let parsedRows = [];
+    let meaningComplete = false;
+    let conjugationsComplete = false;
 
     function getUrlVerb() {
       const params = new URLSearchParams(window.location.search);
@@ -326,6 +334,24 @@
       return result;
     }
 
+    function hideTableAndFlashcards() {
+      tableCard.classList.add('hidden');
+      flashcardCard.classList.add('hidden');
+      tableHead.innerHTML = '';
+      tableBody.innerHTML = '';
+      flashcardWrap.innerHTML = '';
+      tableStatus.textContent = '';
+      tableStatus.className = 'status';
+    }
+
+    function showTableCard() {
+      tableCard.classList.remove('hidden');
+    }
+
+    function showFlashcards() {
+      flashcardCard.classList.remove('hidden');
+    }
+
     function buildMeaningOptions(allDefs, verbDefs) {
       const pool = allDefs
         .filter((item) => item.verb.toLowerCase() !== currentVerb.toLowerCase())
@@ -340,6 +366,9 @@
       meaningOptionsEl.innerHTML = '';
       meaningStatus.textContent = '';
       meaningStatus.className = 'status';
+      meaningComplete = false;
+      conjugationsComplete = false;
+      hideTableAndFlashcards();
 
       const verbInput = normalizeText(verbInputEl.value);
       geminiApi.loadGeminiKey(apiKeyInput);
@@ -383,44 +412,70 @@
         meaningOptionsEl.appendChild(option);
       });
 
-      setupStatus.textContent = `Found ${correctMeanings.length} meaning(s) for ${currentVerb}. Select all of them (options total: ${meaningOptions.length}).`;
+      meaningOptionsEl.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+        checkbox.addEventListener('change', (event) => {
+          if (event.target.checked && meaningOptionsEl.querySelectorAll('input:checked').length > correctMeanings.length) {
+            event.target.checked = false;
+            meaningStatus.textContent = `You only need ${correctMeanings.length} meaning(s). Unselect a wrong one first.`;
+            meaningStatus.className = 'status error';
+            return;
+          }
+          updateMeaningStatus();
+        });
+      });
+
+      updateMeaningStatus();
     }
 
-    function compareMeanings(selected) {
-      const normalizeArray = (arr) => arr.map((item) => item.toLowerCase().trim()).sort();
-      const chosen = normalizeArray(selected);
-      const correct = normalizeArray(correctMeanings);
+    function updateMeaningStatus() {
+      const selectedInputs = Array.from(meaningOptionsEl.querySelectorAll('input:checked'));
+      const selectedValues = selectedInputs.map((el) => el.value);
+      const totalNeeded = correctMeanings.length;
+      const correctSelected = selectedValues.filter((val) =>
+        correctMeanings.some((c) => c.toLowerCase() === val.toLowerCase())
+      );
+      const wrongSelected = selectedValues.length - correctSelected.length;
 
-      if (chosen.length !== correct.length) return false;
-      return correct.every((value, idx) => value === chosen[idx]);
-    }
+      meaningOptionsEl.querySelectorAll('label.option').forEach((label) => {
+        const checkbox = label.querySelector('input');
+        label.classList.remove('option-correct', 'option-wrong');
+        if (!checkbox.checked) return;
+        const isCorrect = correctMeanings.some((c) => c.toLowerCase() === checkbox.value.toLowerCase());
+        if (isCorrect) {
+          label.classList.add('option-correct');
+        } else {
+          label.classList.add('option-wrong');
+        }
+      });
 
-    async function handleMeaningCheck() {
-      meaningStatus.textContent = '';
-      meaningStatus.className = 'status';
-      if (!currentVerbEntry) {
-        meaningStatus.textContent = 'Start the quiz first.';
-        return;
+      if (selectedInputs.length >= totalNeeded) {
+        meaningOptionsEl.querySelectorAll('input:not(:checked)').forEach((input) => {
+          input.disabled = true;
+        });
+      } else {
+        meaningOptionsEl.querySelectorAll('input').forEach((input) => {
+          input.disabled = false;
+        });
       }
 
-      const selected = Array.from(meaningOptionsEl.querySelectorAll('input:checked')).map((el) => el.value);
-      if (selected.length === 0) {
-        meaningStatus.textContent = 'Pick at least one meaning.';
-        return;
-      }
-
-      const allCorrect = compareMeanings(selected);
-      if (!allCorrect) {
-        meaningStatus.textContent = 'Not quite. Try again!';
+      if (wrongSelected > 0) {
+        meaningStatus.textContent = `You need ${totalNeeded} meaning(s). Remove incorrect picks.`;
         meaningStatus.className = 'status error';
+        meaningComplete = false;
         return;
       }
 
-      meaningStatus.textContent = 'Great! Meanings matched. Fetching Gemini sentences...';
-      meaningStatus.className = 'status success';
+      meaningStatus.textContent = `Select ${totalNeeded} meaning(s). ${correctSelected.length}/${totalNeeded} correct so far.`;
+      meaningStatus.className = 'status';
 
-      geminiApi.saveGeminiKey(apiKeyInput.value);
-      await requestGemini();
+      if (correctSelected.length === totalNeeded && !meaningComplete) {
+        meaningStatus.textContent = 'All meanings correct! Fetching Gemini sentences...';
+        meaningStatus.className = 'status success';
+        meaningComplete = true;
+        geminiApi.saveGeminiKey(apiKeyInput.value);
+        showTableCard();
+        requestGemini();
+      }
     }
 
     function parseTable(text) {
@@ -491,6 +546,7 @@
         } else {
           select.classList.add('dropdown-wrong');
         }
+        updateTableProgress();
       });
 
       wrapper.append(before, select, after);
@@ -535,6 +591,29 @@
       });
 
       tableStatus.textContent = 'Dropdowns inserted. Pick the correct conjugations!';
+      updateTableProgress();
+    }
+
+    function updateTableProgress() {
+      const selects = Array.from(tableBody.querySelectorAll('select[data-answer]'));
+      if (!selects.length) return;
+
+      const total = selects.length;
+      const correct = selects.filter((select) => select.value === select.dataset.answer).length;
+
+      if (correct === total) {
+        tableStatus.textContent = 'All conjugations correct! Flashcards unlocked below.';
+        tableStatus.className = 'status success';
+        if (!conjugationsComplete) {
+          conjugationsComplete = true;
+          showFlashcards();
+        }
+      } else {
+        tableStatus.textContent = `Choose the hidden form in each sentence. ${correct}/${total} correct so far.`;
+        tableStatus.className = 'status';
+        conjugationsComplete = false;
+        flashcardCard.classList.add('hidden');
+      }
     }
 
     function findConjugationDetail(form) {
@@ -625,6 +704,7 @@
       tableHead.innerHTML = '';
       tableBody.innerHTML = '';
       flashcardWrap.innerHTML = '';
+      flashcardCard.classList.add('hidden');
 
       try {
         const responseText = await geminiApi.callGemini(SYSTEM_INSTRUCTION, currentVerb);
@@ -644,11 +724,9 @@
       meaningStatus.className = 'status';
       setupStatus.textContent = '';
       setupStatus.className = 'status';
-      tableHead.innerHTML = '';
-      tableBody.innerHTML = '';
-      tableStatus.textContent = '';
-      tableStatus.className = 'status';
-      flashcardWrap.innerHTML = '';
+      hideTableAndFlashcards();
+      meaningComplete = false;
+      conjugationsComplete = false;
       currentVerbEntry = null;
       currentVerb = null;
       parsedRows = [];
@@ -694,6 +772,7 @@
       loadVerbList();
     }
 
+    hideTableAndFlashcards();
     applyStoredGeminiKey();
     if (apiKeyInput) {
       apiKeyInput.addEventListener('input', () => {
@@ -715,7 +794,6 @@
     }
 
     startButton.addEventListener('click', renderMeaningQuiz);
-    checkButton.addEventListener('click', handleMeaningCheck);
     resetBtn.addEventListener('click', resetAll);
 
     const initialVerb = getUrlVerb();
