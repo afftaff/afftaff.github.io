@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>French Verb Tester</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --border: #1f2937;
+      --muted: #cbd5e1;
+      --text: #e5e7eb;
+      --accent: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius: 12px;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 18px 16px 6px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    h1 { margin: 0 0 6px; font-size: 1.7rem; }
+    p.lead { margin: 0; color: var(--muted); font-size: 0.95rem; }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6px 16px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 10px 45px rgba(0,0,0,0.25);
+    }
+
+    .card h2 { margin: 0 0 10px; font-size: 1.15rem; }
+    label { display: block; font-size: 0.9rem; margin-bottom: 4px; color: var(--muted); }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0b1220;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+    }
+
+    button {
+      border: none;
+      background: var(--accent);
+      color: #04150a;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    button:disabled { opacity: 0.6; cursor: default; }
+
+    .status { color: var(--muted); font-size: 0.9rem; min-height: 1.2rem; margin-top: 8px; white-space: pre-wrap; }
+    .error { color: var(--danger); }
+    .success { color: var(--accent); }
+
+    .options { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 8px; }
+    .option {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #0b1220;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .option input { margin-top: 3px; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 10px; border: 1px solid var(--border); text-align: left; }
+    th { background: #0b1220; }
+
+    select {
+      padding: 6px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0b1220;
+      color: var(--text);
+    }
+
+    .sentence-cell { line-height: 1.5; }
+    .dropdown-correct { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .dropdown-wrong { border-color: var(--danger); box-shadow: 0 0 0 1px var(--danger); }
+
+    .flashcards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .flashcard {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #0b1220;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .flashcard small { color: var(--muted); }
+    .flashcard button { align-self: flex-start; }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #152033;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .hidden { display: none !important; }
+
+    .verb-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 8px;
+      max-height: 320px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+
+    .verb-pill {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0b1220;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+    }
+    .verb-pill:hover { border-color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>French Verb Tester</h1>
+    <p class="lead">Guess the infinitive meanings, then practice the conjugations the model returns.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Setup</h2>
+      <div id="urlNotice" class="status"></div>
+      <div id="manualSetup">
+        <div class="grid">
+          <div>
+            <label for="apiKey">Gemini API key</label>
+            <input type="password" id="apiKey" autocomplete="off" placeholder="Paste your key" />
+          </div>
+          <div>
+            <label for="verbInput">Verb infinitive</label>
+            <input type="text" id="verbInput" placeholder="abaisser" />
+          </div>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button id="startQuiz">Start meaning quiz</button>
+          <button class="secondary" id="resetBtn" type="button">Reset</button>
+        </div>
+      </div>
+      <div id="verbListSection">
+        <h3 style="margin:12px 0 4px;">Browse infinitives</h3>
+        <p class="lead">Click an infinitive to load its meaning quiz.</p>
+        <div id="verbList" class="verb-list"></div>
+      </div>
+      <div id="setupStatus" class="status"></div>
+    </section>
+
+    <section class="card" id="meaningCard">
+      <h2>Step 1: What does the infinitive mean?</h2>
+      <p class="lead">Choose every meaning that matches the infinitive. All options stay visible (no dropdowns).</p>
+      <div id="meaningOptions" class="options"></div>
+      <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+        <button id="checkMeanings">Check meanings</button>
+      </div>
+      <div id="meaningStatus" class="status"></div>
+    </section>
+
+    <section class="card" id="tableCard">
+      <h2>Step 2: Hide and choose the right conjugation</h2>
+      <p class="lead">After picking the right meanings, Gemini returns sentences. Choose the hidden verb form in each one.</p>
+      <div id="tableStatus" class="status"></div>
+      <div class="table-wrap">
+        <table id="resultsTable">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" id="flashcardCard">
+      <h2>Mini flashcards</h2>
+      <p class="lead">Quick checks for meaning, pronoun, tense, mood, and pronunciation.</p>
+      <div id="flashcards" class="flashcards"></div>
+    </section>
+  </main>
+
+  <script src="../dir/frenchwordsApi.js"></script>
+  <script src="../dir/geminiApi.js"></script>
+  <script>
+    const SYSTEM_INSTRUCTION = `I type 'Abaisser'.\n\nyou return (Make sure sentences are different to the ones below):\n\n| Mood | Tense | Person | Pronoun | French sentence | Literal translation | Natural translation |\n| Infinitive | Present | — | — | Abaisser le volume est parfois nécessaire. | To lower the volume is sometimes necessary. | Sometimes it is necessary to lower the volume.\n| Indicative | Present | 1st person singular | je | J’abaisse le rideau chaque soir. | I lower the curtain each evening. | I lower the curtain every evening.\n| Indicative | Present | 2nd person singular | tu | Tu abaisses la voix en entrant. | You lower the voice on entering. | You lower your voice when you come in.\n| Indicative | Present | 3rd person singular | il/elle/on | Il abaisse la barrière lentement. | He lowers the barrier slowly. | He slowly lowers the barrier.\n| Indicative | Present | 1st person plural | nous | Nous abaissons les prix en hiver. | We lower the prices in winter. | We reduce prices in winter.\n| Indicative | Present | 2nd person plural | vous | Vous abaissez le dossier du siège. | You lower the back of the seat. | You recline the seat.\n| Indicative | Present | 3rd person plural | ils/elles | Ils abaissent le drapeau à la tombée de la nuit. | They lower the flag at the falling of the night. | They lower the flag at dusk.\n| Indicative | Imperfect | 1st person singular | je | J’abaissais la lumière pour lire. | I was lowering the light in order to read. | I used to dim the light to read.\n| Indicative | Imperfect | 2nd person singular | tu | Tu abaissais toujours tes attentes. | You were always lowering your expectations. | You always lowered your expectations.\n| Indicative | Imperfect | 3rd person singular | il/elle/on | Elle abaissait la tête en parlant. | She was lowering the head while speaking. | She lowered her head as she spoke.\n| Indicative | Imperfect | 1st person plural | nous | Nous abaissions le ton pendant la réunion. | We were lowering the tone during the meeting. | We kept our voices down during the meeting.\n| Indicative | Imperfect | 2nd person plural | vous | Vous abaissiez le store chaque matin. | You were lowering the blind each morning. | You lowered the blind every morning.\n| Indicative | Imperfect | 3rd person plural | ils/elles | Ils abaissaient leurs armes après le conflit. | They were lowering their weapons after the conflict. | They lowered their weapons after the conflict.\n| Indicative | Perfect (Passé Composé) | 1st person singular | je | J’ai abaissé le siège avant de m’asseoir. | I have lowered the seat before sitting down. | I lowered the seat before sitting down.\n| Indicative | Perfect (Passé Composé) | 2nd person singular | tu | Tu as abaissé le son trop tard. | You have lowered the sound too late. | You turned the volume down too late.\n| Indicative | Perfect (Passé Composé) | 3rd person singular | il/elle/on | Il a abaissé sa garde un instant. | He has lowered his guard for a moment. | He let his guard down for a moment.\n| Indicative | Perfect (Passé Composé) | 1st person plural | nous | Nous avons abaissé les coûts cette année. | We have lowered the costs this year. | We reduced costs this year.\n| Indicative | Perfect (Passé Composé) | 2nd person plural | vous | Vous avez abaissé vos standards inutilement. | You have lowered your standards unnecessarily. | You lowered your standards for no reason.\n| Indicative | Perfect (Passé Composé) | 3rd person plural | ils/elles | Elles ont abaissé les rideaux avant la fermeture. | They have lowered the curtains before the closing. | They closed the curtains before closing time.`;
+
+    const setupStatus = document.getElementById('setupStatus');
+    const meaningOptionsEl = document.getElementById('meaningOptions');
+    const meaningStatus = document.getElementById('meaningStatus');
+    const tableStatus = document.getElementById('tableStatus');
+    const tableHead = document.querySelector('#resultsTable thead');
+    const tableBody = document.querySelector('#resultsTable tbody');
+    const flashcardWrap = document.getElementById('flashcards');
+    const verbListEl = document.getElementById('verbList');
+    const verbListSection = document.getElementById('verbListSection');
+    const urlNotice = document.getElementById('urlNotice');
+    const manualSetup = document.getElementById('manualSetup');
+    const verbInputEl = document.getElementById('verbInput');
+
+    const startButton = document.getElementById('startQuiz');
+    const checkButton = document.getElementById('checkMeanings');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let currentVerb = null;
+    let currentVerbEntry = null;
+    let meaningOptions = [];
+    let correctMeanings = [];
+    let conjugationOptions = [];
+    let parsedRows = [];
+
+    function getUrlVerb() {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get('verb');
+      if (!raw) return null;
+      try {
+        return decodeURIComponent(raw);
+      } catch (error) {
+        return raw;
+      }
+    }
+
+    function normalizeText(value) {
+      return (value || '').trim();
+    }
+
+    function shuffle(array) {
+      const clone = [...array];
+      for (let i = clone.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [clone[i], clone[j]] = [clone[j], clone[i]];
+      }
+      return clone;
+    }
+
+    function uniqueStrings(values) {
+      const seen = new Set();
+      const result = [];
+      values.forEach((value) => {
+        const key = value.toLowerCase();
+        if (!seen.has(key)) {
+          seen.add(key);
+          result.push(value);
+        }
+      });
+      return result;
+    }
+
+    function buildMeaningOptions(allDefs, verbDefs) {
+      const pool = allDefs
+        .filter((item) => item.verb.toLowerCase() !== currentVerb.toLowerCase())
+        .flatMap((item) => item.definitions);
+
+      const shuffledPool = shuffle(pool).slice(0, Math.max(0, 10 - verbDefs.length));
+      const combined = uniqueStrings([...verbDefs, ...shuffledPool]).slice(0, 10);
+      return shuffle(combined);
+    }
+
+    async function renderMeaningQuiz() {
+      meaningOptionsEl.innerHTML = '';
+      meaningStatus.textContent = '';
+      meaningStatus.className = 'status';
+
+      const verbInput = normalizeText(verbInputEl.value);
+      const apiInput = document.getElementById('apiKey');
+      geminiApi.loadGeminiKey(apiInput);
+
+      if (!verbInput) {
+        setupStatus.textContent = 'Enter an infinitive to get started.';
+        return;
+      }
+
+      setupStatus.textContent = 'Loading verb data...';
+      setupStatus.className = 'status';
+      await frenchWordsApi.preloadFrenchWordData();
+      currentVerbEntry = await frenchWordsApi.getVerbByInfinitive(verbInput);
+
+      if (!currentVerbEntry) {
+        setupStatus.textContent = `No verb entry found for "${verbInput}".`;
+        return;
+      }
+
+      currentVerb = currentVerbEntry.verb;
+      correctMeanings = (currentVerbEntry.definitions || []).map((d) => d.trim()).filter(Boolean);
+
+      const allDefs = await frenchWordsApi.getAllVerbDefinitions();
+      meaningOptions = buildMeaningOptions(allDefs, correctMeanings);
+
+      meaningOptions.forEach((meaning, index) => {
+        const option = document.createElement('label');
+        option.className = 'option';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = meaning;
+        checkbox.id = `meaning-${index}`;
+
+        const text = document.createElement('div');
+        text.textContent = meaning;
+
+        option.appendChild(checkbox);
+        option.appendChild(text);
+        meaningOptionsEl.appendChild(option);
+      });
+
+      setupStatus.textContent = `Found ${correctMeanings.length} meaning(s) for ${currentVerb}. Select all of them (options total: ${meaningOptions.length}).`;
+    }
+
+    function compareMeanings(selected) {
+      const normalizeArray = (arr) => arr.map((item) => item.toLowerCase().trim()).sort();
+      const chosen = normalizeArray(selected);
+      const correct = normalizeArray(correctMeanings);
+
+      if (chosen.length !== correct.length) return false;
+      return correct.every((value, idx) => value === chosen[idx]);
+    }
+
+    async function handleMeaningCheck() {
+      meaningStatus.textContent = '';
+      meaningStatus.className = 'status';
+      if (!currentVerbEntry) {
+        meaningStatus.textContent = 'Start the quiz first.';
+        return;
+      }
+
+      const selected = Array.from(meaningOptionsEl.querySelectorAll('input:checked')).map((el) => el.value);
+      if (selected.length === 0) {
+        meaningStatus.textContent = 'Pick at least one meaning.';
+        return;
+      }
+
+      const allCorrect = compareMeanings(selected);
+      if (!allCorrect) {
+        meaningStatus.textContent = 'Not quite. Try again!';
+        meaningStatus.className = 'status error';
+        return;
+      }
+
+      meaningStatus.textContent = 'Great! Meanings matched. Fetching Gemini sentences...';
+      meaningStatus.className = 'status success';
+
+      geminiApi.saveGeminiKey(document.getElementById('apiKey').value);
+      await requestGemini();
+    }
+
+    function parseTable(text) {
+      const lines = text.split(/\r?\n/).map((line) => line.trim()).filter((line) => line.startsWith('|'));
+      if (!lines.length) return { headers: [], rows: [] };
+
+      const headers = lines[0].split('|').map((cell) => cell.trim()).filter(Boolean);
+      const rows = lines.slice(1).map((line) => {
+        const cells = line.split('|').map((cell) => cell.trim()).filter(Boolean);
+        const row = {};
+        headers.forEach((header, idx) => {
+          row[header] = cells[idx] || '';
+        });
+        return row;
+      });
+
+      return { headers, rows };
+    }
+
+    function getConjugationOptions(entry) {
+      const forms = (entry.conjugations || []).map((c) => c.conjugated_form).filter(Boolean);
+      return uniqueStrings(forms);
+    }
+
+    function findConjugationInSentence(sentence, options) {
+      const lower = sentence.toLowerCase();
+      return options.find((form) => lower.includes(form.toLowerCase())) || null;
+    }
+
+    function createSentenceCell(sentence, correctForm, options) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'sentence-cell';
+
+      if (!correctForm) {
+        wrapper.textContent = sentence;
+        return wrapper;
+      }
+
+      const lowerSentence = sentence.toLowerCase();
+      const matchIndex = lowerSentence.indexOf(correctForm.toLowerCase());
+      if (matchIndex === -1) {
+        wrapper.textContent = sentence;
+        return wrapper;
+      }
+
+      const before = sentence.slice(0, matchIndex);
+      const after = sentence.slice(matchIndex + correctForm.length);
+
+      const select = document.createElement('select');
+      const placeholder = document.createElement('option');
+      placeholder.textContent = 'Choose form';
+      placeholder.value = '';
+      select.appendChild(placeholder);
+
+      options.forEach((opt) => {
+        const option = document.createElement('option');
+        option.value = opt;
+        option.textContent = opt;
+        select.appendChild(option);
+      });
+
+      select.dataset.answer = correctForm;
+      select.addEventListener('change', () => {
+        select.classList.remove('dropdown-correct', 'dropdown-wrong');
+        if (!select.value) return;
+        if (select.value === correctForm) {
+          select.classList.add('dropdown-correct');
+        } else {
+          select.classList.add('dropdown-wrong');
+        }
+      });
+
+      wrapper.append(before, select, after);
+      return wrapper;
+    }
+
+    function renderTable(headers, rows) {
+      tableHead.innerHTML = '';
+      tableBody.innerHTML = '';
+
+      if (!headers.length || !rows.length) {
+        tableStatus.textContent = 'No table detected in Gemini response yet.';
+        return;
+      }
+
+      const headerRow = document.createElement('tr');
+      headers.forEach((header) => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        headerRow.appendChild(th);
+      });
+      tableHead.appendChild(headerRow);
+
+      conjugationOptions = getConjugationOptions(currentVerbEntry);
+
+      rows.forEach((row) => {
+        const tr = document.createElement('tr');
+        const sentence = row['French sentence'] || row['French Sentence'] || '';
+        const answer = findConjugationInSentence(sentence, conjugationOptions);
+
+        headers.forEach((header) => {
+          const td = document.createElement('td');
+          if (header.toLowerCase().includes('french') && sentence) {
+            td.appendChild(createSentenceCell(sentence, answer, conjugationOptions));
+          } else {
+            td.textContent = row[header] || '';
+          }
+          tr.appendChild(td);
+        });
+
+        tableBody.appendChild(tr);
+      });
+
+      tableStatus.textContent = 'Dropdowns inserted. Pick the correct conjugations!';
+    }
+
+    function findConjugationDetail(form) {
+      if (!form) return null;
+      const lower = form.toLowerCase();
+      return (currentVerbEntry.conjugations || []).find((c) => (c.conjugated_form || '').toLowerCase() === lower) || null;
+    }
+
+    function createFlashcard(row, type) {
+      const card = document.createElement('div');
+      card.className = 'flashcard';
+
+      const conjugated = findConjugationInSentence(row['French sentence'] || row['French Sentence'] || '', conjugationOptions);
+      const detail = findConjugationDetail(conjugated);
+
+      const title = document.createElement('strong');
+      const answer = document.createElement('div');
+      answer.style.display = 'none';
+
+      const meta = document.createElement('div');
+      meta.className = 'chip';
+      meta.textContent = `${row['Mood'] || row['Mood '] || ''} · ${row['Tense'] || ''}`;
+
+      switch (type) {
+        case 'meaning':
+          title.textContent = 'Meaning?';
+          answer.textContent = row['Natural translation'] || row['Literal translation'] || '—';
+          break;
+        case 'pronoun':
+          title.textContent = 'Which pronoun?';
+          answer.textContent = row['Pronoun'] || '—';
+          break;
+        case 'tense':
+          title.textContent = 'Which tense?';
+          answer.textContent = row['Tense'] || '—';
+          break;
+        case 'mood':
+          title.textContent = 'Which mood?';
+          answer.textContent = row['Mood'] || '—';
+          break;
+        case 'pronunciation':
+          title.textContent = 'Pronunciation?';
+          answer.textContent = detail?.ipa || detail?.pronunciation_en || '—';
+          break;
+        default:
+          title.textContent = 'Meaning?';
+          answer.textContent = row['Natural translation'] || '—';
+      }
+
+      const reveal = document.createElement('button');
+      reveal.textContent = 'Reveal';
+      reveal.addEventListener('click', () => {
+        answer.style.display = answer.style.display === 'none' ? 'block' : 'none';
+      });
+
+      const speaker = document.createElement('button');
+      speaker.textContent = '🔊 Speak';
+      speaker.className = 'secondary';
+      speaker.addEventListener('click', () => {
+        if (!conjugated || typeof speechSynthesis === 'undefined') return;
+        const utterance = new SpeechSynthesisUtterance(conjugated);
+        utterance.lang = 'fr-FR';
+        speechSynthesis.speak(utterance);
+      });
+
+      const base = document.createElement('small');
+      base.textContent = conjugated || '—';
+
+      card.append(title, base, meta, reveal, speaker, answer);
+      return card;
+    }
+
+    function renderFlashcards(rows) {
+      flashcardWrap.innerHTML = '';
+      if (!rows.length) return;
+
+      const types = ['meaning', 'pronoun', 'tense', 'mood', 'pronunciation'];
+      rows.forEach((row, idx) => {
+        const cardType = types[idx % types.length];
+        const card = createFlashcard(row, cardType);
+        flashcardWrap.appendChild(card);
+      });
+    }
+
+    async function requestGemini() {
+      tableStatus.textContent = 'Requesting Gemini...';
+      tableStatus.className = 'status';
+      tableHead.innerHTML = '';
+      tableBody.innerHTML = '';
+      flashcardWrap.innerHTML = '';
+
+      try {
+        const responseText = await geminiApi.callGemini(SYSTEM_INSTRUCTION, currentVerb);
+        const parsed = parseTable(responseText);
+        parsedRows = parsed.rows;
+        renderTable(parsed.headers, parsedRows);
+        renderFlashcards(parsedRows);
+      } catch (error) {
+        tableStatus.textContent = `Gemini error: ${error.message}`;
+        tableStatus.className = 'status error';
+      }
+    }
+
+    function resetAll() {
+      meaningOptionsEl.innerHTML = '';
+      meaningStatus.textContent = '';
+      meaningStatus.className = 'status';
+      setupStatus.textContent = '';
+      setupStatus.className = 'status';
+      tableHead.innerHTML = '';
+      tableBody.innerHTML = '';
+      tableStatus.textContent = '';
+      tableStatus.className = 'status';
+      flashcardWrap.innerHTML = '';
+      currentVerbEntry = null;
+      currentVerb = null;
+      parsedRows = [];
+    }
+
+    function renderVerbList(verbs) {
+      if (!verbListEl) return;
+      verbListEl.innerHTML = '';
+      verbs.forEach((verb) => {
+        const pill = document.createElement('button');
+        pill.type = 'button';
+        pill.className = 'verb-pill';
+        pill.textContent = verb;
+        pill.addEventListener('click', () => {
+          verbInputEl.value = verb;
+          renderMeaningQuiz();
+        });
+        verbListEl.appendChild(pill);
+      });
+    }
+
+    async function loadVerbList() {
+      await frenchWordsApi.preloadFrenchWordData();
+      const verbs = await frenchWordsApi.getAllVerbInfinitives();
+      renderVerbList(verbs || []);
+      if (!verbs || !verbs.length) {
+        setupStatus.textContent = 'No verbs found in BigVerbList.json.';
+      }
+    }
+
+    function bootstrapVerbFromUrl(urlVerb) {
+      manualSetup.classList.add('hidden');
+      verbListSection.classList.add('hidden');
+      urlNotice.textContent = `Loaded verb from URL parameter: ${urlVerb}`;
+      verbInputEl.value = urlVerb;
+      renderMeaningQuiz();
+    }
+
+    function bootstrapManualMode() {
+      urlNotice.textContent = 'Paste your Gemini key, type a verb, or click one below to begin.';
+      loadVerbList();
+    }
+
+    startButton.addEventListener('click', renderMeaningQuiz);
+    checkButton.addEventListener('click', handleMeaningCheck);
+    resetBtn.addEventListener('click', resetAll);
+
+    const initialVerb = getUrlVerb();
+    if (initialVerb) {
+      bootstrapVerbFromUrl(initialVerb);
+    } else {
+      bootstrapManualMode();
+    }
+  </script>
+</body>
+</html>
