@@ -725,28 +725,72 @@
       return arr.sort(() => Math.random() - 0.5);
     }
 
+    function parseCSVLine(line) {
+      const values = [];
+      let current = '';
+      let inQuotes = false;
+
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        const next = line[i + 1];
+
+        if (char === '"') {
+          if (inQuotes && next === '"') {
+            current += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (char === ',' && !inQuotes) {
+          values.push(current);
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+
+      values.push(current);
+      return values.map(v => v.trim());
+    }
+
+    function parseCSV(text) {
+      const lines = text.trim().split(/\r?\n/);
+      if (lines.length === 0) return [];
+
+      const headers = parseCSVLine(lines.shift());
+      return lines.map(line => {
+        const cols = parseCSVLine(line);
+        const row = {};
+        headers.forEach((h, idx) => { row[h] = cols[idx] || ''; });
+        return row;
+      });
+    }
+
     window.nextDeck = () => { state.currentDeckIndex = (state.currentDeckIndex + 1) % state.decks.length; state.currentCardIndex=0; render(); };
     window.prevDeck = () => { state.currentDeckIndex = (state.currentDeckIndex - 1 + state.decks.length) % state.decks.length; state.currentCardIndex=0; render(); };
     window.nextCard = () => { if(state.decks.length) { state.currentCardIndex = (state.currentCardIndex + 1) % state.decks[state.currentDeckIndex].length; render(); }};
     window.prevCard = () => { if(state.decks.length) { const len = state.decks[state.currentDeckIndex].length; state.currentCardIndex = (state.currentCardIndex - 1 + len) % len; render(); }};
 
-    function boot() {
-      const mockData = [
-        {
-          Sentence: "Il préfère écrire une lettre plutôt que téléphoner.",
-          Meaning: "to write",
-          Sentence_Translation: "He prefers to write a letter rather than phone.",
-          Sentence_Breakdown: "Il|He|Pronoun|il|; préfère|prefers|Verb|pʁe.fɛʁ|; écrire|to write|Verb|e.kʁiʁ|; une|a|Article|yn|; lettre|letter|Noun|lɛtʁ|; plutôt|rather|Adverb|ply.to|; que|than|Conjunction|kə|; téléphoner|to phone|Verb|te.le.fɔ.ne|"
-        },
-        {
-          Sentence: "Bonjour tout le monde.",
-          Meaning: "Hello everyone",
-          Sentence_Translation: "Hello everyone.",
-          Sentence_Breakdown: "Bonjour|Hello|Noun|bɔ̃.ʒuʁ|; tout|all|Adjective|tu|; le|the|Article|lə|; monde|world|Noun|mɔ̃d|"
-        }
-      ];
-      state.decks = chunk(mockData, 50);
-      render();
+    async function boot() {
+      try {
+        const response = await fetch('/french/dir/words/sentences.csv');
+        const text = await response.text();
+        const rows = parseCSV(text);
+
+        const cards = rows.map(row => ({
+          Sentence: row.Sentence,
+          Meaning: row.Meaning,
+          Sentence_Translation: row.Sentence_Translation,
+          Sentence_Breakdown: row.Sentence_Breakdown
+        })).filter(card => card.Sentence);
+
+        state.decks = chunk(cards, 50);
+        state.currentDeckIndex = 0;
+        state.currentCardIndex = 0;
+        render();
+      } catch (err) {
+        console.error('Failed to load sentences.csv', err);
+      }
     }
     boot();
 
