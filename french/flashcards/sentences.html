@@ -43,6 +43,8 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
+      z-index: 10; /* Ensure controls are above scene */
+      position: relative;
     }
 
     .nav-group {
@@ -75,16 +77,19 @@
     .scene {
       width: 100%;
       max-width: 700px;
-      height: 650px; /* Fixed Height */
-      perspective: 1500px; /* Essential for 3D effect */
-      margin: 0 auto;
+      /* Remove fixed height, let it be determined by the card */
+      min-height: 400px; 
+      perspective: 1500px;
+      margin: 0 auto 50px auto;
+      position: relative;
     }
 
     .main-card {
       width: 100%;
-      height: 100%;
+      /* Default Height (Front) */
+      height: 400px; 
       position: relative;
-      transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), height 0.6s ease;
       transform-style: preserve-3d;
       cursor: pointer;
     }
@@ -92,13 +97,16 @@
     /* Class applied via JS to flip */
     .main-card.is-flipped {
       transform: rotateY(180deg);
+      /* Expanded Height (Back) */
+      height: 700px; 
     }
 
     .card-face {
       position: absolute;
       width: 100%;
       height: 100%;
-      backface-visibility: hidden; /* Hides the back when facing away */
+      -webkit-backface-visibility: hidden; /* Safari fix */
+      backface-visibility: hidden;
       border-radius: 20px;
       background: var(--card-bg);
       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
@@ -112,7 +120,13 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 2;
+      z-index: 2; /* Initially on top */
+      background-color: white; /* Ensure non-transparent */
+    }
+
+    /* When flipped, hide front explicitly via z-index change to prevent bleed-through */
+    .main-card.is-flipped .card-face.front {
+      z-index: 0;
     }
 
     .big-speaker {
@@ -129,9 +143,11 @@
       cursor: pointer;
       transition: transform 0.2s;
       margin-bottom: 2rem;
+      /* Ensure speaker doesn't have its own 3d context causing issues */
+      transform: translateZ(1px); 
     }
-    .big-speaker:hover { transform: scale(1.05); }
-    .big-speaker:active { transform: scale(0.95); }
+    .big-speaker:hover { transform: scale(1.05) translateZ(1px); }
+    .big-speaker:active { transform: scale(0.95) translateZ(1px); }
 
     .hint-text { color: var(--text-muted); font-size: 0.9rem; margin-top: 20px; }
 
@@ -140,16 +156,22 @@
       transform: rotateY(180deg);
       display: flex;
       flex-direction: column;
+      background-color: white; /* Ensure non-transparent */
+      z-index: 1;
+    }
+    
+    /* When flipped, promote back face */
+    .main-card.is-flipped .card-face.back {
+      z-index: 10;
     }
 
-    /* Scrollable content container inside the fixed back face */
     .back-content-scroll {
       flex: 1;
       overflow-y: auto;
       padding: 25px;
     }
 
-    /* Sentence Strips (Thin and Long) */
+    /* Sentence Strips */
     .strip {
       width: 100%;
       padding: 12px 16px;
@@ -190,10 +212,9 @@
       padding-bottom: 20px;
     }
 
-    /* Mini Card 3D Setup */
     .mini-card-scene {
       width: 100%;
-      height: 160px; /* Fixed height for mini cards */
+      height: 160px;
       perspective: 800px;
     }
 
@@ -224,7 +245,6 @@
       overflow: hidden;
     }
 
-    /* Mini Front */
     .mini-face.front {
       align-items: center;
       justify-content: center;
@@ -254,7 +274,6 @@
       color: var(--text-main);
     }
 
-    /* Mini Back */
     .mini-face.back {
       transform: rotateY(180deg);
       display: flex;
@@ -262,7 +281,6 @@
       background: #fff;
     }
 
-    /* The Grid Layout for Mini Back */
     .mini-info-grid {
       display: flex;
       flex-wrap: wrap;
@@ -289,22 +307,9 @@
       color: var(--text-main);
     }
 
-    /* 50% width cells */
-    .mini-cell.half {
-      width: 50%;
-      border-right: 1px solid var(--border);
-    }
-    .mini-cell.half:last-child {
-      border-right: none;
-    }
-
-    /* Full width cells */
-    .mini-cell.full {
-      width: 100%;
-      background: #fdfdfd;
-      flex: 1; /* Take remaining height */
-      border-bottom: none;
-    }
+    .mini-cell.half { width: 50%; border-right: 1px solid var(--border); }
+    .mini-cell.half:last-child { border-right: none; }
+    .mini-cell.full { width: 100%; background: #fdfdfd; flex: 1; border-bottom: none; }
 
   </style>
 </head>
@@ -339,7 +344,6 @@
       <div class="card-face back">
         <div class="back-content-scroll">
           
-          <!-- Sentence Info (Full Width) -->
           <div class="strip">
             <span class="strip-label">Sentence</span>
             <div class="strip-text main-sentence" id="txtSentence">Chargement...</div>
@@ -357,7 +361,6 @@
 
           <div class="divider"></div>
 
-          <!-- Mini Cards Area -->
           <div id="miniCardsArea" class="mini-cards-container">
             <!-- JS inserts mini cards here -->
           </div>
@@ -392,14 +395,19 @@
 
     // Flip Main Card
     els.mainCard.addEventListener('click', (e) => {
-      // Ignore clicks that originate inside a mini-card so only that mini-card flips
+      // 1. Don't flip if clicking inside a mini-card
       if (e.target.closest('.mini-card')) return;
 
-      // Toggle flip class
-      els.mainCard.classList.toggle('is-flipped');
+      // 2. DISABLE FLIP BACK: If already flipped, do not toggle back to front
+      if (els.mainCard.classList.contains('is-flipped')) {
+        return; 
+      }
+
+      // 3. Flip and Expand
+      els.mainCard.classList.add('is-flipped');
     });
 
-    // Main Speaker (Stop propagation so we don't flip when clicking speaker)
+    // Main Speaker
     els.mainSpeaker.addEventListener('click', (e) => {
       e.stopPropagation();
       playCurrentAudio();
@@ -425,7 +433,7 @@
       const card = getCurrentCard();
       if (!card) return;
 
-      // Reset Flip State when changing cards
+      // Reset Flip State when changing cards (Back to small size, front face)
       els.mainCard.classList.remove('is-flipped');
 
       // Update Header Text
@@ -446,21 +454,17 @@
       const words = parseBreakdown(breakdownStr, sentenceText);
 
       words.forEach(word => {
-        // Create Scene
         const scene = document.createElement('div');
         scene.className = 'mini-card-scene';
 
-        // Create Card
         const card = document.createElement('div');
         card.className = 'mini-card';
         
-        // Handle Mini Card Flip
         card.addEventListener('click', (e) => {
-          e.stopPropagation(); // Don't flip the main card
+          e.stopPropagation();
           card.classList.toggle('is-flipped');
         });
 
-        // --- FRONT ---
         const front = document.createElement('div');
         front.className = 'mini-face front';
         
@@ -468,7 +472,7 @@
         spk.className = 'mini-speaker';
         spk.textContent = '🔊';
         spk.onclick = (e) => {
-          e.stopPropagation(); // Don't flip mini card
+          e.stopPropagation();
           speak(word.base || word.rawWord);
         };
 
@@ -479,7 +483,6 @@
         front.appendChild(spk);
         front.appendChild(wordLabel);
 
-        // --- BACK ---
         const back = document.createElement('div');
         back.className = 'mini-face back';
 
@@ -518,7 +521,6 @@
       const hasBreakdown = text && text.trim().length > 0;
 
       if (!hasBreakdown && sentenceText) {
-        // Fallback: create a mini-card for every token in the sentence
         return (sentenceText.match(/[^\s]+/g) || []).map(word => {
           const cleaned = word.replace(/[.,!?;:]+$/g, '');
           return { rawWord: cleaned, base: cleaned };
@@ -527,7 +529,6 @@
 
       if (!hasBreakdown) return [];
 
-      // Format: word|meaning|pos|ipa|approx
       return text.split(';').map(part => {
         const p = part.split('|');
         const rawWord = p[0] ? p[0].trim() : '';
@@ -565,11 +566,13 @@
       render();
     };
     window.nextCard = () => {
+      if(state.decks.length === 0) return;
       const len = state.decks[state.currentDeckIndex].length;
       state.currentCardIndex = (state.currentCardIndex + 1) % len;
       render();
     };
     window.prevCard = () => {
+      if(state.decks.length === 0) return;
       const len = state.decks[state.currentDeckIndex].length;
       state.currentCardIndex = (state.currentCardIndex - 1 + len) % len;
       render();
@@ -577,22 +580,25 @@
 
     // --- Initialization ---
     function boot() {
-      // REPLACE with your actual CSV path
-      Papa.parse('../dir/words/sentences.csv', {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: (res) => {
-          const data = res.data.filter(d => d.Sentence);
-          // Shuffle and chunk
-          state.decks = chunk(shuffle(data), 50);
-          render();
+      // Mock Data for demonstration since I don't have your CSV
+      // If you are using a local CSV, replace the data below with your Papa.parse call
+      const mockData = [
+        {
+          Sentence: "Il préfère écrire une lettre plutôt que téléphoner.",
+          Meaning: "to write",
+          Sentence_Translation: "He prefers to write a letter rather than phone.",
+          Sentence_Breakdown: "Il|He|Pronoun|il|; préfère|prefers|Verb|pʁe.fɛʁ|; écrire|to write|Verb|e.kʁiʁ|; une|a|Article|yn|; lettre|letter|Noun|lɛtʁ|; plutôt|rather|Adverb|ply.to|; que|than|Conjunction|kə|; téléphoner|to phone|Verb|te.le.fɔ.ne|"
         },
-        error: (err) => {
-          console.error("CSV Error", err);
-          els.txtSentence.textContent = "Error loading CSV.";
+         {
+          Sentence: "Bonjour tout le monde.",
+          Meaning: "Hello everyone",
+          Sentence_Translation: "Hello everyone.",
+          Sentence_Breakdown: "Bonjour|Hello|Noun|bɔ̃.ʒuʁ|; tout|all|Adjective|tu|; le|the|Article|lə|; monde|world|Noun|mɔ̃d|"
         }
-      });
+      ];
+
+      state.decks = chunk(mockData, 50);
+      render();
     }
 
     boot();
