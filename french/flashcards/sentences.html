@@ -215,12 +215,18 @@
     }
     
     .info-content {
-      display: none; 
+      display: none;
       margin-top: 8px;
-      font-size: 1.25rem; 
+      font-size: 1.25rem;
       font-weight: 500;
       color: var(--text-main);
       line-height: 1.4;
+    }
+    .pronunciation-approx {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-top: 4px;
+      font-weight: 600;
     }
     .info-content.highlight { color: var(--primary); font-weight: 700; }
     
@@ -471,8 +477,11 @@
               <div class="info-content highlight" id="txtSentence">...</div>
             </div>
             <div class="info-chip" onclick="toggleInfo(this)">
-              <span class="info-label">Meaning</span>
-              <div class="info-content" id="txtMeaning">...</div>
+              <span class="info-label">Pronunciation</span>
+              <div class="info-content" id="txtPronunciation">
+                <div id="txtPronunciationIPA">...</div>
+                <div class="pronunciation-approx" id="txtPronunciationApprox">...</div>
+              </div>
             </div>
             <div class="info-chip" onclick="toggleInfo(this)">
               <span class="info-label">Translation</span>
@@ -519,7 +528,9 @@
       deckLabel: document.getElementById('deckLabel'),
       cardLabel: document.getElementById('cardLabel'),
       txtSentence: document.getElementById('txtSentence'),
-      txtMeaning: document.getElementById('txtMeaning'),
+      txtPronunciation: document.getElementById('txtPronunciation'),
+      txtPronunciationIPA: document.getElementById('txtPronunciationIPA'),
+      txtPronunciationApprox: document.getElementById('txtPronunciationApprox'),
       txtTranslation: document.getElementById('txtTranslation'),
       wordCardContainer: document.getElementById('wordCardContainer'),
       btnPrevWord: document.getElementById('btnPrevWord'),
@@ -772,7 +783,8 @@
       els.cardLabel.textContent = `Card ${state.currentCardIndex + 1} / ${state.decks[state.currentDeckIndex].length}`;
 
       els.txtSentence.innerHTML = `${card.Sentence} <span style="font-size:1.2rem; margin-left:10px; cursor:pointer" onclick="event.stopPropagation(); speak('${card.Sentence.replace(/'/g, "\\'")}')">🔊</span>`;
-      els.txtMeaning.textContent = card.Meaning || "-";
+      els.txtPronunciationIPA.textContent = card.Sentence_IPA || "-";
+      els.txtPronunciationApprox.textContent = card.Sentence_Eng_Approx || "-";
       els.txtTranslation.textContent = card.Sentence_Translation || "-";
 
       state.currentWordsList = parseBreakdown(card.Sentence_Breakdown, card.Sentence);
@@ -874,7 +886,9 @@
           Sentence: row.Sentence,
           Meaning: row.Meaning,
           Sentence_Translation: row.Sentence_Translation,
-          Sentence_Breakdown: row.Sentence_Breakdown
+          Sentence_Breakdown: row.Sentence_Breakdown,
+          Sentence_IPA: row.Sentence_IPA,
+          Sentence_Eng_Approx: row.Sentence_Eng_Approx
         })).filter(card => card.Sentence);
 
         state.decks = chunk(cards, 50);
