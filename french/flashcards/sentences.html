@@ -435,12 +435,12 @@
       els.txtTranslation.textContent = card.Sentence_Translation || "No translation provided";
 
       // Render Mini Cards
-      renderMiniCards(card.Sentence_Breakdown);
+      renderMiniCards(card.Sentence_Breakdown, card.Sentence);
     }
 
-    function renderMiniCards(breakdownStr) {
+    function renderMiniCards(breakdownStr, sentenceText) {
       els.miniCardsArea.innerHTML = '';
-      const words = parseBreakdown(breakdownStr);
+      const words = parseBreakdown(breakdownStr, sentenceText);
 
       words.forEach(word => {
         // Create Scene
@@ -480,22 +480,19 @@
         const back = document.createElement('div');
         back.className = 'mini-face back';
 
-        // Grid Layout based on user request:
-        // [Tense] [Pronounce] (Half width)
-        // [Elisions] (Full width)
         back.innerHTML = `
           <div class="mini-info-grid">
             <div class="mini-cell half">
-              <label>Tense/POS</label>
-              <span>${word.pos || '-'}</span>
+              <label>Meaning</label>
+              <span>${word.meaning || '-'}</span>
             </div>
             <div class="mini-cell half">
               <label>Pronunciation</label>
               <span>${word.ipa || '-'}</span>
             </div>
             <div class="mini-cell full">
-              <label>Notes / Elision</label>
-              <span>${word.elision || word.meaning || '-'}</span>
+              <label>Part of Speech / Notes</label>
+              <span>${word.pos || word.elision || '-'}</span>
             </div>
           </div>
         `;
@@ -514,17 +511,31 @@
       return state.decks[state.currentDeckIndex][state.currentCardIndex];
     }
 
-    function parseBreakdown(text) {
-      if (!text) return [];
-      // Assuming format: word|meaning|pos|ipa|approx
+    function parseBreakdown(text, sentenceText) {
+      const hasBreakdown = text && text.trim().length > 0;
+
+      if (!hasBreakdown && sentenceText) {
+        // Fallback: create a mini-card for every token in the sentence
+        return (sentenceText.match(/[^\s]+/g) || []).map(word => {
+          const cleaned = word.replace(/[.,!?;:]+$/g, '');
+          return { rawWord: cleaned, base: cleaned };
+        });
+      }
+
+      if (!hasBreakdown) return [];
+
+      // Format: word|meaning|pos|ipa|approx
       return text.split(';').map(part => {
         const p = part.split('|');
+        const rawWord = p[0] ? p[0].trim() : '';
+        const base = rawWord ? rawWord.replace(/\(.*\)/, '').trim() : '';
         return {
-          rawWord: p[0] ? p[0].trim() : '',
+          rawWord,
           meaning: p[1] || '',
           pos: p[2] || '',
           ipa: p[3] || '',
-          base: p[0] ? p[0].replace(/\(.*\)/, '').trim() : '' // Simple cleaner
+          elision: p[4] || '',
+          base
         };
       }).filter(w => w.rawWord);
     }
