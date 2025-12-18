@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>French Sentence Sound Flashcards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --panel: #ffffff;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --accent: #2563eb;
+      --accent-soft: #e0ecff;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --radius: 14px;
+      --shadow: 0 10px 40px rgba(0,0,0,0.06);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top left, #eef2ff 0%, #f6f7fb 45%, #f7f6ff 100%);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.05rem;
+      letter-spacing: 0.01em;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      align-items: center;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .control-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .btn {
+      padding: 0.65rem 0.9rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--ink);
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    .btn:hover { background: #eef2ff; }
+    .btn:active { transform: translateY(1px); }
+
+    .btn.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px rgba(37,99,235,0.18);
+    }
+    .btn.primary:hover { background: #1d4ed8; }
+
+    .card-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .sentence-card {
+      position: relative;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: calc(var(--radius) * 1.2);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .sentence-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .sentence-title { font-size: 1.1rem; margin: 0; }
+    .sentence-sub { color: var(--muted); margin: 0; font-size: 0.95rem; }
+
+    .sound-plate {
+      border: 2px dashed var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(37,99,235,0.07), rgba(16,185,129,0.07));
+      cursor: pointer;
+      transition: border-color 0.2s ease, transform 0.15s ease;
+    }
+    .sound-plate:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+    .sound-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid var(--border);
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      box-shadow: 0 8px 20px rgba(37,99,235,0.15);
+      position: relative;
+    }
+
+    .sound-icon::after {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      border-radius: 999px;
+      border: 1px dashed rgba(37,99,235,0.35);
+      animation: pulse 1.6s ease infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.9; }
+      70% { transform: scale(1.1); opacity: 0.2; }
+      100% { transform: scale(1.2); opacity: 0; }
+    }
+
+    .hidden-text { color: var(--muted); font-size: 0.95rem; margin-top: 0.75rem; text-align: center; }
+
+    .reveal-area { margin-top: 1.5rem; }
+
+    .mini-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .mini-card {
+      perspective: 1100px;
+    }
+
+    .mini-inner {
+      position: relative;
+      width: 100%;
+      min-height: 140px;
+      transform-style: preserve-3d;
+      transition: transform 0.5s ease;
+    }
+
+    .mini-card[data-flipped="true"] .mini-inner {
+      transform: rotateY(180deg);
+    }
+
+    .mini-face {
+      position: absolute;
+      inset: 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .mini-face.back { transform: rotateY(180deg); }
+
+    .mini-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .word-label { font-weight: 700; font-size: 1.05rem; }
+    .pos-pill {
+      background: #f1f5f9;
+      color: var(--muted);
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.02em;
+    }
+
+    .speaker-btn, .tiny-btn {
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .speaker-btn:hover, .tiny-btn:hover { background: #eef2ff; }
+
+    .tiny-btn { width: auto; padding: 0.35rem 0.65rem; border-radius: 8px; }
+
+    .meaning { color: var(--muted); margin: 0; }
+
+    .pronunciation { font-family: 'Inter', monospace; color: var(--ink); display: none; }
+    .pronunciation.visible { display: block; }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .info-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .info-title { margin: 0; font-size: 0.95rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .info-body { margin: 0; font-size: 1rem; }
+
+    .deck-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .badge { background: #0ea5e9; color: #fff; padding: 0.35rem 0.7rem; border-radius: 999px; font-weight: 700; font-size: 0.85rem; }
+
+    .mini-note { color: var(--muted); font-size: 0.9rem; }
+
+    @media (max-width: 640px) {
+      .sound-plate { padding: 1rem; }
+      .mini-inner { min-height: 160px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>French Sentence Sound Flashcards</h1>
+    <div class="pill">Decks of 50 • shuffled</div>
+  </header>
+
+  <div class="page">
+    <div class="controls">
+      <div class="control-row">
+        <strong>Deck:</strong>
+        <button class="btn" id="prevDeck">Prev</button>
+        <div id="deckLabel" class="pill">Deck 1</div>
+        <button class="btn" id="nextDeck">Next</button>
+      </div>
+      <div class="control-row">
+        <strong>Card:</strong>
+        <button class="btn" id="prevCard">Prev</button>
+        <div id="cardLabel" class="pill">Card 1</div>
+        <button class="btn" id="nextCard">Next</button>
+      </div>
+      <div class="control-row mini-note">First 81 sentences are missing in the CSV; the deck starts at rank 81.</div>
+    </div>
+
+    <div id="status" class="mini-note"></div>
+
+    <div class="card-stack" id="cardArea"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script>
+    const state = {
+      decks: [],
+      currentDeck: 0,
+      currentCard: 0,
+      showBreakdown: false
+    };
+
+    const cardArea = document.getElementById('cardArea');
+    const deckLabel = document.getElementById('deckLabel');
+    const cardLabel = document.getElementById('cardLabel');
+    const statusEl = document.getElementById('status');
+
+    document.getElementById('prevDeck').addEventListener('click', () => switchDeck(-1));
+    document.getElementById('nextDeck').addEventListener('click', () => switchDeck(1));
+    document.getElementById('prevCard').addEventListener('click', () => switchCard(-1));
+    document.getElementById('nextCard').addEventListener('click', () => switchCard(1));
+
+    function speak(text, lang = 'fr-FR') {
+      if (!text) return;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = lang;
+      utter.rate = 0.95;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utter);
+    }
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function chunk(arr, size) {
+      const groups = [];
+      for (let i = 0; i < arr.length; i += size) groups.push(arr.slice(i, i + size));
+      return groups;
+    }
+
+    function parseBreakdown(text) {
+      if (!text) return [];
+      return text.split(';').map(part => {
+        const pieces = part.split('|');
+        const rawWord = pieces[0] || '';
+        const meaning = pieces[1] || '';
+        const pos = pieces[2] || '';
+        const ipa = pieces[3] || '';
+        const engApprox = pieces[4] || '';
+        let base = rawWord;
+        let article = '';
+        const articleMatch = rawWord.match(/(.+)\((.+)\)/);
+        if (articleMatch) {
+          base = articleMatch[1];
+          article = articleMatch[2];
+        }
+        return { rawWord, base, article, meaning, pos, ipa, engApprox };
+      }).filter(entry => entry.rawWord.trim() !== '');
+    }
+
+    function switchDeck(delta) {
+      if (!state.decks.length) return;
+      state.currentDeck = (state.currentDeck + delta + state.decks.length) % state.decks.length;
+      state.currentCard = 0;
+      render();
+    }
+
+    function switchCard(delta) {
+      if (!state.decks.length) return;
+      const deck = state.decks[state.currentDeck];
+      state.currentCard = (state.currentCard + delta + deck.length) % deck.length;
+      render();
+    }
+
+    function toggleBreakdown() {
+      state.showBreakdown = !state.showBreakdown;
+      render();
+    }
+
+    function toggleMiniCard(card, pronounceEl) {
+      const flipped = card.getAttribute('data-flipped') === 'true';
+      card.setAttribute('data-flipped', flipped ? 'false' : 'true');
+      if (pronounceEl) pronounceEl.classList.remove('visible');
+    }
+
+    function render() {
+      const deckCount = state.decks.length;
+      if (!deckCount) return;
+      deckLabel.textContent = `Deck ${state.currentDeck + 1} / ${deckCount}`;
+      const deck = state.decks[state.currentDeck];
+      const cardCount = deck.length;
+      cardLabel.textContent = `Card ${state.currentCard + 1} / ${cardCount}`;
+
+      const entry = deck[state.currentCard];
+      cardArea.innerHTML = '';
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'sentence-card';
+
+      const header = document.createElement('div');
+      header.className = 'sentence-header';
+      header.innerHTML = `
+        <div>
+          <p class="sentence-title">Rank ${entry.Rank} • ${entry.Word_with_Article || entry.Word || ''}</p>
+          <p class="sentence-sub">Press the speaker to listen. Tap reveal to see word mini-cards.</p>
+        </div>
+        <button class="btn primary" id="toggleBreakdownBtn">${state.showBreakdown ? 'Hide details' : 'Reveal words'}</button>
+      `;
+      wrapper.appendChild(header);
+      header.querySelector('#toggleBreakdownBtn').addEventListener('click', toggleBreakdown);
+
+      const plate = document.createElement('div');
+      plate.className = 'sound-plate';
+      plate.innerHTML = `
+        <div class="sound-icon" aria-label="Play sentence">
+          <span style="font-size:24px;">🔊</span>
+        </div>
+      `;
+      plate.addEventListener('click', () => speak(entry.Sentence, 'fr-FR'));
+      wrapper.appendChild(plate);
+
+      const hint = document.createElement('p');
+      hint.className = 'hidden-text';
+      hint.textContent = 'Front of the card is audio-only. Use the speaker as many times as you need.';
+      wrapper.appendChild(hint);
+
+      if (state.showBreakdown) {
+        const reveal = document.createElement('div');
+        reveal.className = 'reveal-area';
+
+        const sentenceLine = document.createElement('p');
+        sentenceLine.className = 'sentence-title';
+        sentenceLine.textContent = entry.Sentence;
+        reveal.appendChild(sentenceLine);
+
+        const miniGrid = document.createElement('div');
+        miniGrid.className = 'mini-cards';
+        const words = parseBreakdown(entry.Sentence_Breakdown);
+
+        words.forEach(word => {
+          const card = document.createElement('div');
+          card.className = 'mini-card';
+          card.setAttribute('data-flipped', 'false');
+
+          const inner = document.createElement('div');
+          inner.className = 'mini-inner';
+
+          // Front
+          const front = document.createElement('div');
+          front.className = 'mini-face front';
+          front.innerHTML = `
+            <div class="mini-head">
+              <span class="word-label">${word.base || word.rawWord}</span>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <button class="speaker-btn" aria-label="Play word">🔊</button>
+                <button class="tiny-btn" aria-label="Show pronunciation">Show pron.</button>
+              </div>
+            </div>
+            <span class="pos-pill">${word.pos || 'Word'}</span>
+            <p class="meaning">Tap to flip for meaning & article</p>
+            <div class="pronunciation">${word.ipa || ''}<br>${word.engApprox || ''}</div>
+          `;
+
+          // Back
+          const back = document.createElement('div');
+          back.className = 'mini-face back';
+          back.innerHTML = `
+            <div class="mini-head">
+              <span class="word-label">${word.rawWord}</span>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <button class="speaker-btn" aria-label="Play word">🔊</button>
+                <button class="tiny-btn" aria-label="Show pronunciation">Show pron.</button>
+              </div>
+            </div>
+            <span class="pos-pill">${word.pos || 'Word'}</span>
+            <p class="meaning"><strong>Meaning:</strong> ${word.meaning || '—'}</p>
+            <p class="meaning"><strong>Article form:</strong> ${word.article ? `${word.article} ${word.base}` : '—'}</p>
+            <div class="pronunciation">${word.ipa || ''}<br>${word.engApprox || ''}</div>
+          `;
+
+          [front, back].forEach(face => {
+            face.querySelector('.speaker-btn').addEventListener('click', (e) => {
+              e.stopPropagation();
+              speak(word.base || word.rawWord, 'fr-FR');
+            });
+            const pron = face.querySelector('.pronunciation');
+            face.querySelector('.tiny-btn').addEventListener('click', (e) => {
+              e.stopPropagation();
+              pron.classList.toggle('visible');
+            });
+          });
+
+          card.addEventListener('click', () => toggleMiniCard(card));
+
+          inner.appendChild(front);
+          inner.appendChild(back);
+          card.appendChild(inner);
+          miniGrid.appendChild(card);
+        });
+
+        reveal.appendChild(miniGrid);
+
+        const infoGrid = document.createElement('div');
+        infoGrid.className = 'info-grid';
+
+        const infoItems = [
+          { title: 'Sentence meaning', body: entry.Sentence_Translation || '—' },
+          { title: 'Verb tense & mood', body: `${entry.Verb_Tense || 'Unknown'}${entry.Verb_Mood ? ' • ' + entry.Verb_Mood : ''}` },
+          { title: 'Pronouns / articles', body: collectPronouns(entry.Sentence_Breakdown) },
+          { title: 'Elisions', body: entry.Elision_Note || 'None noted' }
+        ];
+
+        infoItems.forEach(({ title, body }) => {
+          const card = document.createElement('div');
+          card.className = 'info-card';
+          card.innerHTML = `<p class="info-title">${title}</p><p class="info-body">${body || '—'}</p>`;
+          infoGrid.appendChild(card);
+        });
+
+        reveal.appendChild(infoGrid);
+        wrapper.appendChild(reveal);
+      }
+
+      cardArea.appendChild(wrapper);
+      statusEl.textContent = `Total decks: ${deckCount}. Cards in this deck: ${state.decks[state.currentDeck].length}. Shuffled order.`;
+    }
+
+    function collectPronouns(breakdown) {
+      const words = parseBreakdown(breakdown);
+      const pronouns = words.filter(w => /pron/i.test(w.pos) || /art/i.test(w.pos)).map(w => w.rawWord);
+      if (!pronouns.length) return '—';
+      return pronouns.join(', ');
+    }
+
+    function boot() {
+      Papa.parse('../dir/words/sentences.csv', {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          const cleaned = results.data.filter(row => row.Sentence);
+          const shuffled = shuffle(cleaned);
+          state.decks = chunk(shuffled, 50);
+          state.currentDeck = 0;
+          state.currentCard = 0;
+          render();
+        },
+        error: (err) => {
+          statusEl.textContent = 'Error loading CSV: ' + err.message;
+        }
+      });
+    }
+
+    boot();
+  </script>
+</body>
+</html>
