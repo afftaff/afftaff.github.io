@@ -327,6 +327,37 @@
     .shuffle-btn:active { background: #eff6ff; transform: scale(0.98); }
     .shuffle-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+    .spaced-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .spaced-btn {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 12px;
+      padding: 12px 10px;
+      font-weight: 800;
+      cursor: pointer;
+      color: var(--text-main);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      transition: all 0.2s ease;
+    }
+
+    .spaced-btn:hover { border-color: var(--primary); color: var(--primary); background: #f9fafb; }
+    .spaced-btn:active { transform: scale(0.98); background: var(--primary-light); }
+    .spaced-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .word-status {
+      margin-top: 10px;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: center;
+    }
+
     .arrow-btn {
       background: white;
       border: 1px solid var(--border);
@@ -548,6 +579,23 @@
               <!-- JS inserts the single active word card here -->
             </div>
 
+            <div class="spaced-buttons">
+              <button class="spaced-btn" onclick="rateWord('again')">Again</button>
+              <button class="spaced-btn" onclick="rateWord('hard')">Hard</button>
+              <button class="spaced-btn" onclick="rateWord('medium')">Medium</button>
+              <button class="spaced-btn" onclick="rateWord('easy')">Easy</button>
+              <button class="spaced-btn" onclick="rateWord('good')">Good</button>
+            </div>
+
+            <div class="word-status" id="wordStatus"></div>
+          </div>
+
+          <div class="spaced-buttons">
+            <button class="spaced-btn" onclick="rateSentence('again')">Again</button>
+            <button class="spaced-btn" onclick="rateSentence('hard')">Hard</button>
+            <button class="spaced-btn" onclick="rateSentence('medium')">Medium</button>
+            <button class="spaced-btn" onclick="rateSentence('easy')">Easy</button>
+            <button class="spaced-btn" onclick="rateSentence('good')">Good</button>
           </div>
 
         </div>
@@ -561,10 +609,13 @@
     // --- State Management ---
     const state = {
       decks: [],
+      deckQueues: [],
       currentDeckIndex: 0,
       currentCardIndex: 0,
       currentWordIndex: 0,
-      currentWordsList: [] 
+      currentWordsList: [],
+      currentWordsQueue: [],
+      wordReinserted: false
     };
 
     const els = {
@@ -581,7 +632,8 @@
       btnPrevWord: document.getElementById('btnPrevWord'),
       btnNextWord: document.getElementById('btnNextWord'),
       btnShuffleWords: document.getElementById('btnShuffleWords'),
-      wordCounter: document.getElementById('wordCounter')
+      wordCounter: document.getElementById('wordCounter'),
+      wordStatus: document.getElementById('wordStatus')
     };
 
     // --- Interaction Logic ---
@@ -627,16 +679,20 @@
     // --- Word Navigation (Sliding) ---
     window.navWord = (dir) => {
       event.stopPropagation();
-      const newIndex = state.currentWordIndex + dir;
-      if (newIndex >= 0 && newIndex < state.currentWordsList.length) {
-        transitionToWord(dir);
+      const queue = state.currentWordsQueue;
+      if (queue.length <= 1) return;
+
+      if (dir > 0) {
+        queue.push(queue.shift());
+      } else {
+        queue.unshift(queue.pop());
       }
+      transitionToWord(dir > 0 ? 1 : -1);
     };
 
     els.btnShuffleWords.addEventListener('click', () => {
-      if (!state.currentWordsList.length) return;
-      state.currentWordsList = shuffle([...state.currentWordsList]);
-      state.currentWordIndex = 0;
+      if (!state.currentWordsQueue.length) return;
+      state.currentWordsQueue = shuffle([...state.currentWordsQueue]);
       transitionToWord(0);
     });
 
@@ -644,20 +700,24 @@
     function transitionToWord(dir) {
       const oldCard = els.wordCardContainer.querySelector('.mini-card');
       
-      state.currentWordIndex += dir;
-      const index = state.currentWordIndex;
-      const total = state.currentWordsList.length;
-      const word = state.currentWordsList[index];
+      const total = state.currentWordsQueue.length;
+      const word = state.currentWordsQueue[0];
 
-      // Update UI
-      els.wordCounter.textContent = total > 0 ? `Word ${index + 1} / ${total}` : '';
-      els.btnPrevWord.disabled = (index === 0);
-      els.btnNextWord.disabled = (index === total - 1);
+      els.wordCounter.textContent = total > 0 ? `Remaining words: ${total}` : '';
+      els.btnPrevWord.disabled = total <= 1;
+      els.btnNextWord.disabled = total <= 1;
       els.btnShuffleWords.disabled = total <= 1;
+      if (total > 0) {
+        els.wordStatus.textContent = '';
+      }
 
       const newCard = createWordCardElement(word);
 
-      // Initial Load
+      if (!word) {
+        els.wordCardContainer.innerHTML = '<div class="mini-card"><div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ccc">All words are complete!</div></div>';
+        return;
+      }
+
       if (dir === 0 || !oldCard) {
         els.wordCardContainer.innerHTML = '';
         els.wordCardContainer.appendChild(newCard);
@@ -817,13 +877,24 @@
 
     function render() {
       const card = getCurrentCard();
-      if (!card) return;
 
       els.mainCard.classList.remove('is-flipped');
       document.querySelectorAll('.info-chip').forEach(el => el.classList.remove('is-revealed'));
 
+      const currentDeck = getCurrentDeckQueue();
       els.deckLabel.textContent = `Deck ${state.currentDeckIndex + 1}`;
-      els.cardLabel.textContent = `Card ${state.currentCardIndex + 1} / ${state.decks[state.currentDeckIndex].length}`;
+      els.cardLabel.textContent = currentDeck.length ? `Cards remaining: ${currentDeck.length}` : 'Deck complete';
+
+      if (!card) {
+        els.txtSentence.textContent = 'All sentences in this deck are complete!';
+        els.txtPronunciationIPA.textContent = '-';
+        els.txtPronunciationApprox.textContent = '-';
+        els.txtTranslation.textContent = '-';
+        state.currentWordsQueue = [];
+        els.wordStatus.textContent = '';
+        transitionToWord(0);
+        return;
+      }
 
       els.txtSentence.textContent = card.Sentence;
       els.txtPronunciationIPA.textContent = card.Sentence_IPA || "-";
@@ -831,15 +902,22 @@
       els.txtTranslation.textContent = card.Sentence_Translation || "-";
 
       state.currentWordsList = parseBreakdown(card.Sentence_Breakdown, card.Sentence);
-      state.currentWordIndex = 0;
-      transitionToWord(0); 
+      state.currentWordsQueue = [...state.currentWordsList];
+      state.wordReinserted = false;
+      transitionToWord(0);
     }
 
     // --- Data Helpers ---
 
+    function getCurrentDeckQueue() {
+      if (state.deckQueues.length === 0) return [];
+      return state.deckQueues[state.currentDeckIndex] || [];
+    }
+
     function getCurrentCard() {
-      if (state.decks.length === 0) return null;
-      return state.decks[state.currentDeckIndex][state.currentCardIndex];
+      const queue = getCurrentDeckQueue();
+      if (!queue.length) return null;
+      return queue[0];
     }
 
     function parseBreakdown(text, sentenceText) {
@@ -954,10 +1032,60 @@
       });
     }
 
-    window.nextDeck = () => { state.currentDeckIndex = (state.currentDeckIndex + 1) % state.decks.length; state.currentCardIndex=0; render(); };
-    window.prevDeck = () => { state.currentDeckIndex = (state.currentDeckIndex - 1 + state.decks.length) % state.decks.length; state.currentCardIndex=0; render(); };
-    window.nextCard = () => { if(state.decks.length) { state.currentCardIndex = (state.currentCardIndex + 1) % state.decks[state.currentDeckIndex].length; render(); }};
-    window.prevCard = () => { if(state.decks.length) { const len = state.decks[state.currentDeckIndex].length; state.currentCardIndex = (state.currentCardIndex - 1 + len) % len; render(); }};
+    function applySpacedRepetition(queue, rating) {
+      if (!queue.length) return;
+      const card = queue.shift();
+      let insertOffset = null;
+
+      if (rating === 'again') insertOffset = 2;
+      if (rating === 'hard') insertOffset = 3;
+      if (rating === 'medium') insertOffset = 5;
+      if (rating === 'easy') insertOffset = queue.length; // end of deck
+
+      if (rating !== 'good' && insertOffset !== null) {
+        const position = Math.min(insertOffset, queue.length);
+        queue.splice(position, 0, card);
+      }
+    }
+
+    window.rateSentence = (rating) => {
+      const queue = getCurrentDeckQueue();
+      applySpacedRepetition(queue, rating);
+      render();
+    };
+
+    window.rateWord = (rating) => {
+      const queue = state.currentWordsQueue;
+      if (!queue.length) return;
+
+      const card = queue.shift();
+      let insertOffset = null;
+
+      if (rating === 'again') insertOffset = 2;
+      if (rating === 'hard') insertOffset = 3;
+      if (rating === 'medium') insertOffset = 5;
+      if (rating === 'easy') insertOffset = queue.length;
+
+      if (rating !== 'good' && insertOffset !== null) {
+        const position = Math.min(insertOffset, queue.length);
+        queue.splice(position, 0, card);
+        state.wordReinserted = true;
+      }
+
+      if (!queue.length) {
+        const message = state.wordReinserted
+          ? "I've worked them."
+          : "I've successfully learnt all individual words for this card.";
+        els.wordStatus.textContent = message;
+      }
+
+      transitionToWord(0);
+    };
+
+    window.nextDeck = () => { state.currentDeckIndex = (state.currentDeckIndex + 1) % state.decks.length; render(); };
+    window.prevDeck = () => { state.currentDeckIndex = (state.currentDeckIndex - 1 + state.decks.length) % state.decks.length; render(); };
+    window.nextCard = () => { const deck = getCurrentDeckQueue(); if(deck.length > 1) { deck.push(deck.shift()); render(); }};
+    window.prevCard = () => { const deck = getCurrentDeckQueue(); if(deck.length > 1) { deck.unshift(deck.pop()); render(); }};
 
     async function boot() {
       try {
@@ -975,8 +1103,8 @@
         })).filter(card => card.Sentence);
 
         state.decks = chunk(cards, 50);
+        state.deckQueues = state.decks.map(deck => [...deck]);
         state.currentDeckIndex = 0;
-        state.currentCardIndex = 0;
         render();
       } catch (err) {
         console.error('Failed to load sentences.csv', err);
