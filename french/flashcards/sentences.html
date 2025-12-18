@@ -347,6 +347,12 @@
       transition: all 0.2s ease;
     }
 
+    .spaced-btn.again { background: #fee2e2; border-color: #fecaca; color: #991b1b; }
+    .spaced-btn.hard { background: #ffedd5; border-color: #fed7aa; color: #9a3412; }
+    .spaced-btn.medium { background: #fef9c3; border-color: #fde68a; color: #92400e; }
+    .spaced-btn.easy { background: #dcfce7; border-color: #bbf7d0; color: #166534; }
+    .spaced-btn.good { background: #e0f2fe; border-color: #bae6fd; color: #0c4a6e; }
+
     .spaced-btn:hover { border-color: var(--primary); color: var(--primary); background: #f9fafb; }
     .spaced-btn:active { transform: scale(0.98); background: var(--primary-light); }
     .spaced-btn:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -561,11 +567,11 @@
             </div>
 
             <div class="spaced-buttons">
-              <button class="spaced-btn" onclick="rateSentence('again')">Again</button>
-              <button class="spaced-btn" onclick="rateSentence('hard')">Hard</button>
-              <button class="spaced-btn" onclick="rateSentence('medium')">Medium</button>
-              <button class="spaced-btn" onclick="rateSentence('easy')">Easy</button>
-              <button class="spaced-btn" onclick="rateSentence('good')">Good</button>
+              <button class="spaced-btn again" onclick="rateSentence('again')">Again</button>
+              <button class="spaced-btn hard" onclick="rateSentence('hard')">Hard</button>
+              <button class="spaced-btn medium" onclick="rateSentence('medium')">Medium</button>
+              <button class="spaced-btn easy" onclick="rateSentence('easy')">Easy</button>
+              <button class="spaced-btn good" onclick="rateSentence('good')">Good</button>
             </div>
           </div>
 
@@ -588,11 +594,11 @@
             </div>
 
             <div class="spaced-buttons">
-              <button class="spaced-btn" onclick="rateWord('again')">Again</button>
-              <button class="spaced-btn" onclick="rateWord('hard')">Hard</button>
-              <button class="spaced-btn" onclick="rateWord('medium')">Medium</button>
-              <button class="spaced-btn" onclick="rateWord('easy')">Easy</button>
-              <button class="spaced-btn" onclick="rateWord('good')">Good</button>
+              <button class="spaced-btn again" onclick="rateWord('again')">Again</button>
+              <button class="spaced-btn hard" onclick="rateWord('hard')">Hard</button>
+              <button class="spaced-btn medium" onclick="rateWord('medium')">Medium</button>
+              <button class="spaced-btn easy" onclick="rateWord('easy')">Easy</button>
+              <button class="spaced-btn good" onclick="rateWord('good')">Good</button>
             </div>
 
             <div class="word-status" id="wordStatus"></div>
