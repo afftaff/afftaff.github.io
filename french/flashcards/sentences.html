@@ -807,6 +807,45 @@
     }
 
     function parseBreakdown(text, sentenceText) {
+      const computeBase = (rawWord) => rawWord ? rawWord.replace(/\(.*?\)/g, '').trim() : '';
+
+      const joinWithPipe = (...values) => {
+        return values.filter(v => v && v.trim()).join(' | ');
+      };
+
+      const mergeElidedWords = (words) => {
+        const merged = [];
+
+        for (let i = 0; i < words.length; i++) {
+          let current = { ...words[i] };
+
+          while (current.rawWord && current.rawWord.endsWith("'") && i + 1 < words.length) {
+            const next = words[i + 1];
+
+            current = {
+              ...current,
+              rawWord: `${current.rawWord}${next.rawWord || ''}`,
+              meaning: joinWithPipe(current.meaning, next.meaning),
+              pos: joinWithPipe(current.pos, next.pos),
+              ipa: joinWithPipe(current.ipa, next.ipa),
+              elision: joinWithPipe(current.elision, next.elision),
+              article: joinWithPipe(current.article, next.article)
+            };
+
+            current.base = computeBase(current.rawWord);
+            i++;
+
+            if (!(next.rawWord && next.rawWord.endsWith("'"))) {
+              break;
+            }
+          }
+
+          merged.push(current);
+        }
+
+        return merged;
+      };
+
       const hasBreakdown = text && text.trim().length > 0;
       if (!hasBreakdown && sentenceText) {
         return (sentenceText.match(/[^\s]+/g) || []).map(word => {
@@ -815,16 +854,17 @@
         });
       }
       if (!hasBreakdown) return [];
-      return text.split(';').map(part => {
+      const words = text.split(';').map(part => {
         const p = part.split('|');
         const rawWord = p[0] ? p[0].trim() : '';
-        const base = rawWord ? rawWord.replace(/\(.*\)/, '').trim() : '';
         const articleMatch = rawWord.match(/\(([^)]+)\)/);
         const article = articleMatch ? articleMatch[1].trim() : '';
         return {
-          rawWord, meaning: p[1]||'', pos: p[2]||'', ipa: p[3]||'', elision: p[4]||'', base, article
+          rawWord, meaning: p[1]||'', pos: p[2]||'', ipa: p[3]||'', elision: p[4]||'', base: computeBase(rawWord), article
         };
       }).filter(w => w.rawWord);
+
+      return mergeElidedWords(words);
     }
 
     function chunk(arr, size) {
