@@ -200,14 +200,14 @@
     /* --- MINI CARDS GRID --- */
     .mini-cards-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Smaller min-width */
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
       gap: 15px;
       padding-bottom: 20px;
     }
 
     .mini-card-scene {
       width: 100%;
-      height: 120px; /* MUCH SMALLER (was 160px) */
+      height: 140px; /* Slight increase to fit chips comfortably */
       perspective: 800px;
     }
 
@@ -229,7 +229,7 @@
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid var(--border);
       background: white;
       display: flex;
@@ -238,16 +238,17 @@
       overflow: hidden;
     }
 
+    /* MINI FRONT */
     .mini-face.front {
       align-items: center;
       justify-content: center;
-      gap: 15px;
+      gap: 10px;
       background: #fafafa;
     }
 
     .mini-speaker {
-      width: 35px; /* Slightly smaller */
-      height: 35px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       background: white;
       border: 1px solid var(--border);
@@ -262,47 +263,89 @@
     .mini-speaker:hover { background: #e0e7ff; }
 
     .mini-word-front {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: var(--text-main);
     }
 
-    /* --- NEW MINI BACK LAYOUT (Compact Rows) --- */
+    /* MINI BACK (The Chip Layout) */
     .mini-face.back {
       transform: rotateY(180deg);
+      background: white;
+      padding: 10px;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      justify-content: center; /* Vertically center the stack */
-      padding: 0 16px;
-      background: #fff;
     }
 
-    .mini-row {
+    .mini-back-header {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .mini-chips-wrapper {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .mini-chip-row {
+      display: flex;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .chip {
+      background: #f3f4f6;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      flex: 1;
+      display: flex;
       align-items: center;
-      padding: 6px 0;
-      border-bottom: 1px solid #f3f4f6;
-      width: 100%;
-    }
-    .mini-row:last-child {
-      border-bottom: none;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+      padding: 4px;
+      min-height: 0; /* Flex fix */
     }
 
-    .mini-label {
-      font-size: 0.7rem;
+    .chip:hover {
+      border-color: var(--primary);
+      background: #f9fafb;
+    }
+
+    /* Revealed State */
+    .chip.is-revealed {
+      background: #e0e7ff;
+      border-color: #c7d2fe;
+    }
+
+    .chip-label {
+      font-size: 0.65rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
       color: var(--text-muted);
-      font-weight: 600;
+      letter-spacing: 0.05em;
     }
 
-    .mini-value {
-      font-size: 0.9rem;
+    .chip-value {
+      display: none;
+      font-size: 0.85rem;
       font-weight: 600;
       color: var(--text-main);
-      text-align: right;
+      line-height: 1.2;
+      word-break: break-word;
     }
+
+    /* Toggle logic controlled by JS class */
+    .chip.is-revealed .chip-label { display: none; }
+    .chip.is-revealed .chip-value { display: block; }
 
   </style>
 </head>
@@ -453,11 +496,13 @@
         const card = document.createElement('div');
         card.className = 'mini-card';
         
+        // Flip Mini Card Logic
         card.addEventListener('click', (e) => {
-          e.stopPropagation();
+          e.stopPropagation(); // Prevent main card interaction
           card.classList.toggle('is-flipped');
         });
 
+        // --- FRONT ---
         const front = document.createElement('div');
         front.className = 'mini-face front';
         
@@ -476,24 +521,48 @@
         front.appendChild(spk);
         front.appendChild(wordLabel);
 
+        // --- BACK (The "Mini Flashcards" Layout) ---
         const back = document.createElement('div');
         back.className = 'mini-face back';
 
-        // NEW: Compact Row Layout for Mini Back
-        back.innerHTML = `
-          <div class="mini-row">
-            <span class="mini-label">Meaning</span>
-            <span class="mini-value">${word.meaning || '-'}</span>
-          </div>
-          <div class="mini-row">
-            <span class="mini-label">IPA</span>
-            <span class="mini-value">${word.ipa || '-'}</span>
-          </div>
-          <div class="mini-row">
-            <span class="mini-label">Type</span>
-            <span class="mini-value">${word.pos || word.elision || '-'}</span>
-          </div>
-        `;
+        // Helper to create a chip
+        const createChip = (label, value) => {
+          const chip = document.createElement('div');
+          chip.className = 'chip';
+          chip.innerHTML = `
+            <span class="chip-label">${label}</span>
+            <span class="chip-value">${value}</span>
+          `;
+          chip.onclick = (e) => {
+            e.stopPropagation(); // Stop the mini-card from flipping back over
+            chip.classList.toggle('is-revealed');
+          };
+          return chip;
+        };
+
+        const header = document.createElement('div');
+        header.className = 'mini-back-header';
+        header.textContent = word.base || word.rawWord;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'mini-chips-wrapper';
+
+        // Row 1: Meaning (Full Width)
+        const row1 = document.createElement('div');
+        row1.className = 'mini-chip-row';
+        row1.appendChild(createChip('Meaning', word.meaning || '?'));
+
+        // Row 2: IPA and Type (Split)
+        const row2 = document.createElement('div');
+        row2.className = 'mini-chip-row';
+        row2.appendChild(createChip('IPA', word.ipa || '-'));
+        row2.appendChild(createChip('Type', word.pos || '-'));
+
+        wrapper.appendChild(row1);
+        wrapper.appendChild(row2);
+
+        back.appendChild(header);
+        back.appendChild(wrapper);
 
         card.appendChild(front);
         card.appendChild(back);
