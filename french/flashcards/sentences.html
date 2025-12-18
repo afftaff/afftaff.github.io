@@ -184,7 +184,15 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      flex-shrink: 0; 
+      flex-shrink: 0;
+    }
+
+    .info-chip-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
     }
 
     .info-chip {
@@ -232,6 +240,20 @@
     
     .info-chip.is-revealed .info-label { display: none; }
     .info-chip.is-revealed .info-content { display: block; animation: fadeIn 0.3s ease; }
+
+    .sentence-play {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--primary);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    .sentence-play:hover { transform: translateY(-1px); box-shadow: 0 8px 14px rgba(0,0,0,0.08); }
+    .sentence-play:active { transform: translateY(0); }
 
     /* --- CAROUSEL SECTION --- */
     .carousel-section {
@@ -308,10 +330,8 @@
       top: 0;
       left: 0;
       transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      transform-style: preserve-3d;
-      cursor: pointer;
+      cursor: default;
     }
-    .mini-card.is-flipped { transform: rotateY(180deg); }
 
     .mini-face {
       position: absolute;
@@ -328,32 +348,12 @@
       box-sizing: border-box;
     }
 
-    /* Front: Huge Speaker */
-    .mini-face.front {
-      align-items: center;
-      justify-content: center;
-      background: #fafafa;
-    }
-    .mini-speaker-large {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #4f46e5, #818cf8);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 5rem;
-      cursor: pointer;
-      border: none;
-      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-      transition: transform 0.2s;
-    }
-    .mini-speaker-large:hover { transform: scale(1.05); }
+    .mini-face.front { display: none; }
 
-    /* Back: Content */
+    /* Back: Content (always visible) */
     .mini-face.back {
-      transform: rotateY(180deg);
+      position: relative;
+      transform: none;
       padding: 20px;
       background: white;
     }
@@ -366,8 +366,8 @@
     }
 
     .mini-speaker-small {
-      width: 64px;
-      height: 64px;
+      width: 86px;
+      height: 86px;
       border-radius: 50%;
       background: #f3f4f6;
       border: 1px solid var(--border);
@@ -375,7 +375,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2rem;
+      font-size: 2.6rem;
       cursor: pointer;
       transition: all 0.2s;
     }
@@ -473,7 +473,10 @@
           
           <div class="info-group">
             <div class="info-chip" onclick="toggleInfo(this)">
-              <span class="info-label">Sentence</span>
+              <div class="info-chip-header">
+                <span class="info-label">Sentence</span>
+                <button class="sentence-play" onclick="playSentence(event)" aria-label="Play full sentence">🔊</button>
+              </div>
               <div class="info-content highlight" id="txtSentence">...</div>
             </div>
             <div class="info-chip" onclick="toggleInfo(this)">
@@ -543,6 +546,11 @@
     window.toggleInfo = (el) => {
       event.stopPropagation();
       el.classList.toggle('is-revealed');
+    };
+
+    window.playSentence = (e) => {
+      e?.stopPropagation();
+      playCurrentAudio();
     };
 
     els.mainCard.addEventListener('click', (e) => {
@@ -617,9 +625,8 @@
       const ease = 'ease-in-out';
 
       oldCard.style.transition = `transform ${duration}ms ${ease}`;
-      const oldIsFlipped = oldCard.classList.contains('is-flipped');
-      const endX = dir > 0 ? '-100%' : '100%'; 
-      oldCard.style.transform = `translateX(${endX}) ${oldIsFlipped ? 'rotateY(180deg)' : ''}`;
+      const endX = dir > 0 ? '-100%' : '100%';
+      oldCard.style.transform = `translateX(${endX})`;
 
       newCard.style.transition = `transform ${duration}ms ${ease}`;
       newCard.style.transform = 'translateX(0)';
@@ -628,9 +635,9 @@
         if(oldCard.parentNode === els.wordCardContainer) {
           els.wordCardContainer.removeChild(oldCard);
         }
-        // FIX: Clear the inline style so the click-flip animation works again
-        newCard.style.transition = ''; 
-        newCard.style.transform = ''; 
+        // Reset inline styles so the next slide animation starts fresh
+        newCard.style.transition = '';
+        newCard.style.transform = '';
       }, duration);
     }
 
@@ -644,22 +651,8 @@
 
       const cardEl = document.createElement('div');
       cardEl.className = 'mini-card';
-      
-      cardEl.addEventListener('click', (e) => {
-        e.stopPropagation();
-        cardEl.classList.toggle('is-flipped');
-      });
 
-      // Front
-      const front = document.createElement('div');
-      front.className = 'mini-face front';
-      front.innerHTML = `<button class="mini-speaker-large">🔊</button>`;
-      front.querySelector('button').onclick = (e) => {
-        e.stopPropagation();
-        speak(word.base || word.rawWord);
-      };
-
-      // Back
+      // Single visible face
       const back = document.createElement('div');
       back.className = 'mini-face back';
 
@@ -765,7 +758,6 @@
       back.appendChild(header);
       back.appendChild(chipsStack);
 
-      cardEl.appendChild(front);
       cardEl.appendChild(back);
       return cardEl;
     }
@@ -782,7 +774,7 @@
       els.deckLabel.textContent = `Deck ${state.currentDeckIndex + 1}`;
       els.cardLabel.textContent = `Card ${state.currentCardIndex + 1} / ${state.decks[state.currentDeckIndex].length}`;
 
-      els.txtSentence.innerHTML = `${card.Sentence} <span style="font-size:1.2rem; margin-left:10px; cursor:pointer" onclick="event.stopPropagation(); speak('${card.Sentence.replace(/'/g, "\\'")}')">🔊</span>`;
+      els.txtSentence.textContent = card.Sentence;
       els.txtPronunciationIPA.textContent = card.Sentence_IPA || "-";
       els.txtPronunciationApprox.textContent = card.Sentence_Eng_Approx || "-";
       els.txtTranslation.textContent = card.Sentence_Translation || "-";
