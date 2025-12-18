@@ -392,6 +392,9 @@
 
     // Flip Main Card
     els.mainCard.addEventListener('click', (e) => {
+      // Ignore clicks that originate inside a mini-card so only that mini-card flips
+      if (e.target.closest('.mini-card')) return;
+
       // Toggle flip class
       els.mainCard.classList.toggle('is-flipped');
     });
