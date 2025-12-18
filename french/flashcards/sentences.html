@@ -110,7 +110,6 @@
 
     .main-card.is-flipped {
       transform: rotateY(180deg);
-      /* INCREASED HEIGHT to fit the taller single word cards */
       height: 1050px; 
     }
 
@@ -237,7 +236,16 @@
       flex-direction: column;
       align-items: center; 
       width: 100%;
-      gap: 10px;
+      gap: 15px; /* Spacing between controls and card */
+    }
+
+    /* New Wrapper for [Arrow] [Counter] [Arrow] */
+    .carousel-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 12px;
     }
 
     .word-counter {
@@ -246,31 +254,24 @@
       font-weight: 700;
       color: var(--primary);
       background: var(--primary-light);
-      padding: 8px 20px;
-      border-radius: 20px;
+      padding: 0 20px;
+      height: 52px; /* Same height as buttons */
+      border-radius: 12px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      display: inline-block;
-      margin-bottom: 5px;
-    }
-
-    .carousel-container {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      width: 100%;
-      box-sizing: border-box;
-      flex-grow: 0; 
+      justify-content: center;
+      flex: 1; /* Take up remaining space */
     }
 
     .arrow-btn {
       background: white;
       border: 1px solid var(--border);
       width: 56px; 
-      height: 56px;
+      height: 52px; /* Match counter height */
       flex-shrink: 0;
-      border-radius: 50%;
+      border-radius: 12px; /* Square-ish with rounded corners */
       font-size: 1.5rem;
       color: var(--text-muted);
       cursor: pointer;
@@ -286,9 +287,7 @@
     .arrow-btn:disabled { opacity: 0.3; cursor: not-allowed; border-color: var(--border); color: var(--text-muted); }
 
     .word-scene {
-      flex: 1;
-      max-width: 100%;
-      /* INCREASED HEIGHT for taller card content */
+      width: 100%; /* FULL WIDTH */
       height: 500px; 
       perspective: 1000px;
       position: relative;
@@ -469,13 +468,19 @@
           </div>
 
           <div class="carousel-section">
-            <div id="wordCounter" class="word-counter">Word 1 / 5</div>
             
-            <div class="carousel-container">
+            <!-- Controls Row: [ < ] [ Counter ] [ > ] -->
+            <div class="carousel-controls">
               <button class="arrow-btn" id="btnPrevWord" onclick="navWord(-1)">&#10094;</button>
-              <div class="word-scene" id="wordCardContainer"></div>
+              <div id="wordCounter" class="word-counter">Word 1 / 5</div>
               <button class="arrow-btn" id="btnNextWord" onclick="navWord(1)">&#10095;</button>
             </div>
+
+            <!-- Full Width Card Scene -->
+            <div class="word-scene" id="wordCardContainer">
+              <!-- JS inserts the single active word card here -->
+            </div>
+
           </div>
 
         </div>
@@ -518,7 +523,7 @@
 
     els.mainCard.addEventListener('click', (e) => {
       if (e.target.closest('.info-chip') || 
-          e.target.closest('.carousel-container') ||
+          e.target.closest('.carousel-controls') || 
           e.target.closest('button')) return;
 
       if (els.mainCard.classList.contains('is-flipped')) return; 
