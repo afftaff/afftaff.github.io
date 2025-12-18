@@ -639,29 +639,81 @@
       const back = document.createElement('div');
       back.className = 'mini-face back';
 
-      const mkChip = (lbl, val, sizeClass) => `
-        <div class="chip" onclick="event.stopPropagation(); this.classList.toggle('is-revealed')">
-          <span class="chip-lbl">${lbl}</span>
-          <span class="chip-val ${sizeClass}">${val || '-'}</span>
-        </div>`;
+      const createChip = (lbl, val, sizeClass, options = {}) => {
+        const chip = document.createElement('div');
+        chip.className = 'chip';
 
-      back.innerHTML = `
-        <div class="mini-back-header">
-           <button class="mini-speaker-small" onclick="event.stopPropagation(); speak('${(word.base || word.rawWord).replace(/'/g, "\\'")}')">🔊</button>
-        </div>
-        <div class="mini-chips-stack">
-          <div class="chip-row">
-            ${mkChip('Word', word.base || word.rawWord, 'text-xl')}
-          </div>
-          <div class="chip-row">
-             ${mkChip('Meaning', word.meaning, 'text-lg')}
-          </div>
-          <div class="chip-row">
-            ${mkChip('IPA', word.ipa, 'text-md')}
-            ${mkChip('Type', word.pos, 'text-md')}
-          </div>
-        </div>
-      `;
+        const labelSpan = document.createElement('span');
+        labelSpan.className = 'chip-lbl';
+        labelSpan.textContent = lbl;
+
+        const valueSpan = document.createElement('span');
+        valueSpan.className = `chip-val ${sizeClass}`;
+        valueSpan.textContent = val || '-';
+
+        chip.appendChild(labelSpan);
+        chip.appendChild(valueSpan);
+
+        const baseValue = val || '-';
+        const article = options.article?.trim();
+        const hasArticle = !!article && options.chipType === 'word';
+
+        chip.addEventListener('click', (event) => {
+          event.stopPropagation();
+
+          if (hasArticle) {
+            if (!chip.classList.contains('is-revealed')) {
+              chip.classList.add('is-revealed');
+              chip.dataset.showingArticle = 'false';
+              valueSpan.textContent = baseValue;
+              return;
+            }
+
+            const showingArticle = chip.dataset.showingArticle === 'true';
+            chip.dataset.showingArticle = showingArticle ? 'false' : 'true';
+            valueSpan.textContent = showingArticle ? baseValue : `${article} ${baseValue}`;
+            return;
+          }
+
+          chip.classList.toggle('is-revealed');
+        });
+
+        return chip;
+      };
+
+      const header = document.createElement('div');
+      header.className = 'mini-back-header';
+      const backSpeaker = document.createElement('button');
+      backSpeaker.className = 'mini-speaker-small';
+      backSpeaker.textContent = '🔊';
+      backSpeaker.onclick = (event) => {
+        event.stopPropagation();
+        speak(word.base || word.rawWord);
+      };
+      header.appendChild(backSpeaker);
+
+      const chipsStack = document.createElement('div');
+      chipsStack.className = 'mini-chips-stack';
+
+      const rowWord = document.createElement('div');
+      rowWord.className = 'chip-row';
+      rowWord.appendChild(createChip('Word', word.base || word.rawWord, 'text-xl', { article: word.article, chipType: 'word' }));
+
+      const rowMeaning = document.createElement('div');
+      rowMeaning.className = 'chip-row';
+      rowMeaning.appendChild(createChip('Meaning', word.meaning, 'text-lg'));
+
+      const rowDetails = document.createElement('div');
+      rowDetails.className = 'chip-row';
+      rowDetails.appendChild(createChip('IPA', word.ipa, 'text-md'));
+      rowDetails.appendChild(createChip('Type', word.pos, 'text-md'));
+
+      chipsStack.appendChild(rowWord);
+      chipsStack.appendChild(rowMeaning);
+      chipsStack.appendChild(rowDetails);
+
+      back.appendChild(header);
+      back.appendChild(chipsStack);
 
       cardEl.appendChild(front);
       cardEl.appendChild(back);
@@ -709,8 +761,10 @@
         const p = part.split('|');
         const rawWord = p[0] ? p[0].trim() : '';
         const base = rawWord ? rawWord.replace(/\(.*\)/, '').trim() : '';
+        const articleMatch = rawWord.match(/\(([^)]+)\)/);
+        const article = articleMatch ? articleMatch[1].trim() : '';
         return {
-          rawWord, meaning: p[1]||'', pos: p[2]||'', ipa: p[3]||'', elision: p[4]||'', base
+          rawWord, meaning: p[1]||'', pos: p[2]||'', ipa: p[3]||'', elision: p[4]||'', base, article
         };
       }).filter(w => w.rawWord);
     }
