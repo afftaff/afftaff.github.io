@@ -43,7 +43,7 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
-      z-index: 10; /* Ensure controls are above scene */
+      z-index: 10;
       position: relative;
     }
 
@@ -77,7 +77,6 @@
     .scene {
       width: 100%;
       max-width: 700px;
-      /* Remove fixed height, let it be determined by the card */
       min-height: 400px; 
       perspective: 1500px;
       margin: 0 auto 50px auto;
@@ -86,7 +85,6 @@
 
     .main-card {
       width: 100%;
-      /* Default Height (Front) */
       height: 400px; 
       position: relative;
       transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), height 0.6s ease;
@@ -94,10 +92,8 @@
       cursor: pointer;
     }
 
-    /* Class applied via JS to flip */
     .main-card.is-flipped {
       transform: rotateY(180deg);
-      /* Expanded Height (Back) */
       height: 700px; 
     }
 
@@ -105,7 +101,7 @@
       position: absolute;
       width: 100%;
       height: 100%;
-      -webkit-backface-visibility: hidden; /* Safari fix */
+      -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
       border-radius: 20px;
       background: var(--card-bg);
@@ -120,11 +116,10 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 2; /* Initially on top */
-      background-color: white; /* Ensure non-transparent */
+      z-index: 2;
+      background-color: white;
     }
 
-    /* When flipped, hide front explicitly via z-index change to prevent bleed-through */
     .main-card.is-flipped .card-face.front {
       z-index: 0;
     }
@@ -143,7 +138,6 @@
       cursor: pointer;
       transition: transform 0.2s;
       margin-bottom: 2rem;
-      /* Ensure speaker doesn't have its own 3d context causing issues */
       transform: translateZ(1px); 
     }
     .big-speaker:hover { transform: scale(1.05) translateZ(1px); }
@@ -156,11 +150,10 @@
       transform: rotateY(180deg);
       display: flex;
       flex-direction: column;
-      background-color: white; /* Ensure non-transparent */
+      background-color: white;
       z-index: 1;
     }
     
-    /* When flipped, promote back face */
     .main-card.is-flipped .card-face.back {
       z-index: 10;
     }
@@ -207,14 +200,14 @@
     /* --- MINI CARDS GRID --- */
     .mini-cards-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Smaller min-width */
       gap: 15px;
       padding-bottom: 20px;
     }
 
     .mini-card-scene {
       width: 100%;
-      height: 160px;
+      height: 120px; /* MUCH SMALLER (was 160px) */
       perspective: 800px;
     }
 
@@ -253,8 +246,8 @@
     }
 
     .mini-speaker {
-      width: 40px;
-      height: 40px;
+      width: 35px; /* Slightly smaller */
+      height: 35px;
       border-radius: 50%;
       background: white;
       border: 1px solid var(--border);
@@ -262,54 +255,54 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       cursor: pointer;
       transition: background 0.2s;
     }
     .mini-speaker:hover { background: #e0e7ff; }
 
     .mini-word-front {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--text-main);
     }
 
+    /* --- NEW MINI BACK LAYOUT (Compact Rows) --- */
     .mini-face.back {
       transform: rotateY(180deg);
       display: flex;
       flex-direction: column;
+      justify-content: center; /* Vertically center the stack */
+      padding: 0 16px;
       background: #fff;
     }
 
-    .mini-info-grid {
+    .mini-row {
       display: flex;
-      flex-wrap: wrap;
-      height: 100%;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #f3f4f6;
+      width: 100%;
+    }
+    .mini-row:last-child {
+      border-bottom: none;
     }
 
-    .mini-cell {
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .mini-cell label {
-      font-size: 0.65rem;
+    .mini-label {
+      font-size: 0.7rem;
       text-transform: uppercase;
+      letter-spacing: 0.05em;
       color: var(--text-muted);
-      margin-bottom: 2px;
+      font-weight: 600;
     }
-    .mini-cell span {
+
+    .mini-value {
       font-size: 0.9rem;
       font-weight: 600;
       color: var(--text-main);
+      text-align: right;
     }
-
-    .mini-cell.half { width: 50%; border-right: 1px solid var(--border); }
-    .mini-cell.half:last-child { border-right: none; }
-    .mini-cell.full { width: 100%; background: #fdfdfd; flex: 1; border-bottom: none; }
 
   </style>
 </head>
@@ -433,7 +426,7 @@
       const card = getCurrentCard();
       if (!card) return;
 
-      // Reset Flip State when changing cards (Back to small size, front face)
+      // Reset Flip State when changing cards
       els.mainCard.classList.remove('is-flipped');
 
       // Update Header Text
@@ -486,20 +479,19 @@
         const back = document.createElement('div');
         back.className = 'mini-face back';
 
+        // NEW: Compact Row Layout for Mini Back
         back.innerHTML = `
-          <div class="mini-info-grid">
-            <div class="mini-cell half">
-              <label>Meaning</label>
-              <span>${word.meaning || '-'}</span>
-            </div>
-            <div class="mini-cell half">
-              <label>Pronunciation</label>
-              <span>${word.ipa || '-'}</span>
-            </div>
-            <div class="mini-cell full">
-              <label>Part of Speech / Notes</label>
-              <span>${word.pos || word.elision || '-'}</span>
-            </div>
+          <div class="mini-row">
+            <span class="mini-label">Meaning</span>
+            <span class="mini-value">${word.meaning || '-'}</span>
+          </div>
+          <div class="mini-row">
+            <span class="mini-label">IPA</span>
+            <span class="mini-value">${word.ipa || '-'}</span>
+          </div>
+          <div class="mini-row">
+            <span class="mini-label">Type</span>
+            <span class="mini-value">${word.pos || word.elision || '-'}</span>
           </div>
         `;
 
@@ -580,8 +572,6 @@
 
     // --- Initialization ---
     function boot() {
-      // Mock Data for demonstration since I don't have your CSV
-      // If you are using a local CSV, replace the data below with your Papa.parse call
       const mockData = [
         {
           Sentence: "Il préfère écrire une lettre plutôt que téléphoner.",
