@@ -244,16 +244,27 @@
     .sentence-play {
       border: 1px solid var(--border);
       background: white;
-      border-radius: 12px;
-      padding: 8px 10px;
-      font-size: 1.1rem;
+      border-radius: 16px;
+      padding: 16px 24px;
+      font-size: 2rem;
       cursor: pointer;
       color: var(--primary);
       transition: transform 0.15s ease, box-shadow 0.15s ease;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-weight: 800;
     }
-    .sentence-play:hover { transform: translateY(-1px); box-shadow: 0 8px 14px rgba(0,0,0,0.08); }
+    .sentence-play:hover { transform: translateY(-2px); box-shadow: 0 14px 24px rgba(0,0,0,0.12); }
     .sentence-play:active { transform: translateY(0); }
+
+    .sentence-play-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
 
     /* --- CAROUSEL SECTION --- */
     .carousel-section {
@@ -472,10 +483,14 @@
         <div class="back-content-scroll">
           
           <div class="info-group">
+            <div class="sentence-play-wrapper">
+              <button class="sentence-play" onclick="playSentence(event)" aria-label="Play full sentence">
+                🔊
+              </button>
+            </div>
             <div class="info-chip" onclick="toggleInfo(this)">
               <div class="info-chip-header">
                 <span class="info-label">Sentence</span>
-                <button class="sentence-play" onclick="playSentence(event)" aria-label="Play full sentence">🔊</button>
               </div>
               <div class="info-content highlight" id="txtSentence">...</div>
             </div>
