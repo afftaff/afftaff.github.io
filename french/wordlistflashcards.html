@@ -236,6 +236,7 @@
       border-bottom: 2px solid var(--bg-inset);
       width: 100%;
       padding-bottom: 2rem;
+      position: relative;
     }
     
     .headword {
@@ -293,6 +294,19 @@
 
     .mini-card.flipped .mini-inner {
       transform: rotateY(180deg);
+    }
+
+    .mini-card.static {
+      cursor: default;
+    }
+
+    .mini-card.static .mini-inner {
+      transform: rotateY(180deg);
+      cursor: default;
+    }
+
+    .mini-card.static .mini-face.mini-front {
+      display: none;
     }
     
     /* Loading / Pulse State */
@@ -467,6 +481,17 @@
     }
     .speaker-btn:hover { background: #fff; }
 
+    .card-speaker {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      font-size: 1.6rem;
+      padding: 12px 14px;
+      border-radius: 50%;
+      box-shadow: var(--shadow-float);
+      border-width: 2px;
+    }
+
     .status-text {
       text-align: center;
       color: var(--text-muted);
@@ -553,6 +578,7 @@
 
       <div class="static-card">
         <div class="card-header">
+          <button id="playHeadword" class="speaker-btn card-speaker" aria-label="Play headword">🔊</button>
           <h1 class="headword" id="headwordDisplay">Bonjour</h1>
           <div class="sub-headword" id="posDisplay">Start here</div>
         </div>
@@ -627,6 +653,7 @@ and IPA and english pronuncation as well, and an English translation of the sent
       wordTotal: document.getElementById('wordTotal'),
       gradeRow: document.getElementById('gradeRow'),
       deckPicker: document.getElementById('deckPicker'),
+      playHeadword: document.getElementById('playHeadword'),
 
       headwordDisplay: document.getElementById('headwordDisplay'),
       posDisplay: document.getElementById('posDisplay'),
@@ -920,7 +947,7 @@ and IPA and english pronuncation as well, and an English translation of the sent
 
     function createMiniCard(label, icon, content) {
       const card = document.createElement('div');
-      card.className = 'mini-card';
+      card.className = 'mini-card static flipped';
       
       const inner = document.createElement('div');
       inner.className = 'mini-inner';
@@ -955,11 +982,6 @@ and IPA and english pronuncation as well, and an English translation of the sent
       inner.appendChild(front);
       inner.appendChild(back);
       card.appendChild(inner);
-      
-      card.addEventListener('click', (event) => {
-        if (event.target.closest('.speaker-btn')) return;
-        card.classList.toggle('flipped');
-      });
       
       return card;
     }
@@ -1005,7 +1027,7 @@ and IPA and english pronuncation as well, and an English translation of the sent
       }
 
       dom.headwordDisplay.textContent = entry.term || word;
-      dom.posDisplay.textContent = 'Flip the cards to reveal grammar details.';
+      dom.posDisplay.textContent = 'Review the grammar details below.';
 
       const defs = entry.definitions || [];
       const first = defs[0] || {};
@@ -1061,9 +1083,8 @@ and IPA and english pronuncation as well, and an English translation of the sent
         const speakExampleBtn = document.createElement('button');
         speakExampleBtn.type = 'button';
         speakExampleBtn.className = 'speaker-btn';
-        speakExampleBtn.innerHTML = '🔈 Speak example';
-        const exampleSpeech = exampleText.replace(/\s*[\(\[].*?[\)\]]\s*$/, '').trim() || exampleText;
-        speakExampleBtn.addEventListener('click', () => speak(exampleSpeech));
+        speakExampleBtn.innerHTML = '🔈 Play sentence';
+        speakExampleBtn.addEventListener('click', () => speak(exampleText));
 
         exampleActions.appendChild(speakExampleBtn);
         contextWrapper.appendChild(exampleActions);
@@ -1258,6 +1279,10 @@ and IPA and english pronuncation as well, and an English translation of the sent
     dom.startDeckBtn.addEventListener('click', startDeck);
     dom.nextCardBtn.addEventListener('click', nextCard);
     dom.shuffleBtn.addEventListener('click', () => shuffleDeck(true));
+    dom.playHeadword.addEventListener('click', () => {
+      const playable = state.definitions[state.currentWord]?.term || state.currentWord || dom.headwordDisplay.textContent;
+      speak(playable);
+    });
     dom.gradeRow.addEventListener('click', (e) => {
       const btn = e.target.closest('.grade-btn');
       if (!btn) return;
