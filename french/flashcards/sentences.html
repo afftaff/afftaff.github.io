@@ -396,14 +396,17 @@
       padding: 12px;
       text-align: center;
       cursor: pointer;
-      min-height: 72px; 
+      min-height: 72px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       border: 1px solid transparent;
       transition: all 0.2s;
     }
     .chip:hover { border-color: var(--primary); }
+    .chip.is-base { background: #fed7aa; border-color: #fdba74; }
+    .chip.is-article { background: #bfdbfe; border-color: #93c5fd; }
     .chip.is-revealed { background: #e0e7ff; border-color: #c7d2fe; }
 
     .chip-lbl { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; }
@@ -416,6 +419,16 @@
 
     .chip.is-revealed .chip-lbl { display: none; }
     .chip.is-revealed .chip-val { display: block; }
+
+    .chip-hint {
+      display: none;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.2;
+    }
+
+    .chip.is-base .chip-hint { display: block; }
 
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -651,27 +664,53 @@
         valueSpan.className = `chip-val ${sizeClass}`;
         valueSpan.textContent = val || '-';
 
+        const hintSpan = document.createElement('span');
+        hintSpan.className = 'chip-hint';
+        hintSpan.textContent = 'Click again to show article + noun';
+
         chip.appendChild(labelSpan);
         chip.appendChild(valueSpan);
+        if (options.chipType === 'word') {
+          chip.appendChild(hintSpan);
+        }
 
         const baseValue = val || '-';
         const article = options.article?.trim();
-        const hasArticle = !!article && options.chipType === 'word';
+        const articleSupported = /^l[ae]\b/i.test(article || '');
+        const hasArticle = !!articleSupported && options.chipType === 'word';
 
         chip.addEventListener('click', (event) => {
           event.stopPropagation();
 
           if (hasArticle) {
-            if (!chip.classList.contains('is-revealed')) {
-              chip.classList.add('is-revealed');
-              chip.dataset.showingArticle = 'false';
+            const stage = chip.dataset.stage;
+
+            // Stage 1: reveal noun only with orange background + hint
+            if (!stage || stage === 'hidden') {
+              chip.dataset.stage = 'base';
+              chip.classList.add('is-revealed', 'is-base');
+              chip.classList.remove('is-article');
               valueSpan.textContent = baseValue;
+              hintSpan.style.display = '';
               return;
             }
 
-            const showingArticle = chip.dataset.showingArticle === 'true';
-            chip.dataset.showingArticle = showingArticle ? 'false' : 'true';
-            valueSpan.textContent = showingArticle ? baseValue : `${article} ${baseValue}`;
+            // Stage 2: show article + noun with blue background
+            if (stage === 'base') {
+              chip.dataset.stage = 'article';
+              chip.classList.remove('is-base');
+              chip.classList.add('is-article');
+              valueSpan.textContent = `${article} ${baseValue}`;
+              hintSpan.style.display = 'none';
+              return;
+            }
+
+            // Stage 3: toggle back to noun-only view
+            chip.dataset.stage = 'base';
+            chip.classList.add('is-base');
+            chip.classList.remove('is-article');
+            valueSpan.textContent = baseValue;
+            hintSpan.style.display = '';
             return;
           }
 
