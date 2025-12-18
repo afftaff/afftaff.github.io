@@ -122,13 +122,35 @@
 
     .sentence-card {
       position: relative;
+      background: transparent;
+      perspective: 1600px;
+    }
+
+    .sentence-inner {
+      position: relative;
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: calc(var(--radius) * 1.2);
       padding: 2rem;
       box-shadow: var(--shadow);
       overflow: hidden;
+      transform-style: preserve-3d;
+      transition: transform 0.65s ease;
+      min-height: 520px;
     }
+
+    .sentence-card[data-flipped="true"] .sentence-inner { transform: rotateY(180deg); }
+
+    .sentence-face {
+      position: absolute;
+      inset: 0;
+      padding: 2rem;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sentence-face.back { transform: rotateY(180deg); overflow-y: auto; }
 
     .sentence-header {
       display: flex;
@@ -431,18 +453,26 @@
 
       const wrapper = document.createElement('div');
       wrapper.className = 'sentence-card';
+      wrapper.setAttribute('data-flipped', state.showBreakdown ? 'true' : 'false');
 
-      const header = document.createElement('div');
-      header.className = 'sentence-header';
-      header.innerHTML = `
+      const inner = document.createElement('div');
+      inner.className = 'sentence-inner';
+
+      // Front face
+      const frontFace = document.createElement('div');
+      frontFace.className = 'sentence-face front';
+
+      const headerFront = document.createElement('div');
+      headerFront.className = 'sentence-header';
+      headerFront.innerHTML = `
         <div>
-          <p class="sentence-title">Rank ${entry.Rank} • ${entry.Word_with_Article || entry.Word || ''}</p>
-          <p class="sentence-sub">Press the speaker to listen. Tap reveal to see word mini-cards.</p>
+          <p class="sentence-title">Listen first</p>
+          <p class="sentence-sub">Front is audio-only. Flip to reveal per-word cards.</p>
         </div>
-        <button class="btn primary" id="toggleBreakdownBtn">${state.showBreakdown ? 'Hide details' : 'Reveal words'}</button>
+        <button class="btn primary" id="toggleBreakdownBtnFront">Flip card</button>
       `;
-      wrapper.appendChild(header);
-      header.querySelector('#toggleBreakdownBtn').addEventListener('click', toggleBreakdown);
+      frontFace.appendChild(headerFront);
+      headerFront.querySelector('#toggleBreakdownBtnFront').addEventListener('click', toggleBreakdown);
 
       const plate = document.createElement('div');
       plate.className = 'sound-plate';
@@ -452,111 +482,131 @@
         </div>
       `;
       plate.addEventListener('click', () => speak(entry.Sentence, 'fr-FR'));
-      wrapper.appendChild(plate);
+      frontFace.appendChild(plate);
 
       const hint = document.createElement('p');
       hint.className = 'hidden-text';
-      hint.textContent = 'Front of the card is audio-only. Use the speaker as many times as you need.';
-      wrapper.appendChild(hint);
+      hint.textContent = 'Press the speaker as many times as you need, then flip to practice each word.';
+      frontFace.appendChild(hint);
 
-      if (state.showBreakdown) {
-        const reveal = document.createElement('div');
-        reveal.className = 'reveal-area';
+      // Back face
+      const backFace = document.createElement('div');
+      backFace.className = 'sentence-face back';
 
-        const sentenceLine = document.createElement('p');
-        sentenceLine.className = 'sentence-title';
-        sentenceLine.textContent = entry.Sentence;
-        reveal.appendChild(sentenceLine);
+      const headerBack = document.createElement('div');
+      headerBack.className = 'sentence-header';
+      headerBack.innerHTML = `
+        <div>
+          <p class="sentence-title">${entry.Sentence}</p>
+          <p class="sentence-sub">Tap a word card to flip it individually.</p>
+        </div>
+        <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+          <button class="btn" id="toggleBreakdownBtnBack">Return to audio</button>
+          <div class="pill">Back of the main card</div>
+        </div>
+      `;
+      backFace.appendChild(headerBack);
+      headerBack.querySelector('#toggleBreakdownBtnBack').addEventListener('click', toggleBreakdown);
 
-        const miniGrid = document.createElement('div');
-        miniGrid.className = 'mini-cards';
-        const words = parseBreakdown(entry.Sentence_Breakdown);
+      const miniGrid = document.createElement('div');
+      miniGrid.className = 'mini-cards';
+      miniGrid.setAttribute('aria-label', 'Word mini flashcards');
+      const words = parseBreakdown(entry.Sentence_Breakdown);
 
-        words.forEach(word => {
-          const card = document.createElement('div');
-          card.className = 'mini-card';
-          card.setAttribute('data-flipped', 'false');
+      const wordSummary = document.createElement('p');
+      wordSummary.className = 'mini-note';
+      wordSummary.textContent = words.length
+        ? `This sentence breaks into ${words.length} individually flippable word cards.`
+        : 'No word breakdown provided in the CSV for this sentence.';
+      backFace.appendChild(wordSummary);
 
-          const inner = document.createElement('div');
-          inner.className = 'mini-inner';
+      words.forEach(word => {
+        const card = document.createElement('div');
+        card.className = 'mini-card';
+        card.setAttribute('data-flipped', 'false');
 
-          // Front
-          const front = document.createElement('div');
-          front.className = 'mini-face front';
-          front.innerHTML = `
-            <div class="mini-head">
-              <span class="word-label">${word.base || word.rawWord}</span>
-              <div style="display:flex;gap:6px;align-items:center;">
-                <button class="speaker-btn" aria-label="Play word">🔊</button>
-                <button class="tiny-btn" aria-label="Show pronunciation">Show pron.</button>
-              </div>
+        const innerMini = document.createElement('div');
+        innerMini.className = 'mini-inner';
+
+        // Front
+        const front = document.createElement('div');
+        front.className = 'mini-face front';
+        front.innerHTML = `
+          <div class="mini-head">
+            <span class="word-label">${word.base || word.rawWord}</span>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <button class="speaker-btn" aria-label="Play word">🔊</button>
+              <button class="tiny-btn" aria-label="Show pronunciation">Show pron.</button>
             </div>
-            <span class="pos-pill">${word.pos || 'Word'}</span>
-            <p class="meaning">Tap to flip for meaning & article</p>
-            <div class="pronunciation">${word.ipa || ''}<br>${word.engApprox || ''}</div>
-          `;
+          </div>
+          <span class="pos-pill">${word.pos || 'Word'}</span>
+          <p class="meaning">Tap to flip for meaning & article</p>
+          <div class="pronunciation">${word.ipa || ''}<br>${word.engApprox || ''}</div>
+        `;
 
-          // Back
-          const back = document.createElement('div');
-          back.className = 'mini-face back';
-          back.innerHTML = `
-            <div class="mini-head">
-              <span class="word-label">${word.rawWord}</span>
-              <div style="display:flex;gap:6px;align-items:center;">
-                <button class="speaker-btn" aria-label="Play word">🔊</button>
-                <button class="tiny-btn" aria-label="Show pronunciation">Show pron.</button>
-              </div>
+        // Back
+        const back = document.createElement('div');
+        back.className = 'mini-face back';
+        back.innerHTML = `
+          <div class="mini-head">
+            <span class="word-label">${word.rawWord}</span>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <button class="speaker-btn" aria-label="Play word">🔊</button>
+              <button class="tiny-btn" aria-label="Show pronunciation">Show pron.</button>
             </div>
-            <span class="pos-pill">${word.pos || 'Word'}</span>
-            <p class="meaning"><strong>Meaning:</strong> ${word.meaning || '—'}</p>
-            <p class="meaning"><strong>Article form:</strong> ${word.article ? `${word.article} ${word.base}` : '—'}</p>
-            <div class="pronunciation">${word.ipa || ''}<br>${word.engApprox || ''}</div>
-          `;
+          </div>
+          <span class="pos-pill">${word.pos || 'Word'}</span>
+          <p class="meaning"><strong>Meaning:</strong> ${word.meaning || '—'}</p>
+          <p class="meaning"><strong>Article form:</strong> ${word.article ? `${word.article} ${word.base}` : '—'}</p>
+          <div class="pronunciation">${word.ipa || ''}<br>${word.engApprox || ''}</div>
+        `;
 
-          [front, back].forEach(face => {
-            face.querySelector('.speaker-btn').addEventListener('click', (e) => {
-              e.stopPropagation();
-              speak(word.base || word.rawWord, 'fr-FR');
-            });
-            const pron = face.querySelector('.pronunciation');
-            face.querySelector('.tiny-btn').addEventListener('click', (e) => {
-              e.stopPropagation();
-              pron.classList.toggle('visible');
-            });
+        [front, back].forEach(face => {
+          face.querySelector('.speaker-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            speak(word.base || word.rawWord, 'fr-FR');
           });
-
-          card.addEventListener('click', () => toggleMiniCard(card));
-
-          inner.appendChild(front);
-          inner.appendChild(back);
-          card.appendChild(inner);
-          miniGrid.appendChild(card);
+          const pron = face.querySelector('.pronunciation');
+          face.querySelector('.tiny-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            pron.classList.toggle('visible');
+          });
         });
 
-        reveal.appendChild(miniGrid);
+        card.addEventListener('click', () => toggleMiniCard(card));
 
-        const infoGrid = document.createElement('div');
-        infoGrid.className = 'info-grid';
+        innerMini.appendChild(front);
+        innerMini.appendChild(back);
+        card.appendChild(innerMini);
+        miniGrid.appendChild(card);
+      });
 
-        const infoItems = [
-          { title: 'Sentence meaning', body: entry.Sentence_Translation || '—' },
-          { title: 'Verb tense & mood', body: `${entry.Verb_Tense || 'Unknown'}${entry.Verb_Mood ? ' • ' + entry.Verb_Mood : ''}` },
-          { title: 'Pronouns / articles', body: collectPronouns(entry.Sentence_Breakdown) },
-          { title: 'Elisions', body: entry.Elision_Note || 'None noted' }
-        ];
+      backFace.appendChild(miniGrid);
 
-        infoItems.forEach(({ title, body }) => {
-          const card = document.createElement('div');
-          card.className = 'info-card';
-          card.innerHTML = `<p class="info-title">${title}</p><p class="info-body">${body || '—'}</p>`;
-          infoGrid.appendChild(card);
-        });
+      const infoGrid = document.createElement('div');
+      infoGrid.className = 'info-grid';
 
-        reveal.appendChild(infoGrid);
-        wrapper.appendChild(reveal);
-      }
+      const infoItems = [
+        { title: 'Sentence meaning', body: entry.Sentence_Translation || '—' },
+        { title: 'Verb tense & mood', body: `${entry.Verb_Tense || 'Unknown'}${entry.Verb_Mood ? ' • ' + entry.Verb_Mood : ''}` },
+        { title: 'Pronouns / articles', body: collectPronouns(entry.Sentence_Breakdown) },
+        { title: 'Elisions', body: entry.Elision_Note || 'None noted' }
+      ];
 
+      infoItems.forEach(({ title, body }) => {
+        const card = document.createElement('div');
+        card.className = 'info-card';
+        card.innerHTML = `<p class="info-title">${title}</p><p class="info-body">${body || '—'}</p>`;
+        infoGrid.appendChild(card);
+      });
+
+      backFace.appendChild(infoGrid);
+
+      inner.appendChild(frontFace);
+      inner.appendChild(backFace);
+      wrapper.appendChild(inner);
       cardArea.appendChild(wrapper);
+
       statusEl.textContent = `Total decks: ${deckCount}. Cards in this deck: ${state.decks[state.currentDeck].length}. Shuffled order.`;
     }
 
