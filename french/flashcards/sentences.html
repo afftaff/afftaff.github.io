@@ -110,7 +110,6 @@
 
     .main-card.is-flipped {
       transform: rotateY(180deg);
-      height: 1050px; 
     }
 
     .card-face {
@@ -170,8 +169,8 @@
     .main-card.is-flipped .card-face.back { z-index: 10; }
 
     .back-content-scroll {
-      flex: 1;
-      overflow-y: auto;
+      flex: 0 0 auto;
+      overflow: visible;
       padding: 25px;
       display: flex;
       flex-direction: column;
@@ -639,7 +638,8 @@
       btnNextWord: document.getElementById('btnNextWord'),
       btnShuffleWords: document.getElementById('btnShuffleWords'),
       wordCounter: document.getElementById('wordCounter'),
-      wordStatus: document.getElementById('wordStatus')
+      wordStatus: document.getElementById('wordStatus'),
+      backContentScroll: document.querySelector('.back-content-scroll')
     };
 
     // --- Interaction Logic ---
@@ -647,6 +647,7 @@
     window.toggleInfo = (el) => {
       event.stopPropagation();
       el.classList.toggle('is-revealed');
+      updateMainCardHeight();
     };
 
     window.playSentence = (e) => {
@@ -661,6 +662,7 @@
 
       if (els.mainCard.classList.contains('is-flipped')) return; 
       els.mainCard.classList.add('is-flipped');
+      updateMainCardHeight();
     });
 
     els.mainSpeaker.addEventListener('click', (e) => {
@@ -671,6 +673,17 @@
     function playCurrentAudio() {
       const card = getCurrentCard();
       if(card) speak(card.Sentence);
+    }
+
+    function updateMainCardHeight() {
+      if (!els.mainCard.classList.contains('is-flipped')) {
+        els.mainCard.style.height = '';
+        return;
+      }
+      if (!els.backContentScroll) return;
+      requestAnimationFrame(() => {
+        els.mainCard.style.height = `${els.backContentScroll.scrollHeight}px`;
+      });
     }
 
     function speak(text) {
@@ -727,6 +740,7 @@
       if (dir === 0 || !oldCard) {
         els.wordCardContainer.innerHTML = '';
         els.wordCardContainer.appendChild(newCard);
+        updateMainCardHeight();
         return;
       }
 
@@ -755,6 +769,7 @@
         // Reset inline styles so the next slide animation starts fresh
         newCard.style.transition = '';
         newCard.style.transform = '';
+        updateMainCardHeight();
       }, duration);
     }
 
