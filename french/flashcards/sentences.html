@@ -957,11 +957,16 @@
 
       const mergeElidedWords = (words) => {
         const merged = [];
+        const hasElision = (word) => {
+          if (!word) return false;
+          const trimmed = word.replace(/[)\]"”’».,;:!?…]+$/g, '');
+          return /['’]$/.test(trimmed);
+        };
 
         for (let i = 0; i < words.length; i++) {
           let current = { ...words[i] };
 
-          while (current.rawWord && current.rawWord.endsWith("'") && i + 1 < words.length) {
+          while (hasElision(current.rawWord) && i + 1 < words.length) {
             const next = words[i + 1];
 
             current = {
@@ -977,7 +982,7 @@
             current.base = computeBase(current.rawWord);
             i++;
 
-            if (!(next.rawWord && next.rawWord.endsWith("'"))) {
+            if (!hasElision(next.rawWord)) {
               break;
             }
           }
