@@ -89,6 +89,28 @@
       user-select: none;
     }
 
+    .nav-input {
+      flex: 0 0 110px;
+      height: 52px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 0 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      background: #fff;
+      box-sizing: border-box;
+    }
+
+    .inline-label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
     /* --- MAIN CARD SCENE --- */
     .scene {
       width: 100%;
@@ -515,14 +537,20 @@
   <!-- Controls -->
   <div class="controls-container">
     <div class="nav-row">
-      <button class="nav-btn" onclick="prevDeck()">&#10094;</button>
-      <div class="status-badge" id="deckLabel">Deck 1</div>
-      <button class="nav-btn" onclick="nextDeck()">&#10095;</button>
+      <div class="status-badge" id="deckLabel">Active Deck</div>
+      <button class="nav-btn" id="toggleDeckBtn">View Finished</button>
     </div>
     <div class="nav-row">
       <button class="nav-btn" onclick="prevCard()">&#10094;</button>
       <div class="status-badge" id="cardLabel">Card 1 / 50</div>
       <button class="nav-btn" onclick="nextCard()">&#10095;</button>
+    </div>
+    <div class="nav-row">
+      <label class="inline-label" for="retryAfterInput">Retry after:</label>
+      <input class="nav-input" id="retryAfterInput" type="number" min="1" value="2">
+      <label class="inline-label" for="finishedToInput">Finished to:</label>
+      <input class="nav-input" id="finishedToInput" type="number" min="0" value="0">
+      <button class="nav-btn" id="applyFinishedBtn">Apply</button>
     </div>
   </div>
 
@@ -565,12 +593,9 @@
               <div class="info-content" id="txtTranslation">...</div>
             </div>
 
-            <div class="spaced-buttons">
-              <button class="spaced-btn again" onclick="rateSentence('again')">Again</button>
-              <button class="spaced-btn hard" onclick="rateSentence('hard')">Hard</button>
-              <button class="spaced-btn medium" onclick="rateSentence('medium')">Medium</button>
-              <button class="spaced-btn easy" onclick="rateSentence('easy')">Easy</button>
-              <button class="spaced-btn good" onclick="rateSentence('good')">Good</button>
+            <div class="spaced-buttons" id="sentenceActions">
+              <button class="spaced-btn hard" onclick="retrySentence()">Retry</button>
+              <button class="spaced-btn easy" onclick="finishSentence()">Place in finished</button>
             </div>
           </div>
 
@@ -612,11 +637,18 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script>
     // --- State Management ---
+    const STORAGE_KEYS = {
+      finishedIds: 'sentencesFinishedIds',
+      retryAfter: 'sentencesRetryAfter'
+    };
+
     const state = {
-      decks: [],
-      deckQueues: [],
-      currentDeckIndex: 0,
-      currentCardIndex: 0,
+      cards: [],
+      activeQueue: [],
+      finishedQueue: [],
+      finishedIds: new Set(),
+      view: 'active',
+      retryAfter: 2,
       currentWordIndex: 0,
       currentWordsList: [],
       currentWordsQueue: [],
@@ -627,6 +659,7 @@
       mainCard: document.getElementById('mainCard'),
       mainSpeaker: document.getElementById('mainSpeaker'),
       deckLabel: document.getElementById('deckLabel'),
+      toggleDeckBtn: document.getElementById('toggleDeckBtn'),
       cardLabel: document.getElementById('cardLabel'),
       txtSentence: document.getElementById('txtSentence'),
       txtPronunciation: document.getElementById('txtPronunciation'),
@@ -639,7 +672,11 @@
       btnShuffleWords: document.getElementById('btnShuffleWords'),
       wordCounter: document.getElementById('wordCounter'),
       wordStatus: document.getElementById('wordStatus'),
-      backContentScroll: document.querySelector('.back-content-scroll')
+      backContentScroll: document.querySelector('.back-content-scroll'),
+      retryAfterInput: document.getElementById('retryAfterInput'),
+      finishedToInput: document.getElementById('finishedToInput'),
+      applyFinishedBtn: document.getElementById('applyFinishedBtn'),
+      sentenceActions: document.getElementById('sentenceActions')
     };
 
     // --- Interaction Logic ---
@@ -693,6 +730,34 @@
       utter.lang = 'fr-FR';
       utter.rate = 0.9;
       window.speechSynthesis.speak(utter);
+    }
+
+    function persistFinished() {
+      localStorage.setItem(STORAGE_KEYS.finishedIds, JSON.stringify([...state.finishedIds]));
+    }
+
+    function persistRetryAfter() {
+      localStorage.setItem(STORAGE_KEYS.retryAfter, String(state.retryAfter));
+    }
+
+    function applyFinishedCount(count) {
+      const safeCount = Math.max(0, Math.min(count, state.cards.length));
+      state.finishedIds = new Set(state.cards.slice(0, safeCount).map(card => card.id));
+      rebuildQueues();
+      persistFinished();
+      updateFinishedInput();
+      render();
+    }
+
+    function updateFinishedInput() {
+      if (els.finishedToInput) {
+        els.finishedToInput.value = String(state.finishedIds.size);
+      }
+    }
+
+    function rebuildQueues() {
+      state.activeQueue = state.cards.filter(card => !state.finishedIds.has(card.id));
+      state.finishedQueue = state.cards.filter(card => state.finishedIds.has(card.id));
     }
 
     function normalizeWordForSpeech(text) {
@@ -918,12 +983,21 @@
       els.mainCard.classList.remove('is-flipped');
       document.querySelectorAll('.info-chip').forEach(el => el.classList.remove('is-revealed'));
 
-      const currentDeck = getCurrentDeckQueue();
-      els.deckLabel.textContent = `Deck ${state.currentDeckIndex + 1}`;
-      els.cardLabel.textContent = currentDeck.length ? `Cards remaining: ${currentDeck.length}` : 'Deck complete';
+      const currentQueue = getCurrentQueue();
+      const isFinishedView = state.view === 'finished';
+      els.deckLabel.textContent = isFinishedView ? 'Finished Deck' : 'Active Deck';
+      els.toggleDeckBtn.textContent = isFinishedView ? 'View Active' : 'View Finished';
+      els.cardLabel.textContent = currentQueue.length
+        ? `${isFinishedView ? 'Finished cards' : 'Cards remaining'}: ${currentQueue.length}`
+        : isFinishedView ? 'No finished cards yet' : 'All cards finished';
+      if (els.sentenceActions) {
+        els.sentenceActions.style.display = isFinishedView ? 'none' : 'grid';
+      }
 
       if (!card) {
-        els.txtSentence.textContent = 'All sentences in this deck are complete!';
+        els.txtSentence.textContent = isFinishedView
+          ? 'No finished cards yet.'
+          : 'All sentences are complete!';
         els.txtPronunciationIPA.textContent = '-';
         els.txtPronunciationApprox.textContent = '-';
         els.txtTranslation.textContent = '-';
@@ -946,13 +1020,12 @@
 
     // --- Data Helpers ---
 
-    function getCurrentDeckQueue() {
-      if (state.deckQueues.length === 0) return [];
-      return state.deckQueues[state.currentDeckIndex] || [];
+    function getCurrentQueue() {
+      return state.view === 'finished' ? state.finishedQueue : state.activeQueue;
     }
 
     function getCurrentCard() {
-      const queue = getCurrentDeckQueue();
+      const queue = getCurrentQueue();
       if (!queue.length) return null;
       return queue[0];
     }
@@ -1024,12 +1097,6 @@
       return mergeElidedWords(words);
     }
 
-    function chunk(arr, size) {
-      const res = [];
-      for (let i = 0; i < arr.length; i += size) res.push(arr.slice(i, i + size));
-      return res;
-    }
-
     function shuffle(arr) {
       return arr.sort(() => Math.random() - 0.5);
     }
@@ -1075,25 +1142,31 @@
       });
     }
 
-    function applySpacedRepetition(queue, rating) {
-      if (!queue.length) return;
-      const card = queue.shift();
-      let insertOffset = null;
-
-      if (rating === 'again') insertOffset = 2;
-      if (rating === 'hard') insertOffset = 3;
-      if (rating === 'medium') insertOffset = 5;
-      if (rating === 'easy') insertOffset = queue.length; // end of deck
-
-      if (rating !== 'good' && insertOffset !== null) {
-        const position = Math.min(insertOffset, queue.length);
-        queue.splice(position, 0, card);
-      }
+    function clampRetryAfter(value) {
+      const parsed = Number.parseInt(value, 10);
+      if (Number.isNaN(parsed)) return 1;
+      return Math.max(1, parsed);
     }
 
-    window.rateSentence = (rating) => {
-      const queue = getCurrentDeckQueue();
-      applySpacedRepetition(queue, rating);
+    window.retrySentence = () => {
+      if (state.view !== 'active') return;
+      const queue = state.activeQueue;
+      if (!queue.length) return;
+      const card = queue.shift();
+      const insertOffset = Math.min(state.retryAfter, queue.length);
+      queue.splice(insertOffset, 0, card);
+      render();
+    };
+
+    window.finishSentence = () => {
+      if (state.view !== 'active') return;
+      const queue = state.activeQueue;
+      if (!queue.length) return;
+      const card = queue.shift();
+      state.finishedIds.add(card.id);
+      state.finishedQueue.push(card);
+      persistFinished();
+      updateFinishedInput();
       render();
     };
 
@@ -1123,10 +1196,36 @@
       transitionToWord(0);
     };
 
-    window.nextDeck = () => { state.currentDeckIndex = (state.currentDeckIndex + 1) % state.decks.length; render(); };
-    window.prevDeck = () => { state.currentDeckIndex = (state.currentDeckIndex - 1 + state.decks.length) % state.decks.length; render(); };
-    window.nextCard = () => { const deck = getCurrentDeckQueue(); if(deck.length > 1) { deck.push(deck.shift()); render(); }};
-    window.prevCard = () => { const deck = getCurrentDeckQueue(); if(deck.length > 1) { deck.unshift(deck.pop()); render(); }};
+    els.toggleDeckBtn.addEventListener('click', () => {
+      state.view = state.view === 'active' ? 'finished' : 'active';
+      render();
+    });
+
+    els.retryAfterInput.addEventListener('change', (event) => {
+      state.retryAfter = clampRetryAfter(event.target.value);
+      els.retryAfterInput.value = String(state.retryAfter);
+      persistRetryAfter();
+    });
+
+    els.applyFinishedBtn.addEventListener('click', () => {
+      const desiredCount = Number.parseInt(els.finishedToInput.value, 10);
+      applyFinishedCount(Number.isNaN(desiredCount) ? 0 : desiredCount);
+    });
+
+    window.nextCard = () => {
+      const queue = getCurrentQueue();
+      if (queue.length > 1) {
+        queue.push(queue.shift());
+        render();
+      }
+    };
+    window.prevCard = () => {
+      const queue = getCurrentQueue();
+      if (queue.length > 1) {
+        queue.unshift(queue.pop());
+        render();
+      }
+    };
 
     async function boot() {
       try {
@@ -1134,7 +1233,8 @@
         const text = await response.text();
         const rows = parseCSV(text);
 
-        const cards = rows.map(row => ({
+        const cards = rows.map((row, index) => ({
+          id: index,
           Sentence: row.Sentence,
           Meaning: row.Meaning,
           Sentence_Translation: row.Sentence_Translation,
@@ -1143,9 +1243,28 @@
           Sentence_Eng_Approx: row.Sentence_Eng_Approx
         })).filter(card => card.Sentence);
 
-        state.decks = chunk(cards, 50);
-        state.deckQueues = state.decks.map(deck => [...deck]);
-        state.currentDeckIndex = 0;
+        state.cards = cards;
+
+        const storedFinished = localStorage.getItem(STORAGE_KEYS.finishedIds);
+        if (storedFinished) {
+          try {
+            const parsed = JSON.parse(storedFinished);
+            if (Array.isArray(parsed)) {
+              state.finishedIds = new Set(parsed);
+            }
+          } catch (error) {
+            console.warn('Failed to parse finished IDs', error);
+          }
+        }
+
+        const storedRetryAfter = localStorage.getItem(STORAGE_KEYS.retryAfter);
+        if (storedRetryAfter) {
+          state.retryAfter = clampRetryAfter(storedRetryAfter);
+        }
+
+        els.retryAfterInput.value = String(state.retryAfter);
+        rebuildQueues();
+        updateFinishedInput();
         render();
       } catch (err) {
         console.error('Failed to load sentences.csv', err);
