@@ -695,6 +695,14 @@
       window.speechSynthesis.speak(utter);
     }
 
+    function normalizeWordForSpeech(text) {
+      const trimmed = text?.trim();
+      if (trimmed === 'à') {
+        return 'a';
+      }
+      return text;
+    }
+
     // --- Word Navigation (Sliding) ---
     window.navWord = (dir) => {
       event.stopPropagation();
@@ -870,7 +878,8 @@
       backSpeaker.textContent = '🔊';
       backSpeaker.onclick = (event) => {
         event.stopPropagation();
-        speak(word.base || word.rawWord);
+        const speechText = normalizeWordForSpeech(word.base || word.rawWord);
+        speak(speechText);
       };
       header.appendChild(backSpeaker);
 
