@@ -733,7 +733,8 @@
       const newCard = createWordCardElement(word);
 
       if (!word) {
-        els.wordCardContainer.innerHTML = '<div class="mini-card"><div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ccc">All words are complete!</div></div>';
+        const completionMessage = getWordCompletionMessage();
+        els.wordCardContainer.innerHTML = `<div class="mini-card"><div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ccc">${completionMessage}</div></div>`;
         return;
       }
 
@@ -771,6 +772,12 @@
         newCard.style.transform = '';
         updateMainCardHeight();
       }, duration);
+    }
+
+    function getWordCompletionMessage() {
+      return state.wordReinserted
+        ? 'all the words have been worked there'
+        : 'All words are successfully complete on your first try!';
     }
 
     function createWordCardElement(word) {
@@ -1094,9 +1101,7 @@
       }
 
       if (!queue.length) {
-        const message = state.wordReinserted
-          ? "I've worked them."
-          : "I've successfully learnt all individual words for this card.";
+        const message = getWordCompletionMessage();
         els.wordStatus.textContent = message;
       }
 
