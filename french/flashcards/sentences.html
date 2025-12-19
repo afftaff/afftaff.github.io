@@ -959,7 +959,8 @@
         const merged = [];
         const hasElision = (word) => {
           if (!word) return false;
-          const trimmed = word.replace(/[)\]"”’».,;:!?…]+$/g, '');
+          const baseWord = computeBase(word);
+          const trimmed = baseWord.replace(/["”’».,;:!?…]+$/g, '');
           return /['’]$/.test(trimmed);
         };
 
