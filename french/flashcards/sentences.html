@@ -670,7 +670,7 @@
     const WORD_DECK_SIZES = WORD_DECK_MODES.reduce((acc, mode) => {
       acc[mode.id] = mode.size;
       return acc;
-    };
+    }, {});
 
     const state = {
       cards: [],
