@@ -149,8 +149,8 @@
     }
 
     /* Position specific label groups */
-    .lane-text.tense { left: var(--gate-a-pos); color: var(--warning); }
-    .lane-text.meaning { left: var(--gate-b-pos); color: var(--accent); }
+    .lane-text.meaning { left: var(--gate-a-pos); color: var(--accent); }
+    .lane-text.tense { left: var(--gate-b-pos); color: var(--warning); }
     .lane-text.person { left: var(--gate-c-pos); color: #e5e7eb; }
 
     /* Hiding states (applied to parent .lanes) */
@@ -177,8 +177,8 @@
       z-index: 5;
     }
 
-    #gate-a { left: var(--gate-a-pos); background: var(--warning); box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
-    #gate-b { left: var(--gate-b-pos); background: var(--accent); box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
+    #gate-a { left: var(--gate-a-pos); background: var(--accent); box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
+    #gate-b { left: var(--gate-b-pos); background: var(--warning); box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
     #gate-c { left: var(--gate-c-pos); background: #e5e7eb; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
 
     .gate-label {
@@ -195,8 +195,8 @@
       letter-spacing: 0.05em;
     }
 
-    #gate-a-label { left: var(--gate-a-pos); background: var(--warning); color: #000; }
-    #gate-b-label { left: var(--gate-b-pos); background: var(--accent); color: #082f49; }
+    #gate-a-label { left: var(--gate-a-pos); background: var(--accent); color: #082f49; }
+    #gate-b-label { left: var(--gate-b-pos); background: var(--warning); color: #000; }
     #gate-c-label { left: var(--gate-c-pos); background: #e5e7eb; color: #000; }
 
     .gate.stamped { background: var(--success); box-shadow: 0 0 20px rgba(34, 197, 94, 0.6); }
@@ -248,7 +248,7 @@
 <body>
   <header>
     <h1>French Conjugation Stave</h1>
-    <p class="lead">Pass the Tense Gate first (Right), then the Infinitive Meaning Gate (Middle), and finally the Person Gate (Left).</p>
+    <p class="lead">Pass the Infinitive Meaning Gate first (Right), then the Tense Gate (Middle), and finally the Person Gate (Left).</p>
   </header>
 
   <main>
@@ -271,7 +271,7 @@
       <div class="stats">
         <div>Lives: <strong id="lives-display">3</strong></div>
         <div>Score: <strong id="score-display">0</strong></div>
-        <div>Target: <strong id="gate-display" style="color:var(--accent)">Tense Gate</strong></div>
+        <div>Target: <strong id="gate-display" style="color:var(--accent)">Meaning Gate</strong></div>
       </div>
       
       <p id="message" class="message">Load verb data to begin.</p>
@@ -283,10 +283,10 @@
         
         <!-- Gates -->
         <div class="gate" id="gate-a"></div>
-        <div class="gate-label" id="gate-a-label">TENSE</div>
+        <div class="gate-label" id="gate-a-label">INFINITIVE MEANING</div>
         
         <div class="gate" id="gate-b"></div>
-        <div class="gate-label" id="gate-b-label">INFINITIVE MEANING</div>
+        <div class="gate-label" id="gate-b-label">TENSE</div>
 
         <div class="gate" id="gate-c"></div>
         <div class="gate-label" id="gate-c-label">PERSON</div>
@@ -331,8 +331,8 @@
       token: null,
       laneIndex: 2, 
       x: 0,
-      gateA: 0, // Tense (Right)
-      gateB: 0, // Meaning (Middle)
+      gateA: 0, // Meaning (Right)
+      gateB: 0, // Tense (Middle)
       gateC: 0, // Person (Left)
       gateAReached: false,
       gateBReached: false,
@@ -389,7 +389,7 @@
 
     function resizeGates() {
       const w = els.stave.getBoundingClientRect().width;
-      // Define positions (Tense is Right/First, Meaning is Middle, Person is Left/Last)
+      // Define positions (Meaning is Right/First, Tense is Middle, Person is Left/Last)
       state.gateA = w * 0.70;
       state.gateB = w * 0.50;
       state.gateC = w * 0.30;
@@ -540,12 +540,12 @@
         state.gateCReached = false;
         
         // Reset Visuals
-        els.lanes.className = "lanes"; // Removes .passed-tense .passed-meaning .passed-person
+        els.lanes.className = "lanes"; // Removes .passed-meaning .passed-tense .passed-person
         els.gateA.classList.remove("stamped");
         els.gateB.classList.remove("stamped");
         els.gateC.classList.remove("stamped");
-        els.target.textContent = "Tense Gate";
-        els.target.style.color = "var(--warning)";
+        els.target.textContent = "Meaning Gate";
+        els.target.style.color = "var(--accent)";
         clearLaneHighlights();
         
         positionToken();
@@ -622,37 +622,37 @@
     }
 
     function checkGate(type) {
-        if(type === 'tense') {
-            const correctLane = state.token.tenseLaneIndex;
-            if(state.laneIndex === correctLane) {
-                // Success Tense
-                els.gateA.classList.add("stamped");
-                els.msg.textContent = "Tense Good! Now Match Infinitive Meaning.";
-                els.msg.className = "message success";
-                els.lanes.classList.add("passed-tense"); // Hides Tense labels
-                els.target.textContent = "Meaning Gate";
-                els.target.style.color = "var(--accent)";
-                return true;
-            } else {
-                highlightLaneLabels("tense", state.laneIndex, correctLane);
-                handleFail(`Wrong Tense! Expected: ${state.token.tense}`);
-                return false;
-            }
-        } 
-        else if(type === 'meaning') {
+        if(type === 'meaning') {
             const correctLane = state.meaningLaneIndex;
             if(state.laneIndex === correctLane) {
-                els.gateB.classList.add("stamped");
-                els.msg.textContent = "Meaning Good! Now Match Person.";
+                // Success Meaning
+                els.gateA.classList.add("stamped");
+                els.msg.textContent = "Meaning Good! Now Match Tense.";
                 els.msg.className = "message success";
                 els.lanes.classList.add("passed-meaning"); // Hides Meaning labels
-                els.target.textContent = "Person Gate";
-                els.target.style.color = "#fff";
+                els.target.textContent = "Tense Gate";
+                els.target.style.color = "var(--warning)";
                 return true;
             } else {
                 const expectedMeaning = state.token.meaning || "Unknown meaning";
                 highlightLaneLabels("meaning", state.laneIndex, correctLane);
                 handleFail(`Wrong Meaning! Expected: ${expectedMeaning}`);
+                return false;
+            }
+        } 
+        else if(type === 'tense') {
+            const correctLane = state.token.tenseLaneIndex;
+            if(state.laneIndex === correctLane) {
+                els.gateB.classList.add("stamped");
+                els.msg.textContent = "Tense Good! Now Match Person.";
+                els.msg.className = "message success";
+                els.lanes.classList.add("passed-tense"); // Hides Tense labels
+                els.target.textContent = "Person Gate";
+                els.target.style.color = "#fff";
+                return true;
+            } else {
+                highlightLaneLabels("tense", state.laneIndex, correctLane);
+                handleFail(`Wrong Tense! Expected: ${state.token.tense}`);
                 return false;
             }
         }
@@ -689,17 +689,17 @@
             // Right-to-Left: Token X decreases.
             // Gate A is at x=66%, Gate B is at x=33%. Token starts at x=100%+.
             
-            // Check Tense Gate (First interaction)
+            // Check Meaning Gate (First interaction)
             // Token left edge passes Gate A
             if(!state.gateAReached && state.x <= state.gateA) {
                 state.gateAReached = true;
-                if(!checkGate('tense')) return requestAnimationFrame(animate);
+                if(!checkGate('meaning')) return requestAnimationFrame(animate);
             }
 
-            // Check Person Gate (Second interaction)
+            // Check Tense Gate (Second interaction)
             if(state.gateAReached && !state.gateBReached && state.x <= state.gateB) {
                 state.gateBReached = true;
-                if(!checkGate('meaning')) return requestAnimationFrame(animate);
+                if(!checkGate('tense')) return requestAnimationFrame(animate);
             }
 
             // Check Person Gate (Third interaction)
