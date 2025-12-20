@@ -546,8 +546,6 @@
       <button class="nav-btn" onclick="nextCard()">&#10095;</button>
     </div>
     <div class="nav-row">
-      <label class="inline-label" for="retryAfterInput">Retry after:</label>
-      <input class="nav-input" id="retryAfterInput" type="number" min="1" value="2">
       <label class="inline-label" for="finishedToInput">Finished to:</label>
       <input class="nav-input" id="finishedToInput" type="number" min="0" value="0">
       <button class="nav-btn" id="applyFinishedBtn">Apply</button>
@@ -611,6 +609,14 @@
             <div class="shuffle-row">
               <button class="shuffle-btn" id="btnShuffleWords">Shuffle words</button>
             </div>
+            <div class="shuffle-row">
+              <span class="inline-label">Word deck</span>
+              <select class="nav-input" id="wordDeckSelect" aria-label="Word deck mode">
+                <option value="single">Single mode</option>
+                <option value="merge2">Merge by 2</option>
+                <option value="merge3">Merge by 3</option>
+              </select>
+            </div>
 
             <!-- Full Width Card Scene -->
             <div class="word-scene" id="wordCardContainer">
@@ -626,6 +632,7 @@
             </div>
 
             <div class="word-status" id="wordStatus"></div>
+            <div class="word-status" id="wordCountdown"></div>
           </div>
 
         </div>
@@ -638,8 +645,23 @@
   <script>
     // --- State Management ---
     const STORAGE_KEYS = {
-      finishedIds: 'sentencesFinishedIds',
-      retryAfter: 'sentencesRetryAfter'
+      finishedIds: 'sentencesFinishedIds'
+    };
+
+    const WORD_DECK_MODES = [
+      { id: 'single', label: 'Single mode', size: 1 },
+      { id: 'merge2', label: 'Merge by 2', size: 2 },
+      { id: 'merge3', label: 'Merge by 3', size: 3 }
+    ];
+
+    const WORD_DECK_LABELS = WORD_DECK_MODES.reduce((acc, mode) => {
+      acc[mode.id] = mode.label;
+      return acc;
+    }, {});
+
+    const WORD_DECK_SIZES = WORD_DECK_MODES.reduce((acc, mode) => {
+      acc[mode.id] = mode.size;
+      return acc;
     };
 
     const state = {
@@ -648,11 +670,15 @@
       finishedQueue: [],
       finishedIds: new Set(),
       view: 'active',
-      retryAfter: 2,
       currentWordIndex: 0,
       currentWordsList: [],
       currentWordsQueue: [],
-      wordReinserted: false
+      wordReinserted: false,
+      wordDeckMode: 'single',
+      wordDecks: {},
+      completedWordDecks: new Set(),
+      wordCountdownTimer: null,
+      wordCountdownNextMode: null
     };
 
     const els = {
@@ -672,11 +698,12 @@
       btnShuffleWords: document.getElementById('btnShuffleWords'),
       wordCounter: document.getElementById('wordCounter'),
       wordStatus: document.getElementById('wordStatus'),
+      wordCountdown: document.getElementById('wordCountdown'),
       backContentScroll: document.querySelector('.back-content-scroll'),
-      retryAfterInput: document.getElementById('retryAfterInput'),
       finishedToInput: document.getElementById('finishedToInput'),
       applyFinishedBtn: document.getElementById('applyFinishedBtn'),
-      sentenceActions: document.getElementById('sentenceActions')
+      sentenceActions: document.getElementById('sentenceActions'),
+      wordDeckSelect: document.getElementById('wordDeckSelect')
     };
 
     // --- Interaction Logic ---
@@ -736,10 +763,6 @@
       localStorage.setItem(STORAGE_KEYS.finishedIds, JSON.stringify([...state.finishedIds]));
     }
 
-    function persistRetryAfter() {
-      localStorage.setItem(STORAGE_KEYS.retryAfter, String(state.retryAfter));
-    }
-
     function applyFinishedCount(count) {
       const safeCount = Math.max(0, Math.min(count, state.cards.length));
       state.finishedIds = new Set(state.cards.slice(0, safeCount).map(card => card.id));
@@ -766,6 +789,17 @@
         return 'a';
       }
       return text;
+    }
+
+    function clearWordCountdown() {
+      if (state.wordCountdownTimer) {
+        clearInterval(state.wordCountdownTimer);
+        state.wordCountdownTimer = null;
+      }
+      state.wordCountdownNextMode = null;
+      if (els.wordCountdown) {
+        els.wordCountdown.textContent = '';
+      }
     }
 
     // --- Word Navigation (Sliding) ---
@@ -801,6 +835,7 @@
       els.btnShuffleWords.disabled = total <= 1;
       if (total > 0) {
         els.wordStatus.textContent = '';
+        clearWordCountdown();
       }
 
       const newCard = createWordCardElement(word);
@@ -975,6 +1010,118 @@
       return cardEl;
     }
 
+    function buildMergedWordCard(words) {
+      const joinWith = (key, joiner) => {
+        return words.map(word => word[key]).filter(val => val && val.trim()).join(joiner);
+      };
+
+      const wordText = words.map(word => word.base || word.rawWord).filter(Boolean).join(' ');
+
+      return {
+        rawWord: wordText,
+        base: wordText,
+        meaning: joinWith('meaning', ' & '),
+        pos: joinWith('pos', ' & '),
+        ipa: joinWith('ipa', ' & '),
+        elision: joinWith('elision', ' & '),
+        article: ''
+      };
+    }
+
+    function buildWordDeck(words, size) {
+      if (size === 1) return words;
+      const merged = [];
+      for (let i = 0; i < words.length; i += size) {
+        const group = words.slice(i, i + size);
+        if (group.length) {
+          merged.push(buildMergedWordCard(group));
+        }
+      }
+      return merged;
+    }
+
+    function initWordDecks(words) {
+      state.wordDecks = {};
+      state.completedWordDecks = new Set();
+      WORD_DECK_MODES.forEach(mode => {
+        const deckList = buildWordDeck(words, mode.size);
+        state.wordDecks[mode.id] = {
+          list: deckList,
+          queue: [...deckList],
+          reinserted: false
+        };
+      });
+      state.wordDeckMode = 'single';
+      state.currentWordsQueue = state.wordDecks.single.queue;
+      state.wordReinserted = false;
+      if (els.wordDeckSelect) {
+        els.wordDeckSelect.value = state.wordDeckMode;
+      }
+      clearWordCountdown();
+    }
+
+    function getNextAvailableWordDeck(fromMode) {
+      const startIndex = WORD_DECK_MODES.findIndex(mode => mode.id === fromMode);
+      for (let offset = 1; offset <= WORD_DECK_MODES.length; offset++) {
+        const nextIndex = (startIndex + offset) % WORD_DECK_MODES.length;
+        const nextMode = WORD_DECK_MODES[nextIndex].id;
+        if (!state.completedWordDecks.has(nextMode)) {
+          return nextMode;
+        }
+      }
+      return null;
+    }
+
+    function startWordDeckCountdown(nextMode) {
+      clearWordCountdown();
+      if (!nextMode) return;
+      state.wordCountdownNextMode = nextMode;
+      let remaining = 5;
+      if (els.wordCountdown) {
+        els.wordCountdown.textContent = `...loading ${WORD_DECK_LABELS[nextMode]} in ${remaining}`;
+      }
+      state.wordCountdownTimer = setInterval(() => {
+        remaining -= 1;
+        if (remaining <= 0) {
+          clearWordCountdown();
+          setWordDeckMode(nextMode, { auto: true });
+          return;
+        }
+        if (els.wordCountdown) {
+          els.wordCountdown.textContent = `...loading ${WORD_DECK_LABELS[nextMode]} in ${remaining}`;
+        }
+      }, 1000);
+    }
+
+    function handleWordDeckCompletion() {
+      state.completedWordDecks.add(state.wordDeckMode);
+      const nextMode = getNextAvailableWordDeck(state.wordDeckMode);
+      if (nextMode) {
+        startWordDeckCountdown(nextMode);
+      } else {
+        clearWordCountdown();
+      }
+    }
+
+    function setWordDeckMode(mode, options = {}) {
+      const deck = state.wordDecks[mode];
+      if (!deck) return;
+      state.wordDeckMode = mode;
+      state.currentWordsQueue = deck.queue;
+      state.wordReinserted = deck.reinserted;
+      if (els.wordDeckSelect) {
+        els.wordDeckSelect.value = mode;
+      }
+      if (!options.auto) {
+        clearWordCountdown();
+      }
+      if (!state.currentWordsQueue.length && state.completedWordDecks.has(mode)) {
+        const message = getWordCompletionMessage();
+        els.wordStatus.textContent = message;
+      }
+      transitionToWord(0);
+    }
+
     // --- Rendering Logic ---
 
     function render() {
@@ -1002,6 +1149,7 @@
         els.txtPronunciationApprox.textContent = '-';
         els.txtTranslation.textContent = '-';
         state.currentWordsQueue = [];
+        initWordDecks([]);
         els.wordStatus.textContent = '';
         transitionToWord(0);
         return;
@@ -1013,8 +1161,7 @@
       els.txtTranslation.textContent = card.Sentence_Translation || "-";
 
       state.currentWordsList = parseBreakdown(card.Sentence_Breakdown, card.Sentence);
-      state.currentWordsQueue = [...state.currentWordsList];
-      state.wordReinserted = false;
+      initWordDecks(state.currentWordsList);
       transitionToWord(0);
     }
 
@@ -1142,19 +1289,12 @@
       });
     }
 
-    function clampRetryAfter(value) {
-      const parsed = Number.parseInt(value, 10);
-      if (Number.isNaN(parsed)) return 1;
-      return Math.max(1, parsed);
-    }
-
     window.retrySentence = () => {
       if (state.view !== 'active') return;
       const queue = state.activeQueue;
       if (!queue.length) return;
       const card = queue.shift();
-      const insertOffset = Math.min(state.retryAfter, queue.length);
-      queue.splice(insertOffset, 0, card);
+      queue.unshift(card);
       render();
     };
 
@@ -1191,6 +1331,16 @@
       if (!queue.length) {
         const message = getWordCompletionMessage();
         els.wordStatus.textContent = message;
+        const deck = state.wordDecks[state.wordDeckMode];
+        if (deck) {
+          deck.reinserted = state.wordReinserted;
+        }
+        handleWordDeckCompletion();
+      } else {
+        const deck = state.wordDecks[state.wordDeckMode];
+        if (deck) {
+          deck.reinserted = state.wordReinserted;
+        }
       }
 
       transitionToWord(0);
@@ -1201,11 +1351,11 @@
       render();
     });
 
-    els.retryAfterInput.addEventListener('change', (event) => {
-      state.retryAfter = clampRetryAfter(event.target.value);
-      els.retryAfterInput.value = String(state.retryAfter);
-      persistRetryAfter();
-    });
+    if (els.wordDeckSelect) {
+      els.wordDeckSelect.addEventListener('change', (event) => {
+        setWordDeckMode(event.target.value);
+      });
+    }
 
     els.applyFinishedBtn.addEventListener('click', () => {
       const desiredCount = Number.parseInt(els.finishedToInput.value, 10);
@@ -1257,12 +1407,6 @@
           }
         }
 
-        const storedRetryAfter = localStorage.getItem(STORAGE_KEYS.retryAfter);
-        if (storedRetryAfter) {
-          state.retryAfter = clampRetryAfter(storedRetryAfter);
-        }
-
-        els.retryAfterInput.value = String(state.retryAfter);
         rebuildQueues();
         updateFinishedInput();
         render();
