@@ -292,7 +292,7 @@
   </main>
 
   <script>
-    const DATA_PATH = "../dir/words/bignounlist.json";
+    const DATA_PATH = "../dir/words/BigVerbList.json";
 
     // Data Config
     const PERSON_LABELS = ["JE", "TU", "IL / ELLE", "NOUS", "VOUS", "ILS / ELLES"];
@@ -378,19 +378,63 @@
 
     // --- GAME LOGIC ---
 
-    function buildVerbEntries(nouns) {
+    const PERSON_INDEX = new Map([
+      ["1st person singular", 0],
+      ["2nd person singular", 1],
+      ["3rd person singular", 2],
+      ["1st person plural", 3],
+      ["2nd person plural", 4],
+      ["3rd person plural", 5]
+    ]);
+
+    const TENSE_ALIASES = new Map([
+      ["Present", "PRÉSENT"],
+      ["Présent", "PRÉSENT"],
+      ["Imperfect", "IMPARFAIT"],
+      ["Imparfait", "IMPARFAIT"],
+      ["Perfect (Passé Composé)", "PASSÉ COMPOSÉ"],
+      ["Passé composé", "PASSÉ COMPOSÉ"]
+    ]);
+
+    function buildVerbEntries(data) {
       const entries = [];
-      nouns.forEach((entry, index) => {
-        // Distribute strictly across valid tense rows (1,2,3) and all person rows (0-5)
+      data.forEach((entry, index) => {
+        if (entry && Array.isArray(entry.conjugations)) {
+          entry.conjugations.forEach((conjugation) => {
+            if (!conjugation || conjugation.mood !== "Indicative") return;
+            const tenseLabel = TENSE_ALIASES.get(conjugation.tense);
+            if (!tenseLabel) return;
+            const tenseData = TENSE_DATA.find((tense) => tense.label === tenseLabel);
+            if (!tenseData) return;
+            const personIndex = PERSON_INDEX.get(conjugation.person);
+            if (personIndex === undefined) return;
+            const conjugated = (conjugation.conjugated_form || "").trim();
+            if (!conjugated) return;
+
+            entries.push({
+              verb: entry.verb || conjugated,
+              conjugated_form: conjugated,
+              tense: tenseData.label,
+              personIndex,
+              tenseLaneIndex: tenseData.laneIndex
+            });
+          });
+          return;
+        }
+
+        // Fallback: distribute entries across tense/person lanes
         const personIndex = index % 6;
-        const tenseIdx = Math.floor(index / 6) % 3; // 0, 1, 2
-        
+        const tenseIdx = Math.floor(index / 6) % 3;
+        const fallbackLabel = TENSE_DATA[tenseIdx].label;
+        const fallbackVerb = entry?.french || entry?.verb || String(entry || "").trim();
+        if (!fallbackVerb) return;
+
         entries.push({
-          verb: entry.french,
-          conjugated_form: entry.french,
-          tense: TENSE_DATA[tenseIdx].tense,
-          personIndex: personIndex, // 0-5
-          tenseLaneIndex: TENSE_DATA[tenseIdx].laneIndex // 1, 2, or 3
+          verb: fallbackVerb,
+          conjugated_form: fallbackVerb,
+          tense: fallbackLabel,
+          personIndex,
+          tenseLaneIndex: TENSE_DATA[tenseIdx].laneIndex
         });
       });
       return entries;
