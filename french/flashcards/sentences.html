@@ -127,7 +127,11 @@
       position: relative;
       transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), height 0.6s ease;
       transform-style: preserve-3d;
-      cursor: pointer;
+      cursor: default;
+    }
+
+    .main-card.card-refresh {
+      animation: cardRefresh 0.35s ease;
     }
 
     .main-card.is-flipped {
@@ -149,7 +153,7 @@
 
     /* --- Main Card FRONT --- */
     .card-face.front {
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -529,6 +533,10 @@
     .chip.is-base .chip-hint { display: block; }
 
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes cardRefresh {
+      0% { opacity: 0.6; filter: blur(1px); }
+      100% { opacity: 1; filter: blur(0); }
+    }
 
   </style>
 </head>
@@ -719,16 +727,6 @@
       playCurrentAudio();
     };
 
-    els.mainCard.addEventListener('click', (e) => {
-      if (e.target.closest('.info-chip') || 
-          e.target.closest('.carousel-controls') || 
-          e.target.closest('button')) return;
-
-      if (els.mainCard.classList.contains('is-flipped')) return; 
-      els.mainCard.classList.add('is-flipped');
-      updateMainCardHeight();
-    });
-
     els.mainSpeaker.addEventListener('click', (e) => {
       e.stopPropagation();
       playCurrentAudio();
@@ -740,14 +738,17 @@
     }
 
     function updateMainCardHeight() {
-      if (!els.mainCard.classList.contains('is-flipped')) {
-        els.mainCard.style.height = '';
-        return;
-      }
       if (!els.backContentScroll) return;
       requestAnimationFrame(() => {
         els.mainCard.style.height = `${els.backContentScroll.scrollHeight}px`;
       });
+    }
+
+    function animateMainCardRefresh() {
+      if (!els.mainCard) return;
+      els.mainCard.classList.remove('card-refresh');
+      void els.mainCard.offsetWidth;
+      els.mainCard.classList.add('card-refresh');
     }
 
     function speak(text) {
@@ -1127,7 +1128,7 @@
     function render() {
       const card = getCurrentCard();
 
-      els.mainCard.classList.remove('is-flipped');
+      els.mainCard.classList.add('is-flipped');
       document.querySelectorAll('.info-chip').forEach(el => el.classList.remove('is-revealed'));
 
       const currentQueue = getCurrentQueue();
@@ -1152,6 +1153,8 @@
         initWordDecks([]);
         els.wordStatus.textContent = '';
         transitionToWord(0);
+        animateMainCardRefresh();
+        updateMainCardHeight();
         return;
       }
 
@@ -1163,6 +1166,8 @@
       state.currentWordsList = parseBreakdown(card.Sentence_Breakdown, card.Sentence);
       initWordDecks(state.currentWordsList);
       transitionToWord(0);
+      animateMainCardRefresh();
+      updateMainCardHeight();
     }
 
     // --- Data Helpers ---
