@@ -416,7 +416,7 @@
             if (!tenseData) return;
             const personIndex = PERSON_INDEX.get(conjugation.person);
             if (personIndex === undefined) return;
-            const conjugated = (conjugation.conjugated_form || "").trim();
+            const conjugated = extractVerbName(conjugation.conjugated_form || "");
             if (!conjugated) return;
 
             const rawVerbName = entry.verb || conjugated;
@@ -438,9 +438,12 @@
         const fallbackVerb = entry?.french || entry?.verb || String(entry || "").trim();
         if (!fallbackVerb) return;
 
+        const cleanedFallbackVerb = extractVerbName(fallbackVerb);
+        if (!cleanedFallbackVerb) return;
+
         entries.push({
-          verb: extractVerbName(fallbackVerb),
-          conjugated_form: fallbackVerb,
+          verb: cleanedFallbackVerb,
+          conjugated_form: cleanedFallbackVerb,
           tense: fallbackLabel,
           personIndex,
           tenseLaneIndex: TENSE_DATA[tenseIdx].laneIndex
