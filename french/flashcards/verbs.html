@@ -396,6 +396,14 @@
       ["Passé composé", "PASSÉ COMPOSÉ"]
     ]);
 
+    function extractVerbName(raw) {
+      if (!raw) return "";
+      const trimmed = String(raw).trim();
+      if (!trimmed) return "";
+      const parts = trimmed.split(/\s+/);
+      return parts[parts.length - 1];
+    }
+
     function buildVerbEntries(data) {
       const entries = [];
       data.forEach((entry, index) => {
@@ -408,11 +416,12 @@
             if (!tenseData) return;
             const personIndex = PERSON_INDEX.get(conjugation.person);
             if (personIndex === undefined) return;
-            const conjugated = (conjugation.conjugated_form || "").trim();
+            const conjugated = extractVerbName(conjugation.conjugated_form || "");
             if (!conjugated) return;
 
+            const rawVerbName = entry.verb || conjugated;
             entries.push({
-              verb: entry.verb || conjugated,
+              verb: extractVerbName(rawVerbName),
               conjugated_form: conjugated,
               tense: tenseData.label,
               personIndex,
@@ -429,9 +438,12 @@
         const fallbackVerb = entry?.french || entry?.verb || String(entry || "").trim();
         if (!fallbackVerb) return;
 
+        const cleanedFallbackVerb = extractVerbName(fallbackVerb);
+        if (!cleanedFallbackVerb) return;
+
         entries.push({
-          verb: fallbackVerb,
-          conjugated_form: fallbackVerb,
+          verb: cleanedFallbackVerb,
+          conjugated_form: cleanedFallbackVerb,
           tense: fallbackLabel,
           personIndex,
           tenseLaneIndex: TENSE_DATA[tenseIdx].laneIndex
