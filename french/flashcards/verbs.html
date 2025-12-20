@@ -109,6 +109,7 @@
       /* CSS Variables for Gate Positions, updated by JS */
       --gate-a-pos: 66%;
       --gate-b-pos: 33%;
+      --gate-c-pos: 16%;
     }
 
     .lanes {
@@ -149,10 +150,12 @@
 
     /* Position specific label groups */
     .lane-text.tense { left: var(--gate-a-pos); color: var(--warning); }
-    .lane-text.person { left: var(--gate-b-pos); color: #e5e7eb; }
+    .lane-text.meaning { left: var(--gate-b-pos); color: var(--accent); }
+    .lane-text.person { left: var(--gate-c-pos); color: #e5e7eb; }
 
     /* Hiding states (applied to parent .lanes) */
     .lanes.passed-tense .lane-text.tense { opacity: 0; }
+    .lanes.passed-meaning .lane-text.meaning { opacity: 0; }
     .lanes.passed-person .lane-text.person { opacity: 0; }
 
     .lane.correct { background: rgba(34, 197, 94, 0.15); }
@@ -175,7 +178,8 @@
     }
 
     #gate-a { left: var(--gate-a-pos); background: var(--warning); box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
-    #gate-b { left: var(--gate-b-pos); background: #e5e7eb; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
+    #gate-b { left: var(--gate-b-pos); background: var(--accent); box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
+    #gate-c { left: var(--gate-c-pos); background: #e5e7eb; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
 
     .gate-label {
       position: absolute;
@@ -192,7 +196,8 @@
     }
 
     #gate-a-label { left: var(--gate-a-pos); background: var(--warning); color: #000; }
-    #gate-b-label { left: var(--gate-b-pos); background: #e5e7eb; color: #000; }
+    #gate-b-label { left: var(--gate-b-pos); background: var(--accent); color: #082f49; }
+    #gate-c-label { left: var(--gate-c-pos); background: #e5e7eb; color: #000; }
 
     .gate.stamped { background: var(--success); box-shadow: 0 0 20px rgba(34, 197, 94, 0.6); }
     .gate.stamped + .gate-label { background: var(--success); color: #fff; }
@@ -243,7 +248,7 @@
 <body>
   <header>
     <h1>French Conjugation Stave</h1>
-    <p class="lead">Pass the Tense Gate first (Right), then the Person Gate (Left).</p>
+    <p class="lead">Pass the Tense Gate first (Right), then the Infinitive Meaning Gate (Middle), and finally the Person Gate (Left).</p>
   </header>
 
   <main>
@@ -281,7 +286,10 @@
         <div class="gate-label" id="gate-a-label">TENSE</div>
         
         <div class="gate" id="gate-b"></div>
-        <div class="gate-label" id="gate-b-label">PERSON</div>
+        <div class="gate-label" id="gate-b-label">INFINITIVE MEANING</div>
+
+        <div class="gate" id="gate-c"></div>
+        <div class="gate-label" id="gate-c-label">PERSON</div>
         
         <!-- Token -->
         <div class="token" id="token">Loading...</div>
@@ -324,11 +332,14 @@
       laneIndex: 2, 
       x: 0,
       gateA: 0, // Tense (Right)
-      gateB: 0, // Person (Left)
+      gateB: 0, // Meaning (Middle)
+      gateC: 0, // Person (Left)
       gateAReached: false,
       gateBReached: false,
+      gateCReached: false,
       lastTime: null,
-      paused: false
+      paused: false,
+      meanings: []
     };
 
     const els = {
@@ -337,6 +348,7 @@
       token: document.getElementById("token"),
       gateA: document.getElementById("gate-a"),
       gateB: document.getElementById("gate-b"),
+      gateC: document.getElementById("gate-c"),
       msg: document.getElementById("message"),
       score: document.getElementById("score-display"),
       lives: document.getElementById("lives-display"),
@@ -364,21 +376,28 @@
         tLabel.className = "lane-text tense";
         tLabel.textContent = TENSE_LABELS_MAP[i] || ""; // Empty if not a tense row
         
+        const mLabel = document.createElement("span");
+        mLabel.className = "lane-text meaning";
+        mLabel.textContent = "";
+
         lane.appendChild(pLabel);
         lane.appendChild(tLabel);
+        lane.appendChild(mLabel);
         els.lanes.appendChild(lane);
       }
     }
 
     function resizeGates() {
       const w = els.stave.getBoundingClientRect().width;
-      // Define positions (Tense is Right/First, Person is Left/Second)
-      state.gateA = w * 0.66;
-      state.gateB = w * 0.30;
+      // Define positions (Tense is Right/First, Meaning is Middle, Person is Left/Last)
+      state.gateA = w * 0.70;
+      state.gateB = w * 0.50;
+      state.gateC = w * 0.30;
       
       // Update CSS variables so CSS handles label positioning
       els.stave.style.setProperty('--gate-a-pos', `${state.gateA}px`);
       els.stave.style.setProperty('--gate-b-pos', `${state.gateB}px`);
+      els.stave.style.setProperty('--gate-c-pos', `${state.gateC}px`);
     }
 
     // --- GAME LOGIC ---
@@ -409,9 +428,21 @@
       return parts[parts.length - 1];
     }
 
+    function getInfinitiveMeaning(entry) {
+      if (!entry) return "";
+      if (Array.isArray(entry.definitions) && entry.definitions.length) {
+        return entry.definitions[0];
+      }
+      const infinitive = entry.conjugations?.find(
+        (conjugation) => conjugation?.mood === "Infinitive" && conjugation?.tense === "Present"
+      );
+      return infinitive?.word_en_1 || infinitive?.word_en_2 || "";
+    }
+
     function buildVerbEntries(data) {
       const entries = [];
       data.forEach((entry, index) => {
+        const infinitiveMeaning = getInfinitiveMeaning(entry);
         if (entry && Array.isArray(entry.conjugations)) {
           entry.conjugations.forEach((conjugation) => {
             if (!conjugation || conjugation.mood !== "Indicative") return;
@@ -430,7 +461,8 @@
               conjugated_form: conjugated,
               tense: tenseData.label,
               personIndex,
-              tenseLaneIndex: tenseData.laneIndex
+              tenseLaneIndex: tenseData.laneIndex,
+              meaning: infinitiveMeaning
             });
           });
           return;
@@ -451,16 +483,43 @@
           conjugated_form: cleanedFallbackVerb,
           tense: fallbackLabel,
           personIndex,
-          tenseLaneIndex: TENSE_DATA[tenseIdx].laneIndex
+          tenseLaneIndex: TENSE_DATA[tenseIdx].laneIndex,
+          meaning: infinitiveMeaning || cleanedFallbackVerb
         });
       });
       return entries;
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function buildMeaningChoices(correctMeaning) {
+      const pool = state.meanings.filter((meaning) => meaning && meaning !== correctMeaning);
+      shuffle(pool);
+      const choices = [correctMeaning, ...pool.slice(0, 5)];
+      return shuffle(choices);
+    }
+
+    function setMeaningLabels(entry) {
+      const meanings = buildMeaningChoices(entry.meaning);
+      const lanes = els.lanes.querySelectorAll(".lane");
+      lanes.forEach((lane, index) => {
+        const meaningLabel = lane.querySelector(".lane-text.meaning");
+        if (meaningLabel) meaningLabel.textContent = meanings[index] || "";
+      });
+      state.meaningLaneIndex = meanings.indexOf(entry.meaning);
     }
 
     function pickToken() {
         if(!state.data.length) return;
         const entry = state.data[Math.floor(Math.random() * state.data.length)];
         state.token = entry;
+        setMeaningLabels(entry);
         
         const showInf = document.getElementById("show-infinitive").checked;
         els.token.textContent = showInf 
@@ -478,11 +537,13 @@
         
         state.gateAReached = false;
         state.gateBReached = false;
+        state.gateCReached = false;
         
         // Reset Visuals
-        els.lanes.className = "lanes"; // Removes .passed-tense .passed-person
+        els.lanes.className = "lanes"; // Removes .passed-tense .passed-meaning .passed-person
         els.gateA.classList.remove("stamped");
         els.gateB.classList.remove("stamped");
+        els.gateC.classList.remove("stamped");
         els.target.textContent = "Tense Gate";
         els.target.style.color = "var(--warning)";
         clearLaneHighlights();
@@ -544,7 +605,11 @@
 
     function highlightLaneLabels(type, wrongIndex, correctIndex) {
         clearLaneHighlights();
-        const selector = type === "tense" ? ".lane-text.tense" : ".lane-text.person";
+        const selector = type === "tense"
+          ? ".lane-text.tense"
+          : type === "meaning"
+            ? ".lane-text.meaning"
+            : ".lane-text.person";
         const lanes = els.lanes.querySelectorAll(".lane");
         const wrongLabel = lanes[wrongIndex]?.querySelector(selector);
         const correctLabel = lanes[correctIndex]?.querySelector(selector);
@@ -562,11 +627,11 @@
             if(state.laneIndex === correctLane) {
                 // Success Tense
                 els.gateA.classList.add("stamped");
-                els.msg.textContent = "Tense Good! Now Match Person.";
+                els.msg.textContent = "Tense Good! Now Match Infinitive Meaning.";
                 els.msg.className = "message success";
                 els.lanes.classList.add("passed-tense"); // Hides Tense labels
-                els.target.textContent = "Person Gate";
-                els.target.style.color = "#fff";
+                els.target.textContent = "Meaning Gate";
+                els.target.style.color = "var(--accent)";
                 return true;
             } else {
                 highlightLaneLabels("tense", state.laneIndex, correctLane);
@@ -574,11 +639,28 @@
                 return false;
             }
         } 
+        else if(type === 'meaning') {
+            const correctLane = state.meaningLaneIndex;
+            if(state.laneIndex === correctLane) {
+                els.gateB.classList.add("stamped");
+                els.msg.textContent = "Meaning Good! Now Match Person.";
+                els.msg.className = "message success";
+                els.lanes.classList.add("passed-meaning"); // Hides Meaning labels
+                els.target.textContent = "Person Gate";
+                els.target.style.color = "#fff";
+                return true;
+            } else {
+                const expectedMeaning = state.token.meaning || "Unknown meaning";
+                highlightLaneLabels("meaning", state.laneIndex, correctLane);
+                handleFail(`Wrong Meaning! Expected: ${expectedMeaning}`);
+                return false;
+            }
+        }
         else if(type === 'person') {
             const correctLane = state.token.personIndex;
             if(state.laneIndex === correctLane) {
                 // Success Person
-                els.gateB.classList.add("stamped");
+                els.gateC.classList.add("stamped");
                 els.msg.textContent = "Person Good!";
                 els.msg.className = "message success";
                 els.lanes.classList.add("passed-person"); // Hides Person labels
@@ -617,11 +699,17 @@
             // Check Person Gate (Second interaction)
             if(state.gateAReached && !state.gateBReached && state.x <= state.gateB) {
                 state.gateBReached = true;
+                if(!checkGate('meaning')) return requestAnimationFrame(animate);
+            }
+
+            // Check Person Gate (Third interaction)
+            if(state.gateBReached && !state.gateCReached && state.x <= state.gateC) {
+                state.gateCReached = true;
                 if(!checkGate('person')) return requestAnimationFrame(animate);
             }
 
             // Check Finish (Left edge)
-            if(state.gateBReached && state.x < -220) {
+            if(state.gateCReached && state.x < -220) {
                 state.score++;
                 els.score.textContent = state.score;
                 els.token.classList.add("success");
@@ -674,12 +762,18 @@
     
     fetch(DATA_PATH).then(r => r.json()).then(data => {
         state.data = buildVerbEntries(data);
+        state.meanings = Array.from(
+          new Set(state.data.map((entry) => entry.meaning).filter(Boolean))
+        );
         els.msg.textContent = `Loaded ${state.data.length} verbs. Ready.`;
     }).catch(e => {
         console.warn("Using mock data");
         const mock = [];
         for(let i=0; i<18; i++) mock.push({french: "mange (mock)"});
         state.data = buildVerbEntries(mock);
+        state.meanings = Array.from(
+          new Set(state.data.map((entry) => entry.meaning).filter(Boolean))
+        );
         els.msg.textContent = "Loaded mock data.";
     });
 
