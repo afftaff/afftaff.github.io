@@ -66,7 +66,7 @@
 
     label { font-size: 0.85rem; color: var(--muted); display: block; margin-bottom: 6px; }
 
-    input[type="number"], input[type="range"] {
+    input[type="number"], input[type="range"], select {
       width: 100%;
       border-radius: 10px;
       border: 1px solid var(--border);
@@ -262,6 +262,17 @@
         <input id="speed" type="range" min="40" max="250" value="100" />
       </div>
       <div>
+        <label for="deck-mode">Deck Mode</label>
+        <select id="deck-mode">
+          <option value="random">Random 50-card decks</option>
+          <option value="verb">Single-verb decks</option>
+        </select>
+      </div>
+      <div>
+        <label for="deck-select">Deck</label>
+        <select id="deck-select"></select>
+      </div>
+      <div>
         <label><input id="show-infinitive" type="checkbox" checked /> Show Infinitive</label>
         <button id="start">Start Run</button>
       </div>
@@ -271,6 +282,7 @@
       <div class="stats">
         <div>Lives: <strong id="lives-display">3</strong></div>
         <div>Score: <strong id="score-display">0</strong></div>
+        <div>Deck: <strong id="deck-display">Random Deck</strong></div>
         <div>Target: <strong id="gate-display" style="color:var(--accent)">Meaning Gate</strong></div>
       </div>
       
@@ -339,7 +351,13 @@
       gateCReached: false,
       lastTime: null,
       paused: false,
-      meanings: []
+      meanings: [],
+      deckMode: "random",
+      deckIndex: 0,
+      decks: {
+        random: [],
+        verb: []
+      }
     };
 
     const els = {
@@ -353,7 +371,10 @@
       score: document.getElementById("score-display"),
       lives: document.getElementById("lives-display"),
       target: document.getElementById("gate-display"),
-      startBtn: document.getElementById("start")
+      startBtn: document.getElementById("start"),
+      deckMode: document.getElementById("deck-mode"),
+      deckSelect: document.getElementById("deck-select"),
+      deckDisplay: document.getElementById("deck-display")
     };
 
     let highlightTimeoutId = null;
@@ -490,6 +511,42 @@
       return entries;
     }
 
+    function buildRandomDecks(entries, size) {
+      const shuffled = shuffle([...entries]);
+      const decks = [];
+      for (let i = 0; i < shuffled.length; i += size) {
+        decks.push({
+          label: `Random Deck ${decks.length + 1}`,
+          entries: shuffled.slice(i, i + size)
+        });
+      }
+      return decks;
+    }
+
+    function buildVerbDecks(entries) {
+      const verbMap = new Map();
+      entries.forEach((entry) => {
+        if (!entry?.verb) return;
+        if (!verbMap.has(entry.verb)) {
+          verbMap.set(entry.verb, []);
+        }
+        verbMap.get(entry.verb).push(entry);
+      });
+      return Array.from(verbMap.entries())
+        .sort((a, b) => a[0].localeCompare(b[0], "fr", { sensitivity: "base" }))
+        .map(([verb, verbEntries]) => ({
+          label: verb,
+          entries: verbEntries
+        }));
+    }
+
+    function buildDecks(entries) {
+      return {
+        random: buildRandomDecks(entries, 50),
+        verb: buildVerbDecks(entries)
+      };
+    }
+
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -515,9 +572,79 @@
       state.meaningLaneIndex = meanings.indexOf(entry.meaning);
     }
 
+    function getActiveDeck() {
+      return state.decks[state.deckMode]?.[state.deckIndex] || null;
+    }
+
+    function getActiveDeckEntries() {
+      return getActiveDeck()?.entries || [];
+    }
+
+    function updateDeckDisplay() {
+      const deck = getActiveDeck();
+      els.deckDisplay.textContent = deck ? deck.label : "None";
+    }
+
+    function updateDeckSelectOptions() {
+      const deckList = state.decks[state.deckMode] || [];
+      els.deckSelect.innerHTML = "";
+      if (!deckList.length) {
+        const option = document.createElement("option");
+        option.value = "0";
+        option.textContent = "No decks available";
+        option.disabled = true;
+        els.deckSelect.appendChild(option);
+        return;
+      }
+      deckList.forEach((deck, index) => {
+        const option = document.createElement("option");
+        option.value = index;
+        option.textContent = `${deck.label} (${deck.entries.length})`;
+        els.deckSelect.appendChild(option);
+      });
+    }
+
+    function updateStartAvailability() {
+      const hasEntries = getActiveDeckEntries().length > 0;
+      if (!state.isRunning) {
+        els.startBtn.disabled = !hasEntries;
+      }
+    }
+
+    function stopRun(message) {
+      state.isRunning = false;
+      state.paused = false;
+      state.lastTime = null;
+      els.startBtn.disabled = false;
+      updateStartAvailability();
+      if (message) {
+        els.msg.textContent = message;
+        els.msg.className = "message";
+      }
+      els.token.textContent = "Ready";
+    }
+
+    function setDeckSelection(index) {
+      const deckList = state.decks[state.deckMode] || [];
+      state.deckIndex = Math.max(0, Math.min(index, deckList.length - 1));
+      updateDeckSelectOptions();
+      if (deckList.length) {
+        els.deckSelect.value = String(state.deckIndex);
+      }
+      updateDeckDisplay();
+      updateStartAvailability();
+    }
+
+    function setDeckMode(mode) {
+      state.deckMode = mode;
+      setDeckSelection(0);
+      stopRun(`Deck mode set to ${mode === "random" ? "Random 50-card decks" : "Single-verb decks"}.`);
+    }
+
     function pickToken() {
-        if(!state.data.length) return;
-        const entry = state.data[Math.floor(Math.random() * state.data.length)];
+        const activeEntries = getActiveDeckEntries();
+        if(!activeEntries.length) return;
+        const entry = activeEntries[Math.floor(Math.random() * activeEntries.length)];
         state.token = entry;
         setMeaningLabels(entry);
         
@@ -736,7 +863,7 @@
     document.getElementById("speed").oninput = (e) => state.speed = parseInt(e.target.value);
 
     els.startBtn.onclick = () => {
-        if(state.data.length === 0) return;
+        if(getActiveDeckEntries().length === 0) return;
         state.lives = parseInt(document.getElementById("lives").value);
         state.score = 0;
         els.lives.textContent = state.lives;
@@ -749,6 +876,16 @@
         pickToken();
         resetTokenPosition();
         requestAnimationFrame(animate);
+    };
+
+    els.deckMode.onchange = (e) => {
+        setDeckMode(e.target.value);
+    };
+
+    els.deckSelect.onchange = (e) => {
+        const index = parseInt(e.target.value, 10);
+        setDeckSelection(Number.isNaN(index) ? 0 : index);
+        stopRun(`Deck set to ${getActiveDeck()?.label || "None"}.`);
     };
 
     window.onresize = () => {
@@ -765,7 +902,9 @@
         state.meanings = Array.from(
           new Set(state.data.map((entry) => entry.meaning).filter(Boolean))
         );
-        els.msg.textContent = `Loaded ${state.data.length} verbs. Ready.`;
+        state.decks = buildDecks(state.data);
+        setDeckSelection(0);
+        els.msg.textContent = `Loaded ${state.data.length} verbs. Choose a deck to begin.`;
     }).catch(e => {
         console.warn("Using mock data");
         const mock = [];
@@ -774,7 +913,9 @@
         state.meanings = Array.from(
           new Set(state.data.map((entry) => entry.meaning).filter(Boolean))
         );
-        els.msg.textContent = "Loaded mock data.";
+        state.decks = buildDecks(state.data);
+        setDeckSelection(0);
+        els.msg.textContent = "Loaded mock data. Choose a deck to begin.";
     });
 
   </script>
