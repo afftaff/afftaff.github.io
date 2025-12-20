@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>French Conjugation Stave</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      --bg: #0f172a;
+      --panel: #111827;
+      --border: #1f2937;
+      --muted: #cbd5e1;
+      --text: #e5e7eb;
+      --accent: #38bdf8;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --lane-disabled: #334155;
+      --lane-highlight: rgba(148, 163, 184, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 20px 6px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.7rem;
+    }
+
+    p.lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6px 20px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input[type="number"],
+    select {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0b1220;
+      color: var(--text);
+      padding: 8px 10px;
+      font-size: 0.95rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 16px;
+      background: var(--accent);
+      color: #03111a;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    .stats {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .stats strong {
+      color: var(--text);
+    }
+
+    .stave {
+      position: relative;
+      height: 320px;
+      overflow: hidden;
+    }
+
+    .lanes {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-rows: repeat(6, 1fr);
+    }
+
+    .lane {
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      color: var(--text);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .lane:last-child {
+      border-bottom: none;
+    }
+
+    .lane.disabled {
+      color: var(--lane-disabled);
+    }
+
+    .lane.correct {
+      background: rgba(34, 197, 94, 0.2);
+      border-color: rgba(34, 197, 94, 0.6);
+    }
+
+    .lane.flash {
+      animation: flash 0.6s ease;
+    }
+
+    @keyframes flash {
+      0% { background: transparent; }
+      50% { background: var(--lane-highlight); }
+      100% { background: transparent; }
+    }
+
+    .lane .lane-label {
+      font-weight: 600;
+    }
+
+    .lane .lane-index {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .gate {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--warning);
+      border-radius: 999px;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+    }
+
+    .gate-label {
+      position: absolute;
+      top: 8px;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+
+    .gate.stamped {
+      background: var(--success);
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
+    }
+
+    .token {
+      position: absolute;
+      right: 0;
+      width: 210px;
+      min-height: 44px;
+      padding: 8px 12px;
+      border-radius: 14px;
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid rgba(56, 189, 248, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 600;
+      color: var(--text);
+      transition: transform 0.15s ease;
+      pointer-events: none;
+    }
+
+    .token.success {
+      border-color: rgba(34, 197, 94, 0.8);
+      background: rgba(34, 197, 94, 0.2);
+    }
+
+    .token.fail {
+      border-color: rgba(239, 68, 68, 0.8);
+      background: rgba(239, 68, 68, 0.2);
+    }
+
+    .message {
+      min-height: 1.3rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .message.error {
+      color: var(--danger);
+    }
+
+    .message.success {
+      color: var(--success);
+    }
+
+    .mobile-controls {
+      display: none;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .mobile-controls button {
+      flex: 1;
+      font-size: 1.05rem;
+      padding: 14px 0;
+    }
+
+    .hint {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 780px) {
+      .stave {
+        height: 340px;
+      }
+
+      .token {
+        width: 180px;
+      }
+
+      .mobile-controls {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>French Conjugation Stave — v0.2</h1>
+    <p class="lead">Guide the token through the Tense and Person gates. Wrong lane loses a life.</p>
+  </header>
+
+  <main>
+    <section class="panel controls">
+      <div>
+        <label for="preset">Preset</label>
+        <select id="preset">
+          <option value="default">Default (Tense → Person)</option>
+        </select>
+        <p class="hint">Preset controls checkpoint order + difficulty.</p>
+      </div>
+      <div>
+        <label for="lives">Starting lives</label>
+        <input id="lives" type="number" min="1" max="9" value="3" />
+      </div>
+      <div>
+        <label for="speed">Token speed</label>
+        <input id="speed" type="range" min="40" max="180" value="90" />
+        <p class="hint">Current: <span id="speed-value">90</span> px/s</p>
+      </div>
+      <div>
+        <label>
+          <input id="show-infinitive" type="checkbox" checked />
+          Show infinitive on token
+        </label>
+        <button id="start">Start run</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="stats">
+        <div>Lives: <strong id="lives-display">3</strong></div>
+        <div>Score: <strong id="score-display">0</strong></div>
+        <div>Gate: <strong id="gate-display">Tense</strong></div>
+      </div>
+      <p id="message" class="message">Load verb data to begin.</p>
+      <div class="stave" id="stave">
+        <div class="lanes" id="lanes"></div>
+        <div class="gate" id="gate-a"></div>
+        <div class="gate" id="gate-b"></div>
+        <div class="gate-label" id="gate-a-label">Gate A — Tense</div>
+        <div class="gate-label" id="gate-b-label">Gate B — Person</div>
+        <div class="token" id="token">Loading…</div>
+      </div>
+      <div class="mobile-controls">
+        <button id="move-up">⬆️ Up</button>
+        <button id="move-down">⬇️ Down</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const DATA_PATH = "../dir/words/bignounlist.json";
+
+    const PERSON_LANES = [
+      { label: "je", pronoun: "je" },
+      { label: "tu", pronoun: "tu" },
+      { label: "il/elle/on", pronoun: "il/elle/on" },
+      { label: "nous", pronoun: "nous" },
+      { label: "vous", pronoun: "vous" },
+      { label: "ils/elles", pronoun: "ils/elles" }
+    ];
+
+    const TENSE_LANES = [
+      { label: "Présent", tense: "Présent" },
+      { label: "Imparfait", tense: "Imparfait" },
+      { label: "Passé composé", tense: "Passé composé" }
+    ];
+
+    const state = {
+      data: [],
+      isRunning: false,
+      lives: 3,
+      score: 0,
+      speed: 90,
+      showInfinitive: true,
+      token: null,
+      laneIndex: 2,
+      x: 0,
+      gateA: 0,
+      gateB: 0,
+      gateAReached: false,
+      gateBReached: false,
+      lastTime: null,
+      laneMode: "tense",
+      paused: false
+    };
+
+    const lanesEl = document.getElementById("lanes");
+    const tokenEl = document.getElementById("token");
+    const gateAEl = document.getElementById("gate-a");
+    const gateBEl = document.getElementById("gate-b");
+    const gateALabel = document.getElementById("gate-a-label");
+    const gateBLabel = document.getElementById("gate-b-label");
+    const messageEl = document.getElementById("message");
+    const livesDisplay = document.getElementById("lives-display");
+    const scoreDisplay = document.getElementById("score-display");
+    const gateDisplay = document.getElementById("gate-display");
+    const speedInput = document.getElementById("speed");
+    const speedValue = document.getElementById("speed-value");
+    const livesInput = document.getElementById("lives");
+    const startButton = document.getElementById("start");
+    const showInfinitiveInput = document.getElementById("show-infinitive");
+    const moveUpButton = document.getElementById("move-up");
+    const moveDownButton = document.getElementById("move-down");
+
+    function createLaneElements() {
+      lanesEl.innerHTML = "";
+      PERSON_LANES.forEach((lane, index) => {
+        const laneEl = document.createElement("div");
+        laneEl.className = "lane";
+        laneEl.dataset.index = index.toString();
+        laneEl.innerHTML = `
+          <span class="lane-label"></span>
+          <span class="lane-index">Lane ${index + 1}</span>
+        `;
+        lanesEl.appendChild(laneEl);
+      });
+    }
+
+    function updateLaneLabels() {
+      const laneEls = Array.from(lanesEl.children);
+      laneEls.forEach((laneEl, index) => {
+        const labelEl = laneEl.querySelector(".lane-label");
+        if (state.laneMode === "tense") {
+          if (index >= 1 && index <= 3) {
+            labelEl.textContent = TENSE_LANES[index - 1].label;
+            laneEl.classList.remove("disabled");
+          } else {
+            labelEl.textContent = "Disabled";
+            laneEl.classList.add("disabled");
+          }
+        } else {
+          labelEl.textContent = PERSON_LANES[index].label;
+          laneEl.classList.remove("disabled");
+        }
+      });
+    }
+
+    function flashLanes() {
+      const laneEls = Array.from(lanesEl.children);
+      laneEls.forEach((laneEl) => {
+        laneEl.classList.add("flash");
+        setTimeout(() => laneEl.classList.remove("flash"), 600);
+      });
+    }
+
+    function highlightLane(index, isCorrect) {
+      const laneEls = Array.from(lanesEl.children);
+      laneEls.forEach((laneEl) => laneEl.classList.remove("correct"));
+      const laneEl = laneEls[index];
+      if (laneEl) {
+        laneEl.classList.add("correct");
+        if (!isCorrect) {
+          setTimeout(() => laneEl.classList.remove("correct"), 900);
+        }
+      }
+    }
+
+    function buildVerbEntries(nouns) {
+      const entries = [];
+      nouns.forEach((entry, index) => {
+        const personIndex = index % PERSON_LANES.length;
+        const tenseIndex = Math.floor(index / PERSON_LANES.length) % TENSE_LANES.length;
+        entries.push({
+          verb: entry.french,
+          conjugated_form: entry.french,
+          tense: TENSE_LANES[tenseIndex].tense,
+          person: personIndex + 1,
+          pronoun: PERSON_LANES[personIndex].pronoun,
+          mood: "indicatif"
+        });
+      });
+      return entries;
+    }
+
+    function setMessage(text, type) {
+      messageEl.textContent = text;
+      messageEl.classList.remove("error", "success");
+      if (type) {
+        messageEl.classList.add(type);
+      }
+    }
+
+    function updateStats() {
+      livesDisplay.textContent = state.lives.toString();
+      scoreDisplay.textContent = state.score.toString();
+      gateDisplay.textContent = state.laneMode === "tense" ? "Tense" : "Person";
+    }
+
+    function resizeGates() {
+      const stave = document.getElementById("stave");
+      const rect = stave.getBoundingClientRect();
+      state.gateA = rect.width * 0.65;
+      state.gateB = rect.width * 0.35;
+      gateAEl.style.left = `${state.gateA}px`;
+      gateBEl.style.left = `${state.gateB}px`;
+      gateALabel.style.left = `${state.gateA}px`;
+      gateBLabel.style.left = `${state.gateB}px`;
+    }
+
+    function pickToken() {
+      const entry = state.data[Math.floor(Math.random() * state.data.length)];
+      state.token = entry;
+      const text = state.showInfinitive
+        ? `${entry.conjugated_form} (${entry.verb})`
+        : entry.conjugated_form;
+      tokenEl.textContent = text;
+      tokenEl.classList.remove("success", "fail");
+    }
+
+    function setLaneIndex(newIndex) {
+      const enabledIndices = getEnabledLaneIndices();
+      if (!enabledIndices.includes(newIndex)) {
+        return;
+      }
+      state.laneIndex = newIndex;
+      positionToken();
+    }
+
+    function getEnabledLaneIndices() {
+      if (state.laneMode === "tense") {
+        return [1, 2, 3];
+      }
+      return [0, 1, 2, 3, 4, 5];
+    }
+
+    function positionToken() {
+      const laneHeight = lanesEl.clientHeight / 6;
+      const y = laneHeight * state.laneIndex + laneHeight / 2 - tokenEl.offsetHeight / 2;
+      tokenEl.style.transform = `translate(${state.x}px, ${y}px)`;
+    }
+
+    function startRun() {
+      state.lives = Number.parseInt(livesInput.value, 10) || 3;
+      state.score = 0;
+      state.speed = Number.parseInt(speedInput.value, 10) || 90;
+      state.showInfinitive = showInfinitiveInput.checked;
+      state.isRunning = true;
+      state.paused = false;
+      startButton.disabled = true;
+      setMessage("Run started. Reach both gates!", "");
+      nextToken();
+      updateStats();
+    }
+
+    function resetTokenPosition() {
+      const stave = document.getElementById("stave");
+      state.x = stave.clientWidth - tokenEl.offsetWidth - 16;
+      state.laneMode = "tense";
+      state.gateAReached = false;
+      state.gateBReached = false;
+      state.laneIndex = 2;
+      updateLaneLabels();
+      flashLanes();
+      gateAEl.classList.remove("stamped");
+      gateBEl.classList.remove("stamped");
+      positionToken();
+      updateStats();
+    }
+
+    function nextToken() {
+      if (state.lives <= 0) {
+        state.isRunning = false;
+        startButton.disabled = false;
+        setMessage("Run over. Out of lives.", "error");
+        return;
+      }
+      pickToken();
+      resetTokenPosition();
+    }
+
+    function evaluateGate(gateType) {
+      if (!state.token) return;
+      if (gateType === "tense") {
+        const expectedIndex = TENSE_LANES.findIndex((lane) => lane.tense === state.token.tense);
+        const laneIndex = state.laneIndex;
+        const isCorrect = laneIndex === expectedIndex + 1;
+        if (isCorrect) {
+          gateAEl.classList.add("stamped");
+          tokenEl.classList.add("success");
+          setMessage(`Tense gate cleared: ${state.token.tense}`, "success");
+        } else {
+          tokenEl.classList.add("fail");
+          handleFailure(`Wrong at Tense gate: expected ${state.token.tense}`, expectedIndex + 1);
+          return false;
+        }
+        state.laneMode = "person";
+        updateLaneLabels();
+        flashLanes();
+        tokenEl.classList.remove("success");
+        return true;
+      }
+
+      const expectedIndex = state.token.person - 1;
+      const isCorrect = state.laneIndex === expectedIndex;
+      if (isCorrect) {
+        gateBEl.classList.add("stamped");
+        tokenEl.classList.add("success");
+        setMessage(`Person gate cleared: ${PERSON_LANES[expectedIndex].label}`, "success");
+      } else {
+        tokenEl.classList.add("fail");
+        handleFailure(`Wrong at Person gate: expected ${PERSON_LANES[expectedIndex].label}`, expectedIndex);
+        return false;
+      }
+      tokenEl.classList.remove("success");
+      return true;
+    }
+
+    function handleFailure(message, correctLane) {
+      state.lives -= 1;
+      updateStats();
+      highlightLane(correctLane, false);
+      setMessage(message, "error");
+      state.paused = true;
+      setTimeout(() => {
+        state.paused = false;
+        nextToken();
+      }, 900);
+    }
+
+    function finishToken() {
+      state.score += 1;
+      updateStats();
+      setMessage("Token cleared both gates! +1", "success");
+      state.paused = true;
+      setTimeout(() => {
+        state.paused = false;
+        nextToken();
+      }, 700);
+    }
+
+    function animate(timestamp) {
+      if (!state.isRunning) {
+        state.lastTime = timestamp;
+        requestAnimationFrame(animate);
+        return;
+      }
+
+      if (!state.lastTime) state.lastTime = timestamp;
+      const delta = (timestamp - state.lastTime) / 1000;
+      state.lastTime = timestamp;
+
+      if (!state.paused) {
+        state.x -= state.speed * delta;
+        positionToken();
+
+        if (!state.gateAReached && state.x <= state.gateA) {
+          state.gateAReached = true;
+          const ok = evaluateGate("tense");
+          if (!ok) {
+            requestAnimationFrame(animate);
+            return;
+          }
+        }
+
+        if (state.gateAReached && !state.gateBReached && state.x <= state.gateB) {
+          state.gateBReached = true;
+          const ok = evaluateGate("person");
+          if (!ok) {
+            requestAnimationFrame(animate);
+            return;
+          }
+        }
+
+        if (state.gateBReached && state.x <= 10) {
+          finishToken();
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function moveLane(direction) {
+      const enabled = getEnabledLaneIndices();
+      const currentIndex = state.laneIndex;
+      const currentEnabledIndex = enabled.indexOf(currentIndex);
+      if (currentEnabledIndex === -1) return;
+      const nextEnabledIndex = currentEnabledIndex + direction;
+      if (nextEnabledIndex < 0 || nextEnabledIndex >= enabled.length) return;
+      setLaneIndex(enabled[nextEnabledIndex]);
+    }
+
+    function handleKey(event) {
+      if (!state.isRunning || state.paused) return;
+      if (event.key === "ArrowUp") {
+        moveLane(-1);
+      }
+      if (event.key === "ArrowDown") {
+        moveLane(1);
+      }
+    }
+
+    async function loadData() {
+      setMessage("Loading verb data...", "");
+      const response = await fetch(DATA_PATH);
+      const data = await response.json();
+      state.data = buildVerbEntries(data);
+      setMessage(`Loaded ${state.data.length} entries. Ready to play.`, "");
+      pickToken();
+      resetTokenPosition();
+    }
+
+    createLaneElements();
+    updateLaneLabels();
+    resizeGates();
+    window.addEventListener("resize", () => {
+      resizeGates();
+      positionToken();
+    });
+
+    speedInput.addEventListener("input", () => {
+      speedValue.textContent = speedInput.value;
+      if (!state.isRunning) {
+        state.speed = Number.parseInt(speedInput.value, 10) || 90;
+      }
+    });
+
+    startButton.addEventListener("click", startRun);
+    showInfinitiveInput.addEventListener("change", () => {
+      state.showInfinitive = showInfinitiveInput.checked;
+      if (state.token) {
+        pickToken();
+      }
+    });
+
+    moveUpButton.addEventListener("click", () => moveLane(-1));
+    moveDownButton.addEventListener("click", () => moveLane(1));
+
+    document.addEventListener("keydown", handleKey);
+
+    loadData().catch((error) => {
+      console.error(error);
+      setMessage("Failed to load verb data.", "error");
+    });
+
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
