@@ -162,6 +162,9 @@
       100% { background: transparent; }
     }
 
+    .lane-text.correct { color: var(--success); font-weight: 800; }
+    .lane-text.wrong { color: var(--danger); font-weight: 800; }
+
     /* GATES */
     .gate {
       position: absolute;
@@ -341,6 +344,8 @@
       startBtn: document.getElementById("start")
     };
 
+    let highlightTimeoutId = null;
+
     // --- SETUP ---
 
     function initLanes() {
@@ -480,6 +485,7 @@
         els.gateB.classList.remove("stamped");
         els.target.textContent = "Tense Gate";
         els.target.style.color = "var(--warning)";
+        clearLaneHighlights();
         
         positionToken();
     }
@@ -526,6 +532,30 @@
         }, 1200);
     }
 
+    function clearLaneHighlights() {
+        if (highlightTimeoutId) {
+            clearTimeout(highlightTimeoutId);
+            highlightTimeoutId = null;
+        }
+        els.lanes.querySelectorAll(".lane-text.correct, .lane-text.wrong").forEach((label) => {
+            label.classList.remove("correct", "wrong");
+        });
+    }
+
+    function highlightLaneLabels(type, wrongIndex, correctIndex) {
+        clearLaneHighlights();
+        const selector = type === "tense" ? ".lane-text.tense" : ".lane-text.person";
+        const lanes = els.lanes.querySelectorAll(".lane");
+        const wrongLabel = lanes[wrongIndex]?.querySelector(selector);
+        const correctLabel = lanes[correctIndex]?.querySelector(selector);
+        if (wrongLabel) wrongLabel.classList.add("wrong");
+        if (correctLabel) correctLabel.classList.add("correct");
+
+        highlightTimeoutId = setTimeout(() => {
+            clearLaneHighlights();
+        }, 1100);
+    }
+
     function checkGate(type) {
         if(type === 'tense') {
             const correctLane = state.token.tenseLaneIndex;
@@ -539,6 +569,7 @@
                 els.target.style.color = "#fff";
                 return true;
             } else {
+                highlightLaneLabels("tense", state.laneIndex, correctLane);
                 handleFail(`Wrong Tense! Expected: ${state.token.tense}`);
                 return false;
             }
@@ -555,6 +586,7 @@
                 return true;
             } else {
                 const pLabel = PERSON_LABELS[correctLane];
+                highlightLaneLabels("person", state.laneIndex, correctLane);
                 handleFail(`Wrong Person! Expected: ${pLabel}`);
                 return false;
             }
