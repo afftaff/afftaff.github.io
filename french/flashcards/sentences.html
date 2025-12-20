@@ -47,6 +47,20 @@
       box-sizing: border-box;
     }
 
+    .deck-controls-container {
+      width: 100%;
+      max-width: 800px;
+      margin-top: 25px;
+      background: white;
+      padding: 15px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-sizing: border-box;
+    }
+
     .nav-row {
       display: flex;
       align-items: center;
@@ -545,18 +559,9 @@
   <!-- Controls -->
   <div class="controls-container">
     <div class="nav-row">
-      <div class="status-badge" id="deckLabel">Active Deck</div>
-      <button class="nav-btn" id="toggleDeckBtn">View Finished</button>
-    </div>
-    <div class="nav-row">
       <button class="nav-btn" onclick="prevCard()">&#10094;</button>
       <div class="status-badge" id="cardLabel">Card 1 / 50</div>
       <button class="nav-btn" onclick="nextCard()">&#10095;</button>
-    </div>
-    <div class="nav-row">
-      <label class="inline-label" for="finishedToInput">Finished to:</label>
-      <input class="nav-input" id="finishedToInput" type="number" min="0" value="0">
-      <button class="nav-btn" id="applyFinishedBtn">Apply</button>
     </div>
   </div>
 
@@ -646,6 +651,18 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <div class="deck-controls-container">
+    <div class="nav-row">
+      <div class="status-badge" id="deckLabel">Active Deck</div>
+      <button class="nav-btn" id="toggleDeckBtn">View Finished</button>
+    </div>
+    <div class="nav-row">
+      <label class="inline-label" for="finishedToInput">Finished to:</label>
+      <input class="nav-input" id="finishedToInput" type="number" min="0" value="0">
+      <button class="nav-btn" id="applyFinishedBtn">Apply</button>
     </div>
   </div>
 
