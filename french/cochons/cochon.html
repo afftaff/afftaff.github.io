@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jeu de Lecture</title>
+  <style>
+    :root {
+      --ink: #111;
+      --accent: #f1991a;
+      --accent-strong: #e87900;
+      --blue: #2b6de0;
+      --red-arrow: #c1272d;
+      --paper: #ffffff;
+      --soft: #f5f5f5;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      font-family: "Comic Sans MS", "Trebuchet MS", system-ui, sans-serif;
+      color: var(--ink);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .page {
+      width: min(980px, 100%);
+      padding: 32px 24px 40px;
+      position: relative;
+    }
+
+    /* Info Box Styles */
+    .info-toggle {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .info-button {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 4px solid #f3c317;
+      background: #fff5c7;
+      font-size: 36px;
+      font-weight: 700;
+      color: #f3c317;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .info-box {
+      border: 3px solid var(--accent);
+      border-radius: 18px;
+      padding: 12px 16px;
+      width: 200px;
+      background: #fff9f0;
+      font-size: 14px;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    .info-box[hidden] {
+      display: none;
+    }
+
+    /* Header & Image */
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .character-container {
+      width: 260px;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .character-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: opacity 0.2s;
+    }
+
+    .img-error {
+      font-size: 12px;
+      color: #666;
+      background: #eee;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      display: none;
+      position: absolute;
+      width: 100%;
+    }
+
+    .character-name-title {
+      font-size: 42px;
+      font-weight: 700;
+      margin: 0;
+      font-family: "Comic Sans MS", cursive, sans-serif;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* --- Navigation & Lines Area --- */
+    .game-area {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 40px auto 30px;
+      max-width: 980px;
+      gap: 20px;
+    }
+
+    /* Arrow Buttons */
+    .nav-arrow {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 20px;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+
+    .nav-arrow:active {
+      transform: scale(0.9);
+    }
+
+    /* CSS Triangles for Arrows */
+    .arrow-left {
+      width: 0; 
+      height: 0; 
+      border-top: 30px solid transparent;
+      border-bottom: 30px solid transparent; 
+      border-right: 40px solid var(--red-arrow); 
+    }
+
+    .arrow-right {
+      width: 0; 
+      height: 0; 
+      border-top: 30px solid transparent;
+      border-bottom: 30px solid transparent;
+      border-left: 40px solid var(--red-arrow);
+    }
+
+    .nav-arrow[disabled] {
+      opacity: 0;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    /* The Interactive Line Display */
+    .line-container {
+      flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px 15px;
+      padding: 10px;
+      min-height: 80px;
+    }
+
+    .word-slot {
+      display: inline-block;
+      min-width: 40px;
+      height: 50px;
+      border-bottom: 5px solid #000;
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+      cursor: pointer;
+      position: relative;
+      color: transparent;
+      transition: color 0.2s, border-color 0.2s;
+      padding: 0 2px;
+    }
+
+    .word-slot.revealed {
+      color: var(--ink);
+    }
+
+    .word-slot.selected {
+      background-color: rgba(241, 153, 26, 0.2);
+    }
+
+    /* Controls */
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 20px;
+      margin-top: 22px;
+      width: 100%;
+    }
+
+    .toggle-btn {
+      justify-self: start;
+      padding: 10px 24px;
+      border: none;
+      color: #fff;
+      background: var(--blue);
+      font-size: 20px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      text-transform: uppercase;
+      border-radius: 8px;
+      box-shadow: 0 4px 0 #1e5bbd;
+    }
+
+    .toggle-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #1e5bbd;
+    }
+
+    .toggle-btn.right {
+      justify-self: end;
+    }
+
+    .play-btn {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 4px solid var(--accent-strong);
+      background: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.1s;
+    }
+
+    .play-btn:active {
+      transform: scale(0.95);
+    }
+
+    .play-btn::before {
+      content: "";
+      border-left: 28px solid var(--accent-strong);
+      border-top: 18px solid transparent;
+      border-bottom: 18px solid transparent;
+      margin-left: 8px;
+    }
+
+    .progress {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #888;
+    }
+
+    @media (max-width: 720px) {
+      .game-area {
+        gap: 5px;
+      }
+      .nav-arrow {
+        width: 50px;
+        padding: 0;
+      }
+      .arrow-left {
+        border-right-width: 25px;
+        border-top-width: 20px;
+        border-bottom-width: 20px;
+      }
+      .arrow-right {
+        border-left-width: 25px;
+        border-top-width: 20px;
+        border-bottom-width: 20px;
+      }
+      .controls {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 20px;
+      }
+      .toggle-btn, .toggle-btn.right {
+        justify-self: center;
+        width: 200px;
+      }
+      .info-toggle {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    
+    <!-- Info / Instructions -->
+    <div class="info-toggle">
+      <button class="info-button" id="infoToggle">i</button>
+      <div class="info-box" id="infoBox">
+        <strong>Tap:</strong> Play word<br>
+        <strong>Double Tap:</strong> Reveal word<br>
+        <strong>Tap & Drag:</strong> Play selection
+      </div>
+    </div>
+
+    <header class="header">
+      <div class="character-container">
+        <!-- Image source is set dynamically by JS -->
+        <img id="charImage" src="" alt="Personnage" class="character-img" 
+             onerror="this.style.opacity='0'; document.getElementById('imgError').style.display='block'; document.getElementById('imgError').innerText = 'Missing file:\n' + this.getAttribute('src');">
+        
+        <div id="imgError" class="img-error"></div>
+      </div>
+      
+      <h1 class="character-name-title" id="characterTitle">Chloé Cochon</h1>
+    </header>
+
+    <!-- NEW: Game Area with Arrows -->
+    <div class="game-area">
+      <button class="nav-arrow" id="prevBtn" aria-label="Previous">
+        <div class="arrow-left"></div>
+      </button>
+
+      <div class="line-container" id="lineContainer"></div>
+
+      <button class="nav-arrow" id="nextBtn" aria-label="Next">
+        <div class="arrow-right"></div>
+      </button>
+    </div>
+
+    <div class="controls">
+      <button class="toggle-btn" id="hideAll">HIDE ALL</button>
+      <button class="play-btn" id="playButton" aria-label="Play full line"></button>
+      <button class="toggle-btn right" id="showAll">SHOW ALL</button>
+    </div>
+
+    <div class="progress" id="progress"></div>
+  </main>
+
+  <script>
+    // --- CONFIGURATION ---
+    const CONFIG = {
+      showTitleName: false // Set to true/false to show character name !!LEAVE AS FALSE FOR NOW!!
+    };
+
+    // --- STORY DATA ---
+    const storyData = [
+      { character: "NARRATEUR", text: "Ce matin Papa Cochon se prépare" },
+      { character: "CHLOÉ", text: "Papa ! C’est quoi ça ?" },
+      { character: "PAPA COCHON", text: "Ça ? C’est mon maillot" },
+      { character: "CHLOÉ", text: "Ton maillot de quoi ?" },
+      { character: "PAPA COCHON", text: "De football" },
+      { character: "PAPA COCHON", text: "Cet après-midi je vais jouer au ballon" },
+      { character: "NARRATEUR", text: "Mais avant Papa Cochon doit aller travailler" },
+      { character: "PAPA COCHON", text: "Soyez bien sages !" },
+      { character: "CHLOÉ", text: "Pourquoi tu es obligé d’aller travailler ?" },
+      { character: "NARRATEUR", text: "Pauvre Papa Cochon" }
+    ];
+
+    let currentIndex = 0;
+    let isDragging = false;
+    let dragStartIndex = -1;
+    let dragEndIndex = -1;
+    let wordElements = []; 
+
+    const lineContainer = document.getElementById("lineContainer");
+    const playButton = document.getElementById("playButton");
+    const progress = document.getElementById("progress");
+    const characterTitle = document.getElementById("characterTitle");
+    const charImage = document.getElementById("charImage");
+    const imgError = document.getElementById("imgError");
+    const showAllBtn = document.getElementById("showAll");
+    const hideAllBtn = document.getElementById("hideAll");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    const synth = window.speechSynthesis;
+    
+    function init() {
+      if (!CONFIG.showTitleName) {
+        characterTitle.classList.add("hidden");
+      }
+      renderLine();
+    }
+
+    function getAvatarFilename(character) {
+      if (character === "CHLOÉ") return "Chloe_Cochon.png";
+      
+      // Convert "NARRATEUR" -> "Narrateur"
+      // "PAPA COCHON" -> "Papa_Cochon"
+      let name = character.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      name = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      name = name.replace(/\s+/g, "_");
+      return name + ".png";
+    }
+
+    function updateAvatar(character) {
+      // Logic: Update Title and Image
+      characterTitle.textContent = character; // Update text logic if you want strict case
+      
+      // Override title text if it's NARRATEUR to look nicer
+      if(character === "NARRATEUR") characterTitle.textContent = "Narrateur";
+      else characterTitle.textContent = character.charAt(0).toUpperCase() + character.slice(1).toLowerCase(); // Simple Title Case for display
+
+      const filename = getAvatarFilename(character);
+      const path = "images/" + filename;
+      
+      charImage.style.opacity = '1';
+      imgError.style.display = 'none';
+      charImage.src = path;
+      charImage.alt = character;
+    }
+
+    function speakText(text) {
+      // Cancel previous
+      synth.cancel();
+      
+      // Small timeout for browser stability
+      setTimeout(() => {
+        // Add trailing space to prevent cutoff
+        const utterance = new SpeechSynthesisUtterance(text + " ");
+        utterance.lang = "fr-FR";
+        utterance.rate = 0.9;
+        synth.speak(utterance);
+      }, 10);
+    }
+
+    function renderLine() {
+      // 1. Update Navigation Buttons
+      if (currentIndex === 0) {
+        prevBtn.setAttribute("disabled", "true");
+      } else {
+        prevBtn.removeAttribute("disabled");
+      }
+
+      if (currentIndex === storyData.length - 1) {
+        nextBtn.setAttribute("disabled", "true");
+      } else {
+        nextBtn.removeAttribute("disabled");
+      }
+
+      // 2. Clear old lines
+      lineContainer.innerHTML = "";
+      wordElements = [];
+      
+      const currentData = storyData[currentIndex];
+      updateAvatar(currentData.character);
+
+      // 3. Process Text (attach punctuation)
+      const formattedText = currentData.text.replace(/\s+([!?;:.,])/g, '$1');
+      const words = formattedText.split(/\s+/).filter(w => w.length > 0);
+
+      words.forEach((word, index) => {
+        const span = document.createElement("span");
+        span.className = "word-slot";
+        span.textContent = word;
+        span.dataset.index = index;
+        
+        // Interaction Events
+        span.addEventListener("pointerdown", (e) => {
+          isDragging = true;
+          dragStartIndex = index;
+          dragEndIndex = index;
+          span.setPointerCapture(e.pointerId);
+          highlightSelection(dragStartIndex, dragEndIndex);
+        });
+
+        span.addEventListener("pointerenter", () => {
+          if (isDragging) {
+            dragEndIndex = index;
+            highlightSelection(dragStartIndex, dragEndIndex);
+          }
+        });
+
+        span.addEventListener("pointerup", (e) => {
+          if (!isDragging) return;
+          isDragging = false;
+          span.releasePointerCapture(e.pointerId);
+          
+          const start = Math.min(dragStartIndex, dragEndIndex);
+          const end = Math.max(dragStartIndex, dragEndIndex);
+          
+          let textToSpeak;
+          if (start === end) {
+             // Clean single word
+             textToSpeak = word.replace(/[!?;:.,]/g, '');
+             if (!textToSpeak) textToSpeak = word; 
+          } else {
+             // Full phrase
+             textToSpeak = words.slice(start, end + 1).join(" ");
+          }
+          
+          speakText(textToSpeak);
+          setTimeout(() => highlightSelection(-1, -1), 500);
+        });
+
+        span.addEventListener("dblclick", () => {
+          span.classList.add("revealed");
+        });
+
+        lineContainer.appendChild(span);
+        wordElements.push(span);
+      });
+
+      progress.textContent = `Ligne ${currentIndex + 1} / ${storyData.length}`;
+    }
+
+    function highlightSelection(start, end) {
+      const low = Math.min(start, end);
+      const high = Math.max(start, end);
+
+      wordElements.forEach((el, idx) => {
+        if (idx >= low && idx <= high && start !== -1) {
+          el.classList.add("selected");
+        } else {
+          el.classList.remove("selected");
+        }
+      });
+    }
+
+    // --- BUTTON EVENT LISTENERS ---
+
+    // 1. Navigation
+    prevBtn.addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderLine();
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentIndex < storyData.length - 1) {
+        currentIndex++;
+        renderLine();
+      }
+    });
+
+    // 2. Play Button (ONLY Plays, no skipping)
+    playButton.addEventListener("click", () => {
+      const currentText = storyData[currentIndex].text;
+      speakText(currentText);
+    });
+
+    // 3. Hide/Show All
+    showAllBtn.addEventListener("click", () => {
+      wordElements.forEach(el => el.classList.add("revealed"));
+    });
+
+    hideAllBtn.addEventListener("click", () => {
+      wordElements.forEach(el => el.classList.remove("revealed"));
+    });
+
+    // 4. Info Toggle
+    document.getElementById("infoToggle").addEventListener("click", () => {
+      const box = document.getElementById("infoBox");
+      if (box.hasAttribute("hidden")) box.removeAttribute("hidden");
+      else box.setAttribute("hidden", "");
+    });
+
+    // Start
+    init();
+  </script>
+</body>
+</html>
