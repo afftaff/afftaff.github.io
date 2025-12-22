@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Jeu de Lecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --ink: #111;
@@ -68,19 +72,19 @@
       #app-root { display: none !important; }
     }
 
-    /* --- MAIN LAYOUT (Vertical Stack) --- */
+    /* --- MAIN LAYOUT --- */
     #app-root {
       width: 100%;
       height: 100%;
       display: flex;
-      flex-direction: column; /* Stacked Vertically */
+      flex-direction: column;
       justify-content: space-between;
       align-items: center;
       padding: 1vmin 2vmin;
       position: relative;
     }
 
-    /* --- TOP UTILITIES --- */
+    /* --- UTILITIES (Top Right) --- */
     .top-controls {
       position: absolute;
       top: 2vmin;
@@ -112,7 +116,7 @@
       color: var(--blue);
       background: #eef4ff;
     }
-
+    
     .icon-btn svg { width: 50%; height: 50%; fill: currentColor; }
 
     .info-box {
@@ -131,38 +135,35 @@
       box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.1);
     }
 
-    /* --- SECTION 1: HEADER (Avatar) --- */
+    /* --- SECTION 1: HEADER (Image) --- */
     .header-section {
-      flex: 0 1 auto; /* Allow shrinking */
+      flex: 0 0 auto;
+      width: 100%;
+      height: 35vh; /* Sets a fixed area for the top */
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 30%; /* Take up top 30% of screen */
-      min-height: 0; /* Important for flex shrinking */
+      justify-content: flex-start; /* Start from the top... */
     }
 
     .character-container {
-      height: 100%;
-      width: 100%;
+      /* This is your fix! Using 'vh' makes it work on all screen sizes */
+      margin-top: 6vh; 
       display: flex;
-      align-items: center;
       justify-content: center;
       position: relative;
     }
 
     .character-img {
-      height: 100%; 
+      /* Setting a fixed height here is what stops the "Zooming" */
+      height: 40vh; 
       width: auto;
-      max-width: 100%;
       object-fit: contain;
-      filter: drop-shadow(0 0.5vmin 0.5vmin rgba(0,0,0,0.1));
     }
 
-    /* --- SECTION 2: GAME AREA (Arrows + Text) --- */
+    /* --- SECTION 2: GAME (Arrows + Text) --- */
     .game-section {
-      flex: 1; /* Take up all remaining space */
+      flex: 1; /* Occupy remaining space */
       width: 100%;
       display: flex;
       align-items: center;
@@ -170,18 +171,16 @@
       gap: 1vmin;
     }
 
-    /* Arrows */
     .nav-arrow {
       background: rgba(0,0,0,0.03);
       border-radius: 1vmin;
       border: none;
       cursor: pointer;
-      width: 10vmin;
-      height: 60%; /* Taller hit area */
+      width: 12vmin;
+      height: 70%;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
       z-index: 50;
     }
     .nav-arrow:active { background: rgba(0,0,0,0.1); }
@@ -195,7 +194,6 @@
     .arrow-left .arrow-shape { border-right: 3.5vmin solid var(--red-arrow); }
     .arrow-right .arrow-shape { border-left: 3.5vmin solid var(--red-arrow); }
 
-    /* Text Line */
     .line-container {
       flex: 1;
       display: flex;
@@ -214,7 +212,7 @@
       min-width: 3vmin;
       height: 7vmin;
       border-bottom: 0.6vmin solid #000;
-      font-size: 5vmin; /* Large text */
+      font-size: 5vmin;
       font-weight: bold;
       cursor: pointer;
       color: transparent;
@@ -228,43 +226,46 @@
     /* --- SECTION 3: CONTROLS (Buttons) --- */
     .controls-section {
       flex: 0 0 auto;
-      height: 15%; /* Bottom 15% */
+      height: 25%; /* Allocated 25% height for BIG buttons */
       width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 4vmin;
-      padding-bottom: 1vmin;
+      gap: 15vmin; /* Very wide spacing */
+      padding-bottom: 2vmin;
     }
 
     .toggle-btn {
-      padding: 0 3vmin;
-      height: 6vmin;
-      border: none; color: #fff; background: var(--blue);
-      font-size: 2.5vmin; font-weight: 700;
-      border-radius: 1vmin;
-      box-shadow: 0 0.6vmin 0 #1e5bbd;
+      padding: 0 4vmin;
+      height: 9vmin; /* Bigger */
+      border: 7px solid var(--blue); color: var(--blue); background: none;
+      font-family: "Comic Neue", cursive;
+      font-style: italic;
+      font-size: 3.5vmin; /* Bigger text */
+      font-weight: bold;
+      border-radius: 1.5vmin;
       cursor: pointer;
     }
-    .toggle-btn:active { transform: translateY(0.3vmin); box-shadow: 0 0.3vmin 0 #1e5bbd; }
+    .toggle-btn:active { transform: scale(0.95); box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.15)}
 
     .play-btn {
-      width: 10vmin; height: 10vmin;
+      width: 18vmin; /* Massive Play Button */
+      height: 18vmin;
       border-radius: 50%;
-      border: 0.8vmin solid var(--accent-strong);
+      border: 1.2vmin solid var(--accent-strong);
       background: #fff;
       display: flex; justify-content: center; align-items: center;
       cursor: pointer;
-      box-shadow: 0 0.5vmin 1vmin rgba(0,0,0,0.1);
+      box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.15);
     }
     .play-btn:active { transform: scale(0.95); }
     
     .play-triangle {
       width: 0; height: 0;
-      border-left: 3.5vmin solid var(--accent-strong);
-      border-top: 2vmin solid transparent;
-      border-bottom: 2vmin solid transparent;
-      margin-left: 0.8vmin;
+      border-left: 7vmin solid var(--accent-strong); /* Bigger arrow */
+      border-top: 4vmin solid transparent;
+      border-bottom: 4vmin solid transparent;
+      margin-left: 1.5vmin;
     }
 
     .progress {
@@ -307,14 +308,14 @@
       <strong>Glisser:</strong> Jouer la phrase
     </div>
 
-    <!-- 1. HEADER (Image) -->
+    <!-- 1. HEADER (Image) - Centered Vertically in Top Zone -->
     <header class="header-section">
       <div class="character-container">
         <img id="charImage" src="" alt="Personnage" class="character-img" 
              onerror="this.style.opacity='0'; document.getElementById('imgError').style.display='block';">
         <div id="imgError" class="img-error">Image manquante</div>
       </div>
-      <h1 id="characterTitle" class="hidden"></h1> <!-- Hidden visually but kept for logic -->
+      <h1 id="characterTitle" class="hidden"></h1>
     </header>
 
     <!-- 2. GAME (Arrows & Text) -->
@@ -330,7 +331,7 @@
       </button>
     </section>
 
-    <!-- 3. CONTROLS (Play/Hide) -->
+    <!-- 3. CONTROLS (Massive Buttons) -->
     <footer class="controls-section">
       <button class="toggle-btn" id="hideAll">CACHER</button>
       <button class="play-btn" id="playButton" aria-label="Lire tout">
@@ -387,7 +388,6 @@
     let voice = null;
     
     function init() {
-      // Logic removed for hiding title since we hide it via CSS now, but kept clean
       renderLine();
     }
 
