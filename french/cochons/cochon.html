@@ -325,7 +325,7 @@
     <div class="info-box" id="infoBox" hidden>
       <strong>Tap:</strong> Jouer le mot<br>
       <strong>Double Tap:</strong> Révéler<br>
-      <strong>Glisser:</strong> Jouer la phrase
+      <strong>Appuyer & glisser à droite:</strong> Jouer la phrase
     </div>
 
     <!-- 1. HEADER (Image) - Centered Vertically in Top Zone -->
@@ -504,11 +504,15 @@
           highlight(dragStartIndex, dragEndIndex);
         };
 
-        const moveDrag = () => {
-          if (isDragging) {
-            dragEndIndex = idx;
-            highlight(dragStartIndex, dragEndIndex);
-          }
+        const moveDrag = (e) => {
+          if (!isDragging) return;
+          const target = document.elementFromPoint(e.clientX, e.clientY);
+          const wordEl = target?.closest?.(".word-slot");
+          if (!wordEl) return;
+          const newIdx = wordElements.indexOf(wordEl);
+          if (newIdx === -1) return;
+          dragEndIndex = Math.max(dragStartIndex, newIdx);
+          highlight(dragStartIndex, dragEndIndex);
         };
 
         const endDrag = (e) => {
@@ -516,19 +520,20 @@
           isDragging = false;
           span.releasePointerCapture(e.pointerId);
           
-          const s = Math.min(dragStartIndex, dragEndIndex);
-          const eIdx = Math.max(dragStartIndex, dragEndIndex);
-          const phrase = (s === eIdx) 
-            ? word.replace(/[!?;:.,]/g, '') || word 
-            : words.slice(s, eIdx + 1).join(" ");
+          const startIdx = dragStartIndex;
+          const endIdx = Math.max(dragStartIndex, dragEndIndex);
+          const phrase = (startIdx === endIdx)
+            ? word.replace(/[!?;:.,]/g, '') || word
+            : words.slice(startIdx, endIdx + 1).join(" ");
           
           speak(phrase);
           setTimeout(() => highlight(-1, -1), 500);
         };
 
         span.addEventListener("pointerdown", startDrag);
-        span.addEventListener("pointerenter", moveDrag);
+        span.addEventListener("pointermove", moveDrag);
         span.addEventListener("pointerup", endDrag);
+        span.addEventListener("pointercancel", endDrag);
         span.addEventListener("dblclick", () => span.classList.add("revealed"));
         
         els.line.appendChild(span);
