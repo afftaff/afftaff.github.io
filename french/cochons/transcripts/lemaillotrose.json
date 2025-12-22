@@ -1,0 +1,120 @@
+{
+  "title": "Papa Cochon — Le maillot rose",
+  "language": "fr",
+  "characters": [
+    "NARRATEUR",
+    "CHLOÉ",
+    "GASTON",
+    "PAPA COCHON",
+    "MAMAN COCHON",
+    "MONSIEUR TAUREAU",
+    "MONSIEUR RENARD",
+    "MONSIEUR PANTHÈRE",
+    "MONSIEUR ZÈBRE"
+  ],
+  "scenes": [
+    {
+      "id": 1,
+      "heading": "SCÈNE 1 — À la maison (matin)",
+      "location": "Maison",
+      "time": "matin",
+      "beats": [
+        { "type": "narration", "character": "NARRATEUR", "text": "Ce matin, Papa Cochon se prépare." },
+        { "type": "dialogue", "character": "CHLOÉ", "text": "Papa ! C’est quoi, ça ?" },
+        { "type": "dialogue", "character": "PAPA COCHON", "text": "Ça ? C’est mon maillot." },
+        { "type": "dialogue", "character": "CHLOÉ", "text": "Ton maillot de quoi ?" },
+        { "type": "dialogue", "character": "PAPA COCHON", "text": "De football. Cet après-midi, je vais jouer au ballon." },
+        { "type": "narration", "character": "NARRATEUR", "text": "Mais avant, Papa Cochon doit aller travailler." },
+        { "type": "dialogue", "character": "PAPA COCHON", "text": "Soyez bien sages !" },
+        { "type": "dialogue", "character": "CHLOÉ", "text": "Pourquoi tu es obligé d’aller travailler ?" },
+        { "type": "narration", "character": "NARRATEUR", "text": "Pauvre Papa Cochon… Il préférerait rester à la maison." }
+      ]
+    },
+    {
+      "id": 2,
+      "heading": "SCÈNE 2 — La bêtise (le maillot)",
+      "location": "Extérieur (flaques de boue)",
+      "time": "jour",
+      "beats": [
+        { "type": "narration", "character": "NARRATEUR", "text": "Chloé et Gaston adorent sauter à pieds joints dans les flaques de boue." },
+        { "type": "dialogue", "character": "CHLOÉ", "text": "Youhou !" },
+        { "type": "dialogue", "character": "GASTON", "text": "Flaque !" },
+        { "type": "narration", "character": "NARRATEUR", "text": "Et aujourd’hui… ils ont marché sur le maillot de football de Papa Cochon." },
+        { "type": "dialogue", "character": "CHLOÉ", "text": "Oh non…" },
+        { "type": "dialogue", "character": "CHLOÉ", "text": "Ce n’est pas grave. On va le laver. Papa ne verra rien du tout." }
+      ]
+    },
+    {
+      "id": 3,
+      "heading": "SCÈNE 3 — La machine à laver",
+      "location": "Cuisine",
+      "time": "jour",
+      "beats": [
+        { "type": "narration", "character": "NARRATEUR", "text": "Chloé et Gaston cherchent du linge." },
+        { "type": "dialogue", "character": "CHLOÉ", "text": "Tiens… il y a une tache sur ma robe." },
+        { "type": "dialogue", "character": "MAMAN COCHON", "text": "Très bien, les enfants. On met tout dans la machine." },
+        { "type": "narration", "character": "NARRATEUR", "text": "On met la lessive, puis on lance la machine. Elle se remplit d’eau savonneuse." },
+        { "type": "sfx", "character": null, "text": "[Bruits de machine]" },
+        { "type": "narration", "character": "NARRATEUR", "text": "La machine fait trembler toute la cuisine." },
+        { "type": "dialogue", "character": "MAMAN COCHON", "text": "Attends… Chloé. Ta robe rouge… elle était bien là-dedans ?" },
+        { "type": "dialogue", "character": "CHLOÉ", "text": "Oui… pourquoi ?" },
+        { "type": "narration", "character": "NARRATEUR", "text": "La robe rouge a déteint. Tous les vêtements sont devenus… roses." },
+        { "type": "dialogue", "character": "MAMAN COCHON", "text": "Oups." },
+        { "type": "narration", "character": "NARRATEUR", "text": "Et le rose n’est vraiment pas la couleur idéale pour un maillot de football." }
+      ]
+    },
+    {
+      "id": 4,
+      "heading": "SCÈNE 4 — Papa rentre (le maillot rose)",
+      "location": "Maison",
+      "time": "après-midi",
+      "beats": [
+        { "type": "narration", "character": "NARRATEUR", "text": "Papa Cochon rentre du travail." },
+        { "type": "dialogue", "character": "PAPA COCHON", "text": "Bonjour tout le monde !" },
+        { "type": "dialogue", "character": "CHLOÉ/GASTON", "text": "Bonjour, Papa !" },
+        { "type": "dialogue", "character": "MAMAN COCHON", "text": "On a un petit problème…" },
+        { "type": "dialogue", "character": "PAPA COCHON", "text": "Plus tard. Je dois me préparer pour le match. Alors… où est mon maillot ?" },
+        { "type": "dialogue", "character": "CHLOÉ", "text": "Le voilà." },
+        { "type": "dialogue", "character": "PAPA COCHON", "text": "…C’est quoi, ça ?!" },
+        { "type": "dialogue", "character": "PAPA COCHON", "text": "C’est rose !" },
+        { "type": "dialogue", "character": "CHLOÉ", "text": "Non, Papa… c’est bien ton maillot de football." },
+        { "type": "dialogue", "character": "MAMAN COCHON", "text": "Il était couvert de boue. On l’a lavé… mais ça ne s’est pas passé comme prévu." },
+        { "type": "dialogue", "character": "PAPA COCHON", "text": "Je ne peux pas porter un maillot de football rose." },
+        { "type": "dialogue", "character": "MAMAN COCHON", "text": "Et pourquoi pas ?" },
+        { "type": "dialogue", "character": "CHLOÉ", "text": "Moi, je trouve que ça te va bien." },
+        { "type": "dialogue", "character": "GASTON", "text": "Non !" },
+        { "type": "narration", "character": "NARRATEUR", "text": "Gaston n’aime pas le rose. Pas du tout." }
+      ]
+    },
+    {
+      "id": 5,
+      "heading": "SCÈNE 5 — Les joueurs arrivent",
+      "location": "Devant la maison",
+      "time": "après-midi",
+      "beats": [
+        { "type": "narration", "character": "NARRATEUR", "text": "Voici les amis de Papa Cochon : Monsieur Taureau, Monsieur Renard, Monsieur Panthère et Monsieur Zèbre." },
+        { "type": "dialogue", "character": "MONSIEUR TAUREAU", "text": "On vient te chercher pour le match !" },
+        { "type": "dialogue", "character": "PAPA COCHON", "text": "J’arrive !" },
+        { "type": "dialogue", "character": "PAPA COCHON", "aside": true, "text": "Mon équipe joue en blanc… il me faut une tenue blanche." },
+        { "type": "dialogue", "character": "MAMAN COCHON", "text": "Tu peux mettre une chemise blanche." },
+        { "type": "dialogue", "character": "PAPA COCHON", "text": "Oui… bonne idée." }
+      ]
+    },
+    {
+      "id": 6,
+      "heading": "SCÈNE 6 — Le terrain",
+      "location": "Terrain de football",
+      "time": "après-midi",
+      "beats": [
+        { "type": "music", "character": null, "text": "[Musique courte]" },
+        { "type": "narration", "character": "NARRATEUR", "text": "Place au football !" },
+        { "type": "dialogue", "character": "MONSIEUR RENARD", "text": "Dis donc, Papa Cochon… jolie tenue. Très élégante !" },
+        { "type": "dialogue", "character": "PAPA COCHON", "text": "Merci… (un peu gêné)" },
+        { "type": "dialogue", "character": "CHLOÉ", "text": "Papa ! Ta chemise est déjà toute tachée !" },
+        { "type": "dialogue", "character": "PAPA COCHON", "text": "C’est normal. Les tenues de sport sont faites pour ça." },
+        { "type": "narration", "character": "NARRATEUR", "text": "Papa Cochon adore jouer au football. Tout le monde adore jouer au football… sur tous les terrains." },
+        { "type": "music", "character": null, "text": "[Musique de fin]" }
+      ]
+    }
+  ]
+}

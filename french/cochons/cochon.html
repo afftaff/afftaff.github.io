@@ -205,6 +205,26 @@
       height: 100%;
     }
 
+    .line-container.title-mode {
+      flex-direction: column;
+      gap: 2vmin;
+    }
+
+    .title-card {
+      text-align: center;
+      font-size: 6vmin;
+      font-weight: 700;
+      line-height: 1.2;
+      max-width: 80vmin;
+    }
+
+    .title-location {
+      display: block;
+      margin-top: 2vmin;
+      font-size: 4vmin;
+      font-weight: 500;
+    }
+
     .word-slot {
       display: inline-flex;
       align-items: center;
@@ -348,18 +368,7 @@
     const CONFIG = { showTitleName: false };
 
     // --- DATA ---
-    const storyData = [
-      { character: "NARRATEUR", text: "Ce matin Papa Cochon se prépare" },
-      { character: "CHLOÉ", text: "Papa ! C’est quoi ça ?" },
-      { character: "PAPA COCHON", text: "Ça ? C’est mon maillot" },
-      { character: "CHLOÉ", text: "Ton maillot de quoi ?" },
-      { character: "PAPA COCHON", text: "De football" },
-      { character: "PAPA COCHON", text: "Cet après-midi je vais jouer au ballon" },
-      { character: "NARRATEUR", text: "Mais avant Papa Cochon doit aller travailler" },
-      { character: "PAPA COCHON", text: "Soyez bien sages !" },
-      { character: "CHLOÉ", text: "Pourquoi tu es obligé d’aller travailler ?" },
-      { character: "NARRATEUR", text: "Pauvre Papa Cochon" }
-    ];
+    let storyData = [];
 
     let currentIndex = 0;
     let isDragging = false;
@@ -381,21 +390,53 @@
       next: document.getElementById("nextBtn"),
       fs: document.getElementById("fsToggle"),
       infoBtn: document.getElementById("infoToggle"),
-      infoBox: document.getElementById("infoBox")
+      infoBox: document.getElementById("infoBox"),
+      topControls: document.querySelector(".top-controls"),
+      controls: document.querySelector(".controls-section"),
+      header: document.querySelector(".header-section")
     };
 
     const synth = window.speechSynthesis;
     let voice = null;
     
     function init() {
-      renderLine();
+      loadStory();
     }
 
     function getAvatarFilename(char) {
       if (char === "CHLOÉ") return "Chloe_Cochon.png";
+      if (char === "CHLOÉ/GASTON") return "Narrateur.png";
+      if (char === "MONSIEUR PANTHÈRE") return "Monsier_Panthere.png";
       let name = char.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
       name = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "_");
       return name + ".png";
+    }
+
+    async function loadStory() {
+      const response = await fetch("transcripts/lemaillotrose.json");
+      const transcript = await response.json();
+      storyData = buildStoryData(transcript);
+      currentIndex = 0;
+      renderLine();
+    }
+
+    function buildStoryData(transcript) {
+      const pages = [];
+      transcript.scenes.forEach((scene) => {
+        pages.push({
+          type: "title",
+          heading: scene.heading,
+          location: scene.location
+        });
+        scene.beats.forEach((beat) => {
+          pages.push({
+            type: "line",
+            character: beat.character || "NARRATEUR",
+            text: beat.text
+          });
+        });
+      });
+      return pages;
     }
 
     function loadVoices() {
@@ -420,6 +461,28 @@
       els.line.innerHTML = "";
       wordElements = [];
       const data = storyData[currentIndex];
+
+      if (data.type === "title") {
+        els.topControls.classList.add("hidden");
+        els.controls.classList.add("hidden");
+        els.header.classList.add("hidden");
+        els.line.classList.add("title-mode");
+        const titleCard = document.createElement("div");
+        titleCard.className = "title-card";
+        titleCard.textContent = data.heading;
+        const location = document.createElement("span");
+        location.className = "title-location";
+        location.textContent = data.location;
+        titleCard.appendChild(location);
+        els.line.appendChild(titleCard);
+        els.progress.textContent = `${currentIndex + 1} / ${storyData.length}`;
+        return;
+      }
+
+      els.topControls.classList.remove("hidden");
+      els.controls.classList.remove("hidden");
+      els.header.classList.remove("hidden");
+      els.line.classList.remove("title-mode");
 
       els.img.style.opacity = '1';
       els.error.style.display = 'none';
