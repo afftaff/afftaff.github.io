@@ -398,6 +398,10 @@
     const nextBtn = document.getElementById("nextBtn");
 
     const synth = window.speechSynthesis;
+    const voiceState = {
+      ready: false,
+      voice: null
+    };
     
     function init() {
       if (!CONFIG.showTitleName) {
@@ -434,18 +438,41 @@
       charImage.alt = character;
     }
 
+    function loadVoices() {
+      const voices = synth.getVoices();
+      if (!voices.length) {
+        return;
+      }
+      voiceState.voice = voices.find((voice) => voice.lang.toLowerCase().startsWith("fr")) || null;
+      voiceState.ready = true;
+    }
+
     function speakText(text) {
-      // Cancel previous
-      synth.cancel();
-      
-      // Small timeout for browser stability
-      setTimeout(() => {
+      if (!text) return;
+
+      // Ensure voices are ready (needed for some browsers)
+      if (!voiceState.ready) {
+        loadVoices();
+      }
+
+      const speakNow = () => {
         // Add trailing space to prevent cutoff
         const utterance = new SpeechSynthesisUtterance(text + " ");
         utterance.lang = "fr-FR";
         utterance.rate = 0.9;
+        if (voiceState.voice) {
+          utterance.voice = voiceState.voice;
+        }
+        synth.resume();
         synth.speak(utterance);
-      }, 10);
+      };
+
+      if (synth.speaking || synth.pending) {
+        synth.cancel();
+        setTimeout(speakNow, 50);
+      } else {
+        speakNow();
+      }
     }
 
     function renderLine() {
@@ -581,6 +608,8 @@
     });
 
     // Start
+    synth.addEventListener("voiceschanged", loadVoices);
+    loadVoices();
     init();
   </script>
 </body>
