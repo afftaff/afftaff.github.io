@@ -406,6 +406,7 @@
     function getAvatarFilename(char) {
       if (char === "CHLOÉ") return "Chloe_Cochon.png";
       if (char === "CHLOÉ/GASTON") return "Narrateur.png";
+      if (char === "GASTON") return "Gaston_Cochon.jpg";
       if (char === "MONSIEUR PANTHÈRE") return "Monsier_Panthere.png";
       let name = char.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
       name = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "_");
