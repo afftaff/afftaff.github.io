@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Jeu de Lecture</title>
   <style>
     :root {
@@ -12,13 +12,14 @@
       --blue: #2b6de0;
       --red-arrow: #c1272d;
       --paper: #ffffff;
-      --soft: #f5f5f5;
     }
 
     * {
       box-sizing: border-box;
       user-select: none;
       -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
     }
 
     body {
@@ -26,70 +27,125 @@
       background: var(--paper);
       font-family: "Comic Sans MS", "Trebuchet MS", system-ui, sans-serif;
       color: var(--ink);
+      height: 100vh; 
+      height: 100dvh;
+      width: 100vw;
+      overflow: hidden;
       display: flex;
+      align-items: center;
       justify-content: center;
-      min-height: 100vh;
     }
 
-    .page {
-      width: min(980px, 100%);
-      padding: 32px 24px 40px;
+    /* --- ROTATION OVERLAY --- */
+    #rotate-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--accent);
+      z-index: 9999;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .rotate-icon {
+      font-size: 10vmin;
+      margin-bottom: 20px;
+      animation: rotate-phone 2s infinite ease-in-out;
+    }
+
+    @keyframes rotate-phone {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(90deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    @media (orientation: portrait) {
+      #rotate-overlay { display: flex; }
+      #app-root { display: none !important; }
+    }
+
+    /* --- MAIN LAYOUT (Vertical Stack) --- */
+    #app-root {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column; /* Stacked Vertically */
+      justify-content: space-between;
+      align-items: center;
+      padding: 1vmin 2vmin;
       position: relative;
     }
 
-    /* Info Box Styles */
-    .info-toggle {
+    /* --- TOP UTILITIES --- */
+    .top-controls {
       position: absolute;
-      top: 24px;
-      right: 24px;
+      top: 2vmin;
+      right: 2vmin;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      z-index: 10;
+      gap: 1.5vmin;
+      z-index: 100;
     }
 
-    .info-button {
-      width: 60px;
-      height: 60px;
+    .icon-btn {
+      width: 8vmin;
+      height: 8vmin;
       border-radius: 50%;
-      border: 4px solid #f3c317;
+      border: 0.5vmin solid #f3c317;
       background: #fff5c7;
-      font-size: 36px;
-      font-weight: 700;
       color: #f3c317;
       cursor: pointer;
-      display: grid;
-      place-items: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5vmin;
+      font-weight: 700;
+      box-shadow: 0 0.5vmin 1vmin rgba(0,0,0,0.1);
+      padding: 0;
     }
+    
+    .icon-btn.fs-btn {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: #eef4ff;
+    }
+
+    .icon-btn svg { width: 50%; height: 50%; fill: currentColor; }
 
     .info-box {
-      border: 3px solid var(--accent);
-      border-radius: 18px;
-      padding: 12px 16px;
-      width: 200px;
+      position: absolute;
+      top: 11vmin;
+      right: 2vmin;
+      border: 0.4vmin solid var(--accent);
+      border-radius: 2vmin;
+      padding: 2vmin;
+      width: 35vmin;
       background: #fff9f0;
-      font-size: 14px;
+      font-size: 2.5vmin;
       line-height: 1.4;
       text-align: left;
+      z-index: 90;
+      box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.1);
     }
 
-    .info-box[hidden] {
-      display: none;
-    }
-
-    /* Header & Image */
-    .header {
+    /* --- SECTION 1: HEADER (Avatar) --- */
+    .header-section {
+      flex: 0 1 auto; /* Allow shrinking */
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
-      margin-top: 10px;
+      justify-content: center;
+      width: 100%;
+      height: 30%; /* Take up top 30% of screen */
+      min-height: 0; /* Important for flex shrinking */
     }
 
     .character-container {
-      width: 260px;
-      height: 220px;
+      height: 100%;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -97,276 +153,200 @@
     }
 
     .character-img {
+      height: 100%; 
+      width: auto;
       max-width: 100%;
-      max-height: 100%;
       object-fit: contain;
-      transition: opacity 0.2s;
+      filter: drop-shadow(0 0.5vmin 0.5vmin rgba(0,0,0,0.1));
     }
 
-    .img-error {
-      font-size: 12px;
-      color: #666;
-      background: #eee;
-      padding: 10px;
-      border-radius: 8px;
-      text-align: center;
-      display: none;
-      position: absolute;
+    /* --- SECTION 2: GAME AREA (Arrows + Text) --- */
+    .game-section {
+      flex: 1; /* Take up all remaining space */
       width: 100%;
-    }
-
-    .character-name-title {
-      font-size: 42px;
-      font-weight: 700;
-      margin: 0;
-      font-family: "Comic Sans MS", cursive, sans-serif;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    /* --- Navigation & Lines Area --- */
-    .game-area {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin: 40px auto 30px;
-      max-width: 980px;
-      gap: 20px;
+      gap: 1vmin;
     }
 
-    /* Arrow Buttons */
+    /* Arrows */
     .nav-arrow {
-      background: none;
+      background: rgba(0,0,0,0.03);
+      border-radius: 1vmin;
       border: none;
       cursor: pointer;
-      padding: 20px;
-      width: 80px;
-      height: 80px;
+      width: 10vmin;
+      height: 60%; /* Taller hit area */
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.1s, opacity 0.2s;
+      transition: background 0.2s;
+      z-index: 50;
     }
+    .nav-arrow:active { background: rgba(0,0,0,0.1); }
+    .nav-arrow[disabled] { opacity: 0.1; pointer-events: none; }
 
-    .nav-arrow:active {
-      transform: scale(0.9);
+    .arrow-shape {
+      width: 0; height: 0;
+      border-top: 2.5vmin solid transparent;
+      border-bottom: 2.5vmin solid transparent;
     }
+    .arrow-left .arrow-shape { border-right: 3.5vmin solid var(--red-arrow); }
+    .arrow-right .arrow-shape { border-left: 3.5vmin solid var(--red-arrow); }
 
-    /* CSS Triangles for Arrows */
-    .arrow-left {
-      width: 0; 
-      height: 0; 
-      border-top: 30px solid transparent;
-      border-bottom: 30px solid transparent; 
-      border-right: 40px solid var(--red-arrow); 
-    }
-
-    .arrow-right {
-      width: 0; 
-      height: 0; 
-      border-top: 30px solid transparent;
-      border-bottom: 30px solid transparent;
-      border-left: 40px solid var(--red-arrow);
-    }
-
-    .nav-arrow[disabled] {
-      opacity: 0;
-      pointer-events: none;
-      cursor: default;
-    }
-
-    /* The Interactive Line Display */
+    /* Text Line */
     .line-container {
       flex: 1;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px 15px;
-      padding: 10px;
-      min-height: 80px;
+      align-items: center;
+      align-content: center;
+      gap: 1.5vmin 1vmin;
+      height: 100%;
     }
 
     .word-slot {
-      display: inline-block;
-      min-width: 40px;
-      height: 50px;
-      border-bottom: 5px solid #000;
-      text-align: center;
-      font-size: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 3vmin;
+      height: 7vmin;
+      border-bottom: 0.6vmin solid #000;
+      font-size: 5vmin; /* Large text */
       font-weight: bold;
       cursor: pointer;
-      position: relative;
       color: transparent;
-      transition: color 0.2s, border-color 0.2s;
-      padding: 0 2px;
+      transition: color 0.1s;
+      padding: 0 0.5vmin;
+      line-height: 1;
     }
+    .word-slot.revealed { color: var(--ink); }
+    .word-slot.selected { background-color: rgba(241, 153, 26, 0.2); }
 
-    .word-slot.revealed {
-      color: var(--ink);
-    }
-
-    .word-slot.selected {
-      background-color: rgba(241, 153, 26, 0.2);
-    }
-
-    /* Controls */
-    .controls {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 20px;
-      margin-top: 22px;
+    /* --- SECTION 3: CONTROLS (Buttons) --- */
+    .controls-section {
+      flex: 0 0 auto;
+      height: 15%; /* Bottom 15% */
       width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4vmin;
+      padding-bottom: 1vmin;
     }
 
     .toggle-btn {
-      justify-self: start;
-      padding: 10px 24px;
-      border: none;
-      color: #fff;
-      background: var(--blue);
-      font-size: 20px;
-      font-weight: 700;
-      font-family: inherit;
+      padding: 0 3vmin;
+      height: 6vmin;
+      border: none; color: #fff; background: var(--blue);
+      font-size: 2.5vmin; font-weight: 700;
+      border-radius: 1vmin;
+      box-shadow: 0 0.6vmin 0 #1e5bbd;
       cursor: pointer;
-      text-transform: uppercase;
-      border-radius: 8px;
-      box-shadow: 0 4px 0 #1e5bbd;
     }
-
-    .toggle-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 #1e5bbd;
-    }
-
-    .toggle-btn.right {
-      justify-self: end;
-    }
+    .toggle-btn:active { transform: translateY(0.3vmin); box-shadow: 0 0.3vmin 0 #1e5bbd; }
 
     .play-btn {
-      width: 90px;
-      height: 90px;
+      width: 10vmin; height: 10vmin;
       border-radius: 50%;
-      border: 4px solid var(--accent-strong);
+      border: 0.8vmin solid var(--accent-strong);
       background: #fff;
-      display: grid;
-      place-items: center;
+      display: flex; justify-content: center; align-items: center;
       cursor: pointer;
-      position: relative;
-      transition: transform 0.1s;
+      box-shadow: 0 0.5vmin 1vmin rgba(0,0,0,0.1);
     }
-
-    .play-btn:active {
-      transform: scale(0.95);
-    }
-
-    .play-btn::before {
-      content: "";
-      border-left: 28px solid var(--accent-strong);
-      border-top: 18px solid transparent;
-      border-bottom: 18px solid transparent;
-      margin-left: 8px;
+    .play-btn:active { transform: scale(0.95); }
+    
+    .play-triangle {
+      width: 0; height: 0;
+      border-left: 3.5vmin solid var(--accent-strong);
+      border-top: 2vmin solid transparent;
+      border-bottom: 2vmin solid transparent;
+      margin-left: 0.8vmin;
     }
 
     .progress {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 16px;
-      color: #888;
+      position: absolute;
+      bottom: 1vmin;
+      left: 2vmin;
+      font-size: 2vmin;
+      color: #aaa;
     }
 
-    @media (max-width: 720px) {
-      .game-area {
-        gap: 5px;
-      }
-      .nav-arrow {
-        width: 50px;
-        padding: 0;
-      }
-      .arrow-left {
-        border-right-width: 25px;
-        border-top-width: 20px;
-        border-bottom-width: 20px;
-      }
-      .arrow-right {
-        border-left-width: 25px;
-        border-top-width: 20px;
-        border-bottom-width: 20px;
-      }
-      .controls {
-        grid-template-columns: 1fr;
-        justify-items: center;
-        gap: 20px;
-      }
-      .toggle-btn, .toggle-btn.right {
-        justify-self: center;
-        width: 200px;
-      }
-      .info-toggle {
-        position: relative;
-        top: 0;
-        right: 0;
-        margin-bottom: 20px;
-      }
-    }
+    .hidden { display: none !important; }
+    .img-error { display: none; font-size: 2vmin; color: red; background: #eee; padding: 5px; }
+
   </style>
 </head>
 <body>
-  <main class="page">
+
+  <!-- Force Rotate Screen -->
+  <div id="rotate-overlay">
+    <div class="rotate-icon">📱</div>
+    <h2 style="font-size: 5vmin; margin:0;">Tournez votre appareil</h2>
+  </div>
+
+  <main id="app-root">
     
-    <!-- Info / Instructions -->
-    <div class="info-toggle">
-      <button class="info-button" id="infoToggle">i</button>
-      <div class="info-box" id="infoBox">
-        <strong>Tap:</strong> Play word<br>
-        <strong>Double Tap:</strong> Reveal word<br>
-        <strong>Tap & Drag:</strong> Play selection
-      </div>
+    <!-- Top Right Utility Buttons -->
+    <div class="top-controls">
+      <button class="icon-btn fs-btn" id="fsToggle" aria-label="Plein écran">
+        <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+      </button>
+      <button class="icon-btn" id="infoToggle" aria-label="Info">
+        <span style="font-family: serif; font-weight: bold; margin-top: -0.5vmin;">i</span>
+      </button>
     </div>
 
-    <header class="header">
+    <!-- Info Box -->
+    <div class="info-box" id="infoBox" hidden>
+      <strong>Tap:</strong> Jouer le mot<br>
+      <strong>Double Tap:</strong> Révéler<br>
+      <strong>Glisser:</strong> Jouer la phrase
+    </div>
+
+    <!-- 1. HEADER (Image) -->
+    <header class="header-section">
       <div class="character-container">
-        <!-- Image source is set dynamically by JS -->
         <img id="charImage" src="" alt="Personnage" class="character-img" 
-             onerror="this.style.opacity='0'; document.getElementById('imgError').style.display='block'; document.getElementById('imgError').innerText = 'Missing file:\n' + this.getAttribute('src');">
-        
-        <div id="imgError" class="img-error"></div>
+             onerror="this.style.opacity='0'; document.getElementById('imgError').style.display='block';">
+        <div id="imgError" class="img-error">Image manquante</div>
       </div>
-      
-      <h1 class="character-name-title" id="characterTitle">Chloé Cochon</h1>
+      <h1 id="characterTitle" class="hidden"></h1> <!-- Hidden visually but kept for logic -->
     </header>
 
-    <!-- NEW: Game Area with Arrows -->
-    <div class="game-area">
-      <button class="nav-arrow" id="prevBtn" aria-label="Previous">
-        <div class="arrow-left"></div>
+    <!-- 2. GAME (Arrows & Text) -->
+    <section class="game-section">
+      <button class="nav-arrow arrow-left" id="prevBtn" aria-label="Précédent">
+        <div class="arrow-shape"></div>
       </button>
 
       <div class="line-container" id="lineContainer"></div>
 
-      <button class="nav-arrow" id="nextBtn" aria-label="Next">
-        <div class="arrow-right"></div>
+      <button class="nav-arrow arrow-right" id="nextBtn" aria-label="Suivant">
+        <div class="arrow-shape"></div>
       </button>
-    </div>
+    </section>
 
-    <div class="controls">
-      <button class="toggle-btn" id="hideAll">HIDE ALL</button>
-      <button class="play-btn" id="playButton" aria-label="Play full line"></button>
-      <button class="toggle-btn right" id="showAll">SHOW ALL</button>
-    </div>
+    <!-- 3. CONTROLS (Play/Hide) -->
+    <footer class="controls-section">
+      <button class="toggle-btn" id="hideAll">CACHER</button>
+      <button class="play-btn" id="playButton" aria-label="Lire tout">
+        <div class="play-triangle"></div>
+      </button>
+      <button class="toggle-btn" id="showAll">VOIR</button>
+    </footer>
 
-    <div class="progress" id="progress"></div>
+    <div class="progress" id="progress">1 / 10</div>
   </main>
 
   <script>
     // --- CONFIGURATION ---
-    const CONFIG = {
-      showTitleName: false // Set to true/false to show character name !!LEAVE AS FALSE FOR NOW!!
-    };
+    const CONFIG = { showTitleName: false };
 
-    // --- STORY DATA ---
+    // --- DATA ---
     const storyData = [
       { character: "NARRATEUR", text: "Ce matin Papa Cochon se prépare" },
       { character: "CHLOÉ", text: "Papa ! C’est quoi ça ?" },
@@ -386,238 +366,143 @@
     let dragEndIndex = -1;
     let wordElements = []; 
 
-    const lineContainer = document.getElementById("lineContainer");
-    const playButton = document.getElementById("playButton");
-    const progress = document.getElementById("progress");
-    const characterTitle = document.getElementById("characterTitle");
-    const charImage = document.getElementById("charImage");
-    const imgError = document.getElementById("imgError");
-    const showAllBtn = document.getElementById("showAll");
-    const hideAllBtn = document.getElementById("hideAll");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
+    // Elements
+    const els = {
+      line: document.getElementById("lineContainer"),
+      play: document.getElementById("playButton"),
+      progress: document.getElementById("progress"),
+      title: document.getElementById("characterTitle"),
+      img: document.getElementById("charImage"),
+      error: document.getElementById("imgError"),
+      show: document.getElementById("showAll"),
+      hide: document.getElementById("hideAll"),
+      prev: document.getElementById("prevBtn"),
+      next: document.getElementById("nextBtn"),
+      fs: document.getElementById("fsToggle"),
+      infoBtn: document.getElementById("infoToggle"),
+      infoBox: document.getElementById("infoBox")
+    };
 
     const synth = window.speechSynthesis;
-    const voiceState = {
-      ready: false,
-      voice: null
-    };
+    let voice = null;
     
     function init() {
-      if (!CONFIG.showTitleName) {
-        characterTitle.classList.add("hidden");
-      }
+      // Logic removed for hiding title since we hide it via CSS now, but kept clean
       renderLine();
     }
 
-    function getAvatarFilename(character) {
-      if (character === "CHLOÉ") return "Chloe_Cochon.png";
-      
-      // Convert "NARRATEUR" -> "Narrateur"
-      // "PAPA COCHON" -> "Papa_Cochon"
-      let name = character.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-      name = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      name = name.replace(/\s+/g, "_");
+    function getAvatarFilename(char) {
+      if (char === "CHLOÉ") return "Chloe_Cochon.png";
+      let name = char.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      name = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "_");
       return name + ".png";
-    }
-
-    function updateAvatar(character) {
-      // Logic: Update Title and Image
-      characterTitle.textContent = character; // Update text logic if you want strict case
-      
-      // Override title text if it's NARRATEUR to look nicer
-      if(character === "NARRATEUR") characterTitle.textContent = "Narrateur";
-      else characterTitle.textContent = character.charAt(0).toUpperCase() + character.slice(1).toLowerCase(); // Simple Title Case for display
-
-      const filename = getAvatarFilename(character);
-      const path = "images/" + filename;
-      
-      charImage.style.opacity = '1';
-      imgError.style.display = 'none';
-      charImage.src = path;
-      charImage.alt = character;
     }
 
     function loadVoices() {
       const voices = synth.getVoices();
-      if (!voices.length) {
-        return;
-      }
-      voiceState.voice = voices.find((voice) => voice.lang.toLowerCase().startsWith("fr")) || null;
-      voiceState.ready = true;
+      if (voices.length) voice = voices.find(v => v.lang.startsWith("fr")) || voices[0];
     }
 
-    function speakText(text, options = {}) {
+    function speak(text) {
       if (!text) return;
-
-      const { userGesture = false } = options;
-
-      // Ensure voices are ready (needed for some browsers)
-      if (!voiceState.ready) {
-        loadVoices();
-      }
-
-      const speakNow = () => {
-        // Add trailing space to prevent cutoff
-        const utterance = new SpeechSynthesisUtterance(text + " ");
-        utterance.lang = "fr-FR";
-        utterance.rate = 0.9;
-        if (voiceState.voice) {
-          utterance.voice = voiceState.voice;
-        }
-        if (synth.paused) {
-          synth.resume();
-        }
-        synth.speak(utterance);
-      };
-
-      if (synth.speaking || synth.pending) {
-        synth.cancel();
-      }
-
-      if (userGesture) {
-        speakNow();
-      } else {
-        setTimeout(speakNow, 50);
-      }
+      if (!voice) loadVoices();
+      synth.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "fr-FR";
+      if (voice) u.voice = voice;
+      synth.speak(u);
     }
 
     function renderLine() {
-      // 1. Update Navigation Buttons
-      if (currentIndex === 0) {
-        prevBtn.setAttribute("disabled", "true");
-      } else {
-        prevBtn.removeAttribute("disabled");
-      }
-
-      if (currentIndex === storyData.length - 1) {
-        nextBtn.setAttribute("disabled", "true");
-      } else {
-        nextBtn.removeAttribute("disabled");
-      }
-
-      // 2. Clear old lines
-      lineContainer.innerHTML = "";
-      wordElements = [];
+      els.prev.disabled = (currentIndex === 0);
+      els.next.disabled = (currentIndex === storyData.length - 1);
       
-      const currentData = storyData[currentIndex];
-      updateAvatar(currentData.character);
+      els.line.innerHTML = "";
+      wordElements = [];
+      const data = storyData[currentIndex];
 
-      // 3. Process Text (attach punctuation)
-      const formattedText = currentData.text.replace(/\s+([!?;:.,])/g, '$1');
-      const words = formattedText.split(/\s+/).filter(w => w.length > 0);
+      els.img.style.opacity = '1';
+      els.error.style.display = 'none';
+      els.img.src = "images/" + getAvatarFilename(data.character);
 
-      words.forEach((word, index) => {
+      const cleanText = data.text.replace(/\s+([!?;:.,])/g, '$1');
+      const words = cleanText.split(/\s+/).filter(w => w.length > 0);
+
+      words.forEach((word, idx) => {
         const span = document.createElement("span");
         span.className = "word-slot";
         span.textContent = word;
-        span.dataset.index = index;
         
-        // Interaction Events
-        span.addEventListener("pointerdown", (e) => {
+        const startDrag = (e) => {
           isDragging = true;
-          dragStartIndex = index;
-          dragEndIndex = index;
+          dragStartIndex = idx; dragEndIndex = idx;
           span.setPointerCapture(e.pointerId);
-          highlightSelection(dragStartIndex, dragEndIndex);
-        });
+          highlight(dragStartIndex, dragEndIndex);
+        };
 
-        span.addEventListener("pointerenter", () => {
+        const moveDrag = () => {
           if (isDragging) {
-            dragEndIndex = index;
-            highlightSelection(dragStartIndex, dragEndIndex);
+            dragEndIndex = idx;
+            highlight(dragStartIndex, dragEndIndex);
           }
-        });
+        };
 
-        span.addEventListener("pointerup", (e) => {
+        const endDrag = (e) => {
           if (!isDragging) return;
           isDragging = false;
           span.releasePointerCapture(e.pointerId);
           
-          const start = Math.min(dragStartIndex, dragEndIndex);
-          const end = Math.max(dragStartIndex, dragEndIndex);
+          const s = Math.min(dragStartIndex, dragEndIndex);
+          const eIdx = Math.max(dragStartIndex, dragEndIndex);
+          const phrase = (s === eIdx) 
+            ? word.replace(/[!?;:.,]/g, '') || word 
+            : words.slice(s, eIdx + 1).join(" ");
           
-          let textToSpeak;
-          if (start === end) {
-             // Clean single word
-             textToSpeak = word.replace(/[!?;:.,]/g, '');
-             if (!textToSpeak) textToSpeak = word; 
-          } else {
-             // Full phrase
-             textToSpeak = words.slice(start, end + 1).join(" ");
-          }
-          
-          speakText(textToSpeak, { userGesture: true });
-          setTimeout(() => highlightSelection(-1, -1), 500);
-        });
+          speak(phrase);
+          setTimeout(() => highlight(-1, -1), 500);
+        };
 
-        span.addEventListener("dblclick", () => {
-          span.classList.add("revealed");
-        });
-
-        lineContainer.appendChild(span);
+        span.addEventListener("pointerdown", startDrag);
+        span.addEventListener("pointerenter", moveDrag);
+        span.addEventListener("pointerup", endDrag);
+        span.addEventListener("dblclick", () => span.classList.add("revealed"));
+        
+        els.line.appendChild(span);
         wordElements.push(span);
       });
 
-      progress.textContent = `Ligne ${currentIndex + 1} / ${storyData.length}`;
+      els.progress.textContent = `${currentIndex + 1} / ${storyData.length}`;
     }
 
-    function highlightSelection(start, end) {
+    function highlight(start, end) {
       const low = Math.min(start, end);
       const high = Math.max(start, end);
-
-      wordElements.forEach((el, idx) => {
-        if (idx >= low && idx <= high && start !== -1) {
-          el.classList.add("selected");
-        } else {
-          el.classList.remove("selected");
-        }
+      wordElements.forEach((el, i) => {
+        if (start !== -1 && i >= low && i <= high) el.classList.add("selected");
+        else el.classList.remove("selected");
       });
     }
 
-    // --- BUTTON EVENT LISTENERS ---
+    // --- EVENTS ---
+    els.prev.onclick = () => { if(currentIndex > 0) { currentIndex--; renderLine(); }};
+    els.next.onclick = () => { if(currentIndex < storyData.length - 1) { currentIndex++; renderLine(); }};
+    els.play.onclick = () => speak(storyData[currentIndex].text);
+    els.show.onclick = () => wordElements.forEach(el => el.classList.add("revealed"));
+    els.hide.onclick = () => wordElements.forEach(el => el.classList.remove("revealed"));
+    
+    els.infoBtn.onclick = () => {
+        els.infoBox.hidden = !els.infoBox.hidden;
+    };
 
-    // 1. Navigation
-    prevBtn.addEventListener("click", () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-        renderLine();
-      }
-    });
+    els.fs.onclick = () => {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+      else if (document.exitFullscreen) document.exitFullscreen();
+    };
 
-    nextBtn.addEventListener("click", () => {
-      if (currentIndex < storyData.length - 1) {
-        currentIndex++;
-        renderLine();
-      }
-    });
-
-    // 2. Play Button (ONLY Plays, no skipping)
-    playButton.addEventListener("click", () => {
-      const currentText = storyData[currentIndex].text;
-      speakText(currentText, { userGesture: true });
-    });
-
-    // 3. Hide/Show All
-    showAllBtn.addEventListener("click", () => {
-      wordElements.forEach(el => el.classList.add("revealed"));
-    });
-
-    hideAllBtn.addEventListener("click", () => {
-      wordElements.forEach(el => el.classList.remove("revealed"));
-    });
-
-    // 4. Info Toggle
-    document.getElementById("infoToggle").addEventListener("click", () => {
-      const box = document.getElementById("infoBox");
-      if (box.hasAttribute("hidden")) box.removeAttribute("hidden");
-      else box.setAttribute("hidden", "");
-    });
-
-    // Start
-    synth.addEventListener("voiceschanged", loadVoices);
+    synth.onvoiceschanged = loadVoices;
     loadVoices();
     init();
+
   </script>
 </body>
 </html>
