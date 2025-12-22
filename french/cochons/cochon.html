@@ -447,8 +447,10 @@
       voiceState.ready = true;
     }
 
-    function speakText(text) {
+    function speakText(text, options = {}) {
       if (!text) return;
+
+      const { userGesture = false } = options;
 
       // Ensure voices are ready (needed for some browsers)
       if (!voiceState.ready) {
@@ -463,15 +465,20 @@
         if (voiceState.voice) {
           utterance.voice = voiceState.voice;
         }
-        synth.resume();
+        if (synth.paused) {
+          synth.resume();
+        }
         synth.speak(utterance);
       };
 
       if (synth.speaking || synth.pending) {
         synth.cancel();
-        setTimeout(speakNow, 50);
-      } else {
+      }
+
+      if (userGesture) {
         speakNow();
+      } else {
+        setTimeout(speakNow, 50);
       }
     }
 
@@ -540,7 +547,7 @@
              textToSpeak = words.slice(start, end + 1).join(" ");
           }
           
-          speakText(textToSpeak);
+          speakText(textToSpeak, { userGesture: true });
           setTimeout(() => highlightSelection(-1, -1), 500);
         });
 
@@ -588,7 +595,7 @@
     // 2. Play Button (ONLY Plays, no skipping)
     playButton.addEventListener("click", () => {
       const currentText = storyData[currentIndex].text;
-      speakText(currentText);
+      speakText(currentText, { userGesture: true });
     });
 
     // 3. Hide/Show All
