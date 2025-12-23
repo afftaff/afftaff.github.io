@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>French Phrase Decks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f7fb;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --french-bg: #e0f2fe;
+      --french-border: #7dd3fc;
+      --literal-bg: #fef3c7;
+      --literal-border: #fbbf24;
+      --translation-bg: #f1f5f9;
+      --accent: #6366f1;
+      --accent-dark: #4338ca;
+      --shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px 48px;
+    }
+
+    .app {
+      width: min(980px, 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .controls {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .controls label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .controls select {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 1rem;
+      min-width: 180px;
+    }
+
+    .pill {
+      background: #eef2ff;
+      color: var(--accent-dark);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .speaker {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 12px 24px rgba(67, 56, 202, 0.25);
+      transition: transform 0.15s ease;
+    }
+
+    .speaker:active {
+      transform: scale(0.96);
+    }
+
+    .phrase-line {
+      display: grid;
+      grid-template-columns: repeat(var(--word-count), minmax(24px, max-content));
+      gap: 8px;
+      align-items: center;
+    }
+
+    .word-box {
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: transparent;
+      transition: color 0.1s ease, background 0.2s ease, border-color 0.2s ease;
+      user-select: none;
+    }
+
+    .word-box.revealed {
+      color: var(--ink);
+    }
+
+    .word-box.french {
+      background: var(--french-bg);
+      border-color: var(--french-border);
+    }
+
+    .word-box.literal {
+      background: var(--literal-bg);
+      border-color: var(--literal-border);
+    }
+
+    .word-box.placeholder {
+      background: transparent;
+      border-color: transparent;
+      cursor: default;
+    }
+
+    .translation {
+      background: var(--translation-bg);
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-weight: 600;
+      color: transparent;
+      cursor: pointer;
+      transition: color 0.2s ease;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+    }
+
+    .translation.revealed {
+      color: var(--ink);
+    }
+
+    .translation::before {
+      content: attr(data-placeholder);
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .translation.revealed::before {
+      content: "";
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .rate-btn {
+      flex: 1 1 120px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-weight: 600;
+      cursor: pointer;
+      background: white;
+      transition: transform 0.1s ease, border-color 0.2s ease;
+    }
+
+    .rate-btn:active {
+      transform: scale(0.98);
+    }
+
+    .rate-btn.again { border-color: #fecaca; background: #fee2e2; color: #991b1b; }
+    .rate-btn.hard { border-color: #fed7aa; background: #ffedd5; color: #9a3412; }
+    .rate-btn.good { border-color: #bae6fd; background: #e0f2fe; color: #0c4a6e; }
+    .rate-btn.easy { border-color: #bbf7d0; background: #dcfce7; color: #166534; }
+
+    .status {
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 720px) {
+      .card {
+        padding: 20px;
+      }
+
+      .phrase-line {
+        gap: 6px;
+      }
+
+      .word-box {
+        min-height: 34px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="controls">
+      <div>
+        <label for="deckSelect">Deck</label><br>
+        <select id="deckSelect" aria-label="Select deck"></select>
+      </div>
+      <span class="pill" id="deckLabel">Deck</span>
+      <span class="pill" id="deckProgress">0 / 0</span>
+      <span class="status" id="statusText">Loading phrases…</span>
+    </div>
+
+    <div class="card">
+      <button class="speaker" id="speakBtn" aria-label="Hear phrase">🔊</button>
+      <div class="phrase-line" id="frenchLine" style="--word-count: 1"></div>
+      <div class="phrase-line" id="literalLine" style="--word-count: 1"></div>
+      <div class="translation" id="englishLine" data-placeholder="Click to reveal the proper translation"></div>
+    </div>
+
+    <div class="actions">
+      <button class="rate-btn again" data-rating="again">Again</button>
+      <button class="rate-btn hard" data-rating="hard">Hard</button>
+      <button class="rate-btn good" data-rating="good">Good</button>
+      <button class="rate-btn easy" data-rating="easy">Easy</button>
+    </div>
+  </div>
+
+  <script>
+    const CSV_PATH = "../dir/words/1000frenchphrases.csv";
+    const DECK_SIZE = 50;
+
+    const els = {
+      deckSelect: document.getElementById("deckSelect"),
+      deckLabel: document.getElementById("deckLabel"),
+      deckProgress: document.getElementById("deckProgress"),
+      statusText: document.getElementById("statusText"),
+      frenchLine: document.getElementById("frenchLine"),
+      literalLine: document.getElementById("literalLine"),
+      englishLine: document.getElementById("englishLine"),
+      speakBtn: document.getElementById("speakBtn"),
+      rateButtons: document.querySelectorAll(".rate-btn")
+    };
+
+    const synth = window.speechSynthesis;
+    let voice = null;
+
+    const state = {
+      decks: [],
+      deckIndex: 0,
+      queue: [],
+      finished: []
+    };
+
+    function splitWords(text) {
+      if (!text) return [];
+      return text
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+    }
+
+    function loadVoices() {
+      const voices = synth.getVoices();
+      voice = voices.find((v) => v.lang.startsWith("fr")) || voices[0] || null;
+    }
+
+    function speak(text) {
+      if (!text) return;
+      if (!voice) loadVoices();
+      synth.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "fr-FR";
+      if (voice) utter.voice = voice;
+      synth.speak(utter);
+    }
+
+    function parseCsv(text) {
+      const lines = text.trim().split(/\r?\n/);
+      const data = [];
+      for (let i = 1; i < lines.length; i += 1) {
+        const line = lines[i].trim();
+        if (!line) continue;
+        const [french, english, literal] = line.split("|").map((part) => part?.trim() || "");
+        if (!french) continue;
+        data.push({
+          french,
+          english: english || "",
+          literal: literal || ""
+        });
+      }
+      return data;
+    }
+
+    function buildDecks(entries) {
+      const decks = [];
+      for (let i = 0; i < entries.length; i += DECK_SIZE) {
+        const slice = entries.slice(i, i + DECK_SIZE);
+        decks.push({
+          label: `Deck ${decks.length + 1} (${slice.length})`,
+          entries: slice
+        });
+      }
+      return decks;
+    }
+
+    function refreshDeckSelect() {
+      els.deckSelect.innerHTML = "";
+      state.decks.forEach((deck, index) => {
+        const option = document.createElement("option");
+        option.value = index;
+        option.textContent = deck.label;
+        els.deckSelect.appendChild(option);
+      });
+      els.deckSelect.value = String(state.deckIndex);
+    }
+
+    function setDeck(index) {
+      state.deckIndex = Math.max(0, Math.min(index, state.decks.length - 1));
+      const deck = state.decks[state.deckIndex];
+      state.queue = deck ? [...deck.entries] : [];
+      state.finished = [];
+      els.deckLabel.textContent = deck ? deck.label : "No deck";
+      updateProgress();
+      renderCard();
+    }
+
+    function updateProgress() {
+      const total = state.queue.length + state.finished.length;
+      const completed = state.finished.length;
+      els.deckProgress.textContent = `${Math.min(completed + 1, total)} / ${total}`;
+      els.statusText.textContent = total
+        ? `${completed} completed, ${state.queue.length} in review.`
+        : "No phrases available.";
+    }
+
+    function renderWordLine(container, words, totalSlots, type) {
+      container.innerHTML = "";
+      container.style.setProperty("--word-count", totalSlots || 1);
+      for (let i = 0; i < totalSlots; i += 1) {
+        const word = words[i] || "";
+        const span = document.createElement("span");
+        span.className = `word-box ${type}`;
+        if (!word) {
+          span.classList.add("placeholder");
+        } else {
+          span.textContent = word;
+          span.addEventListener("click", () => {
+            span.classList.toggle("revealed");
+          });
+        }
+        container.appendChild(span);
+      }
+    }
+
+    function renderCard() {
+      const current = state.queue[0];
+      if (!current) {
+        els.frenchLine.innerHTML = "";
+        els.literalLine.innerHTML = "";
+        els.englishLine.textContent = "";
+        els.englishLine.dataset.placeholder = "Deck finished — pick another deck.";
+        els.englishLine.classList.remove("revealed");
+        return;
+      }
+
+      const frenchWords = splitWords(current.french);
+      const literalWords = splitWords(current.literal);
+      const maxWords = Math.max(frenchWords.length, literalWords.length, 1);
+
+      renderWordLine(els.frenchLine, frenchWords, maxWords, "french");
+      renderWordLine(els.literalLine, literalWords, maxWords, "literal");
+
+      els.englishLine.textContent = current.english || "";
+      els.englishLine.dataset.placeholder = "Click to reveal the proper translation";
+      els.englishLine.classList.remove("revealed");
+      updateProgress();
+    }
+
+    function rateCard(rating) {
+      if (!state.queue.length) return;
+      const card = state.queue.shift();
+      if (rating === "easy") {
+        state.finished.push(card);
+      } else {
+        const insertMap = { again: 2, hard: 5, good: 10 };
+        const offset = insertMap[rating] ?? 3;
+        const index = Math.min(offset, state.queue.length);
+        state.queue.splice(index, 0, card);
+      }
+      renderCard();
+    }
+
+    els.englishLine.addEventListener("click", () => {
+      els.englishLine.classList.toggle("revealed");
+    });
+
+    els.speakBtn.addEventListener("click", () => {
+      const current = state.queue[0];
+      if (current) speak(current.french);
+    });
+
+    els.rateButtons.forEach((btn) => {
+      btn.addEventListener("click", () => rateCard(btn.dataset.rating));
+    });
+
+    els.deckSelect.addEventListener("change", (event) => {
+      setDeck(Number(event.target.value));
+    });
+
+    synth.onvoiceschanged = loadVoices;
+    loadVoices();
+
+    fetch(CSV_PATH)
+      .then((res) => res.text())
+      .then((text) => {
+        const entries = parseCsv(text);
+        state.decks = buildDecks(entries);
+        refreshDeckSelect();
+        setDeck(0);
+      })
+      .catch(() => {
+        els.statusText.textContent = "Unable to load phrases.";
+      });
+  </script>
+</body>
+</html>
