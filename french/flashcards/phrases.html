@@ -292,12 +292,15 @@
 
     function loadVoices() {
       const voices = synth.getVoices();
-      voice = voices.find((v) => v.lang.startsWith("fr")) || voices[0] || null;
+      voice =
+        voices.find((v) => v.lang.toLowerCase().startsWith("fr")) ||
+        voices.find((v) => v.lang.toLowerCase().includes("fr")) ||
+        null;
     }
 
     function speak(text) {
       if (!text) return;
-      if (!voice) loadVoices();
+      loadVoices();
       synth.cancel();
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = "fr-FR";
