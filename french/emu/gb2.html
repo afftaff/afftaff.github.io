@@ -323,7 +323,7 @@
         </div>
         
         <div class="flashcard-actions">
-          <div class="grade-row hidden" id="gradeRow">
+          <div class="grade-row" id="gradeRow">
             <button data-grade="again" class="secondary">Again</button>
             <button data-grade="hard" class="secondary">Hard</button>
             <button data-grade="good">Good</button>
@@ -480,7 +480,7 @@
       dom.card.classList.remove('flipped');
       dom.revealBtn.textContent = 'Reveal answer';
       dom.revealBtn.classList.remove('hidden');
-      dom.gradeRow.classList.add('hidden');
+      dom.gradeRow.classList.remove('hidden');
       updateQueueInfo();
     }
 
@@ -766,7 +766,6 @@
         return;
       }
       dom.card.classList.add('flipped');
-      dom.gradeRow.classList.remove('hidden');
       dom.revealBtn.classList.add('hidden');
     });
 
