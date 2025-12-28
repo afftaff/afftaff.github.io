@@ -627,6 +627,28 @@
       }
     }
 
+    const LOADER_SOURCES = [
+      'https://cdn.emulatorjs.org/loader.js',
+      'https://cdn.emulatorjs.org/latest/loader.js',
+      'https://cdn.jsdelivr.net/npm/emulatorjs@latest/loader.js'
+    ];
+
+    function loadLoaderScript(index = 0) {
+      if (index >= LOADER_SOURCES.length) {
+        setStatus('Failed to load emulator loader script. Check your connection.');
+        return;
+      }
+      const script = document.createElement('script');
+      script.id = 'emu-loader';
+      script.src = LOADER_SOURCES[index];
+      script.onload = () => setStatus('Emulator loaded.');
+      script.onerror = () => {
+        script.remove();
+        loadLoaderScript(index + 1);
+      };
+      document.body.appendChild(script);
+    }
+
     function loadEmulatorFromFile(file) {
       if (!file) return;
       const gameUrl = URL.createObjectURL(file);
@@ -642,12 +664,7 @@
         setStatus('Emulator already running. Refresh the page to load a new ROM.');
         return;
       }
-      const script = document.createElement('script');
-      script.id = 'emu-loader';
-      script.src = 'https://cdn.emulatorjs.org/loader.js';
-      script.onload = () => setStatus('Emulator loaded.');
-      script.onerror = () => setStatus('Failed to load emulator loader script. Check your connection.');
-      document.body.appendChild(script);
+      loadLoaderScript();
     }
 
     async function exportSaveFile() {
