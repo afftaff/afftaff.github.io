@@ -94,6 +94,27 @@
       gap: 14px;
     }
 
+    .flashcard-front {
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .flashcard-front-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .speak-button {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
     .kana {
       font-size: 3rem;
       letter-spacing: 2px;
@@ -199,14 +220,12 @@
       Pass cards via the URL using <code>?card=meaning|romaji|kana</code> (repeat <code>card</code> for multiple entries).
       Click the card to flip. On the back, click each section to reveal meaning + romaji.
     </div>
-    <div class="instructions">
+    <!--
       Examples:
-      <ul>
-        <li><code>?card=thank%20you|arigatou|%E3%81%82%E3%82%8A%E3%81%8C%E3%81%A8%E3%81%86&amp;card=student|gakusei|%E3%81%8C%E3%81%8F%E3%81%9B%E3%81%84</code></li>
-        <li><code>?card=water|mizu|%E3%81%BF%E3%81%9A&amp;card=fire|hi|%E3%81%B2&amp;card=tree|ki|%E3%81%8D</code></li>
-        <li><code>?card=good%20night|oyasumi|%E3%81%8A%E3%82%84%E3%81%99%E3%81%BF&amp;card=delicious|oishii|%E3%81%8A%E3%81%84%E3%81%97%E3%81%84</code></li>
-      </ul>
-    </div>
+      ?card=thank%20you|arigatou|%E3%81%82%E3%82%8A%E3%81%8C%E3%81%A8%E3%81%86&card=student|gakusei|%E3%81%8C%E3%81%8F%E3%81%9B%E3%81%84
+      ?card=water|mizu|%E3%81%BF%E3%81%9A&card=fire|hi|%E3%81%B2&card=tree|ki|%E3%81%8D
+      ?card=good%20night|oyasumi|%E3%81%8A%E3%82%84%E3%81%99%E3%81%BF&card=delicious|oishii|%E3%81%8A%E3%81%84%E3%81%97%E3%81%84
+    -->
   </header>
 
   <main class="deck">
@@ -214,7 +233,10 @@
       <div class="flashcard" id="flashcard" role="button" aria-pressed="false" tabindex="0">
         <div class="flashcard-inner">
           <div class="flashcard-face flashcard-front">
-            <div class="kana" id="kana">かな</div>
+            <div class="flashcard-front-content">
+              <button class="speak-button" type="button" id="speak-button" aria-label="Speak card">🔊</button>
+              <div class="kana" id="kana">かな</div>
+            </div>
           </div>
           <div class="flashcard-face flashcard-back">
             <div class="reveal-block" data-reveal="meaning">
@@ -237,7 +259,7 @@
         <button type="button" data-rating="good">Good</button>
         <button type="button" data-rating="easy" class="secondary">Easy</button>
       </div>
-      <div class="meta" id="next-due">Next due: now</div>
+      <div class="meta" id="next-due">Cards left: 0</div>
     </section>
 
     <section class="queue">
@@ -254,6 +276,7 @@
     const progressEl = document.getElementById("progress");
     const queueList = document.getElementById("queue-list");
     const nextDueEl = document.getElementById("next-due");
+    const speakButton = document.getElementById("speak-button");
 
     const revealBlocks = Array.from(document.querySelectorAll(".reveal-block"));
 
@@ -277,51 +300,17 @@
     const cards = rawCards.map(parseCard).filter(Boolean);
     const deck = cards.length ? cards : defaultCards;
 
-    const storageKey = `japanese-flashcards-${deck.map((card) => card.kana).join("-")}`;
-    const now = () => Date.now();
-
-    let schedule = deck.map((card, index) => ({
-      id: index,
-      ...card,
-      intervalMinutes: 0,
-      dueAt: now(),
-      reviews: 0
-    }));
-
-    const stored = localStorage.getItem(storageKey);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        schedule = schedule.map((card) => parsed.find((storedCard) => storedCard.id === card.id) || card);
-      } catch (error) {
-        console.warn("Unable to load schedule", error);
-      }
-    }
-
-    function saveSchedule() {
-      localStorage.setItem(storageKey, JSON.stringify(schedule));
-    }
+    const queue = [...deck];
 
     function getNextCard() {
-      const sorted = [...schedule].sort((a, b) => a.dueAt - b.dueAt);
-      return sorted[0];
-    }
-
-    function formatTime(timestamp) {
-      const diffMs = timestamp - now();
-      if (diffMs <= 0) return "now";
-      const minutes = Math.ceil(diffMs / 60000);
-      if (minutes < 60) return `${minutes} min`;
-      const hours = Math.ceil(minutes / 60);
-      return `${hours} hr`;
+      return queue[0];
     }
 
     function updateQueue() {
-      const sorted = [...schedule].sort((a, b) => a.dueAt - b.dueAt);
       queueList.innerHTML = "";
-      sorted.forEach((card) => {
+      queue.forEach((card, index) => {
         const line = document.createElement("div");
-        line.textContent = `${card.kana} — due ${formatTime(card.dueAt)}`;
+        line.textContent = `${index + 1}. ${card.kana}`;
         queueList.appendChild(line);
       });
     }
@@ -338,35 +327,57 @@
       kanaEl.textContent = card.kana;
       meaningEl.textContent = card.meaning;
       romajiEl.textContent = card.romaji;
-      progressEl.textContent = `Card ${index + 1} / ${schedule.length}`;
-      nextDueEl.textContent = `Next due: ${formatTime(card.dueAt)}`;
+      progressEl.textContent = `Card ${index + 1} / ${queue.length}`;
+      nextDueEl.textContent = `Cards left: ${queue.length}`;
       resetReveals();
     }
 
-    function applyRating(card, rating) {
-      const multipliers = {
-        hard: 5,
-        medium: 20,
-        good: 60,
-        easy: 240
-      };
+    function renderEmptyState() {
+      kanaEl.textContent = "All done!";
+      meaningEl.textContent = "";
+      romajiEl.textContent = "";
+      progressEl.textContent = "Card 0 / 0";
+      nextDueEl.textContent = "Cards left: 0";
+      resetReveals();
+      document.querySelectorAll("[data-rating]").forEach((button) => {
+        button.disabled = true;
+      });
+    }
 
-      const base = multipliers[rating] || 20;
-      const newInterval = Math.max(base, Math.round(card.intervalMinutes * 1.7));
-      card.intervalMinutes = newInterval;
-      card.reviews += 1;
-      card.dueAt = now() + newInterval * 60000;
-      saveSchedule();
+    function applyRating(card, rating) {
+      if (!card) return;
+      queue.shift();
+
+      if (rating === "hard") {
+        const insertIndex = Math.min(2, queue.length);
+        queue.splice(insertIndex, 0, card);
+      } else if (rating === "medium") {
+        const insertIndex = Math.min(3, queue.length);
+        queue.splice(insertIndex, 0, card);
+      } else if (rating === "easy") {
+        queue.push(card);
+      }
+
       updateQueue();
       showNext();
     }
 
     function showNext() {
       const next = getNextCard();
-      const index = schedule.findIndex((card) => card.id === next.id);
-      renderCard(next, index);
+      if (!next) {
+        renderEmptyState();
+        return;
+      }
+      renderCard(next, 0);
       flashcard.classList.remove("is-flipped");
       flashcard.setAttribute("aria-pressed", "false");
+    }
+
+    function speakFrontText() {
+      const utterance = new SpeechSynthesisUtterance(kanaEl.textContent.trim());
+      utterance.lang = "ja-JP";
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
     }
 
     flashcard.addEventListener("click", () => {
@@ -399,6 +410,11 @@
         const current = getNextCard();
         applyRating(current, rating);
       });
+    });
+
+    speakButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      speakFrontText();
     });
 
     updateQueue();
