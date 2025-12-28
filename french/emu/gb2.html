@@ -204,6 +204,7 @@
       </label>
       <input type="file" id="rom-upload" accept=".gb, .gbc, .zip">
       <button id="snapshotBtn" class="secondary">📸 Snapshot → Gemini</button>
+      <button id="downloadSnapshotBtn" class="secondary">⬇️ Download snapshot</button>
       <button id="reviewBtn" class="ghost">Review deck</button>
     </div>
 
@@ -252,6 +253,7 @@
     const dom = {
       romInput: document.getElementById('rom-upload'),
       snapshotBtn: document.getElementById('snapshotBtn'),
+      downloadSnapshotBtn: document.getElementById('downloadSnapshotBtn'),
       reviewBtn: document.getElementById('reviewBtn'),
       overlay: document.getElementById('flashcardOverlay'),
       prompt: document.getElementById('cardPrompt'),
@@ -489,6 +491,28 @@
       }
     }
 
+    function downloadSnapshot() {
+      const canvas = document.querySelector('#game-container canvas');
+      if (!canvas) {
+        setStatus('Emulator is not ready yet.');
+        return;
+      }
+      try {
+        const dataUrl = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        link.href = dataUrl;
+        link.download = `gb2-snapshot-${timestamp}.png`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setStatus('Snapshot downloaded.');
+      } catch (error) {
+        console.error(error);
+        setStatus('Snapshot download failed.');
+      }
+    }
+
     function pauseEmulator() {
       if (window.EJS_emulator?.gameManager?.pause) {
         window.EJS_emulator.gameManager.pause();
@@ -588,6 +612,7 @@
     });
 
     dom.snapshotBtn.addEventListener('click', snapshotAndTranslate);
+    dom.downloadSnapshotBtn.addEventListener('click', downloadSnapshot);
     dom.reviewBtn.addEventListener('click', startReviewSession);
 
     dom.revealBtn.addEventListener('click', () => {
