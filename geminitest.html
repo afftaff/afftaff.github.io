@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gemini API Test</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 24px;
+      color: #1f2933;
+      background: #f8fafc;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 1.6rem;
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+    }
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+    .row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .row > div {
+      flex: 1 1 240px;
+    }
+    button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 999px;
+      background: #2563eb;
+      color: #ffffff;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.25);
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .output {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 12px;
+      white-space: pre-wrap;
+      min-height: 120px;
+    }
+    .hint {
+      color: #64748b;
+      font-size: 0.85rem;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Gemini API Test</h1>
+    <form id="geminiForm" class="grid">
+      <div>
+        <label for="apiKey">API Key</label>
+        <input type="text" id="apiKey" placeholder="Paste your Gemini API key" autocomplete="off" />
+        <div class="hint">Saved locally in your browser when you submit.</div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="model">Model</label>
+          <select id="model">
+            <option value="gemini-flash-lite-latest">gemini-flash-lite-latest</option>
+            <option value="gemini-flash-latest" selected>gemini-flash-latest</option>
+          </select>
+        </div>
+        <div>
+          <label for="imageInput">Attach image(s)</label>
+          <input type="file" id="imageInput" accept="image/*" multiple />
+          <div class="hint">Optional. Add one or more images to send with the prompt.</div>
+        </div>
+      </div>
+
+      <div>
+        <label for="systemInstruction">System instruction</label>
+        <textarea id="systemInstruction" placeholder="Describe the assistant behavior.">You are a helpful assistant.</textarea>
+      </div>
+
+      <div>
+        <label for="userContent">User prompt</label>
+        <textarea id="userContent" placeholder="Ask Gemini a question or describe the image."></textarea>
+      </div>
+
+      <div>
+        <button type="submit" id="sendBtn">Send to Gemini</button>
+      </div>
+    </form>
+
+    <h2>Response</h2>
+    <div id="response" class="output">Waiting for a response...</div>
+  </div>
+
+  <script src="french/dir/geminiApi.js"></script>
+  <script>
+    const form = document.getElementById('geminiForm');
+    const apiKeyInput = document.getElementById('apiKey');
+    const systemInstructionInput = document.getElementById('systemInstruction');
+    const userContentInput = document.getElementById('userContent');
+    const modelSelect = document.getElementById('model');
+    const imageInput = document.getElementById('imageInput');
+    const responseEl = document.getElementById('response');
+    const sendBtn = document.getElementById('sendBtn');
+
+    if (window.geminiApi) {
+      window.geminiApi.loadGeminiKey(apiKeyInput);
+    }
+
+    function fileToInlineData(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result;
+          if (typeof result !== 'string') {
+            reject(new Error('Unable to read image.'));
+            return;
+          }
+          const [meta, data] = result.split(',');
+          const match = meta.match(/data:(.*);base64/);
+          if (!match || !data) {
+            reject(new Error('Invalid image data.'));
+            return;
+          }
+          resolve({ mimeType: match[1], data });
+        };
+        reader.onerror = () => reject(reader.error || new Error('Failed to read image.'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      responseEl.textContent = 'Sending request...';
+      sendBtn.disabled = true;
+
+      try {
+        const apiKey = apiKeyInput.value.trim();
+        if (apiKey && window.geminiApi) {
+          window.geminiApi.saveGeminiKey(apiKey);
+        }
+
+        const files = Array.from(imageInput.files || []);
+        const images = await Promise.all(files.map(fileToInlineData));
+        const response = await window.geminiApi.callGemini(
+          systemInstructionInput.value.trim(),
+          userContentInput.value.trim(),
+          modelSelect.value,
+          { images }
+        );
+        responseEl.textContent = response;
+      } catch (error) {
+        responseEl.textContent = error?.message || String(error);
+      } finally {
+        sendBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
