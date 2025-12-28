@@ -104,6 +104,22 @@
       image-rendering: pixelated;
     }
 
+    .corner-actions {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      gap: 8px;
+      z-index: 4;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .corner-actions button {
+      padding: 8px 14px;
+      font-size: 0.9rem;
+    }
+
     .placeholder-text {
       color: #5f6368;
     }
@@ -288,14 +304,17 @@
 <body>
   <h1>Web GameBoy Player</h1>
 
+  <div class="corner-actions">
+    <button id="queueSnapshotBtn" class="secondary">📸 Queue snapshot</button>
+    <button id="snapshotBtn" class="secondary">🚀 Send queued to Gemini</button>
+  </div>
+
   <div class="controls">
     <div class="control-row">
       <label for="rom-upload" class="custom-file-upload">
         📁 Select .GB or .GBC ROM
       </label>
       <input type="file" id="rom-upload" accept=".gb, .gbc, .zip">
-      <button id="queueSnapshotBtn" class="secondary">📸 Queue snapshot</button>
-      <button id="snapshotBtn" class="secondary">🚀 Send queued to Gemini</button>
       <button id="downloadSnapshotBtn" class="secondary">⬇️ Download snapshot</button>
       <button id="reviewBtn" class="ghost">Review deck</button>
       <button id="wordListBtn" class="ghost">Words seen</button>
