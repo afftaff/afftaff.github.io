@@ -617,7 +617,7 @@
         const response = await window.geminiApi.callGemini(
           SYSTEM_INSTRUCTION,
           '',
-          'gemini-1.5-flash',
+          'gemini-flash-lite-latest',
           { images: [dataUrl] }
         );
         const newCards = parseGeminiResponse(response);
