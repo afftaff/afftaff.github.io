@@ -133,27 +133,79 @@
     .overlay.hidden { display: none; }
 
     .flashcard {
-      width: min(620px, 100%);
+      width: min(640px, 100%);
       max-height: 95%;
-      overflow-y: auto;
       background: #1f2226;
       border: 1px solid #3c4043;
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 18px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.45);
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 16px;
     }
 
-    .flashcard h2 { margin: 0; font-size: 20px; line-height: 1.4; }
+    .flashcard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .card-shell {
+      perspective: 1200px;
+    }
+
+    .flashcard-card {
+      position: relative;
+      min-height: 260px;
+      border-radius: 14px;
+      background: #15191d;
+      border: 1px solid #3c4043;
+      transform-style: preserve-3d;
+      transition: transform 0.6s ease;
+      box-shadow: 0 16px 30px rgba(0,0,0,0.4);
+    }
+
+    .flashcard.flipped .flashcard-card {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      overflow-y: auto;
+    }
+
+    .card-face.back {
+      transform: rotateY(180deg);
+      background: #181d22;
+    }
+
+    .card-face h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.4;
+    }
+
+    .face-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9aa0a6;
+    }
 
     .flashcard .translation {
       font-size: 18px;
       color: #8ab4f8;
       font-weight: bold;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #3c4043;
     }
 
     /* --- NEW MINI FLASHCARD STYLES --- */
@@ -217,7 +269,6 @@
       gap: 10px;
       justify-content: space-between;
       align-items: center;
-      margin-top: 10px;
     }
 
     .grade-row {
@@ -279,14 +330,27 @@
     <span class="placeholder-text">Load a ROM to start playing</span>
     <div id="flashcardOverlay" class="overlay hidden">
       <div class="flashcard">
-        <div class="pill" id="deckPill">0 cards</div>
-        
-        <!-- CARD FRONT -->
-        <h2 id="cardPrompt">Waiting for snapshot…</h2>
-        
-        <!-- CARD BACK (Translation + Breakdown) -->
-        <div id="cardTranslation" class="translation hidden"></div>
-        <div id="cardBreakdown" class="breakdown-container hidden"></div>
+        <div class="flashcard-header">
+          <div class="pill" id="deckPill">0 cards</div>
+          <button id="revealBtn" class="secondary">Reveal answer</button>
+        </div>
+
+        <div class="card-shell">
+          <div class="flashcard-card">
+            <!-- CARD FRONT -->
+            <div class="card-face front">
+              <span class="face-label">Front</span>
+              <h2 id="cardPrompt">Waiting for snapshot…</h2>
+            </div>
+
+            <!-- CARD BACK (Translation + Breakdown) -->
+            <div class="card-face back">
+              <span class="face-label">Back</span>
+              <div id="cardTranslation" class="translation"></div>
+              <div id="cardBreakdown" class="breakdown-container"></div>
+            </div>
+          </div>
+        </div>
         
         <div class="flashcard-actions">
           <div class="grade-row hidden" id="gradeRow">
@@ -295,7 +359,6 @@
             <button data-grade="good">Good</button>
             <button data-grade="easy">Easy</button>
           </div>
-          <button id="revealBtn" class="secondary">Reveal answer</button>
         </div>
         <div class="status-line" id="queueInfo"></div>
       </div>
@@ -326,6 +389,7 @@
       importSave: document.getElementById('importSave'),
       clearSave: document.getElementById('clearSave')
     };
+    dom.card = document.querySelector('.flashcard');
 
     const STORAGE_DECK = 'gb2Flashcards';
     const STORAGE_SRS = 'gb2FlashcardsSrs';
@@ -431,11 +495,9 @@
 
       // 2. BACK (Hidden): The full translation
       dom.translation.textContent = entry.card.translation;
-      dom.translation.classList.add('hidden');
 
       // 3. BACK (Hidden): The Breakdown / Mini-Flashcards
       dom.breakdown.innerHTML = ''; // Clear old items
-      dom.breakdown.classList.add('hidden');
 
       // Loop through the parsed breakdown objects
       entry.card.breakdown.forEach(item => {
@@ -464,6 +526,7 @@
       });
 
       // 4. Buttons
+      dom.card.classList.remove('flipped');
       dom.revealBtn.textContent = 'Reveal answer';
       dom.revealBtn.classList.remove('hidden');
       dom.gradeRow.classList.add('hidden');
@@ -493,8 +556,8 @@
     function completeReview() {
       dom.prompt.textContent = 'Deck completed!';
       dom.translation.textContent = 'You can resume the game.';
-      dom.translation.classList.remove('hidden');
-      dom.breakdown.classList.add('hidden');
+      dom.breakdown.innerHTML = '';
+      dom.card.classList.remove('flipped');
       dom.revealBtn.textContent = 'Resume game';
       dom.revealBtn.classList.remove('hidden');
       dom.gradeRow.classList.add('hidden');
@@ -756,12 +819,7 @@
         dom.revealBtn.textContent = 'Reveal answer';
         return;
       }
-      // Reveal the main translation
-      dom.translation.classList.remove('hidden');
-      
-      // Reveal the container for mini-cards (they start in unflipped state)
-      dom.breakdown.classList.remove('hidden');
-      
+      dom.card.classList.add('flipped');
       dom.gradeRow.classList.remove('hidden');
       dom.revealBtn.classList.add('hidden');
     });
