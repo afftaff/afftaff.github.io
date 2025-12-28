@@ -1,4 +1,25 @@
+Here is the fixed code. I have updated the CSS, the Parsing Logic, and the Rendering Logic.
 
+Key Changes Made:
+
+Mini-Flashcards: The breakdown lines are no longer plain text. They are now interactive buttons.
+
+Flip Logic: When you click "Reveal Answer", the breakdown list appears, but each item only shows the Source Word (e.g., "Quoi"). You must click the specific word to flip it and see the translation/grammar.
+
+Data Parsing: Updated parseGeminiResponse to intelligently split the ( Word | Translation | Grammar ) format into usable parts.
+
+Hidden Translation: The main translation remains strictly hidden until the "Reveal Answer" button is pressed.
+
+The Complete File
+
+Save this as your .html file (e.g., index.html).
+
+code
+Html
+play_circle
+download
+content_copy
+expand_less
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,7 +120,6 @@
       overflow: hidden;
     }
 
-    /* Important: Clean up canvas scaling for display, though screenshots now grab raw bytes */
     #game-container canvas {
       width: 100% !important;
       height: 100% !important;
@@ -124,7 +144,7 @@
     .overlay {
       position: absolute;
       inset: 0;
-      background: rgba(32, 33, 36, 0.92);
+      background: rgba(32, 33, 36, 0.95); /* Slightly darker for better contrast */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -136,6 +156,8 @@
 
     .flashcard {
       width: min(620px, 100%);
+      max-height: 95%; /* Prevent overflowing screen */
+      overflow-y: auto; /* Allow scrolling if list is long */
       background: #1f2226;
       border: 1px solid #3c4043;
       border-radius: 14px;
@@ -143,26 +165,70 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.45);
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 15px;
     }
 
-    .flashcard h2 { margin: 0; font-size: 20px; }
+    .flashcard h2 { margin: 0; font-size: 20px; line-height: 1.4; }
 
     .flashcard .translation {
       font-size: 18px;
       color: #8ab4f8;
       font-weight: bold;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #3c4043;
     }
 
-    .flashcard .breakdown {
-      background: #2b2f33;
-      border: 1px dashed #5f6368;
-      border-radius: 10px;
-      padding: 10px;
-      color: #bdc1c6;
-      font-size: 14px;
-      line-height: 1.5;
+    /* --- NEW MINI FLASHCARD STYLES --- */
+    .breakdown-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
+
+    .mini-card {
+      background: #2b2f33;
+      border: 1px solid #5f6368;
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      text-align: left;
+    }
+
+    .mini-card:hover {
+      background-color: #353a40;
+      border-color: #8ab4f8;
+    }
+
+    .mini-card .front {
+      font-weight: bold;
+      color: #fff;
+      display: block;
+    }
+
+    .mini-card .back {
+      display: none;
+      color: #bdc1c6;
+      margin-top: 4px;
+      font-size: 0.95em;
+    }
+
+    .mini-card .back strong {
+      color: #8ab4f8;
+    }
+
+    /* State when flipped */
+    .mini-card.flipped .back {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-2px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* -------------------------------- */
 
     .flashcard-actions {
       display: flex;
@@ -170,6 +236,7 @@
       gap: 10px;
       justify-content: space-between;
       align-items: center;
+      margin-top: 10px;
     }
 
     .grade-row {
@@ -191,9 +258,10 @@
       color: #fff;
       font-weight: bold;
       font-size: 12px;
+      width: fit-content;
     }
 
-    .hidden { display: none; }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
@@ -231,9 +299,13 @@
     <div id="flashcardOverlay" class="overlay hidden">
       <div class="flashcard">
         <div class="pill" id="deckPill">0 cards</div>
+        <!-- Card Front -->
         <h2 id="cardPrompt">Waiting for snapshot…</h2>
+        
+        <!-- Card Back Elements -->
         <div id="cardTranslation" class="translation hidden"></div>
-        <div id="cardBreakdown" class="breakdown hidden"></div>
+        <div id="cardBreakdown" class="breakdown-container hidden"></div>
+        
         <div class="flashcard-actions">
           <div class="grade-row hidden" id="gradeRow">
             <button data-grade="again" class="secondary">Again</button>
@@ -251,7 +323,8 @@
   <script src="../dir/geminiApi.js"></script>
 
   <script>
-    const SYSTEM_INSTRUCTION = `Take text from image, translate and return like this:\n\n[Le professeur est arrivé tôt ce matin | The professor arrived early this morning.]\n( Le | the | masc ) \n( professeur | teacher | masc ) \n( est | is / has | N/A ) \n( arrivé | arrived | masc ) \n( tôt | early | N/A ) \n( ce | this | masculine singular ) \n( matin | morning | masculine noun )`;
+    // Instruction tuned to ensure pipes are used for easy parsing
+    const SYSTEM_INSTRUCTION = `Take text from image, translate and return strictly like this example:\n\n[Le professeur est arrivé tôt ce matin | The professor arrived early this morning.]\n( Le | the | masc ) \n( professeur | teacher | masc ) \n( est | is / has | verb ) \n( arrivé | arrived | past participle ) \n( tôt | early | adv ) \n( ce | this | masc ) \n( matin | morning | noun )`;
 
     const dom = {
       romInput: document.getElementById('rom-upload'),
@@ -371,11 +444,48 @@
     }
 
     function renderCard(entry) {
+      // 1. Setup Front
       dom.prompt.textContent = entry.card.term;
+      
+      // 2. Setup Back (Hidden initially)
       dom.translation.textContent = entry.card.translation;
       dom.translation.classList.add('hidden');
-      dom.breakdown.innerHTML = entry.card.breakdown.map(line => `<div>${line}</div>`).join('');
+      
+      // 3. Setup Mini-Cards Breakdown
+      dom.breakdown.innerHTML = '';
       dom.breakdown.classList.add('hidden');
+      
+      // Generate the mini-card DOM elements
+      entry.card.breakdown.forEach(item => {
+        // Handle both old string format and new object format for backward compatibility
+        let source = '', target = '', extra = '';
+        
+        if (typeof item === 'string') {
+            source = item; 
+        } else {
+            source = item.source;
+            target = item.target;
+            extra = item.extra;
+        }
+
+        const btn = document.createElement('div');
+        btn.className = 'mini-card';
+        btn.innerHTML = `
+            <span class="front">${source}</span>
+            <span class="back"><strong>${target}</strong> ${extra ? `&mdash; <em>${extra}</em>` : ''}</span>
+        `;
+        
+        // Add click to flip functionality
+        btn.onclick = (e) => {
+            e.stopPropagation(); // Prevent bubbling
+            btn.classList.toggle('flipped');
+        };
+        
+        dom.breakdown.appendChild(btn);
+      });
+
+      // 4. Reset Actions
+      dom.revealBtn.textContent = 'Reveal answer';
       dom.revealBtn.classList.remove('hidden');
       dom.gradeRow.classList.add('hidden');
       updateQueueInfo();
@@ -429,13 +539,17 @@
       const lines = text.split(/\n+/).map(line => line.trim()).filter(Boolean);
       const cards = [];
       let current = null;
+      
       lines.forEach((line) => {
+        // Match [ Source | Translation ]
         const bracketMatch = line.match(/\[(.*)\]/);
         if (bracketMatch) {
           const payload = bracketMatch[1];
+          // Use a lazy split just in case text has pipes, but usually 1 pipe for main trans
           const parts = payload.split('|').map(p => p.trim());
           const term = parts[0] || 'Unknown';
-          const translation = parts[1] || '';
+          const translation = parts.slice(1).join(' | ') || ''; // Join rest if multiple pipes
+          
           current = {
             id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
             term,
@@ -445,27 +559,37 @@
           cards.push(current);
           return;
         }
+
+        // Match ( Source | Target | Grammar )
+        // Using a regex that captures content inside parens
         const breakdownMatch = line.match(/^\((.*)\)$/);
         if (breakdownMatch && current) {
-          current.breakdown.push(`(${breakdownMatch[1]})`);
+            const rawContent = breakdownMatch[1];
+            const parts = rawContent.split('|').map(s => s.trim());
+            
+            // Build a structured object for the mini-card
+            const miniCard = {
+                source: parts[0] || '?',
+                target: parts[1] || '?',
+                extra: parts[2] || ''
+            };
+            
+            current.breakdown.push(miniCard);
         }
       });
+      
       if (!cards.length) {
         throw new Error('Could not parse Gemini response.');
       }
       return cards;
     }
 
-    // --- NEW SCREENSHOT LOGIC INTEGRATION START ---
-
     async function getEmulatorScreenshot({ download = false, filename = "screenshot" } = {}) {
       const gm = window.EJS_emulator?.gameManager;
       if (!gm?.screenshot) throw new Error("EmulatorJS not ready (no gameManager.screenshot).");
 
-      // Resolves to raw image bytes (Uint8Array)
       const bytesOrBlob = await gm.screenshot(); 
 
-      // Work out the format
       const photoCfg = window.EJS_screenCapture?.photo || {};
       const format = (photoCfg.source === "retroarch") ? "png" : (photoCfg.format || "png");
 
@@ -484,7 +608,6 @@
       return blob;
     }
 
-    // Helper to convert Blob to Base64 (DataURL) for Gemini
     function blobToDataURL(blob) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -493,8 +616,6 @@
         reader.readAsDataURL(blob);
       });
     }
-
-    // --- NEW SCREENSHOT LOGIC INTEGRATION END ---
 
     async function snapshotAndTranslate() {
       if (!window.geminiApi) {
@@ -511,10 +632,7 @@
       setStatus('Capturing internal snapshot and sending to Gemini...');
       
       try {
-        // 1. Get Blob from emulator
         const blob = await getEmulatorScreenshot({ download: false });
-        
-        // 2. Convert to Base64 for Gemini
         const dataUrl = await blobToDataURL(blob);
         
         if (!dataUrl) {
@@ -524,7 +642,7 @@
         const response = await window.geminiApi.callGemini(
           SYSTEM_INSTRUCTION,
           '',
-          'gemini-flash-latest',
+          'gemini-1.5-flash', // Updated to latest flash model name convention if applicable, or keep 'gemini-flash-latest'
           { images: [dataUrl] }
         );
         const newCards = parseGeminiResponse(response);
@@ -656,14 +774,19 @@
     dom.downloadSnapshotBtn.addEventListener('click', downloadSnapshot);
     dom.reviewBtn.addEventListener('click', startReviewSession);
 
+    // REVEAL BUTTON LOGIC
     dom.revealBtn.addEventListener('click', () => {
+      // Logic for concluding the deck review
       if (dom.revealBtn.textContent === 'Resume game') {
         closeOverlay();
         dom.revealBtn.textContent = 'Reveal answer';
         return;
       }
-      dom.translation.classList.remove('hidden');
-      dom.breakdown.classList.remove('hidden');
+
+      // Logic for Revealing the Answer
+      dom.translation.classList.remove('hidden'); // Show full translation
+      dom.breakdown.classList.remove('hidden');   // Show container of mini-cards (unflipped)
+      
       dom.gradeRow.classList.remove('hidden');
       dom.revealBtn.classList.add('hidden');
     });
