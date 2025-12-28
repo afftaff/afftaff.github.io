@@ -264,6 +264,24 @@
     }
 
     .hidden { display: none !important; }
+
+    .wordlist-panel {
+      width: min(640px, 100%);
+      max-height: 90%;
+    }
+
+    #wordListText {
+      width: 100%;
+      min-height: 240px;
+      background: #111418;
+      color: #e8eaed;
+      border: 1px solid #3c4043;
+      border-radius: 10px;
+      padding: 12px;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 14px;
+      resize: vertical;
+    }
   </style>
 </head>
 <body>
@@ -275,9 +293,11 @@
         📁 Select .GB or .GBC ROM
       </label>
       <input type="file" id="rom-upload" accept=".gb, .gbc, .zip">
-      <button id="snapshotBtn" class="secondary">📸 Snapshot → Gemini</button>
+      <button id="queueSnapshotBtn" class="secondary">📸 Queue snapshot</button>
+      <button id="snapshotBtn" class="secondary">🚀 Send queued to Gemini</button>
       <button id="downloadSnapshotBtn" class="secondary">⬇️ Download snapshot</button>
       <button id="reviewBtn" class="ghost">Review deck</button>
+      <button id="wordListBtn" class="ghost">Words seen</button>
     </div>
 
     <div class="control-row">
@@ -333,6 +353,18 @@
         <div class="status-line" id="queueInfo"></div>
       </div>
     </div>
+    <div id="wordListOverlay" class="overlay hidden">
+      <div class="flashcard wordlist-panel">
+        <div class="flashcard-header">
+          <div class="pill">Words seen</div>
+          <button id="closeWordList" class="secondary">Close</button>
+        </div>
+        <textarea id="wordListText" readonly></textarea>
+        <div class="control-row">
+          <button id="copyWordList" class="secondary">Copy list</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="../dir/geminiApi.js"></script>
@@ -342,10 +374,16 @@
 
     const dom = {
       romInput: document.getElementById('rom-upload'),
+      queueSnapshotBtn: document.getElementById('queueSnapshotBtn'),
       snapshotBtn: document.getElementById('snapshotBtn'),
       downloadSnapshotBtn: document.getElementById('downloadSnapshotBtn'),
       reviewBtn: document.getElementById('reviewBtn'),
+      wordListBtn: document.getElementById('wordListBtn'),
       overlay: document.getElementById('flashcardOverlay'),
+      wordListOverlay: document.getElementById('wordListOverlay'),
+      wordListText: document.getElementById('wordListText'),
+      closeWordList: document.getElementById('closeWordList'),
+      copyWordList: document.getElementById('copyWordList'),
       prompt: document.getElementById('cardPrompt'),
       translation: document.getElementById('cardTranslation'),
       breakdown: document.getElementById('cardBreakdown'),
@@ -362,12 +400,15 @@
 
     const STORAGE_DECK = 'gb2Flashcards';
     const STORAGE_SRS = 'gb2FlashcardsSrs';
+    const STORAGE_WORDS = 'gb2FlashcardsWords';
     const DECK_NAME = 'gb2-snapshot-deck';
 
     let deck = [];
     let srsState = {};
     let reviewQueue = [];
     let reviewIndex = 0;
+    let wordsSeen = [];
+    let snapshotQueue = [];
 
     function setStatus(message) {
       dom.status.textContent = message;
@@ -376,7 +417,9 @@
     function loadState() {
       deck = JSON.parse(localStorage.getItem(STORAGE_DECK) || '[]');
       srsState = JSON.parse(localStorage.getItem(STORAGE_SRS) || '{}');
+      wordsSeen = JSON.parse(localStorage.getItem(STORAGE_WORDS) || '[]');
       updateDeckStats();
+      updateSnapshotQueueStatus();
     }
 
     function persistDeck() {
@@ -387,6 +430,10 @@
     function persistSrs() {
       localStorage.setItem(STORAGE_SRS, JSON.stringify(srsState));
       updateDeckStats();
+    }
+
+    function persistWords() {
+      localStorage.setItem(STORAGE_WORDS, JSON.stringify(wordsSeen));
     }
 
     function getCardState(id) {
@@ -448,6 +495,53 @@
       dom.deckPill.textContent = `${deck.length} cards`;
     }
 
+    function updateSnapshotQueueStatus() {
+      const count = snapshotQueue.length;
+      dom.snapshotBtn.textContent = count
+        ? `🚀 Send ${count} queued`
+        : '🚀 Send queued to Gemini';
+    }
+
+    function normalizeText(value) {
+      return (value || '').toString().trim().toLowerCase();
+    }
+
+    function normalizeCardKey(card) {
+      return [
+        normalizeText(card.term),
+        normalizeText(card.translation),
+        normalizeText(card.extra)
+      ].join('|');
+    }
+
+    function dedupeCards(cards) {
+      const seen = new Set();
+      const unique = [];
+      cards.forEach((card) => {
+        const key = normalizeCardKey(card);
+        if (!key || seen.has(key)) return;
+        seen.add(key);
+        unique.push(card);
+      });
+      return unique;
+    }
+
+    function addWordsFromCards(cards) {
+      const existing = new Set(wordsSeen.map(normalizeText));
+      cards.forEach((card) => {
+        const normalized = normalizeText(card.term);
+        if (!normalized || existing.has(normalized)) return;
+        existing.add(normalized);
+        wordsSeen.push(card.term.trim());
+      });
+      persistWords();
+    }
+
+    function renderWordList() {
+      const sorted = [...wordsSeen].sort((a, b) => a.localeCompare(b));
+      dom.wordListText.value = sorted.join('\n');
+    }
+
     function openOverlay() {
       dom.overlay.classList.remove('hidden');
       pauseEmulator();
@@ -455,6 +549,17 @@
 
     function closeOverlay() {
       dom.overlay.classList.add('hidden');
+      resumeEmulator();
+    }
+
+    function openWordList() {
+      renderWordList();
+      dom.wordListOverlay.classList.remove('hidden');
+      pauseEmulator();
+    }
+
+    function closeWordList() {
+      dom.wordListOverlay.classList.add('hidden');
       resumeEmulator();
     }
 
@@ -601,7 +706,29 @@
       });
     }
 
-    async function snapshotAndTranslate() {
+    async function queueSnapshot() {
+      dom.queueSnapshotBtn.disabled = true;
+      setStatus('Capturing snapshot for the queue...');
+      try {
+        const blob = await getEmulatorScreenshot({ download: false });
+        const dataUrl = await blobToDataURL(blob);
+        if (!dataUrl) throw new Error('Snapshot conversion failed.');
+        snapshotQueue.push(dataUrl);
+        updateSnapshotQueueStatus();
+        setStatus(`Queued snapshot ${snapshotQueue.length}.`);
+      } catch (error) {
+        console.error(error);
+        setStatus(error.message || 'Snapshot capture failed.');
+      } finally {
+        dom.queueSnapshotBtn.disabled = false;
+      }
+    }
+
+    async function sendQueuedSnapshots() {
+      if (!snapshotQueue.length) {
+        setStatus('No queued snapshots. Capture one first.');
+        return;
+      }
       if (!window.geminiApi) {
         setStatus('Gemini API helper not loaded.');
         return;
@@ -611,34 +738,35 @@
         setStatus('Add your Gemini API key in geminiApi.js local storage first.');
         return;
       }
-      
-      dom.snapshotBtn.disabled = true;
-      setStatus('Capturing internal snapshot and sending to Gemini...');
-      
-      try {
-        const blob = await getEmulatorScreenshot({ download: false });
-        const dataUrl = await blobToDataURL(blob);
-        
-        if (!dataUrl) {
-          throw new Error('Snapshot conversion failed.');
-        }
 
+      dom.snapshotBtn.disabled = true;
+      dom.queueSnapshotBtn.disabled = true;
+      setStatus(`Sending ${snapshotQueue.length} snapshot(s) to Gemini...`);
+
+      try {
         const response = await window.geminiApi.callGemini(
           SYSTEM_INSTRUCTION,
           '',
           'gemini-flash-lite-latest',
-          { images: [dataUrl] }
+          { images: snapshotQueue }
         );
-        const newCards = parseGeminiResponse(response);
-        deck = [...deck, ...newCards];
+        const parsedCards = parseGeminiResponse(response);
+        const newCards = dedupeCards(parsedCards);
+        deck = newCards;
+        srsState[DECK_NAME] = {};
         persistDeck();
-        setStatus(`Added ${newCards.length} card(s) to the deck.`);
+        persistSrs();
+        addWordsFromCards(deck);
+        snapshotQueue = [];
+        updateSnapshotQueueStatus();
+        setStatus(`Deck replaced with ${newCards.length} unique card(s).`);
         startReviewSession();
       } catch (error) {
         console.error(error);
         setStatus(error.message || 'Snapshot/Translation failed.');
       } finally {
         dom.snapshotBtn.disabled = false;
+        dom.queueSnapshotBtn.disabled = false;
       }
     }
 
@@ -754,9 +882,22 @@
       loadEmulator(file);
     });
 
-    dom.snapshotBtn.addEventListener('click', snapshotAndTranslate);
+    dom.queueSnapshotBtn.addEventListener('click', queueSnapshot);
+    dom.snapshotBtn.addEventListener('click', sendQueuedSnapshots);
     dom.downloadSnapshotBtn.addEventListener('click', downloadSnapshot);
     dom.reviewBtn.addEventListener('click', startReviewSession);
+    dom.wordListBtn.addEventListener('click', openWordList);
+    dom.closeWordList.addEventListener('click', closeWordList);
+    dom.copyWordList.addEventListener('click', async () => {
+      renderWordList();
+      try {
+        await navigator.clipboard.writeText(dom.wordListText.value);
+        setStatus('Word list copied to clipboard.');
+      } catch (error) {
+        console.error(error);
+        setStatus('Copy failed. You can manually select the list.');
+      }
+    });
 
     // REVEAL BUTTON CLICK HANDLER
     dom.revealBtn.addEventListener('click', () => {
