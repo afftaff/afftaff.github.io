@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web GameBoy Player</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #202124;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    h1 { margin-bottom: 10px; }
+
+    .controls {
+      background: #303134;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      text-align: center;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 760px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    /* Custom File Input Styling */
+    input[type="file"] {
+      display: none;
+    }
+    
+    .custom-file-upload,
+    button {
+      border: 1px solid #5f6368;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #8ab4f8;
+      color: #202124;
+      font-weight: bold;
+      border-radius: 4px;
+      transition: background 0.3s;
+      font-family: inherit;
+    }
+
+    .custom-file-upload:hover,
+    button:hover {
+      background-color: #aecbfa;
+    }
+
+    button.secondary {
+      background-color: transparent;
+      color: #fff;
+      border: 1px solid #5f6368;
+    }
+
+    button.secondary:hover { background-color: #3c4043; }
+
+    button.ghost {
+      background-color: transparent;
+      color: #9aa0a6;
+      border: 1px dashed #5f6368;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #game-container {
+      position: relative;
+      width: 640px;
+      height: 480px;
+      background-color: #000;
+      border: 2px solid #5f6368;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    #game-container canvas {
+      width: 100% !important;
+      height: 100% !important;
+      image-rendering: pixelated;
+    }
+
+    .placeholder-text {
+      color: #5f6368;
+    }
+
+    .instructions {
+      margin-top: 5px;
+      font-size: 0.9em;
+      color: #9aa0a6;
+    }
+
+    .status-line {
+      font-size: 0.9em;
+      color: #9aa0a6;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(32, 33, 36, 0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 3;
+    }
+
+    .overlay.hidden { display: none; }
+
+    .flashcard {
+      width: min(620px, 100%);
+      background: #1f2226;
+      border: 1px solid #3c4043;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.45);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .flashcard h2 { margin: 0; font-size: 20px; }
+
+    .flashcard .translation {
+      font-size: 18px;
+      color: #8ab4f8;
+      font-weight: bold;
+    }
+
+    .flashcard .breakdown {
+      background: #2b2f33;
+      border: 1px dashed #5f6368;
+      border-radius: 10px;
+      padding: 10px;
+      color: #bdc1c6;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .flashcard-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .grade-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .grade-row button { min-width: 90px; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: rgba(138,180,248,0.12);
+      border-radius: 999px;
+      border: 1px solid rgba(138,180,248,0.4);
+      color: #fff;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1>Web GameBoy Player</h1>
+
+  <div class="controls">
+    <div class="control-row">
+      <label for="rom-upload" class="custom-file-upload">
+        📁 Select .GB or .GBC ROM
+      </label>
+      <input type="file" id="rom-upload" accept=".gb, .gbc, .zip">
+      <button id="snapshotBtn" class="secondary">📸 Snapshot → Gemini</button>
+      <button id="reviewBtn" class="ghost">Review deck</button>
+    </div>
+
+    <div class="control-row">
+      <button id="exportSave" class="secondary">Export save</button>
+      <label class="custom-file-upload" style="background-color: transparent; color: #fff; border: 1px solid #5f6368;">
+        Import save
+        <input type="file" id="importSave" accept=".sav,.srm,.bin" />
+      </label>
+      <button id="clearSave" class="ghost">Clear save</button>
+    </div>
+
+    <div class="instructions">
+      <strong>Controls:</strong> Arrow Keys (Move), Z (A), X (B), Enter (Start), Shift (Select)<br>
+      <em>Note: Saves are stored in your browser's cache. Do not clear browser data if you want to keep save files.</em>
+    </div>
+    <div class="status-line" id="statusLine">Ready.</div>
+  </div>
+
+  <div id="game-container">
+    <span class="placeholder-text">Load a ROM to start playing</span>
+    <div id="flashcardOverlay" class="overlay hidden">
+      <div class="flashcard">
+        <div class="pill" id="deckPill">0 cards</div>
+        <h2 id="cardPrompt">Waiting for snapshot…</h2>
+        <div id="cardTranslation" class="translation hidden"></div>
+        <div id="cardBreakdown" class="breakdown hidden"></div>
+        <div class="flashcard-actions">
+          <div class="grade-row hidden" id="gradeRow">
+            <button data-grade="again" class="secondary">Again</button>
+            <button data-grade="hard" class="secondary">Hard</button>
+            <button data-grade="good">Good</button>
+            <button data-grade="easy">Easy</button>
+          </div>
+          <button id="revealBtn" class="secondary">Reveal answer</button>
+        </div>
+        <div class="status-line" id="queueInfo"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../dir/geminiApi.js"></script>
+  <script>
+    const SYSTEM_INSTRUCTION = `Take text from image, translate and return like this:\n\n[Le professeur est arrivé tôt ce matin | The professor arrived early this morning.]\n( Le | the | masc ) \n( professeur | teacher | masc ) \n( est | is / has | N/A ) \n( arrivé | arrived | masc ) \n( tôt | early | N/A ) \n( ce | this | masculine singular ) \n( matin | morning | masculine noun )`;
+
+    const dom = {
+      romInput: document.getElementById('rom-upload'),
+      snapshotBtn: document.getElementById('snapshotBtn'),
+      reviewBtn: document.getElementById('reviewBtn'),
+      overlay: document.getElementById('flashcardOverlay'),
+      prompt: document.getElementById('cardPrompt'),
+      translation: document.getElementById('cardTranslation'),
+      breakdown: document.getElementById('cardBreakdown'),
+      revealBtn: document.getElementById('revealBtn'),
+      gradeRow: document.getElementById('gradeRow'),
+      queueInfo: document.getElementById('queueInfo'),
+      deckPill: document.getElementById('deckPill'),
+      status: document.getElementById('statusLine'),
+      exportSave: document.getElementById('exportSave'),
+      importSave: document.getElementById('importSave'),
+      clearSave: document.getElementById('clearSave')
+    };
+
+    const STORAGE_DECK = 'gb2Flashcards';
+    const STORAGE_SRS = 'gb2FlashcardsSrs';
+    const DECK_NAME = 'gb2-snapshot-deck';
+
+    let deck = [];
+    let srsState = {};
+    let reviewQueue = [];
+    let reviewIndex = 0;
+
+    function setStatus(message) {
+      dom.status.textContent = message;
+    }
+
+    function loadState() {
+      deck = JSON.parse(localStorage.getItem(STORAGE_DECK) || '[]');
+      srsState = JSON.parse(localStorage.getItem(STORAGE_SRS) || '{}');
+      updateDeckStats();
+    }
+
+    function persistDeck() {
+      localStorage.setItem(STORAGE_DECK, JSON.stringify(deck));
+      updateDeckStats();
+    }
+
+    function persistSrs() {
+      localStorage.setItem(STORAGE_SRS, JSON.stringify(srsState));
+      updateDeckStats();
+    }
+
+    function getCardState(id) {
+      return (srsState[DECK_NAME] || {})[id] || null;
+    }
+
+    function scheduleCard(id, grade) {
+      const now = Date.now();
+      const deckState = srsState[DECK_NAME] || {};
+      const current = deckState[id] || { ease: 2.5, interval: 0, repetitions: 0, lapses: 0, due: now };
+      const qualityMap = { again: 1, hard: 2, good: 3, easy: 4 };
+      const quality = qualityMap[grade] || 3;
+      const state = { ...current };
+
+      if (quality < 2) {
+        state.repetitions = 0;
+        state.interval = quality === 1 ? 0.007 : 1;
+        state.ease = Math.max(1.3, (state.ease ?? 2.5) - 0.2);
+        state.lapses = (state.lapses ?? 0) + 1;
+      } else {
+        const ease = state.ease ?? 2.5;
+        let newEase = ease + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+        newEase = Math.max(1.3, newEase);
+        state.ease = newEase;
+        if (state.repetitions === 0) {
+          state.interval = grade === 'easy' ? 3 : 1;
+        } else if (state.repetitions === 1) {
+          state.interval = grade === 'easy' ? 8 : 6;
+        } else {
+          state.interval = Math.round(state.interval * newEase);
+        }
+        if (grade === 'hard') state.interval = Math.max(1, Math.round(state.interval * 0.6));
+        if (grade === 'easy') state.interval = Math.round(state.interval * 1.3);
+        state.repetitions += 1;
+      }
+
+      const intervalMs = state.interval * 24 * 60 * 60 * 1000;
+      state.due = now + Math.max(intervalMs, 10 * 60 * 1000);
+      state.lastGrade = grade;
+      srsState[DECK_NAME] = { ...deckState, [id]: state };
+      return state;
+    }
+
+    function getReviewQueue(cards) {
+      const now = Date.now();
+      const due = [];
+      const fresh = [];
+      cards.forEach((card) => {
+        const state = getCardState(card.id);
+        if (!state) { fresh.push({ id: card.id, card, due: now }); }
+        else if (state.due <= now) { due.push({ id: card.id, card, due: state.due }); }
+      });
+      due.sort((a, b) => a.due - b.due);
+      fresh.sort((a, b) => a.card.term.localeCompare(b.card.term));
+      return [...due, ...fresh];
+    }
+
+    function updateDeckStats() {
+      dom.deckPill.textContent = `${deck.length} cards`;
+    }
+
+    function openOverlay() {
+      dom.overlay.classList.remove('hidden');
+      pauseEmulator();
+    }
+
+    function closeOverlay() {
+      dom.overlay.classList.add('hidden');
+      resumeEmulator();
+    }
+
+    function renderCard(entry) {
+      dom.prompt.textContent = entry.card.term;
+      dom.translation.textContent = entry.card.translation;
+      dom.translation.classList.add('hidden');
+      dom.breakdown.innerHTML = entry.card.breakdown.map(line => `<div>${line}</div>`).join('');
+      dom.breakdown.classList.add('hidden');
+      dom.revealBtn.classList.remove('hidden');
+      dom.gradeRow.classList.add('hidden');
+      updateQueueInfo();
+    }
+
+    function updateQueueInfo() {
+      dom.queueInfo.textContent = `${reviewQueue.length} card(s) left in this session.`;
+    }
+
+    function startReviewSession() {
+      if (!deck.length) {
+        setStatus('Create a snapshot first to build a deck.');
+        return;
+      }
+      const queue = getReviewQueue(deck);
+      if (!queue.length) {
+        setStatus('No cards are due yet.');
+        return;
+      }
+      reviewQueue = queue;
+      reviewIndex = 0;
+      renderCard(reviewQueue[reviewIndex]);
+      openOverlay();
+    }
+
+    function completeReview() {
+      dom.prompt.textContent = 'Deck completed!';
+      dom.translation.textContent = 'You can resume the game.';
+      dom.translation.classList.remove('hidden');
+      dom.breakdown.classList.add('hidden');
+      dom.revealBtn.textContent = 'Resume game';
+      dom.revealBtn.classList.remove('hidden');
+      dom.gradeRow.classList.add('hidden');
+      dom.queueInfo.textContent = '';
+    }
+
+    function gradeCurrentCard(grade) {
+      const entry = reviewQueue[reviewIndex];
+      scheduleCard(entry.id, grade);
+      reviewQueue.splice(reviewIndex, 1);
+      persistSrs();
+      if (!reviewQueue.length) {
+        completeReview();
+        return;
+      }
+      reviewIndex = 0;
+      renderCard(reviewQueue[reviewIndex]);
+    }
+
+    function parseGeminiResponse(text) {
+      const lines = text.split(/\n+/).map(line => line.trim()).filter(Boolean);
+      const cards = [];
+      let current = null;
+      lines.forEach((line) => {
+        const bracketMatch = line.match(/\[(.*)\]/);
+        if (bracketMatch) {
+          const payload = bracketMatch[1];
+          const parts = payload.split('|').map(p => p.trim());
+          const term = parts[0] || 'Unknown';
+          const translation = parts[1] || '';
+          current = {
+            id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+            term,
+            translation,
+            breakdown: []
+          };
+          cards.push(current);
+          return;
+        }
+        const breakdownMatch = line.match(/^\((.*)\)$/);
+        if (breakdownMatch && current) {
+          current.breakdown.push(`(${breakdownMatch[1]})`);
+        }
+      });
+      if (!cards.length) {
+        throw new Error('Could not parse Gemini response.');
+      }
+      return cards;
+    }
+
+    async function snapshotAndTranslate() {
+      if (!window.geminiApi) {
+        setStatus('Gemini API helper not loaded.');
+        return;
+      }
+      const apiKey = window.geminiApi.loadGeminiKey();
+      if (!apiKey) {
+        setStatus('Add your Gemini API key in geminiApi.js local storage first.');
+        return;
+      }
+      const canvas = document.querySelector('#game-container canvas');
+      if (!canvas) {
+        setStatus('Emulator is not ready yet.');
+        return;
+      }
+      dom.snapshotBtn.disabled = true;
+      setStatus('Capturing snapshot and sending to Gemini...');
+      try {
+        const dataUrl = canvas.toDataURL('image/png');
+        const response = await window.geminiApi.callGemini(
+          SYSTEM_INSTRUCTION,
+          '',
+          'gemini-flash-latest',
+          { images: [dataUrl] }
+        );
+        const newCards = parseGeminiResponse(response);
+        deck = [...deck, ...newCards];
+        persistDeck();
+        setStatus(`Added ${newCards.length} card(s) to the deck.`);
+        startReviewSession();
+      } catch (error) {
+        console.error(error);
+        setStatus(error.message || 'Snapshot failed.');
+      } finally {
+        dom.snapshotBtn.disabled = false;
+      }
+    }
+
+    function pauseEmulator() {
+      if (window.EJS_emulator?.gameManager?.pause) {
+        window.EJS_emulator.gameManager.pause();
+      } else if (window.EJS_emulator?.pause) {
+        window.EJS_emulator.pause();
+      }
+    }
+
+    function resumeEmulator() {
+      if (window.EJS_emulator?.gameManager?.resume) {
+        window.EJS_emulator.gameManager.resume();
+      } else if (window.EJS_emulator?.resume) {
+        window.EJS_emulator.resume();
+      }
+    }
+
+    function loadLoaderScript() {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+      script.id = 'emulator-script';
+      script.onload = () => setStatus('Emulator loaded.');
+      script.onerror = () => setStatus('Failed to load emulator script.');
+      document.body.appendChild(script);
+    }
+
+    function loadEmulator(file) {
+      if (!file) return;
+      const gameContainer = document.getElementById('game-container');
+      gameContainer.innerHTML = '';
+      const emulatorDiv = document.createElement('div');
+      emulatorDiv.id = 'emulator';
+      emulatorDiv.style.width = '100%';
+      emulatorDiv.style.height = '100%';
+      gameContainer.appendChild(emulatorDiv);
+      gameContainer.appendChild(dom.overlay);
+
+      window.EJS_player = '#emulator';
+      window.EJS_core = 'gb';
+      window.EJS_gameName = file.name;
+      window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+      window.EJS_startOnLoaded = true;
+      window.EJS_biosUrl = '';
+      window.EJS_gameUrl = URL.createObjectURL(file);
+
+      const oldScript = document.getElementById('emulator-script');
+      if (oldScript) oldScript.remove();
+      loadLoaderScript();
+      setStatus(`Loaded ${file.name}. Saves will persist in your browser.`);
+    }
+
+    async function exportSaveFile() {
+      const manager = window.EJS_emulator?.gameManager?.saveManager || window.EJS_emulator?.saveManager;
+      if (manager?.download) {
+        manager.download();
+        setStatus('Save file downloaded.');
+        return;
+      }
+      if (window.EJS_emulator?.gameManager?.downloadSave) {
+        window.EJS_emulator.gameManager.downloadSave();
+        setStatus('Save file downloaded.');
+        return;
+      }
+      setStatus('Save export not supported by this emulator build.');
+    }
+
+    async function importSaveFile(file) {
+      if (!file) return;
+      const buffer = await file.arrayBuffer();
+      const data = new Uint8Array(buffer);
+      const manager = window.EJS_emulator?.gameManager?.saveManager || window.EJS_emulator?.saveManager;
+      if (manager?.importSave) {
+        manager.importSave(data, file.name);
+        setStatus('Save file imported. Restart the game if needed.');
+        return;
+      }
+      if (manager?.load) {
+        manager.load(data, file.name);
+        setStatus('Save file loaded.');
+        return;
+      }
+      setStatus('Save import not supported by this emulator build.');
+    }
+
+    function clearSaveFile() {
+      const manager = window.EJS_emulator?.gameManager?.saveManager || window.EJS_emulator?.saveManager;
+      if (manager?.clear) {
+        manager.clear();
+        setStatus('Save file cleared.');
+        return;
+      }
+      setStatus('Save clear not supported by this emulator build.');
+    }
+
+    dom.romInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      loadEmulator(file);
+    });
+
+    dom.snapshotBtn.addEventListener('click', snapshotAndTranslate);
+    dom.reviewBtn.addEventListener('click', startReviewSession);
+
+    dom.revealBtn.addEventListener('click', () => {
+      if (dom.revealBtn.textContent === 'Resume game') {
+        closeOverlay();
+        dom.revealBtn.textContent = 'Reveal answer';
+        return;
+      }
+      dom.translation.classList.remove('hidden');
+      dom.breakdown.classList.remove('hidden');
+      dom.gradeRow.classList.remove('hidden');
+      dom.revealBtn.classList.add('hidden');
+    });
+
+    dom.gradeRow.querySelectorAll('button').forEach((btn) => {
+      btn.addEventListener('click', () => gradeCurrentCard(btn.dataset.grade));
+    });
+
+    dom.exportSave.addEventListener('click', exportSaveFile);
+    dom.importSave.addEventListener('change', (event) => importSaveFile(event.target.files[0]));
+    dom.clearSave.addEventListener('click', clearSaveFile);
+
+    loadState();
+  </script>
+</body>
+</html>
