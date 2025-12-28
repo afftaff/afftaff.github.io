@@ -166,6 +166,7 @@
       transform-style: preserve-3d;
       transition: transform 0.6s ease;
       box-shadow: 0 16px 30px rgba(0,0,0,0.4);
+      cursor: pointer;
     }
 
     .flashcard.flipped .flashcard-card {
@@ -397,6 +398,7 @@
       clearSave: document.getElementById('clearSave')
     };
     dom.card = document.querySelector('.flashcard');
+    dom.flashcardCard = document.querySelector('.flashcard-card');
 
     const STORAGE_DECK = 'gb2Flashcards';
     const STORAGE_SRS = 'gb2FlashcardsSrs';
@@ -908,6 +910,20 @@
       }
       dom.card.classList.add('flipped');
       dom.revealBtn.classList.add('hidden');
+    });
+
+    dom.flashcardCard.addEventListener('click', () => {
+      if (dom.revealBtn.textContent === 'Resume game') {
+        return;
+      }
+      const isFlipped = dom.card.classList.contains('flipped');
+      if (isFlipped) {
+        dom.card.classList.remove('flipped');
+        dom.revealBtn.classList.remove('hidden');
+      } else {
+        dom.card.classList.add('flipped');
+        dom.revealBtn.classList.add('hidden');
+      }
     });
 
     dom.gradeRow.querySelectorAll('button').forEach((btn) => {
