@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,7 +45,7 @@
     input[type="file"] {
       display: none;
     }
-    
+
     .custom-file-upload,
     button {
       border: 1px solid #5f6368;
@@ -98,6 +99,7 @@
       overflow: hidden;
     }
 
+    /* Important: Clean up canvas scaling for display, though screenshots now grab raw bytes */
     #game-container canvas {
       width: 100% !important;
       height: 100% !important;
@@ -247,6 +249,7 @@
   </div>
 
   <script src="../dir/geminiApi.js"></script>
+
   <script>
     const SYSTEM_INSTRUCTION = `Take text from image, translate and return like this:\n\n[Le professeur est arrivé tôt ce matin | The professor arrived early this morning.]\n( Le | the | masc ) \n( professeur | teacher | masc ) \n( est | is / has | N/A ) \n( arrivé | arrived | masc ) \n( tôt | early | N/A ) \n( ce | this | masculine singular ) \n( matin | morning | masculine noun )`;
 
@@ -453,42 +456,45 @@
       return cards;
     }
 
-    function getEmulatorCanvas() {
-      const candidates = [];
-      const manager = window.EJS_emulator?.gameManager;
-      if (manager?.canvas) candidates.push(manager.canvas);
-      if (manager?.display?.canvas) candidates.push(manager.display.canvas);
-      if (window.EJS_emulator?.canvas) candidates.push(window.EJS_emulator.canvas);
-      const emulatorRoot = document.getElementById('emulator');
-      if (emulatorRoot) candidates.push(...emulatorRoot.querySelectorAll('canvas'));
-      const container = document.getElementById('game-container');
-      if (container) candidates.push(...container.querySelectorAll('canvas'));
+    // --- NEW SCREENSHOT LOGIC INTEGRATION START ---
 
-      const visible = candidates.filter((canvas) => {
-        if (!canvas) return false;
-        const rect = canvas.getBoundingClientRect();
-        return rect.width > 0 && rect.height > 0;
+    async function getEmulatorScreenshot({ download = false, filename = "screenshot" } = {}) {
+      const gm = window.EJS_emulator?.gameManager;
+      if (!gm?.screenshot) throw new Error("EmulatorJS not ready (no gameManager.screenshot).");
+
+      // Resolves to raw image bytes (Uint8Array)
+      const bytesOrBlob = await gm.screenshot(); 
+
+      // Work out the format
+      const photoCfg = window.EJS_screenCapture?.photo || {};
+      const format = (photoCfg.source === "retroarch") ? "png" : (photoCfg.format || "png");
+
+      const blob = (bytesOrBlob instanceof Blob)
+        ? bytesOrBlob
+        : new Blob([bytesOrBlob], { type: `image/${format}` });
+
+      if (download) {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `${filename}.${format}`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+
+      return blob;
+    }
+
+    // Helper to convert Blob to Base64 (DataURL) for Gemini
+    function blobToDataURL(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
       });
-      if (!visible.length) return null;
-      return visible.sort((a, b) => (b.width * b.height) - (a.width * a.height))[0];
     }
 
-    function captureSnapshotDataUrl() {
-      const canvas = getEmulatorCanvas();
-      if (!canvas) return null;
-      const rect = canvas.getBoundingClientRect();
-      const width = canvas.width || Math.round(rect.width);
-      const height = canvas.height || Math.round(rect.height);
-      if (!width || !height) return null;
-      const snapshotCanvas = document.createElement('canvas');
-      snapshotCanvas.width = width;
-      snapshotCanvas.height = height;
-      const ctx = snapshotCanvas.getContext('2d');
-      if (!ctx) return null;
-      ctx.imageSmoothingEnabled = false;
-      ctx.drawImage(canvas, 0, 0, width, height);
-      return snapshotCanvas.toDataURL('image/png');
-    }
+    // --- NEW SCREENSHOT LOGIC INTEGRATION END ---
 
     async function snapshotAndTranslate() {
       if (!window.geminiApi) {
@@ -500,17 +506,21 @@
         setStatus('Add your Gemini API key in geminiApi.js local storage first.');
         return;
       }
-      if (!getEmulatorCanvas()) {
-        setStatus('Emulator is not ready yet.');
-        return;
-      }
+      
       dom.snapshotBtn.disabled = true;
-      setStatus('Capturing snapshot and sending to Gemini...');
+      setStatus('Capturing internal snapshot and sending to Gemini...');
+      
       try {
-        const dataUrl = captureSnapshotDataUrl();
+        // 1. Get Blob from emulator
+        const blob = await getEmulatorScreenshot({ download: false });
+        
+        // 2. Convert to Base64 for Gemini
+        const dataUrl = await blobToDataURL(blob);
+        
         if (!dataUrl) {
-          throw new Error('Snapshot capture failed. Try again after the game is running.');
+          throw new Error('Snapshot conversion failed.');
         }
+
         const response = await window.geminiApi.callGemini(
           SYSTEM_INSTRUCTION,
           '',
@@ -524,30 +534,23 @@
         startReviewSession();
       } catch (error) {
         console.error(error);
-        setStatus(error.message || 'Snapshot failed.');
+        setStatus(error.message || 'Snapshot/Translation failed.');
       } finally {
         dom.snapshotBtn.disabled = false;
       }
     }
 
-    function downloadSnapshot() {
+    async function downloadSnapshot() {
       try {
-        const dataUrl = captureSnapshotDataUrl();
-        if (!dataUrl) {
-          setStatus('Snapshot capture failed. Try again after the game is running.');
-          return;
-        }
-        const link = document.createElement('a');
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-        link.href = dataUrl;
-        link.download = `gb2-snapshot-${timestamp}.png`;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
+        await getEmulatorScreenshot({ 
+            download: true, 
+            filename: `gb2-snapshot-${timestamp}`
+        });
         setStatus('Snapshot downloaded.');
       } catch (error) {
         console.error(error);
-        setStatus('Snapshot download failed.');
+        setStatus('Snapshot download failed: ' + error.message);
       }
     }
 
@@ -675,5 +678,6 @@
 
     loadState();
   </script>
+
 </body>
 </html>
