@@ -1,25 +1,3 @@
-Here is the fixed code. I have updated the CSS, the Parsing Logic, and the Rendering Logic.
-
-Key Changes Made:
-
-Mini-Flashcards: The breakdown lines are no longer plain text. They are now interactive buttons.
-
-Flip Logic: When you click "Reveal Answer", the breakdown list appears, but each item only shows the Source Word (e.g., "Quoi"). You must click the specific word to flip it and see the translation/grammar.
-
-Data Parsing: Updated parseGeminiResponse to intelligently split the ( Word | Translation | Grammar ) format into usable parts.
-
-Hidden Translation: The main translation remains strictly hidden until the "Reveal Answer" button is pressed.
-
-The Complete File
-
-Save this as your .html file (e.g., index.html).
-
-code
-Html
-play_circle
-download
-content_copy
-expand_less
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -144,7 +122,7 @@ expand_less
     .overlay {
       position: absolute;
       inset: 0;
-      background: rgba(32, 33, 36, 0.95); /* Slightly darker for better contrast */
+      background: rgba(32, 33, 36, 0.95);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -156,8 +134,8 @@ expand_less
 
     .flashcard {
       width: min(620px, 100%);
-      max-height: 95%; /* Prevent overflowing screen */
-      overflow-y: auto; /* Allow scrolling if list is long */
+      max-height: 95%;
+      overflow-y: auto;
       background: #1f2226;
       border: 1px solid #3c4043;
       border-radius: 14px;
@@ -191,9 +169,8 @@ expand_less
       border-radius: 8px;
       padding: 12px;
       cursor: pointer;
-      transition: all 0.2s ease;
-      position: relative;
-      text-align: left;
+      user-select: none;
+      transition: background-color 0.2s;
     }
 
     .mini-card:hover {
@@ -201,32 +178,36 @@ expand_less
       border-color: #8ab4f8;
     }
 
-    .mini-card .front {
-      font-weight: bold;
+    /* The Front of the mini card (always visible) */
+    .mini-card-front {
       color: #fff;
-      display: block;
+      font-weight: bold;
+      font-size: 16px;
     }
 
-    .mini-card .back {
-      display: none;
+    /* The Back of the mini card (hidden by default) */
+    .mini-card-back {
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed #5f6368;
       color: #bdc1c6;
-      margin-top: 4px;
-      font-size: 0.95em;
+      font-size: 14px;
+      display: none; /* Hidden by default */
     }
-
-    .mini-card .back strong {
+    
+    .mini-card-back strong {
       color: #8ab4f8;
     }
 
-    /* State when flipped */
-    .mini-card.flipped .back {
+    /* Class applied when mini-card is clicked */
+    .mini-card.flipped .mini-card-back {
       display: block;
-      animation: fadeIn 0.3s ease;
+      animation: fadeIn 0.2s ease-in-out;
     }
-    
+
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-2px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     /* -------------------------------- */
 
@@ -299,10 +280,11 @@ expand_less
     <div id="flashcardOverlay" class="overlay hidden">
       <div class="flashcard">
         <div class="pill" id="deckPill">0 cards</div>
-        <!-- Card Front -->
+        
+        <!-- CARD FRONT -->
         <h2 id="cardPrompt">Waiting for snapshot…</h2>
         
-        <!-- Card Back Elements -->
+        <!-- CARD BACK (Translation + Breakdown) -->
         <div id="cardTranslation" class="translation hidden"></div>
         <div id="cardBreakdown" class="breakdown-container hidden"></div>
         
@@ -323,8 +305,8 @@ expand_less
   <script src="../dir/geminiApi.js"></script>
 
   <script>
-    // Instruction tuned to ensure pipes are used for easy parsing
-    const SYSTEM_INSTRUCTION = `Take text from image, translate and return strictly like this example:\n\n[Le professeur est arrivé tôt ce matin | The professor arrived early this morning.]\n( Le | the | masc ) \n( professeur | teacher | masc ) \n( est | is / has | verb ) \n( arrivé | arrived | past participle ) \n( tôt | early | adv ) \n( ce | this | masc ) \n( matin | morning | noun )`;
+    // --- RESTORED ORIGINAL INSTRUCTION ---
+    const SYSTEM_INSTRUCTION = `Take text from image, translate and return like this:\n\n[Le professeur est arrivé tôt ce matin | The professor arrived early this morning.]\n( Le | the | masc ) \n( professeur | teacher | masc ) \n( est | is / has | N/A ) \n( arrivé | arrived | masc ) \n( tôt | early | N/A ) \n( ce | this | masculine singular ) \n( matin | morning | masculine noun )`;
 
     const dom = {
       romInput: document.getElementById('rom-upload'),
@@ -444,47 +426,44 @@ expand_less
     }
 
     function renderCard(entry) {
-      // 1. Setup Front
+      // 1. FRONT: The original sentence prompt
       dom.prompt.textContent = entry.card.term;
-      
-      // 2. Setup Back (Hidden initially)
+
+      // 2. BACK (Hidden): The full translation
       dom.translation.textContent = entry.card.translation;
       dom.translation.classList.add('hidden');
-      
-      // 3. Setup Mini-Cards Breakdown
-      dom.breakdown.innerHTML = '';
-      dom.breakdown.classList.add('hidden');
-      
-      // Generate the mini-card DOM elements
-      entry.card.breakdown.forEach(item => {
-        // Handle both old string format and new object format for backward compatibility
-        let source = '', target = '', extra = '';
-        
-        if (typeof item === 'string') {
-            source = item; 
-        } else {
-            source = item.source;
-            target = item.target;
-            extra = item.extra;
-        }
 
-        const btn = document.createElement('div');
-        btn.className = 'mini-card';
-        btn.innerHTML = `
-            <span class="front">${source}</span>
-            <span class="back"><strong>${target}</strong> ${extra ? `&mdash; <em>${extra}</em>` : ''}</span>
+      // 3. BACK (Hidden): The Breakdown / Mini-Flashcards
+      dom.breakdown.innerHTML = ''; // Clear old items
+      dom.breakdown.classList.add('hidden');
+
+      // Loop through the parsed breakdown objects
+      entry.card.breakdown.forEach(item => {
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'mini-card';
+        
+        // Handle backward compatibility or string/object differences
+        const word = item.source || item;
+        const trans = item.target || '';
+        const gram = item.extra || '';
+
+        cardDiv.innerHTML = `
+          <div class="mini-card-front">${word}</div>
+          <div class="mini-card-back">
+            <strong>${trans}</strong> ${gram ? `<span style="color:#777">|</span> ${gram}` : ''}
+          </div>
         `;
-        
-        // Add click to flip functionality
-        btn.onclick = (e) => {
-            e.stopPropagation(); // Prevent bubbling
-            btn.classList.toggle('flipped');
+
+        // Click to flip this specific mini-card
+        cardDiv.onclick = (e) => {
+          e.stopPropagation(); // don't trigger parent clicks
+          cardDiv.classList.toggle('flipped');
         };
-        
-        dom.breakdown.appendChild(btn);
+
+        dom.breakdown.appendChild(cardDiv);
       });
 
-      // 4. Reset Actions
+      // 4. Buttons
       dom.revealBtn.textContent = 'Reveal answer';
       dom.revealBtn.classList.remove('hidden');
       dom.gradeRow.classList.add('hidden');
@@ -535,61 +514,57 @@ expand_less
       renderCard(reviewQueue[reviewIndex]);
     }
 
+    // --- UPDATED PARSING LOGIC TO HANDLE BREAKDOWN ITEMS ---
     function parseGeminiResponse(text) {
       const lines = text.split(/\n+/).map(line => line.trim()).filter(Boolean);
       const cards = [];
       let current = null;
       
       lines.forEach((line) => {
-        // Match [ Source | Translation ]
+        // 1. Capture Main Card: [ Source | Translation ]
         const bracketMatch = line.match(/\[(.*)\]/);
         if (bracketMatch) {
           const payload = bracketMatch[1];
-          // Use a lazy split just in case text has pipes, but usually 1 pipe for main trans
           const parts = payload.split('|').map(p => p.trim());
           const term = parts[0] || 'Unknown';
-          const translation = parts.slice(1).join(' | ') || ''; // Join rest if multiple pipes
-          
+          const translation = parts[1] || '';
           current = {
             id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
             term,
             translation,
-            breakdown: []
+            breakdown: [] // Stores objects: {source, target, extra}
           };
           cards.push(current);
           return;
         }
 
-        // Match ( Source | Target | Grammar )
-        // Using a regex that captures content inside parens
+        // 2. Capture Breakdown Items: ( Word | Trans | Extra )
         const breakdownMatch = line.match(/^\((.*)\)$/);
         if (breakdownMatch && current) {
-            const rawContent = breakdownMatch[1];
-            const parts = rawContent.split('|').map(s => s.trim());
-            
-            // Build a structured object for the mini-card
-            const miniCard = {
-                source: parts[0] || '?',
-                target: parts[1] || '?',
-                extra: parts[2] || ''
-            };
-            
-            current.breakdown.push(miniCard);
+          const content = breakdownMatch[1];
+          const parts = content.split('|').map(p => p.trim());
+          
+          // Create structured object for the UI
+          current.breakdown.push({
+            source: parts[0] || '?',
+            target: parts[1] || '',
+            extra: parts[2] || ''
+          });
         }
       });
-      
+
       if (!cards.length) {
         throw new Error('Could not parse Gemini response.');
       }
       return cards;
     }
 
+    // --- NEW SCREENSHOT LOGIC ---
     async function getEmulatorScreenshot({ download = false, filename = "screenshot" } = {}) {
       const gm = window.EJS_emulator?.gameManager;
       if (!gm?.screenshot) throw new Error("EmulatorJS not ready (no gameManager.screenshot).");
 
       const bytesOrBlob = await gm.screenshot(); 
-
       const photoCfg = window.EJS_screenCapture?.photo || {};
       const format = (photoCfg.source === "retroarch") ? "png" : (photoCfg.format || "png");
 
@@ -642,7 +617,7 @@ expand_less
         const response = await window.geminiApi.callGemini(
           SYSTEM_INSTRUCTION,
           '',
-          'gemini-1.5-flash', // Updated to latest flash model name convention if applicable, or keep 'gemini-flash-latest'
+          'gemini-1.5-flash',
           { images: [dataUrl] }
         );
         const newCards = parseGeminiResponse(response);
@@ -774,18 +749,18 @@ expand_less
     dom.downloadSnapshotBtn.addEventListener('click', downloadSnapshot);
     dom.reviewBtn.addEventListener('click', startReviewSession);
 
-    // REVEAL BUTTON LOGIC
+    // REVEAL BUTTON CLICK HANDLER
     dom.revealBtn.addEventListener('click', () => {
-      // Logic for concluding the deck review
       if (dom.revealBtn.textContent === 'Resume game') {
         closeOverlay();
         dom.revealBtn.textContent = 'Reveal answer';
         return;
       }
-
-      // Logic for Revealing the Answer
-      dom.translation.classList.remove('hidden'); // Show full translation
-      dom.breakdown.classList.remove('hidden');   // Show container of mini-cards (unflipped)
+      // Reveal the main translation
+      dom.translation.classList.remove('hidden');
+      
+      // Reveal the container for mini-cards (they start in unflipped state)
+      dom.breakdown.classList.remove('hidden');
       
       dom.gradeRow.classList.remove('hidden');
       dom.revealBtn.classList.add('hidden');
