@@ -635,6 +635,7 @@
       window.EJS_core = 'gb';
       window.EJS_gameName = file.name.replace(/\.[^/.]+$/, '');
       window.EJS_startOnLoaded = true;
+      window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/';
 
       const existing = document.getElementById('emu-loader');
       if (existing) {
@@ -643,9 +644,9 @@
       }
       const script = document.createElement('script');
       script.id = 'emu-loader';
-      script.src = 'https://cdn.emulatorjs.org/latest/loader.js';
+      script.src = 'https://cdn.emulatorjs.org/loader.js';
       script.onload = () => setStatus('Emulator loaded.');
-      script.onerror = () => setStatus('Failed to load emulator.');
+      script.onerror = () => setStatus('Failed to load emulator loader script. Check your connection.');
       document.body.appendChild(script);
     }
 
