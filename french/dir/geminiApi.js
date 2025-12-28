@@ -22,12 +22,46 @@ function saveGeminiKey(value) {
   }
 }
 
-async function callGemini(systemInstruction, userContent, model = 'gemini-flash-latest') {
+function normalizeImagePart(image) {
+  if (!image) return null;
+
+  if (typeof image === 'string') {
+    if (!image.startsWith('data:')) {
+      throw new Error('Image string must be a data URL.');
+    }
+    const [meta, data] = image.split(',');
+    if (!meta || !data) {
+      throw new Error('Invalid data URL format.');
+    }
+    const mimeMatch = meta.match(/data:(.*);base64/);
+    if (!mimeMatch) {
+      throw new Error('Data URL must include base64 mimeType.');
+    }
+    return { inlineData: { mimeType: mimeMatch[1], data } };
+  }
+
+  if (typeof image === 'object' && image.data && image.mimeType) {
+    return { inlineData: { mimeType: image.mimeType, data: image.data } };
+  }
+
+  throw new Error('Image must be a data URL string or { data, mimeType } object.');
+}
+
+async function callGemini(systemInstruction, userContent, model = 'gemini-flash-latest', options = {}) {
   if (!systemInstruction) throw new Error('Missing system instruction');
-  if (!userContent) throw new Error('Missing user content');
+  const images = Array.isArray(options.images) ? options.images : [];
+  if (!userContent && images.length === 0) throw new Error('Missing user content');
 
   const key = loadGeminiKey();
   if (!key) throw new Error('Missing API key');
+  const parts = [];
+  if (userContent) {
+    parts.push({ text: userContent });
+  }
+  images.forEach((image) => {
+    const part = normalizeImagePart(image);
+    if (part) parts.push(part);
+  });
 
   const response = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`,
@@ -36,7 +70,7 @@ async function callGemini(systemInstruction, userContent, model = 'gemini-flash-
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: systemInstruction }] },
-        contents: [{ parts: [{ text: userContent }] }]
+        contents: [{ parts }]
       })
     }
   );
