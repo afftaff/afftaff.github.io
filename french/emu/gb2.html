@@ -453,6 +453,43 @@
       return cards;
     }
 
+    function getEmulatorCanvas() {
+      const candidates = [];
+      const manager = window.EJS_emulator?.gameManager;
+      if (manager?.canvas) candidates.push(manager.canvas);
+      if (manager?.display?.canvas) candidates.push(manager.display.canvas);
+      if (window.EJS_emulator?.canvas) candidates.push(window.EJS_emulator.canvas);
+      const emulatorRoot = document.getElementById('emulator');
+      if (emulatorRoot) candidates.push(...emulatorRoot.querySelectorAll('canvas'));
+      const container = document.getElementById('game-container');
+      if (container) candidates.push(...container.querySelectorAll('canvas'));
+
+      const visible = candidates.filter((canvas) => {
+        if (!canvas) return false;
+        const rect = canvas.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0;
+      });
+      if (!visible.length) return null;
+      return visible.sort((a, b) => (b.width * b.height) - (a.width * a.height))[0];
+    }
+
+    function captureSnapshotDataUrl() {
+      const canvas = getEmulatorCanvas();
+      if (!canvas) return null;
+      const rect = canvas.getBoundingClientRect();
+      const width = canvas.width || Math.round(rect.width);
+      const height = canvas.height || Math.round(rect.height);
+      if (!width || !height) return null;
+      const snapshotCanvas = document.createElement('canvas');
+      snapshotCanvas.width = width;
+      snapshotCanvas.height = height;
+      const ctx = snapshotCanvas.getContext('2d');
+      if (!ctx) return null;
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(canvas, 0, 0, width, height);
+      return snapshotCanvas.toDataURL('image/png');
+    }
+
     async function snapshotAndTranslate() {
       if (!window.geminiApi) {
         setStatus('Gemini API helper not loaded.');
@@ -463,15 +500,17 @@
         setStatus('Add your Gemini API key in geminiApi.js local storage first.');
         return;
       }
-      const canvas = document.querySelector('#game-container canvas');
-      if (!canvas) {
+      if (!getEmulatorCanvas()) {
         setStatus('Emulator is not ready yet.');
         return;
       }
       dom.snapshotBtn.disabled = true;
       setStatus('Capturing snapshot and sending to Gemini...');
       try {
-        const dataUrl = canvas.toDataURL('image/png');
+        const dataUrl = captureSnapshotDataUrl();
+        if (!dataUrl) {
+          throw new Error('Snapshot capture failed. Try again after the game is running.');
+        }
         const response = await window.geminiApi.callGemini(
           SYSTEM_INSTRUCTION,
           '',
@@ -492,13 +531,12 @@
     }
 
     function downloadSnapshot() {
-      const canvas = document.querySelector('#game-container canvas');
-      if (!canvas) {
-        setStatus('Emulator is not ready yet.');
-        return;
-      }
       try {
-        const dataUrl = canvas.toDataURL('image/png');
+        const dataUrl = captureSnapshotDataUrl();
+        if (!dataUrl) {
+          setStatus('Snapshot capture failed. Try again after the game is running.');
+          return;
+        }
         const link = document.createElement('a');
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         link.href = dataUrl;
