@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -98,19 +99,26 @@
       overflow: hidden;
     }
 
+    #emulator {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
     #game-container canvas {
       width: 100% !important;
       height: 100% !important;
       image-rendering: pixelated;
     }
 
+    /* UPDATED: Z-Index set to max to ensure visibility in fullscreen */
     .corner-actions {
       position: absolute;
       top: 16px;
       right: 16px;
       display: flex;
       gap: 8px;
-      z-index: 5;
+      z-index: 2147483647; 
       flex-wrap: wrap;
       justify-content: flex-end;
     }
@@ -118,6 +126,8 @@
     .corner-actions button {
       padding: 8px 14px;
       font-size: 0.9rem;
+      background-color: rgba(32, 33, 36, 0.8); /* Added transparency for fullscreen look */
+      backdrop-filter: blur(4px);
     }
 
     .placeholder-text {
@@ -135,6 +145,7 @@
       color: #9aa0a6;
     }
 
+    /* UPDATED: Z-Index set to max */
     .overlay {
       position: absolute;
       inset: 0;
@@ -143,7 +154,7 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-      z-index: 3;
+      z-index: 2147483647;
     }
 
     .overlay.hidden { display: none; }
@@ -211,7 +222,7 @@
 
     .card-face h2 {
       margin: 0;
-      font-size: 32px; /* Bigger font for single words */
+      font-size: 32px; 
       line-height: 1.4;
     }
 
@@ -231,7 +242,6 @@
       font-weight: bold;
     }
 
-    /* --- OLD MINI STYLES KEPT FOR SAFEKEEPING (Unused) --- */
     .breakdown-container {
       display: flex;
       flex-direction: column;
@@ -239,7 +249,6 @@
       width: 100%;
       align-items: center;
     }
-    /* -------------------------------- */
 
     .extra-info {
         margin-top: 15px;
@@ -336,7 +345,9 @@
       <button id="queueSnapshotBtn" class="secondary">📸 Queue snapshot</button>
       <button id="snapshotBtn" class="secondary">🚀 Send queued to Gemini</button>
     </div>
+    
     <span class="placeholder-text">Load a ROM to start playing</span>
+    
     <div id="flashcardOverlay" class="overlay hidden">
       <div class="flashcard">
         <div class="flashcard-header">
@@ -372,6 +383,7 @@
         <div class="status-line" id="queueInfo"></div>
       </div>
     </div>
+    
     <div id="wordListOverlay" class="overlay hidden">
       <div class="flashcard wordlist-panel">
         <div class="flashcard-header">
@@ -392,7 +404,9 @@
     const SYSTEM_INSTRUCTION = `Take text from image, translate and return like this:\n\n[Le professeur est arrivé tôt ce matin | The professor arrived early this morning.]\n( Le | the | masc ) \n( professeur | teacher | masc ) \n( est | is / has | N/A ) \n( arrivé | arrived | masc ) \n( tôt | early | N/A ) \n( ce | this | masculine singular ) \n( matin | morning | masculine noun )`;
 
     const dom = {
+      gameContainer: document.getElementById('game-container'),
       romInput: document.getElementById('rom-upload'),
+      cornerActions: document.querySelector('.corner-actions'),
       queueSnapshotBtn: document.getElementById('queueSnapshotBtn'),
       snapshotBtn: document.getElementById('snapshotBtn'),
       downloadSnapshotBtn: document.getElementById('downloadSnapshotBtn'),
@@ -413,7 +427,8 @@
       status: document.getElementById('statusLine'),
       exportSave: document.getElementById('exportSave'),
       importSave: document.getElementById('importSave'),
-      clearSave: document.getElementById('clearSave')
+      clearSave: document.getElementById('clearSave'),
+      placeholder: document.querySelector('.placeholder-text')
     };
     dom.card = document.querySelector('.flashcard');
     dom.flashcardCard = document.querySelector('.flashcard-card');
@@ -583,16 +598,10 @@
       resumeEmulator();
     }
 
-    // --- REVISED RENDER FUNCTION ---
     function renderCard(entry) {
-      // 1. FRONT: The original word
       dom.prompt.textContent = entry.card.term;
-
-      // 2. BACK: The translation
       dom.translation.textContent = entry.card.translation;
-
-      // 3. BELOW BACK: The "After pipe" info (Clean text, no list)
-      dom.breakdown.innerHTML = ''; // Clear previous
+      dom.breakdown.innerHTML = ''; 
       
       if (entry.card.extra) {
         const extraDiv = document.createElement('div');
@@ -601,7 +610,6 @@
         dom.breakdown.appendChild(extraDiv);
       }
 
-      // 4. Buttons & UI Reset
       dom.card.classList.remove('flipped');
       dom.revealBtn.textContent = 'Reveal answer';
       dom.revealBtn.classList.remove('hidden');
@@ -653,28 +661,23 @@
       renderCard(reviewQueue[reviewIndex]);
     }
 
-    // --- UPDATED PARSING LOGIC: FLATTENS LIST INTO INDIVIDUAL CARDS ---
     function parseGeminiResponse(text) {
       const lines = text.split(/\n+/).map(line => line.trim()).filter(Boolean);
       const cards = [];
       
       lines.forEach((line) => {
-        // 1. Check for INDIVIDUAL WORD card: ( Source | Target | Extra )
-        // This splits the response into multiple Anki cards immediately.
         const breakdownMatch = line.match(/^\((.*)\)$/);
         if (breakdownMatch) {
           const parts = breakdownMatch[1].split('|').map(p => p.trim());
           cards.push({
             id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-            term: parts[0] || '?',        // Front
-            translation: parts[1] || '',  // Back
-            extra: parts[2] || ''         // Below Back
+            term: parts[0] || '?',
+            translation: parts[1] || '',
+            extra: parts[2] || ''
           });
           return;
         }
 
-        // 2. Check for SENTENCE card: [ Source | Target ]
-        // Added as a separate card type, but treated consistently (no "reveal list")
         const bracketMatch = line.match(/\[(.*)\]/);
         if (bracketMatch) {
           const parts = bracketMatch[1].split('|').map(p => p.trim());
@@ -831,20 +834,30 @@
 
     function loadEmulator(file) {
       if (!file) return;
-      const gameContainer = document.getElementById('game-container');
-      gameContainer.innerHTML = '';
+      
+      // Cleanup previous emulator only
+      const existingEmulator = document.getElementById('emulator');
+      if (existingEmulator) existingEmulator.remove();
+      
+      // Hide placeholder
+      if (dom.placeholder) dom.placeholder.style.display = 'none';
+
+      // Create new emulator container
       const emulatorDiv = document.createElement('div');
       emulatorDiv.id = 'emulator';
-      emulatorDiv.style.width = '100%';
-      emulatorDiv.style.height = '100%';
-      gameContainer.appendChild(emulatorDiv);
-      gameContainer.appendChild(dom.overlay);
+      
+      // Insert emulator at the beginning of the container so buttons stay on top
+      dom.gameContainer.prepend(emulatorDiv);
 
       window.EJS_player = '#emulator';
       window.EJS_core = 'gb';
       window.EJS_gameName = file.name;
       window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
       window.EJS_startOnLoaded = true;
+      
+      // *** 1. DEFAULT TO FULLSCREEN ***
+      window.EJS_fullscreenOnLoaded = true;
+      
       window.EJS_biosUrl = '';
       window.EJS_gameUrl = URL.createObjectURL(file);
 
@@ -853,6 +866,27 @@
       loadLoaderScript();
       setStatus(`Loaded ${file.name}. Saves will persist in your browser.`);
     }
+
+    // *** 2. FULLSCREEN "PORTAL" LOGIC ***
+    // Moves the buttons into the emulator's fullscreen element so they are visible
+    document.addEventListener('fullscreenchange', () => {
+      const fsElement = document.fullscreenElement;
+      
+      // Elements we want to see in fullscreen
+      const elementsToMove = [dom.cornerActions, dom.overlay, dom.wordListOverlay];
+
+      if (fsElement) {
+        // Entering fullscreen: Append our controls to the fullscreen element
+        elementsToMove.forEach(el => {
+          if (el) fsElement.appendChild(el);
+        });
+      } else {
+        // Exiting fullscreen: Move them back to the game container
+        elementsToMove.forEach(el => {
+          if (el) dom.gameContainer.appendChild(el);
+        });
+      }
+    });
 
     async function exportSaveFile() {
       const manager = window.EJS_emulator?.gameManager?.saveManager || window.EJS_emulator?.saveManager;
@@ -919,7 +953,6 @@
       }
     });
 
-    // REVEAL BUTTON CLICK HANDLER
     dom.revealBtn.addEventListener('click', () => {
       if (dom.revealBtn.textContent === 'Resume game') {
         closeOverlay();
