@@ -105,12 +105,12 @@
     }
 
     .corner-actions {
-      position: fixed;
+      position: absolute;
       top: 16px;
       right: 16px;
       display: flex;
       gap: 8px;
-      z-index: 4;
+      z-index: 5;
       flex-wrap: wrap;
       justify-content: flex-end;
     }
@@ -304,11 +304,6 @@
 <body>
   <h1>Web GameBoy Player</h1>
 
-  <div class="corner-actions">
-    <button id="queueSnapshotBtn" class="secondary">📸 Queue snapshot</button>
-    <button id="snapshotBtn" class="secondary">🚀 Send queued to Gemini</button>
-  </div>
-
   <div class="controls">
     <div class="control-row">
       <label for="rom-upload" class="custom-file-upload">
@@ -337,6 +332,10 @@
   </div>
 
   <div id="game-container">
+    <div class="corner-actions">
+      <button id="queueSnapshotBtn" class="secondary">📸 Queue snapshot</button>
+      <button id="snapshotBtn" class="secondary">🚀 Send queued to Gemini</button>
+    </div>
     <span class="placeholder-text">Load a ROM to start playing</span>
     <div id="flashcardOverlay" class="overlay hidden">
       <div class="flashcard">
