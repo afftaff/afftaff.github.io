@@ -261,6 +261,8 @@
     const speakButton = document.getElementById("speak-button");
     const ratingButtons = Array.from(document.querySelectorAll("[data-rating]"));
     const FLIP_TRANSITION_MS = 300;
+    const DEFAULT_TTS_LANG = "fr-FR";
+    let preferredVoice = null;
 
     const urlParams = new URLSearchParams(window.location.search);
     const rawCards = urlParams.getAll("card");
@@ -392,7 +394,10 @@
 
     function speakFrontText() {
       const utterance = new SpeechSynthesisUtterance(frontTextEl.textContent.trim());
-      utterance.lang = "fr-FR";
+      utterance.lang = DEFAULT_TTS_LANG;
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      }
       window.speechSynthesis.cancel();
       window.speechSynthesis.speak(utterance);
     }
@@ -446,9 +451,18 @@
       }
     });
 
+    function selectFrenchVoice() {
+      const voices = window.speechSynthesis.getVoices();
+      preferredVoice =
+        voices.find((voice) => voice.lang?.toLowerCase().startsWith("fr")) ?? null;
+    }
+
+    window.speechSynthesis.addEventListener("voiceschanged", selectFrenchVoice);
+
     updateQueue();
     showNext();
     persistQueue();
+    selectFrenchVoice();
   </script>
 </body>
 </html>
