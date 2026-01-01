@@ -148,13 +148,23 @@
       border-radius: 999px;
       font-weight: 600;
       cursor: pointer;
-      background: var(--accent);
       color: white;
     }
 
-    .controls button.secondary {
-      background: #dfe3ff;
-      color: #1f2a8a;
+    .controls button.rating-again {
+      background: #d64545;
+    }
+
+    .controls button.rating-hard {
+      background: #f0a500;
+    }
+
+    .controls button.rating-good {
+      background: #3f9c5f;
+    }
+
+    .controls button.rating-easy {
+      background: #4b5cff;
     }
 
     .meta {
@@ -226,10 +236,10 @@
       </div>
       <div class="meta" id="progress">Card 1 / 1</div>
       <div class="controls">
-        <button type="button" data-rating="again">Again</button>
-        <button type="button" data-rating="hard" class="secondary">Hard</button>
-        <button type="button" data-rating="good">Good</button>
-        <button type="button" data-rating="easy" class="secondary">Easy</button>
+        <button type="button" data-rating="again" class="rating-again">Again</button>
+        <button type="button" data-rating="hard" class="rating-hard">Hard</button>
+        <button type="button" data-rating="good" class="rating-good">Good</button>
+        <button type="button" data-rating="easy" class="rating-easy">Easy</button>
       </div>
       <div class="meta" id="next-due">Cards left: 0</div>
     </section>
@@ -342,10 +352,10 @@
       queue.shift();
 
       if (rating === "again") {
-        const insertIndex = Math.min(1, queue.length);
+        const insertIndex = Math.min(4, queue.length);
         queue.splice(insertIndex, 0, card);
       } else if (rating === "hard") {
-        const insertIndex = Math.min(2, queue.length);
+        const insertIndex = Math.min(7, queue.length);
         queue.splice(insertIndex, 0, card);
       } else if (rating === "good") {
         queue.push(card);
