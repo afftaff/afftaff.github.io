@@ -2,63 +2,88 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>French Flashcards (URL Deck)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>French Flashcards</title>
   <style>
     :root {
       color-scheme: light dark;
-      --bg: #f6f6f9;
-      --card: #ffffff;
-      --text: #1d1d1f;
-      --accent: #4b5cff;
-      --muted: #7a7f8c;
-      --border: #d9dce6;
-      --back: #f1f3ff;
-      font-family: "Noto Sans", system-ui, -apple-system, sans-serif;
+      --bg: #f2f2f7;
+      --card-bg: #ffffff;
+      --text: #1c1c1e;
+      --accent: #007aff;
+      --muted: #8e8e93;
+      --border: #e5e5ea;
+      --back-face: #f1f3ff;
+      
+      /* Rating Colors */
+      --rate-again: #ff3b30;
+      --rate-hard: #ff9500;
+      --rate-good: #34c759;
+      --rate-easy: #007aff;
+
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
+
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 16px;
+      font-size: 16px; /* Base size for readability */
     }
 
     header {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 20px;
+      text-align: center;
+      margin-bottom: 16px;
     }
 
     h1 {
       margin: 0;
-      font-size: 1.8rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+      opacity: 0.9;
     }
 
-    .instructions {
-      font-size: 0.95rem;
-      color: var(--muted);
-      line-height: 1.5;
+    /* Main layout takes available space */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
     }
 
-    .deck {
-      display: grid;
-      gap: 16px;
-    }
-
+    /* --- FLASHCARD STYLES --- */
     .card-stage {
-      display: grid;
-      gap: 12px;
-      align-items: center;
-      justify-items: center;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+
+    .meta-top {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
     }
 
     .flashcard {
-      width: min(520px, 90vw);
-      height: 280px;
+      width: 100%;
+      /* Responsive height: taller on mobile, capped on desktop */
+      height: 50vh; 
+      min-height: 280px;
+      max-height: 500px;
       perspective: 1000px;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .flashcard-inner {
@@ -66,7 +91,7 @@
       width: 100%;
       height: 100%;
       transform-style: preserve-3d;
-      transition: transform 0.6s;
+      transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
     }
 
     .flashcard.is-flipped .flashcard-inner {
@@ -77,178 +102,239 @@
       position: absolute;
       inset: 0;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-radius: 18px;
-      border: 2px solid var(--border);
-      background: var(--card);
-      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
+      border-radius: 24px;
+      background: var(--card-bg);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
       backface-visibility: hidden;
-      padding: 20px;
+      padding: 24px;
       text-align: center;
+      border: 1px solid rgba(0,0,0,0.05);
     }
 
     .flashcard-back {
-      background: var(--back);
+      background: var(--back-face);
       transform: rotateY(180deg);
-      flex-direction: column;
-      gap: 10px;
     }
 
-    .flashcard-front {
-      flex-direction: column;
-      gap: 16px;
-    }
-
+    /* --- CONTENT INSIDE CARD --- */
     .front-controls {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
+
+    .speak-button {
+      background: rgba(0,0,0,0.05);
+      border: none;
+      border-radius: 50%;
+      width: 44px; /* Good touch target */
+      height: 44px;
+      font-size: 1.2rem;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
       justify-content: center;
+      transition: background 0.2s;
     }
-
-    .speak-button,
-    .front-text {
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--text);
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 0.95rem;
-      cursor: pointer;
-    }
+    
+    .speak-button:active { background: rgba(0,0,0,0.1); }
 
     .front-text {
-      font-size: 2.5rem;
-      letter-spacing: 1px;
-      min-height: 3rem;
+      font-size: 2.8rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin: 10px 0;
+      line-height: 1.2;
+      padding: 10px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
     }
 
+    /* Click-to-reveal Logic */
     .hidden-value {
       color: transparent;
-      text-shadow: 0 0 26px rgba(0, 0, 0, 0.35);
-      filter: blur(8px);
+      text-shadow: 0 0 35px rgba(0, 0, 0, 0.2);
+      background: rgba(0,0,0,0.03);
+      user-select: none;
+      cursor: pointer;
     }
 
     .back-text {
-      font-size: 1.6rem;
-      font-weight: 600;
+      font-size: 1.8rem;
+      font-weight: 500;
+      color: var(--accent);
     }
 
-    .controls {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
+    .tap-hint {
+      position: absolute;
+      bottom: 20px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      opacity: 0.7;
     }
 
-    .controls button {
+    /* --- RATING BUTTONS (Thumb Friendly) --- */
+    .controls-area {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .rating-btn {
       border: none;
-      padding: 10px 18px;
-      border-radius: 999px;
+      padding: 16px 4px; /* Taller for thumbs */
+      border-radius: 14px;
       font-weight: 600;
+      font-size: 0.95rem;
       cursor: pointer;
       color: white;
+      transition: transform 0.1s, opacity 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .controls button.rating-again {
-      background: #d64545;
+    .rating-btn:active { transform: scale(0.96); opacity: 0.9; }
+    .rating-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+    .btn-again { background: var(--rate-again); }
+    .btn-hard  { background: var(--rate-hard); }
+    .btn-good  { background: var(--rate-good); }
+    .btn-easy  { background: var(--rate-easy); }
+
+    /* --- DETAILS / ACCORDIONS --- */
+    .accordion-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: auto; /* Pushes to bottom */
+      padding-top: 20px;
     }
 
-    .controls button.rating-hard {
-      background: #f0a500;
-    }
-
-    .controls button.rating-good {
-      background: #3f9c5f;
-    }
-
-    .controls button.rating-easy {
-      background: #4b5cff;
-    }
-
-    .meta {
-      text-align: center;
-      color: var(--muted);
+    details {
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
       font-size: 0.9rem;
     }
 
-    .queue {
-      margin-top: 18px;
-      border-top: 1px dashed var(--border);
-      padding-top: 12px;
-    }
-
-    .queue summary {
+    summary {
+      padding: 14px;
       cursor: pointer;
-      font-size: 1.1rem;
       font-weight: 600;
-      margin-bottom: 8px;
       list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.5);
     }
 
-    .queue summary::-webkit-details-marker {
-      display: none;
+    summary::-webkit-details-marker { display: none; }
+    
+    summary::after {
+      content: '+';
+      font-size: 1.2rem;
+      font-weight: 300;
+      color: var(--muted);
+    }
+    
+    details[open] summary::after { content: '−'; }
+
+    .details-content {
+      padding: 14px;
+      border-top: 1px solid var(--border);
+      color: var(--text);
+      line-height: 1.5;
     }
 
     .queue-list {
-      display: grid;
-      gap: 6px;
-      font-size: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
       color: var(--muted);
     }
+    
+    code {
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      word-break: break-all;
+      font-family: monospace;
+      font-size: 0.85em;
+    }
 
-    @media (max-width: 600px) {
-      .flashcard {
-        height: 240px;
+    /* --- MEDIA QUERIES --- */
+    @media (max-width: 400px) {
+      .controls-area {
+        grid-template-columns: repeat(2, 1fr); /* 2x2 grid on very small phones */
       }
-
-      .front-text {
-        font-size: 2rem;
-      }
+      .front-text { font-size: 2.2rem; }
     }
   </style>
 </head>
 <body>
+
   <header>
-    <h1>French Flashcards (URL Deck)</h1>
-    <div class="instructions">
-      Pass cards via the URL using <code>?card=front|back</code> (repeat <code>card</code> for multiple entries).
-      Example: <code>flashcardsfor.html?card=bonjour|hello&card=au%20revoir|goodbye</code>
-      Click the card to flip. Click the front word to reveal it.
-    </div>
+    <h1>French Flashcards</h1>
   </header>
 
-  <main class="deck">
+  <main>
     <section class="card-stage">
+      <div class="meta-top" id="progress">Loading...</div>
+      
       <div class="flashcard" id="flashcard" role="button" aria-pressed="false" tabindex="0">
         <div class="flashcard-inner">
+          <!-- FRONT -->
           <div class="flashcard-face flashcard-front">
             <div class="front-controls">
-              <button class="speak-button" type="button" id="speak-button" aria-label="Speak card">🔊 Speak</button>
+              <button class="speak-button" type="button" id="speak-button" aria-label="Speak">🔊</button>
             </div>
-            <div class="front-text hidden-value" id="front-text" role="button" tabindex="0" aria-pressed="false">mot</div>
+            
+            <div class="front-text hidden-value" id="front-text">mot</div>
+            <div class="tap-hint">Tap card to flip</div>
           </div>
+          
+          <!-- BACK -->
           <div class="flashcard-face flashcard-back">
             <div class="back-text" id="back-text">word</div>
+            <div class="tap-hint">Rate difficulty below</div>
           </div>
         </div>
       </div>
-      <div class="meta" id="progress">Card 1 / 1</div>
-      <div class="controls">
-        <button type="button" data-rating="again" class="rating-again">Again</button>
-        <button type="button" data-rating="hard" class="rating-hard">Hard</button>
-        <button type="button" data-rating="good" class="rating-good">Good</button>
-        <button type="button" data-rating="easy" class="rating-easy">Easy</button>
-      </div>
-      <div class="meta" id="next-due">Cards left: 0</div>
     </section>
 
-    <details class="queue">
-      <summary>Upcoming cards</summary>
-      <div class="queue-list" id="queue-list"></div>
-    </details>
+    <!-- RATING CONTROLS -->
+    <section class="controls-area">
+      <button type="button" data-rating="again" class="rating-btn btn-again">Again</button>
+      <button type="button" data-rating="hard" class="rating-btn btn-hard">Hard</button>
+      <button type="button" data-rating="good" class="rating-btn btn-good">Good</button>
+      <button type="button" data-rating="easy" class="rating-btn btn-easy">Easy</button>
+    </section>
+
+    <!-- FOOTER SECTIONS -->
+    <div class="accordion-group">
+      <!-- Upcoming Queue -->
+      <details>
+        <summary>Upcoming Cards <span id="queue-count" style="font-weight:400; color:var(--muted)">(0)</span></summary>
+        <div class="details-content">
+          <div class="queue-list" id="queue-list"></div>
+        </div>
+      </details>
+
+      <!-- URL Instructions (Moved to bottom & Expandable) -->
+      <details>
+        <summary>How to add cards</summary>
+        <div class="details-content">
+          <p style="margin-top:0">Pass cards via the URL using <code>?card=front|back</code>.</p>
+          <p><strong>Example:</strong><br>
+          <code>flashcards.html?card=bonjour|hello&card=merci|thanks</code></p>
+          <p style="margin-bottom:0; font-size:0.85em; color:var(--muted);">Tip: Bookmark the URL with your custom cards to save the deck.</p>
+        </div>
+      </details>
+    </div>
   </main>
 
   <script>
@@ -257,212 +343,193 @@
     const backTextEl = document.getElementById("back-text");
     const progressEl = document.getElementById("progress");
     const queueList = document.getElementById("queue-list");
-    const nextDueEl = document.getElementById("next-due");
+    const queueCountEl = document.getElementById("queue-count");
     const speakButton = document.getElementById("speak-button");
     const ratingButtons = Array.from(document.querySelectorAll("[data-rating]"));
+    
     const FLIP_TRANSITION_MS = 300;
     const DEFAULT_TTS_LANG = "fr-FR";
     let preferredVoice = null;
 
+    // --- 1. Load Data ---
     const urlParams = new URLSearchParams(window.location.search);
     const rawCards = urlParams.getAll("card");
 
     const defaultCards = [
       { frontText: "bonjour", backText: "hello" },
       { frontText: "merci", backText: "thank you" },
-      { frontText: "au revoir", backText: "goodbye" }
+      { frontText: "au revoir", backText: "goodbye" },
+      { frontText: "s'il vous plaît", backText: "please" }
     ];
 
     function parseCard(raw) {
-      const [frontText, backText] = raw.split("|").map((part) => part.trim());
-      if (!frontText || !backText) {
-        return null;
-      }
-      return { frontText, backText };
+      const parts = raw.split("|");
+      if (parts.length < 2) return null;
+      return { 
+        frontText: parts[0].trim(), 
+        backText: parts[1].trim() 
+      };
     }
 
-    const cards = rawCards.map(parseCard).filter(Boolean);
-    const deck = cards.length ? cards : defaultCards;
+    const inputCards = rawCards.map(parseCard).filter(Boolean);
+    const deck = inputCards.length ? inputCards : defaultCards;
 
-    const STORAGE_PREFIX = "flashcardsfor-progress:";
-
-    function getDeckSignature(activeDeck) {
-      return activeDeck.map((card) => `${card.frontText}||${card.backText}`).join("##");
-    }
+    // --- 2. Storage & Queue Management ---
+    const STORAGE_PREFIX = "fr-flash-v2:"; // changed version to prevent conflict
 
     function getStorageKey(activeDeck) {
-      const signature = getDeckSignature(activeDeck);
-      return `${STORAGE_PREFIX}${btoa(unescape(encodeURIComponent(signature)))}`;
+      // Create a simple hash of the deck content so we track progress per unique deck URL
+      const signature = activeDeck.map(c => c.frontText).join("");
+      let hash = 0;
+      for (let i = 0; i < signature.length; i++) {
+        hash = ((hash << 5) - hash) + signature.charCodeAt(i);
+        hash |= 0;
+      }
+      return `${STORAGE_PREFIX}${hash}`;
     }
 
-    function loadQueue(activeDeck) {
-      const key = getStorageKey(activeDeck);
-      const stored = localStorage.getItem(key);
-      if (!stored) return null;
+    const storageKey = getStorageKey(deck);
+
+    function loadQueue() {
+      const stored = localStorage.getItem(storageKey);
+      if (!stored) return [...deck]; // Start fresh
       try {
         const parsed = JSON.parse(stored);
-        if (!Array.isArray(parsed.queue)) return null;
-        const isValid = parsed.queue.every((card) => card.frontText && card.backText);
-        if (!isValid) return null;
-        return parsed.queue;
-      } catch (error) {
-        return null;
-      }
+        if (Array.isArray(parsed.queue) && parsed.queue.length > 0) {
+          return parsed.queue;
+        }
+      } catch (e) { console.error("Save file corrupted"); }
+      return [...deck];
     }
 
-    const queue = loadQueue(deck) ?? [...deck];
+    const queue = loadQueue();
 
+    // --- 3. UI Rendering ---
     function getNextCard() {
       return queue[0];
     }
 
-    function updateQueue() {
+    function renderQueueList() {
       queueList.innerHTML = "";
-      queue.forEach((card, index) => {
+      queueCountEl.textContent = `(${queue.length})`;
+      
+      if(queue.length === 0) {
+        queueList.innerHTML = "<div>No cards left!</div>";
+        return;
+      }
+
+      // Show top 5 only to keep UI clean
+      queue.slice(0, 5).forEach((card, index) => {
         const line = document.createElement("div");
         line.textContent = `${index + 1}. ${card.frontText}`;
         queueList.appendChild(line);
       });
-    }
-
-    function resetReveal() {
-      frontTextEl.classList.add("hidden-value");
-      frontTextEl.setAttribute("aria-pressed", "false");
-    }
-
-    function renderCard(card, index) {
-      frontTextEl.textContent = card.frontText;
-      backTextEl.textContent = card.backText;
-      progressEl.textContent = `Card ${index + 1} / ${queue.length}`;
-      nextDueEl.textContent = `Cards left: ${queue.length}`;
-      resetReveal();
-    }
-
-    function renderEmptyState() {
-      frontTextEl.textContent = "All done!";
-      backTextEl.textContent = "";
-      progressEl.textContent = "Card 0 / 0";
-      nextDueEl.textContent = "Cards left: 0";
-      resetReveal();
-      ratingButtons.forEach((button) => {
-        button.disabled = true;
-      });
-      persistQueue();
-    }
-
-    function applyRating(card, rating) {
-      if (!card) return;
-      queue.shift();
-
-      if (rating === "again") {
-        const insertIndex = Math.min(4, queue.length);
-        queue.splice(insertIndex, 0, card);
-      } else if (rating === "hard") {
-        const insertIndex = Math.min(7, queue.length);
-        queue.splice(insertIndex, 0, card);
-      } else if (rating === "good") {
-        queue.push(card);
-      } else if (rating === "easy") {
-        // Drop card from queue
+      
+      if(queue.length > 5) {
+        const more = document.createElement("div");
+        more.textContent = `...and ${queue.length - 5} more`;
+        more.style.fontStyle = "italic";
+        queueList.appendChild(more);
       }
-
-      updateQueue();
-      persistQueue();
-      ratingButtons.forEach((button) => {
-        button.disabled = true;
-      });
-      flashcard.classList.remove("is-flipped");
-      flashcard.setAttribute("aria-pressed", "false");
-      window.setTimeout(() => {
-        showNext();
-      }, FLIP_TRANSITION_MS);
     }
 
-    function showNext() {
-      const next = getNextCard();
-      if (!next) {
-        renderEmptyState();
+    function resetCardState() {
+      frontTextEl.classList.add("hidden-value");
+      flashcard.classList.remove("is-flipped");
+    }
+
+    function renderCurrent() {
+      const card = getNextCard();
+      
+      if (!card) {
+        // Empty state
+        frontTextEl.textContent = "🎉";
+        frontTextEl.classList.remove("hidden-value");
+        backTextEl.textContent = "All done!";
+        progressEl.textContent = "0 Cards remaining";
+        ratingButtons.forEach(b => b.disabled = true);
+        renderQueueList();
         return;
       }
-      ratingButtons.forEach((button) => {
-        button.disabled = false;
-      });
-      renderCard(next, 0);
+
+      frontTextEl.textContent = card.frontText;
+      backTextEl.textContent = card.backText;
+      progressEl.textContent = `${queue.length} Card${queue.length === 1 ? '' : 's'} remaining`;
+      
+      resetCardState();
+      ratingButtons.forEach(b => b.disabled = false);
+      renderQueueList();
+    }
+
+    // --- 4. Interactions ---
+
+    function handleRating(rating) {
+      const currentCard = queue.shift(); // Remove current
+      if (!currentCard) return;
+
+      // Simple Spaced Repetition Logic
+      if (rating === "again") {
+        queue.splice(2, 0, currentCard); // Re-insert shortly
+      } else if (rating === "hard") {
+        queue.splice(6, 0, currentCard); // Re-insert later
+      } else if (rating === "good") {
+        queue.push(currentCard); // Back of the line
+      } 
+      // "easy" removes it from session (already shifted out)
+
+      // Save and Next
+      localStorage.setItem(storageKey, JSON.stringify({ queue }));
+      
+      // Visual transition
       flashcard.classList.remove("is-flipped");
-      flashcard.setAttribute("aria-pressed", "false");
+      setTimeout(() => {
+        renderCurrent();
+      }, 250); // Wait for half flip
     }
 
-    function speakFrontText() {
-      const utterance = new SpeechSynthesisUtterance(frontTextEl.textContent.trim());
-      utterance.lang = DEFAULT_TTS_LANG;
-      if (preferredVoice) {
-        utterance.voice = preferredVoice;
-      }
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
-    }
-
-    function persistQueue() {
-      const key = getStorageKey(deck);
-      localStorage.setItem(key, JSON.stringify({ queue }));
-    }
-
-    function toggleReveal() {
-      const isHidden = frontTextEl.classList.contains("hidden-value");
-      frontTextEl.classList.toggle("hidden-value", !isHidden);
-      frontTextEl.setAttribute("aria-pressed", isHidden ? "true" : "false");
-    }
-
-    flashcard.addEventListener("click", () => {
+    // Flip Card
+    flashcard.addEventListener("click", (e) => {
+      // Don't flip if clicking speaker or the text itself (since text handles its own reveal)
+      if (e.target.closest('.speak-button')) return;
+      if (e.target.closest('#front-text')) return; 
+      
       flashcard.classList.toggle("is-flipped");
-      const pressed = flashcard.classList.contains("is-flipped");
-      flashcard.setAttribute("aria-pressed", pressed.toString());
     });
 
-    flashcard.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        flashcard.click();
-      }
+    // Reveal Text
+    frontTextEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+      frontTextEl.classList.toggle("hidden-value");
     });
 
-    ratingButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const rating = button.getAttribute("data-rating");
-        const current = getNextCard();
-        applyRating(current, rating);
+    // Speak
+    function setupSpeech() {
+      const voices = window.speechSynthesis.getVoices();
+      preferredVoice = voices.find(v => v.lang.includes("fr")) || null;
+    }
+    window.speechSynthesis.onvoiceschanged = setupSpeech;
+    setupSpeech(); // Init immediately if available
+
+    speakButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const text = frontTextEl.textContent;
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = DEFAULT_TTS_LANG;
+      if (preferredVoice) u.voice = preferredVoice;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    });
+
+    // Rating Buttons
+    ratingButtons.forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation(); // prevent card flip
+        handleRating(btn.dataset.rating);
       });
     });
 
-    speakButton.addEventListener("click", (event) => {
-      event.stopPropagation();
-      speakFrontText();
-    });
-
-    frontTextEl.addEventListener("click", (event) => {
-      event.stopPropagation();
-      toggleReveal();
-    });
-
-    frontTextEl.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        toggleReveal();
-      }
-    });
-
-    function selectFrenchVoice() {
-      const voices = window.speechSynthesis.getVoices();
-      preferredVoice =
-        voices.find((voice) => voice.lang?.toLowerCase().startsWith("fr")) ?? null;
-    }
-
-    window.speechSynthesis.addEventListener("voiceschanged", selectFrenchVoice);
-
-    updateQueue();
-    showNext();
-    persistQueue();
-    selectFrenchVoice();
+    // Init
+    renderCurrent();
   </script>
 </body>
 </html>
