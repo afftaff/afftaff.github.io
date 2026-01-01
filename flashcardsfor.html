@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>French Flashcards (URL Deck)</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f6f6f9;
+      --card: #ffffff;
+      --text: #1d1d1f;
+      --accent: #4b5cff;
+      --muted: #7a7f8c;
+      --border: #d9dce6;
+      --back: #f1f3ff;
+      font-family: "Noto Sans", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .instructions {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .deck {
+      display: grid;
+      gap: 16px;
+    }
+
+    .card-stage {
+      display: grid;
+      gap: 12px;
+      align-items: center;
+      justify-items: center;
+    }
+
+    .flashcard {
+      width: min(520px, 90vw);
+      height: 280px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .flashcard-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+    }
+
+    .flashcard.is-flipped .flashcard-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flashcard-face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 18px;
+      border: 2px solid var(--border);
+      background: var(--card);
+      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
+      backface-visibility: hidden;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .flashcard-back {
+      background: var(--back);
+      transform: rotateY(180deg);
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .flashcard-front {
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .front-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .speak-button,
+    .reveal-button {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .front-text {
+      font-size: 2.5rem;
+      letter-spacing: 1px;
+      min-height: 3rem;
+    }
+
+    .hidden-value {
+      color: transparent;
+      text-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .back-text {
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .controls button {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+    }
+
+    .controls button.secondary {
+      background: #dfe3ff;
+      color: #1f2a8a;
+    }
+
+    .meta {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .queue {
+      margin-top: 18px;
+      border-top: 1px dashed var(--border);
+      padding-top: 12px;
+    }
+
+    .queue h2 {
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+    }
+
+    .queue-list {
+      display: grid;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 600px) {
+      .flashcard {
+        height: 240px;
+      }
+
+      .front-text {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>French Flashcards (URL Deck)</h1>
+    <div class="instructions">
+      Pass cards via the URL using <code>?card=front|back</code> (repeat <code>card</code> for multiple entries).
+      Example: <code>flashcardsfor.html?card=bonjour|hello&card=au%20revoir|goodbye</code>
+      Click the card to flip. Use the reveal button to show the front text.
+    </div>
+  </header>
+
+  <main class="deck">
+    <section class="card-stage">
+      <div class="flashcard" id="flashcard" role="button" aria-pressed="false" tabindex="0">
+        <div class="flashcard-inner">
+          <div class="flashcard-face flashcard-front">
+            <div class="front-controls">
+              <button class="speak-button" type="button" id="speak-button" aria-label="Speak card">🔊 Speak</button>
+              <button class="reveal-button" type="button" id="reveal-button">Reveal word</button>
+            </div>
+            <div class="front-text hidden-value" id="front-text">mot</div>
+          </div>
+          <div class="flashcard-face flashcard-back">
+            <div class="back-text" id="back-text">word</div>
+          </div>
+        </div>
+      </div>
+      <div class="meta" id="progress">Card 1 / 1</div>
+      <div class="controls">
+        <button type="button" data-rating="again">Again</button>
+        <button type="button" data-rating="hard" class="secondary">Hard</button>
+        <button type="button" data-rating="good">Good</button>
+        <button type="button" data-rating="easy" class="secondary">Easy</button>
+      </div>
+      <div class="meta" id="next-due">Cards left: 0</div>
+    </section>
+
+    <section class="queue">
+      <h2>Upcoming cards</h2>
+      <div class="queue-list" id="queue-list"></div>
+    </section>
+  </main>
+
+  <script>
+    const flashcard = document.getElementById("flashcard");
+    const frontTextEl = document.getElementById("front-text");
+    const backTextEl = document.getElementById("back-text");
+    const progressEl = document.getElementById("progress");
+    const queueList = document.getElementById("queue-list");
+    const nextDueEl = document.getElementById("next-due");
+    const speakButton = document.getElementById("speak-button");
+    const revealButton = document.getElementById("reveal-button");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const rawCards = urlParams.getAll("card");
+
+    const defaultCards = [
+      { frontText: "bonjour", backText: "hello" },
+      { frontText: "merci", backText: "thank you" },
+      { frontText: "au revoir", backText: "goodbye" }
+    ];
+
+    function parseCard(raw) {
+      const [frontText, backText] = raw.split("|").map((part) => part.trim());
+      if (!frontText || !backText) {
+        return null;
+      }
+      return { frontText, backText };
+    }
+
+    const cards = rawCards.map(parseCard).filter(Boolean);
+    const deck = cards.length ? cards : defaultCards;
+    const queue = [...deck];
+
+    function getNextCard() {
+      return queue[0];
+    }
+
+    function updateQueue() {
+      queueList.innerHTML = "";
+      queue.forEach((card, index) => {
+        const line = document.createElement("div");
+        line.textContent = `${index + 1}. ${card.frontText}`;
+        queueList.appendChild(line);
+      });
+    }
+
+    function resetReveal() {
+      frontTextEl.classList.add("hidden-value");
+      revealButton.textContent = "Reveal word";
+    }
+
+    function renderCard(card, index) {
+      frontTextEl.textContent = card.frontText;
+      backTextEl.textContent = card.backText;
+      progressEl.textContent = `Card ${index + 1} / ${queue.length}`;
+      nextDueEl.textContent = `Cards left: ${queue.length}`;
+      resetReveal();
+    }
+
+    function renderEmptyState() {
+      frontTextEl.textContent = "All done!";
+      backTextEl.textContent = "";
+      progressEl.textContent = "Card 0 / 0";
+      nextDueEl.textContent = "Cards left: 0";
+      resetReveal();
+      document.querySelectorAll("[data-rating]").forEach((button) => {
+        button.disabled = true;
+      });
+    }
+
+    function applyRating(card, rating) {
+      if (!card) return;
+      queue.shift();
+
+      if (rating === "again") {
+        const insertIndex = Math.min(1, queue.length);
+        queue.splice(insertIndex, 0, card);
+      } else if (rating === "hard") {
+        const insertIndex = Math.min(2, queue.length);
+        queue.splice(insertIndex, 0, card);
+      } else if (rating === "good") {
+        queue.push(card);
+      } else if (rating === "easy") {
+        // Drop card from queue
+      }
+
+      updateQueue();
+      showNext();
+    }
+
+    function showNext() {
+      const next = getNextCard();
+      if (!next) {
+        renderEmptyState();
+        return;
+      }
+      renderCard(next, 0);
+      flashcard.classList.remove("is-flipped");
+      flashcard.setAttribute("aria-pressed", "false");
+    }
+
+    function speakFrontText() {
+      const utterance = new SpeechSynthesisUtterance(frontTextEl.textContent.trim());
+      utterance.lang = "fr-FR";
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
+
+    flashcard.addEventListener("click", () => {
+      flashcard.classList.toggle("is-flipped");
+      const pressed = flashcard.classList.contains("is-flipped");
+      flashcard.setAttribute("aria-pressed", pressed.toString());
+    });
+
+    flashcard.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        flashcard.click();
+      }
+    });
+
+    document.querySelectorAll("[data-rating]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const rating = button.getAttribute("data-rating");
+        const current = getNextCard();
+        applyRating(current, rating);
+      });
+    });
+
+    speakButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      speakFrontText();
+    });
+
+    revealButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const isHidden = frontTextEl.classList.contains("hidden-value");
+      frontTextEl.classList.toggle("hidden-value", !isHidden);
+      revealButton.textContent = isHidden ? "Hide word" : "Reveal word";
+    });
+
+    updateQueue();
+    showNext();
+  </script>
+</body>
+</html>
