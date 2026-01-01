@@ -109,7 +109,7 @@
     }
 
     .speak-button,
-    .reveal-button {
+    .front-text {
       border: 1px solid var(--border);
       background: var(--card);
       color: var(--text);
@@ -198,7 +198,7 @@
     <div class="instructions">
       Pass cards via the URL using <code>?card=front|back</code> (repeat <code>card</code> for multiple entries).
       Example: <code>flashcardsfor.html?card=bonjour|hello&card=au%20revoir|goodbye</code>
-      Click the card to flip. Use the reveal button to show the front text.
+      Click the card to flip. Click the front word to reveal it.
     </div>
   </header>
 
@@ -209,9 +209,8 @@
           <div class="flashcard-face flashcard-front">
             <div class="front-controls">
               <button class="speak-button" type="button" id="speak-button" aria-label="Speak card">🔊 Speak</button>
-              <button class="reveal-button" type="button" id="reveal-button">Reveal word</button>
             </div>
-            <div class="front-text hidden-value" id="front-text">mot</div>
+            <div class="front-text hidden-value" id="front-text" role="button" tabindex="0" aria-pressed="false">mot</div>
           </div>
           <div class="flashcard-face flashcard-back">
             <div class="back-text" id="back-text">word</div>
@@ -242,7 +241,6 @@
     const queueList = document.getElementById("queue-list");
     const nextDueEl = document.getElementById("next-due");
     const speakButton = document.getElementById("speak-button");
-    const revealButton = document.getElementById("reveal-button");
 
     const urlParams = new URLSearchParams(window.location.search);
     const rawCards = urlParams.getAll("card");
@@ -263,7 +261,34 @@
 
     const cards = rawCards.map(parseCard).filter(Boolean);
     const deck = cards.length ? cards : defaultCards;
-    const queue = [...deck];
+
+    const STORAGE_PREFIX = "flashcardsfor-progress:";
+
+    function getDeckSignature(activeDeck) {
+      return activeDeck.map((card) => `${card.frontText}||${card.backText}`).join("##");
+    }
+
+    function getStorageKey(activeDeck) {
+      const signature = getDeckSignature(activeDeck);
+      return `${STORAGE_PREFIX}${btoa(unescape(encodeURIComponent(signature)))}`;
+    }
+
+    function loadQueue(activeDeck) {
+      const key = getStorageKey(activeDeck);
+      const stored = localStorage.getItem(key);
+      if (!stored) return null;
+      try {
+        const parsed = JSON.parse(stored);
+        if (!Array.isArray(parsed.queue)) return null;
+        const isValid = parsed.queue.every((card) => card.frontText && card.backText);
+        if (!isValid) return null;
+        return parsed.queue;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    const queue = loadQueue(deck) ?? [...deck];
 
     function getNextCard() {
       return queue[0];
@@ -280,7 +305,7 @@
 
     function resetReveal() {
       frontTextEl.classList.add("hidden-value");
-      revealButton.textContent = "Reveal word";
+      frontTextEl.setAttribute("aria-pressed", "false");
     }
 
     function renderCard(card, index) {
@@ -300,6 +325,7 @@
       document.querySelectorAll("[data-rating]").forEach((button) => {
         button.disabled = true;
       });
+      persistQueue();
     }
 
     function applyRating(card, rating) {
@@ -319,6 +345,7 @@
       }
 
       updateQueue();
+      persistQueue();
       showNext();
     }
 
@@ -328,6 +355,9 @@
         renderEmptyState();
         return;
       }
+      document.querySelectorAll("[data-rating]").forEach((button) => {
+        button.disabled = false;
+      });
       renderCard(next, 0);
       flashcard.classList.remove("is-flipped");
       flashcard.setAttribute("aria-pressed", "false");
@@ -338,6 +368,17 @@
       utterance.lang = "fr-FR";
       window.speechSynthesis.cancel();
       window.speechSynthesis.speak(utterance);
+    }
+
+    function persistQueue() {
+      const key = getStorageKey(deck);
+      localStorage.setItem(key, JSON.stringify({ queue }));
+    }
+
+    function toggleReveal() {
+      const isHidden = frontTextEl.classList.contains("hidden-value");
+      frontTextEl.classList.toggle("hidden-value", !isHidden);
+      frontTextEl.setAttribute("aria-pressed", isHidden ? "true" : "false");
     }
 
     flashcard.addEventListener("click", () => {
@@ -366,15 +407,21 @@
       speakFrontText();
     });
 
-    revealButton.addEventListener("click", (event) => {
+    frontTextEl.addEventListener("click", (event) => {
       event.stopPropagation();
-      const isHidden = frontTextEl.classList.contains("hidden-value");
-      frontTextEl.classList.toggle("hidden-value", !isHidden);
-      revealButton.textContent = isHidden ? "Hide word" : "Reveal word";
+      toggleReveal();
+    });
+
+    frontTextEl.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        toggleReveal();
+      }
     });
 
     updateQueue();
     showNext();
+    persistQueue();
   </script>
 </body>
 </html>
