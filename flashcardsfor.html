@@ -169,9 +169,16 @@
       padding-top: 12px;
     }
 
-    .queue h2 {
-      margin: 0 0 8px;
+    .queue summary {
+      cursor: pointer;
       font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      list-style: none;
+    }
+
+    .queue summary::-webkit-details-marker {
+      display: none;
     }
 
     .queue-list {
@@ -227,10 +234,10 @@
       <div class="meta" id="next-due">Cards left: 0</div>
     </section>
 
-    <section class="queue">
-      <h2>Upcoming cards</h2>
+    <details class="queue">
+      <summary>Upcoming cards</summary>
       <div class="queue-list" id="queue-list"></div>
-    </section>
+    </details>
   </main>
 
   <script>
@@ -242,7 +249,7 @@
     const nextDueEl = document.getElementById("next-due");
     const speakButton = document.getElementById("speak-button");
     const ratingButtons = Array.from(document.querySelectorAll("[data-rating]"));
-    const FLIP_TRANSITION_MS = 600;
+    const FLIP_TRANSITION_MS = 300;
 
     const urlParams = new URLSearchParams(window.location.search);
     const rawCards = urlParams.getAll("card");
