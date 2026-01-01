@@ -118,22 +118,19 @@
     }
 
     /* --- CONTROLS & CONTENT --- */
-    
-    /* Updated: Removed absolute positioning, made it part of the flex flow */
     .front-controls {
       margin-bottom: 24px;
       z-index: 10;
     }
 
-    /* Updated: Much bigger button */
     .speak-button {
-      background: rgba(0, 122, 255, 0.1); /* Light blue tint */
+      background: rgba(0, 122, 255, 0.1); 
       color: var(--accent);
       border: 1px solid rgba(0, 122, 255, 0.2);
       border-radius: 50%;
       width: 80px; 
       height: 80px;
-      font-size: 3rem; /* Large icon */
+      font-size: 3rem; 
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -147,6 +144,11 @@
       background: rgba(0, 122, 255, 0.2);
     }
 
+    /* 
+       --- BLUR LOGIC --- 
+       By default, .front-text is blurred/hidden.
+       It only becomes visible when .is-visible is added.
+    */
     .front-text {
       font-size: 2.8rem;
       font-weight: 700;
@@ -155,15 +157,23 @@
       line-height: 1.2;
       padding: 12px 20px;
       border-radius: 16px;
-      transition: all 0.3s ease;
-    }
+      transition: all 0.2s ease;
 
-    .hidden-value {
+      /* DEFAULT STATE: HIDDEN/BLURRED */
       color: transparent;
-      text-shadow: 0 0 35px rgba(0, 0, 0, 0.2);
-      background: rgba(0,0,0,0.03);
+      text-shadow: 0 0 35px rgba(0, 0, 0, 0.35); /* Strong blur */
+      background: rgba(0,0,0,0.04); /* Light grey patch */
       user-select: none;
       cursor: pointer;
+    }
+
+    /* REVEALED STATE */
+    .front-text.is-visible {
+      color: var(--text);
+      text-shadow: none;
+      background: transparent;
+      cursor: text;
+      user-select: text;
     }
 
     .back-text {
@@ -291,18 +301,18 @@
         <div class="flashcard-inner">
           <!-- FRONT -->
           <div class="flashcard-face flashcard-front">
-            <!-- Big Central Speaker -->
             <div class="front-controls">
               <button class="speak-button" type="button" id="speak-button" aria-label="Speak">🔊</button>
             </div>
             
-            <div class="front-text hidden-value" id="front-text">mot</div>
+            <!-- Default state is now blurred/hidden -->
+            <div class="front-text" id="front-text">...</div>
             <div class="tap-hint">Tap card to flip</div>
           </div>
           
           <!-- BACK -->
           <div class="flashcard-face flashcard-back">
-            <div class="back-text" id="back-text">word</div>
+            <div class="back-text" id="back-text">...</div>
             <div class="tap-hint">Rate difficulty below</div>
           </div>
         </div>
@@ -346,7 +356,6 @@
     const speakButton = document.getElementById("speak-button");
     const ratingButtons = Array.from(document.querySelectorAll("[data-rating]"));
     
-    const FLIP_TRANSITION_MS = 300;
     const DEFAULT_TTS_LANG = "fr-FR";
     let preferredVoice = null;
 
@@ -374,7 +383,7 @@
     const deck = inputCards.length ? inputCards : defaultCards;
 
     // --- 2. Storage & Queue Management ---
-    const STORAGE_PREFIX = "fr-flash-v3:"; 
+    const STORAGE_PREFIX = "fr-flash-v4:"; 
 
     function getStorageKey(activeDeck) {
       const signature = activeDeck.map(c => c.frontText).join("");
@@ -430,8 +439,9 @@
       }
     }
 
-    function resetCardState() {
-      frontTextEl.classList.add("hidden-value");
+    function hideTextStrictly() {
+      // Remove visibility class immediately
+      frontTextEl.classList.remove("is-visible");
       flashcard.classList.remove("is-flipped");
     }
 
@@ -440,21 +450,24 @@
       
       if (!card) {
         frontTextEl.textContent = "🎉";
-        frontTextEl.classList.remove("hidden-value");
+        frontTextEl.classList.add("is-visible"); // Reveal the trophy
         backTextEl.textContent = "All done!";
         progressEl.textContent = "0 Cards remaining";
         ratingButtons.forEach(b => b.disabled = true);
-        speakButton.style.display = "none"; // Hide speaker on empty state
+        speakButton.style.display = "none";
         renderQueueList();
         return;
       }
       
-      speakButton.style.display = "flex"; // Ensure visible
+      // 1. Ensure hidden BEFORE changing text
+      hideTextStrictly();
+      
+      // 2. Change text (user only sees blur updating)
+      speakButton.style.display = "flex";
       frontTextEl.textContent = card.frontText;
       backTextEl.textContent = card.backText;
       progressEl.textContent = `${queue.length} Card${queue.length === 1 ? '' : 's'} remaining`;
       
-      resetCardState();
       ratingButtons.forEach(b => b.disabled = false);
       renderQueueList();
     }
@@ -491,7 +504,7 @@
 
     frontTextEl.addEventListener("click", (e) => {
       e.stopPropagation();
-      frontTextEl.classList.toggle("hidden-value");
+      frontTextEl.classList.toggle("is-visible");
     });
 
     function setupSpeech() {
@@ -503,7 +516,6 @@
 
     speakButton.addEventListener("click", (e) => {
       e.stopPropagation();
-      // Add subtle animation feedback via JS class if desired, or rely on CSS :active
       const text = frontTextEl.textContent;
       const u = new SpeechSynthesisUtterance(text);
       u.lang = DEFAULT_TTS_LANG;
