@@ -241,6 +241,8 @@
     const queueList = document.getElementById("queue-list");
     const nextDueEl = document.getElementById("next-due");
     const speakButton = document.getElementById("speak-button");
+    const ratingButtons = Array.from(document.querySelectorAll("[data-rating]"));
+    const FLIP_TRANSITION_MS = 600;
 
     const urlParams = new URLSearchParams(window.location.search);
     const rawCards = urlParams.getAll("card");
@@ -322,7 +324,7 @@
       progressEl.textContent = "Card 0 / 0";
       nextDueEl.textContent = "Cards left: 0";
       resetReveal();
-      document.querySelectorAll("[data-rating]").forEach((button) => {
+      ratingButtons.forEach((button) => {
         button.disabled = true;
       });
       persistQueue();
@@ -346,7 +348,14 @@
 
       updateQueue();
       persistQueue();
-      showNext();
+      ratingButtons.forEach((button) => {
+        button.disabled = true;
+      });
+      flashcard.classList.remove("is-flipped");
+      flashcard.setAttribute("aria-pressed", "false");
+      window.setTimeout(() => {
+        showNext();
+      }, FLIP_TRANSITION_MS);
     }
 
     function showNext() {
@@ -355,7 +364,7 @@
         renderEmptyState();
         return;
       }
-      document.querySelectorAll("[data-rating]").forEach((button) => {
+      ratingButtons.forEach((button) => {
         button.disabled = false;
       });
       renderCard(next, 0);
@@ -394,7 +403,7 @@
       }
     });
 
-    document.querySelectorAll("[data-rating]").forEach((button) => {
+    ratingButtons.forEach((button) => {
       button.addEventListener("click", () => {
         const rating = button.getAttribute("data-rating");
         const current = getNextCard();
