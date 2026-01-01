@@ -157,23 +157,27 @@
       line-height: 1.2;
       padding: 12px 20px;
       border-radius: 16px;
-      transition: all 0.2s ease;
 
       /* DEFAULT STATE: HIDDEN/BLURRED */
+      opacity: 0;
       color: transparent;
       text-shadow: 0 0 35px rgba(0, 0, 0, 0.35); /* Strong blur */
       background: rgba(0,0,0,0.04); /* Light grey patch */
       user-select: none;
       cursor: pointer;
+      transition: none;
     }
 
     /* REVEALED STATE */
     .front-text.is-visible {
+      opacity: 1;
       color: var(--text);
       text-shadow: none;
       background: transparent;
       cursor: text;
       user-select: text;
+      transition: opacity 0.2s ease 0.12s, color 0.2s ease 0.12s,
+        text-shadow 0.2s ease 0.12s, background 0.2s ease 0.12s;
     }
 
     .back-text {
