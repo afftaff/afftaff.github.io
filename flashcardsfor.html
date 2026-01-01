@@ -34,7 +34,7 @@
       flex-direction: column;
       min-height: 100vh;
       padding: 16px;
-      font-size: 16px; /* Base size for readability */
+      font-size: 16px;
     }
 
     header {
@@ -49,7 +49,6 @@
       opacity: 0.9;
     }
 
-    /* Main layout takes available space */
     main {
       flex: 1;
       display: flex;
@@ -77,10 +76,9 @@
 
     .flashcard {
       width: 100%;
-      /* Responsive height: taller on mobile, capped on desktop */
       height: 50vh; 
-      min-height: 280px;
-      max-height: 500px;
+      min-height: 320px;
+      max-height: 550px;
       perspective: 1000px;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
@@ -119,41 +117,47 @@
       transform: rotateY(180deg);
     }
 
-    /* --- CONTENT INSIDE CARD --- */
+    /* --- CONTROLS & CONTENT --- */
+    
+    /* Updated: Removed absolute positioning, made it part of the flex flow */
     .front-controls {
-      position: absolute;
-      top: 16px;
-      right: 16px;
+      margin-bottom: 24px;
+      z-index: 10;
     }
 
+    /* Updated: Much bigger button */
     .speak-button {
-      background: rgba(0,0,0,0.05);
-      border: none;
+      background: rgba(0, 122, 255, 0.1); /* Light blue tint */
+      color: var(--accent);
+      border: 1px solid rgba(0, 122, 255, 0.2);
       border-radius: 50%;
-      width: 44px; /* Good touch target */
-      height: 44px;
-      font-size: 1.2rem;
+      width: 80px; 
+      height: 80px;
+      font-size: 3rem; /* Large icon */
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 10px rgba(0, 122, 255, 0.15);
     }
     
-    .speak-button:active { background: rgba(0,0,0,0.1); }
+    .speak-button:active { 
+      transform: scale(0.9); 
+      background: rgba(0, 122, 255, 0.2);
+    }
 
     .front-text {
       font-size: 2.8rem;
       font-weight: 700;
       letter-spacing: -0.5px;
-      margin: 10px 0;
+      margin: 0;
       line-height: 1.2;
-      padding: 10px;
-      border-radius: 12px;
+      padding: 12px 20px;
+      border-radius: 16px;
       transition: all 0.3s ease;
     }
 
-    /* Click-to-reveal Logic */
     .hidden-value {
       color: transparent;
       text-shadow: 0 0 35px rgba(0, 0, 0, 0.2);
@@ -170,13 +174,13 @@
 
     .tap-hint {
       position: absolute;
-      bottom: 20px;
-      font-size: 0.8rem;
+      bottom: 24px;
+      font-size: 0.85rem;
       color: var(--muted);
       opacity: 0.7;
     }
 
-    /* --- RATING BUTTONS (Thumb Friendly) --- */
+    /* --- RATING BUTTONS --- */
     .controls-area {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -185,7 +189,7 @@
 
     .rating-btn {
       border: none;
-      padding: 16px 4px; /* Taller for thumbs */
+      padding: 16px 4px;
       border-radius: 14px;
       font-weight: 600;
       font-size: 0.95rem;
@@ -204,12 +208,12 @@
     .btn-good  { background: var(--rate-good); }
     .btn-easy  { background: var(--rate-easy); }
 
-    /* --- DETAILS / ACCORDIONS --- */
+    /* --- ACCORDIONS --- */
     .accordion-group {
       display: flex;
       flex-direction: column;
       gap: 12px;
-      margin-top: auto; /* Pushes to bottom */
+      margin-top: auto;
       padding-top: 20px;
     }
 
@@ -266,12 +270,10 @@
       font-size: 0.85em;
     }
 
-    /* --- MEDIA QUERIES --- */
     @media (max-width: 400px) {
-      .controls-area {
-        grid-template-columns: repeat(2, 1fr); /* 2x2 grid on very small phones */
-      }
+      .controls-area { grid-template-columns: repeat(2, 1fr); }
       .front-text { font-size: 2.2rem; }
+      .speak-button { width: 70px; height: 70px; font-size: 2.5rem; }
     }
   </style>
 </head>
@@ -289,6 +291,7 @@
         <div class="flashcard-inner">
           <!-- FRONT -->
           <div class="flashcard-face flashcard-front">
+            <!-- Big Central Speaker -->
             <div class="front-controls">
               <button class="speak-button" type="button" id="speak-button" aria-label="Speak">🔊</button>
             </div>
@@ -306,7 +309,6 @@
       </div>
     </section>
 
-    <!-- RATING CONTROLS -->
     <section class="controls-area">
       <button type="button" data-rating="again" class="rating-btn btn-again">Again</button>
       <button type="button" data-rating="hard" class="rating-btn btn-hard">Hard</button>
@@ -314,9 +316,7 @@
       <button type="button" data-rating="easy" class="rating-btn btn-easy">Easy</button>
     </section>
 
-    <!-- FOOTER SECTIONS -->
     <div class="accordion-group">
-      <!-- Upcoming Queue -->
       <details>
         <summary>Upcoming Cards <span id="queue-count" style="font-weight:400; color:var(--muted)">(0)</span></summary>
         <div class="details-content">
@@ -324,7 +324,6 @@
         </div>
       </details>
 
-      <!-- URL Instructions (Moved to bottom & Expandable) -->
       <details>
         <summary>How to add cards</summary>
         <div class="details-content">
@@ -375,10 +374,9 @@
     const deck = inputCards.length ? inputCards : defaultCards;
 
     // --- 2. Storage & Queue Management ---
-    const STORAGE_PREFIX = "fr-flash-v2:"; // changed version to prevent conflict
+    const STORAGE_PREFIX = "fr-flash-v3:"; 
 
     function getStorageKey(activeDeck) {
-      // Create a simple hash of the deck content so we track progress per unique deck URL
       const signature = activeDeck.map(c => c.frontText).join("");
       let hash = 0;
       for (let i = 0; i < signature.length; i++) {
@@ -392,7 +390,7 @@
 
     function loadQueue() {
       const stored = localStorage.getItem(storageKey);
-      if (!stored) return [...deck]; // Start fresh
+      if (!stored) return [...deck];
       try {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed.queue) && parsed.queue.length > 0) {
@@ -418,7 +416,6 @@
         return;
       }
 
-      // Show top 5 only to keep UI clean
       queue.slice(0, 5).forEach((card, index) => {
         const line = document.createElement("div");
         line.textContent = `${index + 1}. ${card.frontText}`;
@@ -442,16 +439,17 @@
       const card = getNextCard();
       
       if (!card) {
-        // Empty state
         frontTextEl.textContent = "🎉";
         frontTextEl.classList.remove("hidden-value");
         backTextEl.textContent = "All done!";
         progressEl.textContent = "0 Cards remaining";
         ratingButtons.forEach(b => b.disabled = true);
+        speakButton.style.display = "none"; // Hide speaker on empty state
         renderQueueList();
         return;
       }
-
+      
+      speakButton.style.display = "flex"; // Ensure visible
       frontTextEl.textContent = card.frontText;
       backTextEl.textContent = card.backText;
       progressEl.textContent = `${queue.length} Card${queue.length === 1 ? '' : 's'} remaining`;
@@ -464,54 +462,48 @@
     // --- 4. Interactions ---
 
     function handleRating(rating) {
-      const currentCard = queue.shift(); // Remove current
+      const currentCard = queue.shift(); 
       if (!currentCard) return;
 
-      // Simple Spaced Repetition Logic
       if (rating === "again") {
-        queue.splice(2, 0, currentCard); // Re-insert shortly
+        queue.splice(2, 0, currentCard);
       } else if (rating === "hard") {
-        queue.splice(6, 0, currentCard); // Re-insert later
+        queue.splice(6, 0, currentCard);
       } else if (rating === "good") {
-        queue.push(currentCard); // Back of the line
+        queue.push(currentCard);
       } 
-      // "easy" removes it from session (already shifted out)
-
-      // Save and Next
+      
       localStorage.setItem(storageKey, JSON.stringify({ queue }));
       
-      // Visual transition
       flashcard.classList.remove("is-flipped");
       setTimeout(() => {
         renderCurrent();
-      }, 250); // Wait for half flip
+      }, 250); 
     }
 
-    // Flip Card
     flashcard.addEventListener("click", (e) => {
-      // Don't flip if clicking speaker or the text itself (since text handles its own reveal)
+      // Don't flip if clicking speaker or the text 
       if (e.target.closest('.speak-button')) return;
       if (e.target.closest('#front-text')) return; 
       
       flashcard.classList.toggle("is-flipped");
     });
 
-    // Reveal Text
     frontTextEl.addEventListener("click", (e) => {
       e.stopPropagation();
       frontTextEl.classList.toggle("hidden-value");
     });
 
-    // Speak
     function setupSpeech() {
       const voices = window.speechSynthesis.getVoices();
       preferredVoice = voices.find(v => v.lang.includes("fr")) || null;
     }
     window.speechSynthesis.onvoiceschanged = setupSpeech;
-    setupSpeech(); // Init immediately if available
+    setupSpeech(); 
 
     speakButton.addEventListener("click", (e) => {
       e.stopPropagation();
+      // Add subtle animation feedback via JS class if desired, or rely on CSS :active
       const text = frontTextEl.textContent;
       const u = new SpeechSynthesisUtterance(text);
       u.lang = DEFAULT_TTS_LANG;
@@ -520,15 +512,13 @@
       window.speechSynthesis.speak(u);
     });
 
-    // Rating Buttons
     ratingButtons.forEach(btn => {
       btn.addEventListener("click", (e) => {
-        e.stopPropagation(); // prevent card flip
+        e.stopPropagation();
         handleRating(btn.dataset.rating);
       });
     });
 
-    // Init
     renderCurrent();
   </script>
 </body>
