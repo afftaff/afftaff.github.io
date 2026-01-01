@@ -1,4 +1,4 @@
-#	Sentence (Audio)	Sentence Reveal (English)	W1 Front	W1 Back (Quiz Data)	W2 Front	W2 Back (Quiz Data)	W3 Front	W3 Back (Quiz Data)	W4 Front	W4 Back (Quiz Data)
+#	Sentence (Audio)	Sentence Reveal (English)	W1	W1 Quiz Data	W2	W2 Quiz Data	W3	W3 Quiz Data	W4	W4 Quiz Data
 1	🔊 Je suis ici.	I am here.	Je	Type: Pronoun<br>Pers: 1st Sing	suis	Inf: Être<br>Tense: Présent<br>Conj: 1st Sing<br>Trans: To be	ici	Type: Adverb<br>Trans: Here	N/A	N/A
 2	🔊 Tu as faim.	You are hungry.	Tu	Type: Pronoun<br>Pers: 2nd Sing	as	Inf: Avoir<br>Tense: Présent<br>Conj: 2nd Sing<br>Trans: To have	faim	Type: Noun<br>Gen: Fem<br>Trans: Hunger	N/A	N/A
 3	🔊 Il va bien.	He is doing well.	Il	Type: Pronoun<br>Pers: 3rd Sing M	va	Inf: Aller<br>Tense: Présent<br>Conj: 3rd Sing<br>Trans: To go	bien	Type: Adverb<br>Trans: Well	N/A	N/A
@@ -998,4 +998,5 @@
 997	🔊 Bon voyage.	Have a good trip.	Bon	Type: Adj<br>Gen: Masc<br>Trans: Good	voyage	Type: Noun<br>Gen: Masc<br>Trans: Trip	N/A	N/A	N/A	N/A
 998	🔊 Bon courage.	Good luck (hang in there).	Bon	Type: Adj<br>Gen: Masc<br>Trans: Good	courage	Type: Noun<br>Gen: Masc<br>Trans: Courage	N/A	N/A	N/A	N/A
 999	🔊 Joyeux Noël.	Merry Christmas.	Joyeux	Type: Adj<br>Gen: Masc<br>Trans: Joyful/Merry	Noël	Type: Noun<br>Gen: Masc<br>Trans: Christmas	N/A	N/A	N/A	N/A
+
 1000	🔊 Bonne année.	Happy New Year.	Bonne	Type: Adj<br>Gen: Fem<br>Trans: Good/Happy	année	Type: Noun<br>Gen: Fem<br>Trans: Year	N/A	N/A	N/A	N/A
