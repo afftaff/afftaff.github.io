@@ -180,6 +180,30 @@
         text-shadow 0.2s ease 0.12s, background 0.2s ease 0.12s;
     }
 
+    .reveal-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      background: rgba(0, 0, 0, 0.04);
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px dashed rgba(0, 0, 0, 0.1);
+      margin-top: 8px;
+      letter-spacing: 0.2px;
+      animation: pulse-hint 1.8s ease-in-out infinite;
+    }
+
+    .reveal-hint span {
+      font-size: 1.05rem;
+    }
+
+    @keyframes pulse-hint {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.02); opacity: 1; }
+    }
+
     .back-text {
       font-size: 1.8rem;
       font-weight: 500;
@@ -311,6 +335,9 @@
             
             <!-- Default state is now blurred/hidden -->
             <div class="front-text" id="front-text">...</div>
+            <div class="reveal-hint" aria-hidden="true">
+              <span>👆</span> Tap the word to reveal
+            </div>
             <div class="tap-hint">Tap card to flip</div>
           </div>
           
