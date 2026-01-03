@@ -279,6 +279,38 @@
       font-weight: 600;
     }
 
+    .translation {
+      width: 100%;
+      margin-top: 16px;
+      background: #f1f5f9;
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-weight: 600;
+      color: transparent;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .translation.revealed {
+      color: var(--text-main);
+    }
+
+    .translation::before {
+      content: attr(data-placeholder);
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .translation.revealed::before {
+      content: "";
+    }
+
     /* --- Rating Actions --- */
     .actions {
       display: grid;
@@ -367,6 +399,9 @@
     <div class="token-grid" id="tokenGrid">
       <!-- Tokens injected via JS -->
     </div>
+
+    <!-- Stage 4: Natural Translation -->
+    <div class="translation hidden" id="translationLine" data-placeholder="Click to reveal the actual translation"></div>
   </div>
 
   <!-- 4. Rating Buttons -->
@@ -393,13 +428,13 @@ Then for each sentence:
 Input: Je travaille à Paris depuis trois ans.
 
 Output:
-<<Je[I] travaille[work/am working] à[in/at] Paris[Paris] depuis[since/for] trois[three] ans[years] | Je travaille à Paris depuis trois ans.>>
+<<Je[I] travaille[work/am working] à[in/at] Paris[Paris] depuis[since/for] trois[three] ans[years] | Je travaille à Paris depuis trois ans. | I have been working in Paris for three years.>>
 
 After going through all the sentences output them 1 after each other like this:
 1
-<<Elle[She] a[has] oublié[forgotten] son[her] téléphone[phone] sur[on] la[the] table[table] | Elle a oublié son téléphone sur la table.>>
+<<Elle[She] a[has] oublié[forgotten] son[her] téléphone[phone] sur[on] la[the] table[table] | Elle a oublié son téléphone sur la table. | She forgot her phone on the table.>>
 2
-<<Nous[We] irons[will go] au[to the] cinéma[cinema] demain[tomorrow] soir[evening] | Nous irons au cinéma demain soir.>>
+<<Nous[We] irons[will go] au[to the] cinéma[cinema] demain[tomorrow] soir[evening] | Nous irons au cinéma demain soir. | We will go to the cinema tomorrow night.>>
 `;
 
 /* --- STATE MANAGEMENT --- */
@@ -429,6 +464,7 @@ const els = {
   speakerBtn: document.getElementById('speakerBtn'),
   sentenceText: document.getElementById('sentenceText'),
   tokenGrid: document.getElementById('tokenGrid'),
+  translationLine: document.getElementById('translationLine'),
   
   toggleFrBtn: document.getElementById('toggleFrBtn'),
   revealEnBtn: document.getElementById('revealEnBtn'),
@@ -493,14 +529,14 @@ function parseGeminiResponse(text) {
 
   while ((match = blockRegex.exec(text)) !== null) {
     const content = match[1];
-    const pipeIndex = content.indexOf('|');
-    
-    // Split into Tokens Section and Full Sentence
-    const left = pipeIndex > -1 ? content.slice(0, pipeIndex) : content;
-    const right = pipeIndex > -1 ? content.slice(pipeIndex + 1) : '';
+    const parts = content.split('|');
+    const left = parts[0] || '';
+    const sentencePart = parts[1] || '';
+    const translationPart = parts.length > 2 ? parts.slice(2).join('|') : '';
 
     // Clean sentence
-    const rawSentence = right.trim().replace(/^:+/, '').trim();
+    const rawSentence = sentencePart.trim().replace(/^:+/, '').trim();
+    const rawTranslation = translationPart.trim().replace(/^:+/, '').trim();
 
     // Parse Tokens: Word[Literal]
     const tokenRegex = /([^\[\s]+)\[(.*?)\]/g;
@@ -519,6 +555,7 @@ function parseGeminiResponse(text) {
         id: `card_${Date.now()}_${index}`,
         index: index++,
         sentence: rawSentence,
+        translation: rawTranslation,
         tokens: tokens
       });
     }
@@ -552,10 +589,32 @@ function initCardState(cardId, tokenCount) {
       stage: 0, // 0: SpeakerOnly, 1: Sentence, 2: TokenGrid
       // Default: French Visible (true), English Hidden (false)
       frVisible: true,
-      enRevealed: new Array(tokenCount).fill(false) 
+      enRevealed: new Array(tokenCount).fill(false),
+      translationRevealed: false
     };
   }
+  if (state.cardData[cardId].translationRevealed === undefined) {
+    state.cardData[cardId].translationRevealed = false;
+  }
   return state.cardData[cardId];
+}
+
+function updateTranslationDisplay(card, cState) {
+  const allTokensRevealed = cState.enRevealed.every(Boolean);
+  if (cState.stage !== 2 || !allTokensRevealed) {
+    els.translationLine.classList.add('hidden');
+    els.translationLine.classList.remove('revealed');
+    return;
+  }
+
+  els.translationLine.classList.remove('hidden');
+  els.translationLine.dataset.placeholder = "Click to reveal the actual translation";
+  els.translationLine.textContent = card.translation || '';
+  if (cState.translationRevealed) {
+    els.translationLine.classList.add('revealed');
+  } else {
+    els.translationLine.classList.remove('revealed');
+  }
 }
 
 function renderCurrentCard() {
@@ -566,6 +625,7 @@ function renderCurrentCard() {
     els.sentenceText.style.opacity = 1;
     els.speakerBtn.style.display = 'none';
     els.tokenGrid.innerHTML = '';
+    els.translationLine.classList.add('hidden');
     return;
   }
 
@@ -581,17 +641,21 @@ function renderCurrentCard() {
     els.sentenceText.textContent = card.sentence;
     els.sentenceText.style.opacity = 0; // Hidden but takes space
     els.tokenGrid.innerHTML = ''; // Clear grid
+    els.translationLine.classList.add('hidden');
   } 
   // Stage 1: Reveal Sentence
   else if (cState.stage === 1) {
     els.sentenceText.textContent = card.sentence;
     els.card.classList.add('reveal-sentence');
+    els.translationLine.classList.add('hidden');
   } 
   // Stage 2: Token Grid Mode
   else if (cState.stage === 2) {
     els.card.classList.add('mode-tokens');
     renderTokenGrid(card, cState);
   }
+
+  updateTranslationDisplay(card, cState);
 }
 
 function renderTokenGrid(card, cState) {
@@ -624,6 +688,7 @@ function renderTokenGrid(card, cState) {
       e.stopPropagation();
       cState.enRevealed[idx] = true; 
       pair.classList.add('show-en');
+      updateTranslationDisplay(card, cState);
       saveState();
     });
 
@@ -684,6 +749,7 @@ els.revealEnBtn.addEventListener('click', (e) => {
   // Set all to true
   cState.enRevealed = cState.enRevealed.map(() => true);
   renderTokenGrid(card, cState);
+  updateTranslationDisplay(card, cState);
   saveState();
 });
 
@@ -706,7 +772,8 @@ els.rateBtns.forEach(btn => {
       state.cardData[currentId] = { 
         stage: 0, 
         frVisible: true, 
-        enRevealed: state.cardData[currentId].enRevealed.map(() => false) 
+        enRevealed: state.cardData[currentId].enRevealed.map(() => false),
+        translationRevealed: false
       };
     }
 
@@ -714,6 +781,17 @@ els.rateBtns.forEach(btn => {
     updateUI();
     saveState();
   });
+});
+
+els.translationLine.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const card = getCurrentCard();
+  if (!card) return;
+  const cState = state.cardData[card.id];
+  if (!cState.enRevealed.every(Boolean) || cState.stage !== 2) return;
+  cState.translationRevealed = true;
+  updateTranslationDisplay(card, cState);
+  saveState();
 });
 
 /* --- API & GENERATOR --- */
