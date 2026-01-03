@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -476,10 +476,16 @@ const els = {
 const synth = window.speechSynthesis;
 let voice = null;
 
+function pickFrenchVoice(voices) {
+  return voices.find(v => v.lang === 'fr-FR')
+    || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('fr-'))
+    || voices.find(v => v.lang && v.lang.toLowerCase().includes('fr'));
+}
+
 function loadVoices() {
   const voices = synth.getVoices();
   // Prefer French from France, then any French
-  voice = voices.find(v => v.lang === 'fr-FR') || voices.find(v => v.lang.includes('fr'));
+  voice = pickFrenchVoice(voices);
 }
 if (speechSynthesis.onvoiceschanged !== undefined) {
   speechSynthesis.onvoiceschanged = loadVoices;
@@ -490,7 +496,9 @@ function speak(text) {
   if (!text) return;
   synth.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'fr-FR';
+  const voices = synth.getVoices();
+  voice = voice || pickFrenchVoice(voices);
+  u.lang = (voice && voice.lang) ? voice.lang : 'fr-FR';
   if (voice) u.voice = voice;
   u.rate = 0.9;
   synth.speak(u);
