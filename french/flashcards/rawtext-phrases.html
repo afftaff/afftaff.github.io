@@ -258,6 +258,32 @@
       background: #f8fafc;
     }
 
+    .token-grid.single-word .token-group {
+      border: none;
+      padding: 0;
+      background: transparent;
+      gap: 10px;
+    }
+
+    .token-grid.single-word .token-pair {
+      border: none;
+      background: transparent;
+      min-width: auto;
+    }
+
+    .token-grid.single-word .token-fr,
+    .token-grid.single-word .token-en {
+      padding: 0;
+    }
+
+    .token-grid.single-word .token-fr {
+      border-bottom: none;
+    }
+
+    .token-grid.single-word .token-en {
+      background: transparent;
+    }
+
     /* The "Table" Cell */
     .token-pair {
       display: flex;
@@ -757,6 +783,7 @@ function updateTokenSizeControl() {
 
 function renderTokenGrid(card, cState) {
   els.tokenGrid.innerHTML = '';
+  els.tokenGrid.classList.toggle('single-word', state.tokenGroupSize === 1);
   const groups = getTokenGroups(card.tokens, state.tokenGroupSize);
 
   groups.forEach(group => {
@@ -767,6 +794,7 @@ function renderTokenGrid(card, cState) {
       const actualIndex = group.indices[idx];
       const pair = document.createElement('div');
       pair.className = 'token-pair';
+      let clickTimer = null;
 
       if (!cState.frRevealed[actualIndex]) pair.classList.add('hide-fr');
       if (cState.enRevealed[actualIndex]) pair.classList.add('show-en');
@@ -782,27 +810,42 @@ function renderTokenGrid(card, cState) {
       pair.appendChild(fr);
       pair.appendChild(en);
       groupEl.appendChild(pair);
-    });
 
-    groupEl.addEventListener('click', (e) => {
-      if (!e.target.closest('.token-pair')) return;
-      e.stopPropagation();
-      if (cState.phase === 'fr') {
-        group.indices.forEach(idx => {
-          cState.frRevealed[idx] = true;
-        });
+      pair.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (clickTimer) return;
+        clickTimer = setTimeout(() => {
+          if (!cState.frRevealed[actualIndex]) {
+            speak(t.fr);
+          } else if (!cState.enRevealed[actualIndex]) {
+            cState.enRevealed[actualIndex] = true;
+            renderTokenGrid(card, cState);
+            updateTranslationDisplay(card, cState);
+            updateTokenControls(card, cState);
+            saveState();
+          } else {
+            speak(t.fr);
+          }
+          clickTimer = null;
+        }, 250);
+      });
+
+      pair.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
+        if (clickTimer) {
+          clearTimeout(clickTimer);
+          clickTimer = null;
+        }
+        if (cState.frRevealed[actualIndex]) return;
+        cState.frRevealed[actualIndex] = true;
         if (cState.frRevealed.every(Boolean)) {
           cState.phase = 'en';
         }
-      } else {
-        group.indices.forEach(idx => {
-          cState.enRevealed[idx] = true;
-        });
-      }
-      renderTokenGrid(card, cState);
-      updateTranslationDisplay(card, cState);
-      updateTokenControls(card, cState);
-      saveState();
+        renderTokenGrid(card, cState);
+        updateTranslationDisplay(card, cState);
+        updateTokenControls(card, cState);
+        saveState();
+      });
     });
 
     els.tokenGrid.appendChild(groupEl);
