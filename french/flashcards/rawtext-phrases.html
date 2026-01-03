@@ -827,10 +827,10 @@ els.generateBtn.addEventListener('click', async () => {
     // Use the provided geminiApi lib if available, or simple fetch
     let responseText = "";
     if (window.geminiApi) {
-      responseText = await window.geminiApi.callGemini(SYSTEM_INSTRUCTION, text);
+      responseText = await window.geminiApi.callGemini(SYSTEM_INSTRUCTION, text, 'gemini-3-flash-preview');
     } else {
       // Fallback simple fetch if lib missing
-      const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
