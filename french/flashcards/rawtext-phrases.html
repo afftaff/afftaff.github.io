@@ -199,16 +199,12 @@
       max-width: 100%;
     }
     
-    .card.reveal-sentence .sentence-display {
-      opacity: 1;
-    }
-
     /* --- Token Grid (The Table Mode) --- */
     .token-grid {
       display: none; /* Hidden until Grid Mode */
       flex-wrap: wrap;
       justify-content: center;
-      gap: 12px;
+      gap: 14px;
       width: 100%;
       margin-top: 10px;
     }
@@ -216,6 +212,51 @@
     .card.mode-tokens .sentence-display { display: none; }
     .card.mode-tokens .speaker-btn { display: none; } /* Hide speaker in grid mode to focus on reading? Optional */
     .card.mode-tokens .token-grid { display: flex; }
+    .card.mode-tokens .token-settings { display: flex; }
+
+    .token-settings {
+      display: none;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .segmented-control {
+      display: inline-flex;
+      background: #eef2ff;
+      border-radius: 999px;
+      padding: 4px;
+      gap: 4px;
+      border: 1px solid #c7d2fe;
+    }
+
+    .segment {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .segment.active {
+      background: white;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .token-group {
+      display: flex;
+      gap: 8px;
+      padding: 6px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #ffffff;
+    }
+
+    .token-group:active {
+      background: #f8fafc;
+    }
 
     /* The "Table" Cell */
     .token-pair {
@@ -383,8 +424,8 @@
     
     <!-- Controls visible only in Token Mode -->
     <div class="token-tools">
-      <button class="tool-btn" id="toggleFrBtn">Toggle French</button>
-      <button class="tool-btn" id="revealEnBtn">Show Literal</button>
+      <button class="tool-btn" id="toggleFrBtn">Reveal French</button>
+      <button class="tool-btn" id="revealEnBtn">Reveal English</button>
     </div>
 
     <!-- Stage 1: Speaker -->
@@ -396,6 +437,13 @@
     </div>
 
     <!-- Stage 3: Token Grid -->
+    <div class="token-settings">
+      <div class="segmented-control" id="tokenSizeControl" role="group" aria-label="Token size">
+        <button type="button" class="segment active" data-size="1">1 word</button>
+        <button type="button" class="segment" data-size="3">3 word</button>
+        <button type="button" class="segment" data-size="5">5 word</button>
+      </div>
+    </div>
     <div class="token-grid" id="tokenGrid">
       <!-- Tokens injected via JS -->
     </div>
@@ -444,7 +492,8 @@ const state = {
   deck: null,
   queue: [],
   currentCardId: null,
-  cardData: {} // Stores visual state per card { id: { stage, tokensHiddenFr, tokensShownEn } }
+  cardData: {}, // Stores visual state per card { id: { stage, tokensHiddenFr, tokensShownEn } }
+  tokenGroupSize: 1
 };
 
 /* --- ELEMENTS --- */
@@ -466,6 +515,7 @@ const els = {
   sentenceText: document.getElementById('sentenceText'),
   tokenGrid: document.getElementById('tokenGrid'),
   translationLine: document.getElementById('translationLine'),
+  tokenSizeControl: document.getElementById('tokenSizeControl'),
   
   toggleFrBtn: document.getElementById('toggleFrBtn'),
   revealEnBtn: document.getElementById('revealEnBtn'),
@@ -518,12 +568,14 @@ function loadState() {
       state.queue = data.queue || [];
       state.cardData = data.cardData || {};
       state.currentCardId = data.currentCardId;
+      state.tokenGroupSize = data.tokenGroupSize || 1;
       
       if (state.deck) {
         els.setupDetails.removeAttribute('open'); // Close settings if deck exists
         renderCurrentCard();
         updateUI();
       }
+      updateTokenSizeControl();
     } catch (e) { console.error('Load error', e); }
   }
 }
@@ -595,12 +647,25 @@ function getCurrentCard() {
 function initCardState(cardId, tokenCount) {
   if (!state.cardData[cardId]) {
     state.cardData[cardId] = {
-      stage: 0, // 0: SpeakerOnly, 1: Sentence, 2: TokenGrid
-      // Default: French Visible (true), English Hidden (false)
-      frVisible: true,
+      stage: 0, // 0: SpeakerOnly, 2: TokenGrid
+      frRevealed: new Array(tokenCount).fill(false),
       enRevealed: new Array(tokenCount).fill(false),
+      phase: 'fr',
       translationRevealed: false
     };
+  }
+  if (state.cardData[cardId].stage === 1) {
+    state.cardData[cardId].stage = 2;
+  }
+  if (!Array.isArray(state.cardData[cardId].frRevealed)) {
+    const revealAll = Boolean(state.cardData[cardId].frVisible);
+    state.cardData[cardId].frRevealed = new Array(tokenCount).fill(revealAll);
+  }
+  if (!Array.isArray(state.cardData[cardId].enRevealed)) {
+    state.cardData[cardId].enRevealed = new Array(tokenCount).fill(false);
+  }
+  if (!state.cardData[cardId].phase) {
+    state.cardData[cardId].phase = state.cardData[cardId].frRevealed.every(Boolean) ? 'en' : 'fr';
   }
   if (state.cardData[cardId].translationRevealed === undefined) {
     state.cardData[cardId].translationRevealed = false;
@@ -652,56 +717,95 @@ function renderCurrentCard() {
     els.tokenGrid.innerHTML = ''; // Clear grid
     els.translationLine.classList.add('hidden');
   } 
-  // Stage 1: Reveal Sentence
-  else if (cState.stage === 1) {
-    els.sentenceText.textContent = card.sentence;
-    els.card.classList.add('reveal-sentence');
-    els.translationLine.classList.add('hidden');
-  } 
   // Stage 2: Token Grid Mode
   else if (cState.stage === 2) {
     els.card.classList.add('mode-tokens');
     renderTokenGrid(card, cState);
+    updateTokenControls(card, cState);
   }
 
   updateTranslationDisplay(card, cState);
 }
 
+function getTokenGroups(tokens, size) {
+  const groups = [];
+  for (let i = 0; i < tokens.length; i += size) {
+    const slice = tokens.slice(i, i + size);
+    const indices = slice.map((_, idx) => i + idx);
+    groups.push({ tokens: slice, indices });
+  }
+  return groups;
+}
+
+function updateTokenControls(card, cState) {
+  if (!card || cState.stage !== 2) return;
+  const allFrenchRevealed = cState.frRevealed.every(Boolean);
+  const allEnglishRevealed = cState.enRevealed.every(Boolean);
+  els.toggleFrBtn.disabled = allFrenchRevealed;
+  els.revealEnBtn.disabled = !allFrenchRevealed || allEnglishRevealed;
+  updateTokenSizeControl();
+}
+
+function updateTokenSizeControl() {
+  if (!els.tokenSizeControl) return;
+  const buttons = els.tokenSizeControl.querySelectorAll('.segment');
+  buttons.forEach(btn => {
+    const size = Number(btn.dataset.size);
+    btn.classList.toggle('active', size === state.tokenGroupSize);
+  });
+}
+
 function renderTokenGrid(card, cState) {
   els.tokenGrid.innerHTML = '';
-  
-  card.tokens.forEach((t, idx) => {
-    // Container
-    const pair = document.createElement('div');
-    pair.className = 'token-pair';
-    
-    // Apply visibility states from memory
-    if (!cState.frVisible) pair.classList.add('hide-fr');
-    if (cState.enRevealed[idx]) pair.classList.add('show-en');
+  const groups = getTokenGroups(card.tokens, state.tokenGroupSize);
 
-    // French (Top)
-    const fr = document.createElement('div');
-    fr.className = 'token-fr';
-    fr.textContent = t.fr;
+  groups.forEach(group => {
+    const groupEl = document.createElement('div');
+    groupEl.className = 'token-group';
 
-    // English (Bottom)
-    const en = document.createElement('div');
-    en.className = 'token-en';
-    en.textContent = t.en;
+    group.tokens.forEach((t, idx) => {
+      const actualIndex = group.indices[idx];
+      const pair = document.createElement('div');
+      pair.className = 'token-pair';
 
-    pair.appendChild(fr);
-    pair.appendChild(en);
+      if (!cState.frRevealed[actualIndex]) pair.classList.add('hide-fr');
+      if (cState.enRevealed[actualIndex]) pair.classList.add('show-en');
 
-    // Interaction: Click to reveal Literal
-    pair.addEventListener('click', (e) => {
+      const fr = document.createElement('div');
+      fr.className = 'token-fr';
+      fr.textContent = t.fr;
+
+      const en = document.createElement('div');
+      en.className = 'token-en';
+      en.textContent = t.en;
+
+      pair.appendChild(fr);
+      pair.appendChild(en);
+      groupEl.appendChild(pair);
+    });
+
+    groupEl.addEventListener('click', (e) => {
+      if (!e.target.closest('.token-pair')) return;
       e.stopPropagation();
-      cState.enRevealed[idx] = true; 
-      pair.classList.add('show-en');
+      if (cState.phase === 'fr') {
+        group.indices.forEach(idx => {
+          cState.frRevealed[idx] = true;
+        });
+        if (cState.frRevealed.every(Boolean)) {
+          cState.phase = 'en';
+        }
+      } else {
+        group.indices.forEach(idx => {
+          cState.enRevealed[idx] = true;
+        });
+      }
+      renderTokenGrid(card, cState);
       updateTranslationDisplay(card, cState);
+      updateTokenControls(card, cState);
       saveState();
     });
 
-    els.tokenGrid.appendChild(pair);
+    els.tokenGrid.appendChild(groupEl);
   });
 }
 
@@ -717,10 +821,6 @@ els.card.addEventListener('click', (e) => {
   const cState = state.cardData[card.id];
 
   if (cState.stage === 0) {
-    // Fade in sentence
-    cState.stage = 1;
-    renderCurrentCard();
-  } else if (cState.stage === 1) {
     // Switch to grid
     cState.stage = 2;
     renderCurrentCard();
@@ -743,9 +843,10 @@ els.toggleFrBtn.addEventListener('click', (e) => {
   if(!card) return;
   const cState = state.cardData[card.id];
   
-  cState.frVisible = !cState.frVisible;
-  // Re-render to update classes
+  cState.frRevealed = cState.frRevealed.map(() => true);
+  cState.phase = 'en';
   renderTokenGrid(card, cState);
+  updateTokenControls(card, cState);
   saveState();
 });
 
@@ -755,12 +856,35 @@ els.revealEnBtn.addEventListener('click', (e) => {
   if(!card) return;
   const cState = state.cardData[card.id];
   
-  // Set all to true
+  if (cState.phase !== 'en') return;
   cState.enRevealed = cState.enRevealed.map(() => true);
   renderTokenGrid(card, cState);
   updateTranslationDisplay(card, cState);
+  updateTokenControls(card, cState);
   saveState();
 });
+
+if (els.tokenSizeControl) {
+  const sizeButtons = els.tokenSizeControl.querySelectorAll('.segment');
+  sizeButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const size = Number(btn.dataset.size);
+      if (!size || size === state.tokenGroupSize) return;
+      state.tokenGroupSize = size;
+      updateTokenSizeControl();
+      const card = getCurrentCard();
+      if (card) {
+        const cState = state.cardData[card.id];
+        if (cState.stage === 2) {
+          renderTokenGrid(card, cState);
+        }
+        updateTokenControls(card, cState);
+      }
+      saveState();
+    });
+  });
+}
 
 // 4. Rating (Next Card)
 els.rateBtns.forEach(btn => {
@@ -779,9 +903,10 @@ els.rateBtns.forEach(btn => {
       
       // Reset state for next time we see it
       state.cardData[currentId] = { 
-        stage: 0, 
-        frVisible: true, 
+        stage: 0,
+        frRevealed: state.cardData[currentId].frRevealed.map(() => false),
         enRevealed: state.cardData[currentId].enRevealed.map(() => false),
+        phase: 'fr',
         translationRevealed: false
       };
     }
@@ -892,6 +1017,7 @@ els.deleteDeckBtn.addEventListener('click', () => {
 loadState();
 renderCurrentCard();
 updateUI();
+updateTokenSizeControl();
 
 </script>
 </body>
