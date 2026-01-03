@@ -113,45 +113,50 @@
 
     .phrase-line {
       display: grid;
-      grid-template-columns: repeat(var(--word-count), minmax(24px, max-content));
-      gap: 8px;
+      grid-template-columns: repeat(var(--token-count), minmax(40px, max-content));
+      gap: 10px;
       align-items: center;
     }
 
-    .word-box {
-      padding: 8px 10px;
-      border-radius: 10px;
+    .token-group {
+      padding: 6px 10px;
+      border-radius: 999px;
       border: 2px solid transparent;
       font-weight: 600;
-      text-align: center;
       cursor: pointer;
       min-height: 40px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      color: transparent;
-      transition: color 0.1s ease, background 0.2s ease, border-color 0.2s ease;
+      gap: 6px;
+      transition: background 0.2s ease, border-color 0.2s ease;
       user-select: none;
+      justify-content: center;
     }
 
-    .word-box.revealed {
+    .token-word {
+      padding: 2px 4px;
+      border-radius: 6px;
+      color: transparent;
+      transition: color 0.1s ease;
+    }
+
+    .token-group.revealed .token-word {
       color: var(--ink);
     }
 
-    .word-box.french {
+    .token-group.french {
       background: var(--french-bg);
       border-color: var(--french-border);
     }
 
-    .word-box.literal {
-      background: var(--literal-bg);
-      border-color: var(--literal-border);
+    .token-group.english {
+      background: var(--translation-bg);
+      border-color: var(--border);
     }
 
-    .word-box.placeholder {
-      background: transparent;
-      border-color: transparent;
-      cursor: default;
+    .phrase-line.locked {
+      opacity: 0.6;
+      pointer-events: none;
     }
 
     .translation {
@@ -188,6 +193,39 @@
       gap: 12px;
     }
 
+    .segment-control {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      overflow: hidden;
+    }
+
+    .segment-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--muted);
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .segment-btn.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    .reveal-all-btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
     .rate-btn {
       flex: 1 1 120px;
       padding: 12px 16px;
@@ -222,7 +260,7 @@
         gap: 6px;
       }
 
-      .word-box {
+      .token-group {
         min-height: 34px;
         font-size: 0.9rem;
       }
@@ -236,6 +274,14 @@
         <label for="deckSelect">Deck</label><br>
         <select id="deckSelect" aria-label="Select deck"></select>
       </div>
+      <div>
+        <label>Token size</label><br>
+        <div class="segment-control" role="group" aria-label="Token size">
+          <button class="segment-btn active" type="button" data-size="1">1 word</button>
+          <button class="segment-btn" type="button" data-size="3">3 word</button>
+          <button class="segment-btn" type="button" data-size="5">5 word</button>
+        </div>
+      </div>
       <span class="pill" id="deckLabel">Deck</span>
       <span class="pill" id="deckProgress">0 / 0</span>
       <span class="status" id="statusText">Loading phrases…</span>
@@ -243,9 +289,10 @@
 
     <div class="card">
       <button class="speaker" id="speakBtn" aria-label="Hear phrase">🔊</button>
-      <div class="phrase-line" id="frenchLine" style="--word-count: 1"></div>
-      <div class="phrase-line" id="literalLine" style="--word-count: 1"></div>
-      <div class="translation" id="englishLine" data-placeholder="Click to reveal the proper translation"></div>
+      <div class="phrase-line" id="frenchLine" style="--token-count: 1"></div>
+      <div class="phrase-line locked" id="englishTokens" style="--token-count: 1"></div>
+      <button class="reveal-all-btn" id="revealFrenchBtn" type="button">Reveal French sentence</button>
+      <div class="translation" id="englishLine" data-placeholder="Click to reveal the full translation"></div>
     </div>
 
     <div class="actions">
@@ -266,10 +313,12 @@
       deckProgress: document.getElementById("deckProgress"),
       statusText: document.getElementById("statusText"),
       frenchLine: document.getElementById("frenchLine"),
-      literalLine: document.getElementById("literalLine"),
+      englishTokens: document.getElementById("englishTokens"),
+      revealFrenchBtn: document.getElementById("revealFrenchBtn"),
       englishLine: document.getElementById("englishLine"),
       speakBtn: document.getElementById("speakBtn"),
-      rateButtons: document.querySelectorAll(".rate-btn")
+      rateButtons: document.querySelectorAll(".rate-btn"),
+      segmentButtons: document.querySelectorAll(".segment-btn")
     };
 
     const synth = window.speechSynthesis;
@@ -279,7 +328,11 @@
       decks: [],
       deckIndex: 0,
       queue: [],
-      finished: []
+      finished: [],
+      tokenSize: 1,
+      revealStage: "french",
+      frenchRevealed: [],
+      englishRevealed: []
     };
 
     function splitWords(text) {
@@ -367,45 +420,82 @@
         : "No phrases available.";
     }
 
-    function renderWordLine(container, words, totalSlots, type) {
-      container.innerHTML = "";
-      container.style.setProperty("--word-count", totalSlots || 1);
-      for (let i = 0; i < totalSlots; i += 1) {
-        const word = words[i] || "";
-        const span = document.createElement("span");
-        span.className = `word-box ${type}`;
-        if (!word) {
-          span.classList.add("placeholder");
-        } else {
-          span.textContent = word;
-          span.addEventListener("click", () => {
-            span.classList.toggle("revealed");
-          });
-        }
-        container.appendChild(span);
+    function groupWords(words, size) {
+      if (!words.length) return [];
+      const groups = [];
+      for (let i = 0; i < words.length; i += size) {
+        groups.push(words.slice(i, i + size));
       }
+      return groups;
+    }
+
+    function renderTokenLine(container, groups, type, revealed, onGroupClick) {
+      container.innerHTML = "";
+      const totalSlots = groups.length || 1;
+      container.style.setProperty("--token-count", totalSlots);
+      if (!groups.length) {
+        const placeholder = document.createElement("span");
+        placeholder.className = `token-group ${type}`;
+        container.appendChild(placeholder);
+        return;
+      }
+
+      groups.forEach((group, index) => {
+        const groupEl = document.createElement("span");
+        groupEl.className = `token-group ${type}`;
+        if (revealed[index]) groupEl.classList.add("revealed");
+        group.forEach((word) => {
+          const wordEl = document.createElement("span");
+          wordEl.className = "token-word";
+          wordEl.textContent = word;
+          groupEl.appendChild(wordEl);
+        });
+        groupEl.addEventListener("click", () => onGroupClick(index, groupEl));
+        container.appendChild(groupEl);
+      });
+    }
     }
 
     function renderCard() {
       const current = state.queue[0];
       if (!current) {
         els.frenchLine.innerHTML = "";
-        els.literalLine.innerHTML = "";
+        els.englishTokens.innerHTML = "";
         els.englishLine.textContent = "";
         els.englishLine.dataset.placeholder = "Deck finished — pick another deck.";
         els.englishLine.classList.remove("revealed");
+        els.englishTokens.classList.add("locked");
         return;
       }
 
       const frenchWords = splitWords(current.french);
-      const literalWords = splitWords(current.literal);
-      const maxWords = Math.max(frenchWords.length, literalWords.length, 1);
+      const englishWords = splitWords(current.english);
+      const frenchGroups = groupWords(frenchWords, state.tokenSize);
+      const englishGroups = groupWords(englishWords, state.tokenSize);
 
-      renderWordLine(els.frenchLine, frenchWords, maxWords, "french");
-      renderWordLine(els.literalLine, literalWords, maxWords, "literal");
+      state.revealStage = "french";
+      state.frenchRevealed = new Array(frenchGroups.length).fill(false);
+      state.englishRevealed = new Array(englishGroups.length).fill(false);
 
+      renderTokenLine(els.frenchLine, frenchGroups, "french", state.frenchRevealed, (index, groupEl) => {
+        if (state.revealStage !== "french") return;
+        state.frenchRevealed[index] = !state.frenchRevealed[index];
+        groupEl.classList.toggle("revealed", state.frenchRevealed[index]);
+        if (state.frenchRevealed.every(Boolean)) {
+          state.revealStage = "english";
+          els.englishTokens.classList.remove("locked");
+        }
+      });
+
+      renderTokenLine(els.englishTokens, englishGroups, "english", state.englishRevealed, (index, groupEl) => {
+        if (state.revealStage !== "english") return;
+        state.englishRevealed[index] = !state.englishRevealed[index];
+        groupEl.classList.toggle("revealed", state.englishRevealed[index]);
+      });
+
+      els.englishTokens.classList.add("locked");
       els.englishLine.textContent = current.english || "";
-      els.englishLine.dataset.placeholder = "Click to reveal the proper translation";
+      els.englishLine.dataset.placeholder = "Click to reveal the full translation";
       els.englishLine.classList.remove("revealed");
       updateProgress();
     }
@@ -426,6 +516,25 @@
 
     els.englishLine.addEventListener("click", () => {
       els.englishLine.classList.toggle("revealed");
+    });
+
+    els.revealFrenchBtn.addEventListener("click", () => {
+      if (state.revealStage !== "french") return;
+      state.frenchRevealed = state.frenchRevealed.map(() => true);
+      els.frenchLine.querySelectorAll(".token-group").forEach((group) => {
+        group.classList.add("revealed");
+      });
+      state.revealStage = "english";
+      els.englishTokens.classList.remove("locked");
+    });
+
+    els.segmentButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        els.segmentButtons.forEach((button) => button.classList.remove("active"));
+        btn.classList.add("active");
+        state.tokenSize = Number(btn.dataset.size) || 1;
+        renderCard();
+      });
     });
 
     els.speakBtn.addEventListener("click", () => {
