@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Modern French Flashcards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --card-bg: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --danger: #ef4444;
+      --success: #10b981;
+      --border: #e5e7eb;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px 16px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 600px; /* Phone optimized max-width */
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* --- Collapsible Settings Sections --- */
+    details {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    details summary {
+      padding: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+    }
+
+    details summary::-webkit-details-marker { display: none; }
+    details summary::after { content: '+'; font-size: 1.2rem; }
+    details[open] summary::after { content: '-'; }
+
+    .details-content {
+      padding: 0 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* --- Inputs & Buttons --- */
+    label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    textarea, input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-family: inherit;
+      font-size: 16px; /* Prevents zooming on iPhone */
+      background: #f9fafb;
+    }
+
+    textarea:focus, input:focus {
+      outline: 2px solid var(--primary);
+      background: white;
+    }
+
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button:active { transform: scale(0.98); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    button.secondary { background: white; border: 1px solid var(--border); color: var(--text-main); }
+    button.danger { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+    button.text-only { background: transparent; color: var(--text-muted); padding: 4px 8px; font-size: 0.85rem; }
+
+    .button-row { display: flex; gap: 10px; }
+    .button-row > * { flex: 1; }
+
+    /* --- Status Pill --- */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: -10px;
+      padding: 0 4px;
+    }
+    .pill {
+      background: #e0e7ff;
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    /* --- Main Flashcard --- */
+    .card-container {
+      perspective: 1000px;
+      width: 100%;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: var(--shadow-lg);
+      padding: 24px;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      transition: transform 0.1s ease;
+      overflow: hidden;
+    }
+
+    .card:active { transform: scale(0.99); }
+
+    /* Speaker Icon */
+    .speaker-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+      margin-bottom: 24px;
+      z-index: 10;
+    }
+    .speaker-btn:active { transform: scale(0.9); }
+
+    /* Sentence (Fade In Logic) */
+    .sentence-display {
+      font-size: 1.35rem;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--text-main);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      max-width: 100%;
+    }
+    
+    .card.reveal-sentence .sentence-display {
+      opacity: 1;
+    }
+
+    /* --- Token Grid (The Table Mode) --- */
+    .token-grid {
+      display: none; /* Hidden until Grid Mode */
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .card.mode-tokens .sentence-display { display: none; }
+    .card.mode-tokens .speaker-btn { display: none; } /* Hide speaker in grid mode to focus on reading? Optional */
+    .card.mode-tokens .token-grid { display: flex; }
+
+    /* The "Table" Cell */
+    .token-pair {
+      display: flex;
+      flex-direction: column;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      min-width: 60px;
+      transition: background 0.1s;
+    }
+
+    .token-pair:active { background: #f1f5f9; }
+
+    /* French Row (Top) */
+    .token-fr {
+      padding: 8px 12px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--text-main);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      text-align: center;
+      transition: opacity 0.2s;
+    }
+
+    /* English Row (Bottom) */
+    .token-en {
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      color: var(--primary);
+      background: #eef2ff;
+      text-align: center;
+      font-weight: 500;
+      opacity: 0; /* Hidden by default */
+      transition: opacity 0.2s;
+    }
+
+    /* Visibility States */
+    .token-pair.hide-fr .token-fr { opacity: 0; }
+    .token-pair.show-en .token-en { opacity: 1; }
+
+    /* --- Token Controls --- */
+    .token-tools {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: none;
+      gap: 8px;
+    }
+    .card.mode-tokens .token-tools { display: flex; }
+    
+    .tool-btn {
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(4px);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    /* --- Rating Actions --- */
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .rate-btn {
+      flex-direction: column;
+      padding: 14px 4px;
+      font-size: 0.9rem;
+      border-radius: 12px;
+      border: 1px solid transparent;
+    }
+    
+    .rate-btn.again { background: #fef2f2; color: #dc2626; }
+    .rate-btn.hard { background: #fff7ed; color: #ea580c; }
+    .rate-btn.good { background: #f0f9ff; color: #0284c7; }
+    .rate-btn.easy { background: #f0fdf4; color: #16a34a; }
+
+    /* Utilities */
+    .hidden { display: none !important; }
+    .status-text { font-size: 0.85rem; color: var(--text-muted); text-align: center; min-height: 1.2rem; }
+    .error { color: var(--danger); }
+
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- 1. Settings / Generation Area (Collapsible) -->
+  <details id="setupDetails" open>
+    <summary>Deck Generator</summary>
+    <div class="details-content" style="margin-top:10px;">
+      
+      <!-- API Key -->
+      <div>
+        <label>Gemini API Key</label>
+        <div style="display:flex; gap:8px;">
+          <input type="password" id="apiKeyInput" placeholder="Paste key here..." />
+          <button class="secondary" id="saveKeyBtn" style="width:auto;">Save</button>
+        </div>
+        <div id="keyStatus" class="status-text" style="text-align:left; margin-top:4px;"></div>
+      </div>
+
+      <!-- Generator -->
+      <div>
+        <label>French Text Source</label>
+        <textarea id="sourceText" rows="4" placeholder="Paste French article or story here..."></textarea>
+      </div>
+
+      <div class="button-row">
+        <button id="generateBtn">✨ Generate Deck</button>
+        <button class="danger" id="deleteDeckBtn">Reset</button>
+      </div>
+      <div id="genStatus" class="status-text"></div>
+    </div>
+  </details>
+
+  <!-- 2. Status Bar -->
+  <div class="status-bar">
+    <span class="pill" id="deckCounter">0 / 0</span>
+    <span class="pill" id="deckName">No Deck</span>
+  </div>
+
+  <!-- 3. The Flashcard -->
+  <div class="card" id="flashcard">
+    
+    <!-- Controls visible only in Token Mode -->
+    <div class="token-tools">
+      <button class="tool-btn" id="toggleFrBtn">Toggle French</button>
+      <button class="tool-btn" id="revealEnBtn">Show Literal</button>
+    </div>
+
+    <!-- Stage 1: Speaker -->
+    <button class="speaker-btn" id="speakerBtn">🔊</button>
+    
+    <!-- Stage 2: Sentence -->
+    <div class="sentence-display" id="sentenceText">
+      Paste text and generate a deck to begin.
+    </div>
+
+    <!-- Stage 3: Token Grid -->
+    <div class="token-grid" id="tokenGrid">
+      <!-- Tokens injected via JS -->
+    </div>
+  </div>
+
+  <!-- 4. Rating Buttons -->
+  <div class="actions">
+    <button class="rate-btn again" data-rating="again">Again</button>
+    <button class="rate-btn hard" data-rating="hard">Hard</button>
+    <button class="rate-btn good" data-rating="good">Good</button>
+    <button class="rate-btn easy" data-rating="easy">Easy</button>
+  </div>
+
+</div>
+
+<!-- Mock API Loader for the specific Gemini logic -->
+<script src="../dir/geminiApi.js"></script>
+
+<script>
+/**
+ * SYSTEM INSTRUCTION / PROMPT
+ */
+const SYSTEM_INSTRUCTION = `Find all french sentences in this text.
+If parts of text are broken or corrupted. Fix them best you can.
+
+Then for each sentence:
+Input: Je travaille à Paris depuis trois ans.
+
+Output:
+<<Je[I] travaille[work/am working] à[in/at] Paris[Paris] depuis[since/for] trois[three] ans[years] | Je travaille à Paris depuis trois ans.>>
+
+After going through all the sentences output them 1 after each other like this:
+1
+<<Elle[She] a[has] oublié[forgotten] son[her] téléphone[phone] sur[on] la[the] table[table] | Elle a oublié son téléphone sur la table.>>
+2
+<<Nous[We] irons[will go] au[to the] cinéma[cinema] demain[tomorrow] soir[evening] | Nous irons au cinéma demain soir.>>
+`;
+
+/* --- STATE MANAGEMENT --- */
+const STORAGE_KEY = 'gemini_flashcards_v2';
+const state = {
+  deck: null,
+  queue: [],
+  currentCardId: null,
+  cardData: {} // Stores visual state per card { id: { stage, tokensHiddenFr, tokensShownEn } }
+};
+
+/* --- ELEMENTS --- */
+const els = {
+  setupDetails: document.getElementById('setupDetails'),
+  apiKeyInput: document.getElementById('apiKeyInput'),
+  saveKeyBtn: document.getElementById('saveKeyBtn'),
+  keyStatus: document.getElementById('keyStatus'),
+  sourceText: document.getElementById('sourceText'),
+  generateBtn: document.getElementById('generateBtn'),
+  deleteDeckBtn: document.getElementById('deleteDeckBtn'),
+  genStatus: document.getElementById('genStatus'),
+  
+  deckCounter: document.getElementById('deckCounter'),
+  deckName: document.getElementById('deckName'),
+  
+  card: document.getElementById('flashcard'),
+  speakerBtn: document.getElementById('speakerBtn'),
+  sentenceText: document.getElementById('sentenceText'),
+  tokenGrid: document.getElementById('tokenGrid'),
+  
+  toggleFrBtn: document.getElementById('toggleFrBtn'),
+  revealEnBtn: document.getElementById('revealEnBtn'),
+  rateBtns: document.querySelectorAll('.rate-btn')
+};
+
+/* --- SPEECH --- */
+const synth = window.speechSynthesis;
+let voice = null;
+
+function loadVoices() {
+  const voices = synth.getVoices();
+  // Prefer French from France, then any French
+  voice = voices.find(v => v.lang === 'fr-FR') || voices.find(v => v.lang.includes('fr'));
+}
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+loadVoices();
+
+function speak(text) {
+  if (!text) return;
+  synth.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'fr-FR';
+  if (voice) u.voice = voice;
+  u.rate = 0.9;
+  synth.speak(u);
+}
+
+/* --- STORAGE & DATA --- */
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadState() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw) {
+    try {
+      const data = JSON.parse(raw);
+      state.deck = data.deck;
+      state.queue = data.queue || [];
+      state.cardData = data.cardData || {};
+      state.currentCardId = data.currentCardId;
+      
+      if (state.deck) {
+        els.setupDetails.removeAttribute('open'); // Close settings if deck exists
+        renderCurrentCard();
+        updateUI();
+      }
+    } catch (e) { console.error('Load error', e); }
+  }
+}
+
+/* --- DECK GENERATION LOGIC (Parsing) --- */
+function parseGeminiResponse(text) {
+  const results = [];
+  // Regex to capture content inside << ... >>
+  const blockRegex = /<<([\s\S]*?)>>/g;
+  let match;
+  let index = 1;
+
+  while ((match = blockRegex.exec(text)) !== null) {
+    const content = match[1];
+    const pipeIndex = content.indexOf('|');
+    
+    // Split into Tokens Section and Full Sentence
+    const left = pipeIndex > -1 ? content.slice(0, pipeIndex) : content;
+    const right = pipeIndex > -1 ? content.slice(pipeIndex + 1) : '';
+
+    // Clean sentence
+    const rawSentence = right.trim().replace(/^:+/, '').trim();
+
+    // Parse Tokens: Word[Literal]
+    const tokenRegex = /([^\[\s]+)\[(.*?)\]/g;
+    const tokens = [];
+    let tMatch;
+    // We run regex on the 'left' part
+    while ((tMatch = tokenRegex.exec(left)) !== null) {
+      tokens.push({
+        fr: tMatch[1].trim(),
+        en: tMatch[2].trim()
+      });
+    }
+
+    if (rawSentence && tokens.length > 0) {
+      results.push({
+        id: `card_${Date.now()}_${index}`,
+        index: index++,
+        sentence: rawSentence,
+        tokens: tokens
+      });
+    }
+  }
+  return results;
+}
+
+/* --- UI RENDERING --- */
+function updateUI() {
+  if (!state.deck) {
+    els.deckName.textContent = 'No Deck';
+    els.deckCounter.textContent = '0 / 0';
+    return;
+  }
+  const total = state.deck.length;
+  const remaining = state.queue.length;
+  const done = total - remaining;
+  els.deckName.textContent = `Deck (${total})`;
+  els.deckCounter.textContent = `${done + 1 > total ? total : done + 1} / ${total}`;
+}
+
+function getCurrentCard() {
+  if (!state.queue.length) return null;
+  const id = state.queue[0];
+  return state.deck.find(c => c.id === id);
+}
+
+function initCardState(cardId, tokenCount) {
+  if (!state.cardData[cardId]) {
+    state.cardData[cardId] = {
+      stage: 0, // 0: SpeakerOnly, 1: Sentence, 2: TokenGrid
+      // Default: French Visible (true), English Hidden (false)
+      frVisible: true,
+      enRevealed: new Array(tokenCount).fill(false) 
+    };
+  }
+  return state.cardData[cardId];
+}
+
+function renderCurrentCard() {
+  const card = getCurrentCard();
+  if (!card) {
+    els.card.className = 'card'; // reset
+    els.sentenceText.textContent = "Deck Complete! 🎉";
+    els.sentenceText.style.opacity = 1;
+    els.speakerBtn.style.display = 'none';
+    els.tokenGrid.innerHTML = '';
+    return;
+  }
+
+  const cState = initCardState(card.id, card.tokens.length);
+  
+  // Reset classes based on stage
+  els.card.className = 'card'; // base
+  els.speakerBtn.style.display = 'flex';
+  els.sentenceText.style.display = 'block';
+  
+  // Stage 0: Speaker Only (Hidden text)
+  if (cState.stage === 0) {
+    els.sentenceText.textContent = card.sentence;
+    els.sentenceText.style.opacity = 0; // Hidden but takes space
+    els.tokenGrid.innerHTML = ''; // Clear grid
+  } 
+  // Stage 1: Reveal Sentence
+  else if (cState.stage === 1) {
+    els.sentenceText.textContent = card.sentence;
+    els.card.classList.add('reveal-sentence');
+  } 
+  // Stage 2: Token Grid Mode
+  else if (cState.stage === 2) {
+    els.card.classList.add('mode-tokens');
+    renderTokenGrid(card, cState);
+  }
+}
+
+function renderTokenGrid(card, cState) {
+  els.tokenGrid.innerHTML = '';
+  
+  card.tokens.forEach((t, idx) => {
+    // Container
+    const pair = document.createElement('div');
+    pair.className = 'token-pair';
+    
+    // Apply visibility states from memory
+    if (!cState.frVisible) pair.classList.add('hide-fr');
+    if (cState.enRevealed[idx]) pair.classList.add('show-en');
+
+    // French (Top)
+    const fr = document.createElement('div');
+    fr.className = 'token-fr';
+    fr.textContent = t.fr;
+
+    // English (Bottom)
+    const en = document.createElement('div');
+    en.className = 'token-en';
+    en.textContent = t.en;
+
+    pair.appendChild(fr);
+    pair.appendChild(en);
+
+    // Interaction: Click to reveal Literal
+    pair.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cState.enRevealed[idx] = true; 
+      pair.classList.add('show-en');
+      saveState();
+    });
+
+    els.tokenGrid.appendChild(pair);
+  });
+}
+
+/* --- INTERACTION HANDLERS --- */
+
+// 1. Advance Card Stage
+els.card.addEventListener('click', (e) => {
+  // Ignore clicks on buttons inside the card
+  if (e.target.closest('button') || e.target.closest('.token-pair')) return;
+
+  const card = getCurrentCard();
+  if (!card) return;
+  const cState = state.cardData[card.id];
+
+  if (cState.stage === 0) {
+    // Fade in sentence
+    cState.stage = 1;
+    renderCurrentCard();
+  } else if (cState.stage === 1) {
+    // Switch to grid
+    cState.stage = 2;
+    renderCurrentCard();
+  }
+  // If stage 2, do nothing (user interacts with tokens)
+  saveState();
+});
+
+// 2. Speaker Click
+els.speakerBtn.addEventListener('click', (e) => {
+  e.stopPropagation(); // Don't trigger card advance
+  const card = getCurrentCard();
+  if (card) speak(card.sentence);
+});
+
+// 3. Grid Controls
+els.toggleFrBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const card = getCurrentCard();
+  if(!card) return;
+  const cState = state.cardData[card.id];
+  
+  cState.frVisible = !cState.frVisible;
+  // Re-render to update classes
+  renderTokenGrid(card, cState);
+  saveState();
+});
+
+els.revealEnBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const card = getCurrentCard();
+  if(!card) return;
+  const cState = state.cardData[card.id];
+  
+  // Set all to true
+  cState.enRevealed = cState.enRevealed.map(() => true);
+  renderTokenGrid(card, cState);
+  saveState();
+});
+
+// 4. Rating (Next Card)
+els.rateBtns.forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (state.queue.length === 0) return;
+
+    const currentId = state.queue.shift(); // Remove current
+    const rating = btn.dataset.rating;
+
+    // Simple SRS logic: if hard/again, put back in queue
+    if (rating === 'again' || rating === 'hard') {
+      const offset = rating === 'again' ? 2 : 5;
+      const newIndex = Math.min(offset, state.queue.length);
+      state.queue.splice(newIndex, 0, currentId);
+      
+      // Reset state for next time we see it
+      state.cardData[currentId] = { 
+        stage: 0, 
+        frVisible: true, 
+        enRevealed: state.cardData[currentId].enRevealed.map(() => false) 
+      };
+    }
+
+    renderCurrentCard();
+    updateUI();
+    saveState();
+  });
+});
+
+/* --- API & GENERATOR --- */
+
+function getKey() { return els.apiKeyInput.value.trim(); }
+
+els.saveKeyBtn.addEventListener('click', () => {
+  const key = getKey();
+  if(key) {
+    if(window.geminiApi) window.geminiApi.saveGeminiKey(key); // Use provided library if exists
+    else localStorage.setItem('gemini_api_key', key);
+    els.keyStatus.textContent = "Key Saved.";
+    els.keyStatus.classList.add('text-success');
+  }
+});
+
+// Attempt to load key
+const savedKey = localStorage.getItem('geminiApiKey') || localStorage.getItem('gemini_api_key');
+if(savedKey) els.apiKeyInput.value = savedKey;
+
+els.generateBtn.addEventListener('click', async () => {
+  const text = els.sourceText.value.trim();
+  const apiKey = getKey();
+
+  if (!text) return alert("Please enter text.");
+  if (!apiKey) return alert("Please enter API Key.");
+
+  els.generateBtn.disabled = true;
+  els.generateBtn.textContent = "Generating...";
+  els.genStatus.textContent = "Asking Gemini...";
+
+  try {
+    // Use the provided geminiApi lib if available, or simple fetch
+    let responseText = "";
+    if (window.geminiApi) {
+      responseText = await window.geminiApi.callGemini(SYSTEM_INSTRUCTION, text);
+    } else {
+      // Fallback simple fetch if lib missing
+      const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: SYSTEM_INSTRUCTION + "\n\nText:\n" + text }] }]
+        })
+      });
+      const data = await resp.json();
+      responseText = data.candidates[0].content.parts[0].text;
+    }
+
+    const newDeck = parseGeminiResponse(responseText);
+    
+    if (newDeck.length === 0) {
+      throw new Error("No sentences found. Try different text.");
+    }
+
+    // Success
+    state.deck = newDeck;
+    state.queue = newDeck.map(c => c.id);
+    state.cardData = {};
+    saveState();
+    
+    renderCurrentCard();
+    updateUI();
+    els.setupDetails.removeAttribute('open'); // Close settings
+    els.genStatus.textContent = "";
+
+  } catch (err) {
+    console.error(err);
+    els.genStatus.textContent = "Error: " + err.message;
+    els.genStatus.classList.add('error');
+  } finally {
+    els.generateBtn.disabled = false;
+    els.generateBtn.textContent = "✨ Generate Deck";
+  }
+});
+
+els.deleteDeckBtn.addEventListener('click', () => {
+  if(confirm("Delete current deck?")) {
+    state.deck = null;
+    state.queue = [];
+    state.cardData = {};
+    saveState();
+    updateUI();
+    renderCurrentCard();
+  }
+});
+
+// Initial Load
+loadState();
+renderCurrentCard();
+updateUI();
+
+</script>
+</body>
+</html>
