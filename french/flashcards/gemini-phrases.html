@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gemini French Sentence Flashcards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f7fb;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --accent: #6366f1;
+      --accent-dark: #4338ca;
+      --shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+      --token-bg: #fef3c7;
+      --token-border: #fbbf24;
+      --token-text: #854d0e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px 48px;
+    }
+
+    .app {
+      width: min(1020px, 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .controls,
+    .api-panel,
+    .generator {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 12px;
+      font-size: 1rem;
+      resize: vertical;
+    }
+
+    input[type="password"],
+    input[type="text"] {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 1rem;
+      min-width: 260px;
+    }
+
+    button {
+      border: 1px solid transparent;
+      background: var(--accent);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s ease, background 0.2s ease;
+    }
+
+    button.secondary {
+      background: white;
+      color: var(--ink);
+      border-color: var(--border);
+    }
+
+    button.subtle {
+      background: transparent;
+      color: var(--muted);
+      border-color: transparent;
+      font-size: 0.9rem;
+      padding: 6px 10px;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    .pill {
+      background: #eef2ff;
+      color: var(--accent-dark);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .status {
+      font-size: 0.95rem;
+      color: var(--muted);
+      min-height: 1.2rem;
+      white-space: pre-wrap;
+    }
+
+    .status.error {
+      color: #b91c1c;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .speaker {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 12px 24px rgba(67, 56, 202, 0.25);
+      transition: transform 0.15s ease;
+    }
+
+    .speaker:active {
+      transform: scale(0.96);
+    }
+
+    .speaker-label {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .sentence {
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: 1.4;
+      display: none;
+    }
+
+    .token-controls {
+      display: none;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .token-controls button {
+      background: transparent;
+      border-color: var(--border);
+      color: var(--muted);
+      padding: 6px 12px;
+      font-size: 0.85rem;
+    }
+
+    .token-grid {
+      display: none;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .token {
+      border: 1px solid var(--token-border);
+      background: var(--token-bg);
+      border-radius: 12px;
+      padding: 8px 10px;
+      min-width: 72px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      display: grid;
+      gap: 4px;
+    }
+
+    .token span {
+      display: block;
+      line-height: 1.1;
+    }
+
+    .token .fr {
+      font-weight: 600;
+      color: transparent;
+    }
+
+    .token .en {
+      font-size: 0.85rem;
+      color: transparent;
+    }
+
+    .token.reveal-fr .fr {
+      color: var(--token-text);
+    }
+
+    .token.reveal-en .en {
+      color: var(--token-text);
+    }
+
+    .card[data-stage="sentenceRevealed"] .sentence {
+      display: block;
+    }
+
+    .card[data-stage="tokenMode"] .token-controls,
+    .card[data-stage="tokenMode"] .token-grid {
+      display: flex;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .rate-btn {
+      flex: 1 1 120px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-weight: 600;
+      cursor: pointer;
+      background: white;
+      transition: transform 0.1s ease, border-color 0.2s ease;
+    }
+
+    .rate-btn:active {
+      transform: scale(0.98);
+    }
+
+    .rate-btn.again { border-color: #fecaca; background: #fee2e2; color: #991b1b; }
+    .rate-btn.hard { border-color: #fed7aa; background: #ffedd5; color: #9a3412; }
+    .rate-btn.good { border-color: #bae6fd; background: #e0f2fe; color: #0c4a6e; }
+    .rate-btn.easy { border-color: #bbf7d0; background: #dcfce7; color: #166534; }
+
+    @media (max-width: 720px) {
+      .card {
+        padding: 20px;
+      }
+
+      .sentence {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="api-panel">
+      <div class="row" style="justify-content: space-between;">
+        <div>
+          <label for="apiKeyInput">Gemini API key</label>
+          <div class="row" style="margin-top:6px;">
+            <input id="apiKeyInput" type="password" autocomplete="off" placeholder="Paste your Gemini key" />
+            <button class="secondary" id="toggleKey" type="button">Show</button>
+          </div>
+        </div>
+        <div class="row">
+          <button class="secondary" id="saveKey" type="button">Save key</button>
+          <button class="secondary" id="clearKey" type="button">Clear key</button>
+        </div>
+      </div>
+      <div id="keyStatus" class="status"></div>
+    </section>
+
+    <section class="generator">
+      <div>
+        <label for="sourceText">Source text</label>
+        <textarea id="sourceText" placeholder="Paste your source text here..."></textarea>
+      </div>
+      <div class="row">
+        <button id="generateBtn" type="button">Generate deck</button>
+        <button class="secondary" id="clearDeck" type="button">Delete saved deck</button>
+      </div>
+      <div id="generatorStatus" class="status"></div>
+    </section>
+
+    <section class="controls">
+      <div class="row">
+        <span class="pill" id="deckLabel">No deck</span>
+        <span class="pill" id="deckProgress">0 / 0</span>
+      </div>
+      <div class="status" id="statusText">Paste text and generate a deck.</div>
+    </section>
+
+    <div class="card" id="card" data-stage="speakerOnly">
+      <div class="card-header">
+        <button class="speaker" id="speakBtn" type="button" aria-label="Hear sentence">🔊</button>
+        <div class="speaker-label" id="speakerLabel">Speaker</div>
+      </div>
+      <div class="sentence" id="sentenceText"></div>
+      <div class="token-controls">
+        <button class="subtle" id="revealFrench" type="button">Reveal all French</button>
+        <button class="subtle" id="revealLiteral" type="button">Reveal all literal</button>
+      </div>
+      <div class="token-grid" id="tokenGrid"></div>
+    </div>
+
+    <div class="actions">
+      <button class="rate-btn again" data-rating="again" type="button">Easy</button>
+      <button class="rate-btn hard" data-rating="hard" type="button">Medium</button>
+      <button class="rate-btn good" data-rating="good" type="button">Good</button>
+      <button class="rate-btn easy" data-rating="easy" type="button">Easy</button>
+    </div>
+  </div>
+
+  <script src="../dir/geminiApi.js"></script>
+  <script>
+    const SYSTEM_INSTRUCTION = `Find all french sentences in this text.
+If parts of text are broken or corrupted. Fix them best you can.
+
+Then for each sentence:
+Input: Je travaille à Paris depuis trois ans.
+
+Output:
+<<Je[I] travaille[work/am working] à[in/at] Paris[Paris] depuis[since/for] trois[three] ans[years] | Je travaille à Paris depuis trois ans.>>
+
+After going through all the sentences output them 1 after each other like this:
+1
+<<Elle[She] a[has] oublié[forgotten] son[her] téléphone[phone] sur[on] la[the] table[table] | Elle a oublié son téléphone sur la table.>>
+2
+<<Nous[We] irons[will go] au[to the] cinéma[cinema] demain[tomorrow] soir[evening] | Nous irons au cinéma demain soir.>>
+3
+<<Ils[They] ne[not] sont[are] pas[not] d’accord[in agreement] avec[with] cette[this] décision[decision] | Ils ne sont pas d’accord avec cette décision.>>
+4
+<<Ce[This] livre[book] explique[explains] le[the] problème[problem] de[of] manière[way] simple[simple] | Ce livre explique le problème de manière simple.>>
+5
+<<Je[I] comprends[understand] le[the] problème[problem] maintenant[now] | Je comprends le problème maintenant.>>`;
+
+    const STORAGE_VERSION = 1;
+    const STORAGE_KEY = `gemini-french-sentences-v${STORAGE_VERSION}`;
+
+    const els = {
+      apiKeyInput: document.getElementById('apiKeyInput'),
+      toggleKey: document.getElementById('toggleKey'),
+      saveKey: document.getElementById('saveKey'),
+      clearKey: document.getElementById('clearKey'),
+      keyStatus: document.getElementById('keyStatus'),
+      sourceText: document.getElementById('sourceText'),
+      generateBtn: document.getElementById('generateBtn'),
+      clearDeck: document.getElementById('clearDeck'),
+      generatorStatus: document.getElementById('generatorStatus'),
+      deckLabel: document.getElementById('deckLabel'),
+      deckProgress: document.getElementById('deckProgress'),
+      statusText: document.getElementById('statusText'),
+      card: document.getElementById('card'),
+      sentenceText: document.getElementById('sentenceText'),
+      tokenGrid: document.getElementById('tokenGrid'),
+      revealFrench: document.getElementById('revealFrench'),
+      revealLiteral: document.getElementById('revealLiteral'),
+      speakBtn: document.getElementById('speakBtn'),
+      speakerLabel: document.getElementById('speakerLabel'),
+      rateButtons: document.querySelectorAll('.rate-btn')
+    };
+
+    const synth = window.speechSynthesis;
+    let voice = null;
+    let saveTimer = null;
+
+    const state = {
+      deck: null,
+      progress: null
+    };
+
+    function loadVoices() {
+      const voices = synth.getVoices();
+      voice =
+        voices.find((v) => v.lang.toLowerCase().startsWith('fr')) ||
+        voices.find((v) => v.lang.toLowerCase().includes('fr')) ||
+        null;
+    }
+
+    function speak(text) {
+      if (!text) return;
+      loadVoices();
+      synth.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'fr-FR';
+      if (voice) utter.voice = voice;
+      synth.speak(utter);
+    }
+
+    function getDeckFromStorage() {
+      if (typeof localStorage === 'undefined') return null;
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      try {
+        const data = JSON.parse(raw);
+        if (!data || data.version !== STORAGE_VERSION || !Array.isArray(data.sentences)) {
+          return null;
+        }
+        return data;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function saveDeckToStorage() {
+      if (!state.deck || !state.progress || typeof localStorage === 'undefined') return;
+      const payload = {
+        version: STORAGE_VERSION,
+        deckId: state.deck.deckId,
+        createdAt: state.deck.createdAt,
+        sentences: state.deck.sentences,
+        sourceText: state.deck.sourceText,
+        rawGeminiResponse: state.deck.rawGeminiResponse,
+        progress: state.progress
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    }
+
+    function scheduleSave() {
+      if (saveTimer) window.clearTimeout(saveTimer);
+      saveTimer = window.setTimeout(() => {
+        saveDeckToStorage();
+      }, 300);
+    }
+
+    function clearDeckStorage() {
+      if (typeof localStorage === 'undefined') return;
+      localStorage.removeItem(STORAGE_KEY);
+    }
+
+    function sanitizeTokenPart(value) {
+      return (value || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function parseTokenPairs(text) {
+      const tokens = [];
+      const tokenRegex = /([^[]+)\[([^\]]*)\]/g;
+      let match;
+      while ((match = tokenRegex.exec(text)) !== null) {
+        const fr = sanitizeTokenPart(match[1]);
+        const en = sanitizeTokenPart(match[2]);
+        if (!fr) continue;
+        tokens.push({ fr, en });
+      }
+      return tokens;
+    }
+
+    function parseGeminiBlock(block) {
+      const separatorIndex = block.indexOf('|');
+      const left = separatorIndex >= 0 ? block.slice(0, separatorIndex).trim() : block.trim();
+      const right = separatorIndex >= 0 ? block.slice(separatorIndex + 1).trim() : '';
+      const tokens = parseTokenPairs(left);
+      let rawFrench = right.replace(/^:+/, '').trim();
+      if (!rawFrench && tokens.length) {
+        rawFrench = tokens.map((token) => token.fr).join(' ').trim();
+      }
+      return { rawFrench, tokens };
+    }
+
+    function parseGeminiResponse(text) {
+      if (!text) return [];
+      const results = [];
+      const numberedRegex = /(\d+)\s*<<([\s\S]*?)>>/g;
+      let match;
+      while ((match = numberedRegex.exec(text)) !== null) {
+        const index = Number(match[1]);
+        const block = match[2].trim();
+        const parsed = parseGeminiBlock(block);
+        if (parsed.rawFrench || parsed.tokens.length) {
+          results.push({ index, rawFrench: parsed.rawFrench, tokens: parsed.tokens });
+        }
+      }
+      if (results.length) return results;
+
+      const fallbackRegex = /<<([\s\S]*?)>>/g;
+      let fallbackIndex = 1;
+      while ((match = fallbackRegex.exec(text)) !== null) {
+        const block = match[1].trim();
+        const parsed = parseGeminiBlock(block);
+        if (parsed.rawFrench || parsed.tokens.length) {
+          results.push({ index: fallbackIndex, rawFrench: parsed.rawFrench, tokens: parsed.tokens });
+          fallbackIndex += 1;
+        }
+      }
+      return results;
+    }
+
+    function buildDeck(sentences, sourceText, rawGeminiResponse) {
+      const deckId = `deck-${Date.now()}`;
+      return {
+        deckId,
+        createdAt: new Date().toISOString(),
+        sentences,
+        sourceText,
+        rawGeminiResponse
+      };
+    }
+
+    function buildProgress(sentences) {
+      return {
+        queue: sentences.map((sentence) => sentence.id),
+        finished: [],
+        cardStates: {}
+      };
+    }
+
+    function ensureCardState(id, tokenCount) {
+      if (!state.progress.cardStates[id]) {
+        state.progress.cardStates[id] = {
+          stage: 'speakerOnly',
+          tokens: {
+            french: Array(tokenCount).fill(false),
+            literal: Array(tokenCount).fill(false)
+          },
+          grades: []
+        };
+      }
+      const cardState = state.progress.cardStates[id];
+      if (cardState.tokens.french.length !== tokenCount) {
+        cardState.tokens.french = Array(tokenCount).fill(false);
+      }
+      if (cardState.tokens.literal.length !== tokenCount) {
+        cardState.tokens.literal = Array(tokenCount).fill(false);
+      }
+      return cardState;
+    }
+
+    function updateStatus(message, isError = false) {
+      els.statusText.textContent = message;
+      els.statusText.classList.toggle('error', isError);
+    }
+
+    function updateKeyStatus(message, isError = false) {
+      els.keyStatus.textContent = message;
+      els.keyStatus.classList.toggle('error', isError);
+    }
+
+    function updateGeneratorStatus(message, isError = false) {
+      els.generatorStatus.textContent = message;
+      els.generatorStatus.classList.toggle('error', isError);
+    }
+
+    function refreshKeyState() {
+      const key = window.geminiApi?.loadGeminiKey(els.apiKeyInput) || '';
+      const hasKey = Boolean(key);
+      els.generateBtn.disabled = !hasKey;
+      updateKeyStatus(hasKey ? 'Key loaded.' : 'Add your Gemini API key to enable deck generation.');
+    }
+
+    function getSentenceById(id) {
+      return state.deck?.sentences.find((sentence) => sentence.id === id) || null;
+    }
+
+    function updateProgress() {
+      const total = state.progress ? state.progress.queue.length + state.progress.finished.length : 0;
+      const completed = state.progress ? state.progress.finished.length : 0;
+      els.deckProgress.textContent = `${Math.min(completed + 1, total)} / ${total}`;
+    }
+
+    function renderCard() {
+      if (!state.deck || !state.progress || !state.progress.queue.length) {
+        els.card.dataset.stage = 'speakerOnly';
+        els.sentenceText.textContent = '';
+        els.tokenGrid.innerHTML = '';
+        els.speakerLabel.textContent = 'No sentence';
+        updateStatus('No sentences available.');
+        updateProgress();
+        return;
+      }
+
+      const currentId = state.progress.queue[0];
+      const sentence = getSentenceById(currentId);
+      if (!sentence) return;
+      const tokens = sentence.tokens || [];
+      const cardState = ensureCardState(currentId, tokens.length);
+
+      els.card.dataset.stage = cardState.stage;
+      els.sentenceText.textContent = sentence.rawFrench || '';
+      els.speakerLabel.textContent = `Sentence ${sentence.index}`;
+
+      els.tokenGrid.innerHTML = '';
+      tokens.forEach((token, idx) => {
+        const tokenEl = document.createElement('div');
+        tokenEl.className = 'token';
+        if (cardState.tokens.french[idx]) tokenEl.classList.add('reveal-fr');
+        if (cardState.tokens.literal[idx]) tokenEl.classList.add('reveal-en');
+        tokenEl.dataset.index = String(idx);
+
+        const fr = document.createElement('span');
+        fr.className = 'fr';
+        fr.textContent = token.fr || '';
+        const en = document.createElement('span');
+        en.className = 'en';
+        en.textContent = token.en || '';
+
+        tokenEl.appendChild(fr);
+        tokenEl.appendChild(en);
+        tokenEl.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const index = Number(tokenEl.dataset.index);
+          cardState.tokens.french[index] = !cardState.tokens.french[index];
+          tokenEl.classList.toggle('reveal-fr');
+          scheduleSave();
+        });
+
+        els.tokenGrid.appendChild(tokenEl);
+      });
+
+      updateProgress();
+    }
+
+    function rateCard(rating) {
+      if (!state.progress || !state.progress.queue.length) return;
+      const cardId = state.progress.queue.shift();
+      const cardState = state.progress.cardStates[cardId];
+      if (cardState) {
+        cardState.grades.push({ rating, at: new Date().toISOString() });
+      }
+      if (rating === 'easy') {
+        state.progress.finished.push(cardId);
+      } else {
+        const insertMap = { again: 2, hard: 5, good: 10 };
+        const offset = insertMap[rating] ?? 3;
+        const index = Math.min(offset, state.progress.queue.length);
+        state.progress.queue.splice(index, 0, cardId);
+      }
+      saveDeckToStorage();
+      renderCard();
+    }
+
+    function advanceStage() {
+      if (!state.progress || !state.progress.queue.length) return;
+      const currentId = state.progress.queue[0];
+      const cardState = state.progress.cardStates[currentId];
+      if (!cardState) return;
+      if (cardState.stage === 'speakerOnly') {
+        cardState.stage = 'sentenceRevealed';
+      } else if (cardState.stage === 'sentenceRevealed') {
+        cardState.stage = 'tokenMode';
+      }
+      scheduleSave();
+      renderCard();
+    }
+
+    function applyRevealAll(type) {
+      if (!state.progress || !state.progress.queue.length) return;
+      const currentId = state.progress.queue[0];
+      const cardState = state.progress.cardStates[currentId];
+      if (!cardState) return;
+      if (type === 'french') {
+        cardState.tokens.french = cardState.tokens.french.map(() => true);
+      } else {
+        cardState.tokens.literal = cardState.tokens.literal.map(() => true);
+      }
+      saveDeckToStorage();
+      renderCard();
+    }
+
+    function hydrateStoredDeck() {
+      const stored = getDeckFromStorage();
+      if (!stored) return;
+      const sentences = stored.sentences.map((sentence, idx) => ({
+        id: sentence.id || `s-${idx + 1}`,
+        index: sentence.index || idx + 1,
+        rawFrench: sentence.rawFrench || '',
+        tokens: Array.isArray(sentence.tokens) ? sentence.tokens : []
+      }));
+      state.deck = {
+        deckId: stored.deckId,
+        createdAt: stored.createdAt,
+        sentences,
+        sourceText: stored.sourceText || '',
+        rawGeminiResponse: stored.rawGeminiResponse || ''
+      };
+      state.progress = stored.progress || buildProgress(sentences);
+      updateGeneratorStatus('Restored last deck.');
+    }
+
+    function applyDeck(deck, progress) {
+      state.deck = deck;
+      state.progress = progress;
+      els.deckLabel.textContent = `Deck (${deck.sentences.length})`;
+      updateStatus(`Deck created at ${new Date(deck.createdAt).toLocaleString()}.`);
+      saveDeckToStorage();
+      renderCard();
+    }
+
+    function normalizeSentences(sentences) {
+      return sentences.map((sentence, idx) => ({
+        id: `s-${idx + 1}`,
+        index: sentence.index || idx + 1,
+        rawFrench: sentence.rawFrench || '',
+        tokens: Array.isArray(sentence.tokens) ? sentence.tokens : []
+      }));
+    }
+
+    async function generateDeck() {
+      updateGeneratorStatus('');
+      const source = els.sourceText.value.trim();
+      if (!source) {
+        updateGeneratorStatus('Please paste source text to process.', true);
+        return;
+      }
+      const key = window.geminiApi?.loadGeminiKey(els.apiKeyInput);
+      if (!key) {
+        updateGeneratorStatus('Add your Gemini API key to continue.', true);
+        return;
+      }
+      els.generateBtn.disabled = true;
+      updateGeneratorStatus('Calling Gemini...');
+      try {
+        const responseText = await window.geminiApi.callGemini(SYSTEM_INSTRUCTION, source);
+        const sentences = parseGeminiResponse(responseText);
+        if (!sentences.length) {
+          updateGeneratorStatus('No sentences detected in Gemini response.', true);
+          return;
+        }
+        const normalized = normalizeSentences(sentences);
+        const deck = buildDeck(normalized, source, responseText);
+        const progress = buildProgress(normalized);
+        applyDeck(deck, progress);
+        saveDeckToStorage();
+      } catch (error) {
+        const message = String(error?.message || 'Unexpected error.');
+        const isAuth = /permission|unauthorized|401|403/i.test(message);
+        updateGeneratorStatus(
+          isAuth
+            ? 'Gemini authentication failed. Update your API key and try again.'
+            : `Gemini error: ${message}`,
+          true
+        );
+      } finally {
+        els.generateBtn.disabled = !Boolean(window.geminiApi?.loadGeminiKey());
+      }
+    }
+
+    els.toggleKey.addEventListener('click', () => {
+      const showing = els.apiKeyInput.type === 'text';
+      els.apiKeyInput.type = showing ? 'password' : 'text';
+      els.toggleKey.textContent = showing ? 'Show' : 'Hide';
+    });
+
+    els.saveKey.addEventListener('click', () => {
+      window.geminiApi?.saveGeminiKey(els.apiKeyInput.value);
+      refreshKeyState();
+    });
+
+    els.clearKey.addEventListener('click', () => {
+      els.apiKeyInput.value = '';
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('geminiApiKey');
+      }
+      refreshKeyState();
+    });
+
+    els.generateBtn.addEventListener('click', () => {
+      generateDeck();
+    });
+
+    els.clearDeck.addEventListener('click', () => {
+      clearDeckStorage();
+      state.deck = null;
+      state.progress = null;
+      els.deckLabel.textContent = 'No deck';
+      els.deckProgress.textContent = '0 / 0';
+      updateStatus('Saved deck removed.');
+      renderCard();
+    });
+
+    els.card.addEventListener('click', (event) => {
+      if (event.target.closest('button') || event.target.closest('.token')) return;
+      advanceStage();
+    });
+
+    els.revealFrench.addEventListener('click', (event) => {
+      event.stopPropagation();
+      applyRevealAll('french');
+    });
+
+    els.revealLiteral.addEventListener('click', (event) => {
+      event.stopPropagation();
+      applyRevealAll('literal');
+    });
+
+    els.speakBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      if (!state.progress || !state.progress.queue.length) return;
+      const currentId = state.progress.queue[0];
+      const sentence = getSentenceById(currentId);
+      speak(sentence?.rawFrench || '');
+    });
+
+    els.rateButtons.forEach((btn) => {
+      btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        rateCard(btn.dataset.rating);
+      });
+    });
+
+    synth.onvoiceschanged = loadVoices;
+    loadVoices();
+
+    refreshKeyState();
+    hydrateStoredDeck();
+    if (state.deck && state.progress) {
+      els.deckLabel.textContent = `Deck (${state.deck.sentences.length})`;
+      renderCard();
+    }
+  </script>
+</body>
+</html>
