@@ -213,6 +213,11 @@
     .card.mode-tokens .speaker-btn { display: none; } /* Hide speaker in grid mode to focus on reading? Optional */
     .card.mode-tokens .token-grid { display: flex; }
     .card.mode-tokens .token-settings { display: flex; }
+    .card.mode-tokens.show-sentence .sentence-display {
+      display: block;
+      opacity: 1;
+      margin-top: 16px;
+    }
 
     .token-settings {
       display: none;
@@ -697,6 +702,17 @@ function updateTranslationDisplay(card, cState) {
   }
 }
 
+function updateSentenceReveal(card, cState) {
+  if (!card || cState.stage !== 2) {
+    els.card.classList.remove('show-sentence');
+    return;
+  }
+  const allFrenchRevealed = cState.frRevealed.every(Boolean);
+  els.sentenceText.textContent = card.sentence;
+  els.sentenceText.style.opacity = allFrenchRevealed ? 1 : 0;
+  els.card.classList.toggle('show-sentence', allFrenchRevealed);
+}
+
 function renderCurrentCard() {
   const card = getCurrentCard();
   if (!card) {
@@ -728,6 +744,7 @@ function renderCurrentCard() {
     els.card.classList.add('mode-tokens');
     renderTokenGrid(card, cState);
     updateTokenControls(card, cState);
+    updateSentenceReveal(card, cState);
   }
 
   updateTranslationDisplay(card, cState);
@@ -767,6 +784,7 @@ function renderTokenGrid(card, cState) {
   const groups = getTokenGroups(card.tokens, state.tokenGroupSize);
 
   groups.forEach(group => {
+    const groupText = group.tokens.map(token => token.fr).join(' ');
     const groupEl = document.createElement('div');
     groupEl.className = 'token-group';
 
@@ -795,7 +813,7 @@ function renderTokenGrid(card, cState) {
         e.stopPropagation();
         if (clickTimer) return;
         clickTimer = setTimeout(() => {
-          speak(t.fr);
+          speak(groupText);
           clickTimer = null;
         }, 250);
       });
@@ -812,6 +830,7 @@ function renderTokenGrid(card, cState) {
           cState.phase = 'en';
         }
         renderTokenGrid(card, cState);
+        updateSentenceReveal(card, cState);
         updateTranslationDisplay(card, cState);
         updateTokenControls(card, cState);
         saveState();
@@ -820,6 +839,8 @@ function renderTokenGrid(card, cState) {
 
     els.tokenGrid.appendChild(groupEl);
   });
+
+  updateSentenceReveal(card, cState);
 }
 
 /* --- INTERACTION HANDLERS --- */
