@@ -262,26 +262,6 @@
       border: none;
       padding: 0;
       background: transparent;
-      gap: 10px;
-    }
-
-    .token-grid.single-word .token-pair {
-      border: none;
-      background: transparent;
-      min-width: auto;
-    }
-
-    .token-grid.single-word .token-fr,
-    .token-grid.single-word .token-en {
-      padding: 0;
-    }
-
-    .token-grid.single-word .token-fr {
-      border-bottom: none;
-    }
-
-    .token-grid.single-word .token-en {
-      background: transparent;
     }
 
     /* The "Table" Cell */
@@ -823,8 +803,6 @@ function renderTokenGrid(card, cState) {
             updateTranslationDisplay(card, cState);
             updateTokenControls(card, cState);
             saveState();
-          } else {
-            speak(t.fr);
           }
           clickTimer = null;
         }, 250);
