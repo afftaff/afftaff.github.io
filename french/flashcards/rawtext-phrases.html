@@ -588,6 +588,13 @@ function loadVoices() {
   const voices = synth.getVoices();
   // Prefer French from France, then any French
   voice = pickFrenchVoice(voices);
+  const hasFrenchVoice = Boolean(voice);
+  if (els.speakerBtn) {
+    els.speakerBtn.disabled = !hasFrenchVoice;
+    els.speakerBtn.title = hasFrenchVoice
+      ? 'Lire la phrase en français'
+      : 'Aucune voix française disponible sur cet appareil.';
+  }
 }
 if (speechSynthesis.onvoiceschanged !== undefined) {
   speechSynthesis.onvoiceschanged = loadVoices;
@@ -596,12 +603,15 @@ loadVoices();
 
 function speak(text) {
   if (!text) return;
-  synth.cancel();
-  const u = new SpeechSynthesisUtterance(text);
   const voices = synth.getVoices();
   voice = voice || pickFrenchVoice(voices);
-  u.lang = (voice && voice.lang) ? voice.lang : 'fr-FR';
-  if (voice) u.voice = voice;
+  if (!voice) {
+    return;
+  }
+  synth.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'fr-FR';
+  u.voice = voice;
   u.rate = 0.9;
   synth.speak(u);
 }
