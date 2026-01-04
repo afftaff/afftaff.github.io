@@ -604,14 +604,18 @@ loadVoices();
 function speak(text) {
   if (!text) return;
   const voices = synth.getVoices();
-  voice = voice || pickFrenchVoice(voices);
+  const preferredVoice = pickFrenchVoice(voices);
+  if (preferredVoice) {
+    voice = preferredVoice;
+  }
   if (!voice) {
     return;
   }
   synth.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'fr-FR';
   u.voice = voice;
+  u.voiceURI = voice.voiceURI;
+  u.lang = voice.lang || 'fr-FR';
   u.rate = 0.9;
   synth.speak(u);
 }
