@@ -584,7 +584,7 @@ const els = {
 const synth = window.speechSynthesis;
 const FORCED_LANG = 'fr-FR';
 const FRENCH_PRIMER_TEXT = 'Ceci est une phrase en francais.';
-const PRIMER_WORD_THRESHOLD = 12;
+const PRIMER_WORD_THRESHOLD = 4;
 const VOICE_STORAGE_KEY = 'tts_french_voice_key';
 const AUTO_VOICE_VALUE = '__auto__';
 
@@ -736,16 +736,20 @@ if (els.voiceSelect) {
   });
 }
 
-function speak(text) {
+function speak(text, options = {}) {
   const normalized = (text || '').trim();
   if (!normalized) return;
   const preferredVoice = resolveFrenchVoice();
   if (!preferredVoice) return;
 
+  const usePrimer = options.usePrimer !== false;
+  const primerThreshold = Number.isFinite(options.primerThreshold)
+    ? options.primerThreshold
+    : PRIMER_WORD_THRESHOLD;
   const utteranceLang = isFrenchLang(preferredVoice.lang) ? preferredVoice.lang : FORCED_LANG;
   synth.cancel();
   const wordCount = normalized.split(/\s+/).filter(Boolean).length;
-  if (wordCount <= PRIMER_WORD_THRESHOLD) {
+  if (usePrimer && wordCount <= primerThreshold) {
     const primer = new SpeechSynthesisUtterance(FRENCH_PRIMER_TEXT);
     primer.voice = preferredVoice;
     primer.voiceURI = preferredVoice.voiceURI;
@@ -1045,7 +1049,7 @@ function renderTokenGrid(card, cState) {
         if (!clickTimer) return;
         clearTimeout(clickTimer);
         clickTimer = null;
-        speak(groupText);
+        speak(groupText, { usePrimer: false });
       };
 
       const cancelPress = (e) => {
@@ -1108,7 +1112,7 @@ els.card.addEventListener('click', (e) => {
 els.speakerBtn.addEventListener('click', (e) => {
   e.stopPropagation(); // Don't trigger card advance
   const card = getCurrentCard();
-  if (card) speak(card.sentence);
+  if (card) speak(card.sentence, { usePrimer: false });
 });
 
 // 3. Grid Controls
