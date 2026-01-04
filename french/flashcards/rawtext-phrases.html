@@ -164,11 +164,26 @@
       position: relative;
       cursor: pointer;
       border: 1px solid var(--border);
-      transition: transform 0.1s ease;
+      transition: transform 0.2s ease, opacity 0.2s ease;
       overflow: hidden;
     }
 
     .card:active { transform: scale(0.99); }
+
+    .card.is-transitioning {
+      opacity: 0;
+      transform: translateX(-12px);
+    }
+
+    .card.is-entering {
+      opacity: 0;
+      transform: translateX(12px);
+    }
+
+    .card.is-transitioning .sentence-display {
+      opacity: 0;
+      filter: blur(16px);
+    }
 
     /* Speaker Icon */
     .speaker-btn {
@@ -866,6 +881,23 @@ function renderTokenGrid(card, cState) {
   updateSentenceReveal(card, cState);
 }
 
+function transitionToNextCard(callback) {
+  els.card.classList.add('is-transitioning');
+  els.sentenceText.classList.remove('revealed', 'obscured');
+  els.translationLine.classList.add('hidden');
+
+  window.setTimeout(() => {
+    callback();
+    els.card.classList.remove('is-transitioning');
+    els.card.classList.add('is-entering');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        els.card.classList.remove('is-entering');
+      });
+    });
+  }, 140);
+}
+
 /* --- INTERACTION HANDLERS --- */
 
 // 1. Advance Card Stage
@@ -949,28 +981,30 @@ els.rateBtns.forEach(btn => {
     e.stopPropagation();
     if (state.queue.length === 0) return;
 
-    const currentId = state.queue.shift(); // Remove current
-    const rating = btn.dataset.rating;
+    transitionToNextCard(() => {
+      const currentId = state.queue.shift(); // Remove current
+      const rating = btn.dataset.rating;
 
-    // Simple SRS logic: if hard/again, put back in queue
-    if (rating === 'again' || rating === 'hard') {
-      const offset = rating === 'again' ? 2 : 5;
-      const newIndex = Math.min(offset, state.queue.length);
-      state.queue.splice(newIndex, 0, currentId);
-      
-      // Reset state for next time we see it
-      state.cardData[currentId] = { 
-        stage: 0,
-        frRevealed: state.cardData[currentId].frRevealed.map(() => false),
-        enRevealed: state.cardData[currentId].enRevealed.map(() => false),
-        phase: 'fr',
-        translationRevealed: false
-      };
-    }
+      // Simple SRS logic: if hard/again, put back in queue
+      if (rating === 'again' || rating === 'hard') {
+        const offset = rating === 'again' ? 2 : 5;
+        const newIndex = Math.min(offset, state.queue.length);
+        state.queue.splice(newIndex, 0, currentId);
+        
+        // Reset state for next time we see it
+        state.cardData[currentId] = { 
+          stage: 0,
+          frRevealed: state.cardData[currentId].frRevealed.map(() => false),
+          enRevealed: state.cardData[currentId].enRevealed.map(() => false),
+          phase: 'fr',
+          translationRevealed: false
+        };
+      }
 
-    renderCurrentCard();
-    updateUI();
-    saveState();
+      renderCurrentCard();
+      updateUI();
+      saveState();
+    });
   });
 });
 
