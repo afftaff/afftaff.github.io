@@ -1,11 +1,12 @@
+
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<!-- saved from url=(0064)https://afftaff.github.io/french/flashcards/rawtext-phrases.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>Modern French Flashcards</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link href="./Modern French Flashcards_files/css2" rel="stylesheet">
   <style>
     :root {
       --bg: #f3f4f6;
@@ -86,7 +87,7 @@
       display: block;
     }
 
-    textarea, input[type="text"], input[type="password"] {
+    textarea, input[type="text"], input[type="password"], select {
       width: 100%;
       padding: 12px;
       border-radius: 8px;
@@ -96,7 +97,7 @@
       background: #f9fafb;
     }
 
-    textarea:focus, input:focus {
+    textarea:focus, input:focus, select:focus {
       outline: 2px solid var(--primary);
       background: white;
     }
@@ -437,7 +438,7 @@
 <div class="app-container">
 
   <!-- 1. Settings / Generation Area (Collapsible) -->
-  <details id="setupDetails" open>
+  <details id="setupDetails">
     <summary>Deck Generator</summary>
     <div class="details-content" style="margin-top:10px;">
       
@@ -445,10 +446,17 @@
       <div>
         <label>Gemini API Key</label>
         <div style="display:flex; gap:8px;">
-          <input type="password" id="apiKeyInput" placeholder="Paste key here..." />
+          <input type="password" id="apiKeyInput" placeholder="Paste key here...">
           <button class="secondary" id="saveKeyBtn" style="width:auto;">Save</button>
         </div>
         <div id="keyStatus" class="status-text" style="text-align:left; margin-top:4px;"></div>
+      </div>
+
+      <!-- Speech -->
+      <div>
+        <label>French Voice (TTS)</label>
+        <select id="voiceSelect"></select>
+        <div id="voiceStatus" class="status-text" style="text-align:left; margin-top:4px;"></div>
       </div>
 
       <!-- Generator -->
@@ -467,38 +475,34 @@
 
   <!-- 2. Status Bar -->
   <div class="status-bar">
-    <span class="pill" id="deckCounter">0 / 0</span>
-    <span class="pill" id="deckName">No Deck</span>
+    <span class="pill" id="deckCounter">10 / 184</span>
+    <span class="pill" id="deckName">Deck (184)</span>
   </div>
 
   <!-- 3. The Flashcard -->
-  <div class="card" id="flashcard">
+  <div class="card mode-tokens" id="flashcard">
     
     <!-- Controls visible only in Token Mode -->
     <div class="token-tools">
       <button class="tool-btn" id="toggleFrBtn">Reveal French</button>
-      <button class="tool-btn" id="revealEnBtn">Reveal English</button>
+      <button class="tool-btn" id="revealEnBtn" disabled="">Reveal English</button>
     </div>
 
     <!-- Stage 1: Speaker -->
-    <button class="speaker-btn" id="speakerBtn">🔊</button>
+    <button class="speaker-btn" id="speakerBtn" title="Lire la phrase en français" style="display: flex;">🔊</button>
     
     <!-- Stage 2: Sentence -->
-    <div class="sentence-display" id="sentenceText">
-      Paste text and generate a deck to begin.
-    </div>
+    <div class="sentence-display obscured" id="sentenceText" style="display: block;">Un groupe de soi-disant scientifiques me retient en otage.</div>
 
     <!-- Stage 3: Token Grid -->
     <div class="token-settings">
       <div class="segmented-control" id="tokenSizeControl" role="group" aria-label="Token size">
-        <button type="button" class="segment active" data-size="1">1 word</button>
-        <button type="button" class="segment" data-size="3">3 word</button>
+        <button type="button" class="segment" data-size="1">1 word</button>
+        <button type="button" class="segment active" data-size="3">3 word</button>
         <button type="button" class="segment" data-size="5">5 word</button>
       </div>
     </div>
-    <div class="token-grid" id="tokenGrid">
-      <!-- Tokens injected via JS -->
-    </div>
+    <div class="token-grid" id="tokenGrid"><div class="token-group"><div class="token-pair"><div class="token-fr">Un</div><div class="token-en">A</div></div><div class="token-pair"><div class="token-fr">groupe</div><div class="token-en">group</div></div><div class="token-pair"><div class="token-fr">de</div><div class="token-en">of</div></div></div><div class="token-group"><div class="token-pair"><div class="token-fr">soi-disant</div><div class="token-en">so-called</div></div><div class="token-pair"><div class="token-fr">scientifiques</div><div class="token-en">scientists</div></div><div class="token-pair hide-fr"><div class="token-fr">me</div><div class="token-en">me</div></div></div><div class="token-group"><div class="token-pair hide-fr"><div class="token-fr">retient</div><div class="token-en">holds</div></div><div class="token-pair hide-fr"><div class="token-fr">en</div><div class="token-en">in</div></div><div class="token-pair hide-fr"><div class="token-fr">otage</div><div class="token-en">hostage</div></div></div></div>
 
     <!-- Stage 4: Natural Translation -->
     <div class="translation hidden" id="translationLine" data-placeholder="Show translation"></div>
@@ -515,7 +519,7 @@
 </div>
 
 <!-- Mock API Loader for the specific Gemini logic -->
-<script src="../dir/geminiApi.js"></script>
+<script src="./Modern French Flashcards_files/geminiApi.js.download"></script>
 
 <script>
 /**
@@ -554,6 +558,8 @@ const els = {
   apiKeyInput: document.getElementById('apiKeyInput'),
   saveKeyBtn: document.getElementById('saveKeyBtn'),
   keyStatus: document.getElementById('keyStatus'),
+  voiceSelect: document.getElementById('voiceSelect'),
+  voiceStatus: document.getElementById('voiceStatus'),
   sourceText: document.getElementById('sourceText'),
   generateBtn: document.getElementById('generateBtn'),
   deleteDeckBtn: document.getElementById('deleteDeckBtn'),
@@ -576,57 +582,182 @@ const els = {
 
 /* --- SPEECH --- */
 const synth = window.speechSynthesis;
-let voice = null;
-const FRENCH_PRIMER_TEXT = 'Bonjour';
+const FORCED_LANG = 'fr-FR';
+const FRENCH_PRIMER_TEXT = 'Ceci est une phrase en francais.';
+const PRIMER_WORD_THRESHOLD = 12;
+const VOICE_STORAGE_KEY = 'tts_french_voice_key';
+const AUTO_VOICE_VALUE = '__auto__';
 
-function pickFrenchVoice(voices) {
-  return voices.find(v => v.lang === 'fr-FR')
-    || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('fr-'))
-    || voices.find(v => v.lang && v.lang.toLowerCase().includes('fr'));
+let voice = null;
+let selectedVoiceKey = null;
+let autoVoiceKey = null;
+
+function isFrenchLang(lang) {
+  return typeof lang === 'string' && lang.toLowerCase().startsWith('fr');
+}
+
+function isMultilingualVoiceName(name) {
+  return typeof name === 'string' && /multi|polyglot/i.test(name);
+}
+
+function getVoiceKey(v) {
+  return v.voiceURI || v.name || '';
+}
+
+function getFrenchVoices() {
+  const voices = synth.getVoices().filter(v => isFrenchLang(v.lang));
+  voices.sort((a, b) => {
+    const score = (v) => {
+      let s = 0;
+      if (v.lang === FORCED_LANG) s -= 20;
+      if (v.localService) s -= 5;
+      if (isMultilingualVoiceName(v.name)) s += 5;
+      return s;
+    };
+    const diff = score(a) - score(b);
+    if (diff !== 0) return diff;
+    const nameA = a.name || '';
+    const nameB = b.name || '';
+    return nameA.localeCompare(nameB);
+  });
+  return voices;
+}
+
+function loadVoicePreference() {
+  if (typeof localStorage === 'undefined') return;
+  const stored = localStorage.getItem(VOICE_STORAGE_KEY);
+  if (stored) selectedVoiceKey = stored;
+}
+
+function saveVoicePreference(value) {
+  if (typeof localStorage === 'undefined') return;
+  if (!value || value === AUTO_VOICE_VALUE) {
+    localStorage.removeItem(VOICE_STORAGE_KEY);
+    selectedVoiceKey = null;
+    return;
+  }
+  selectedVoiceKey = value;
+  localStorage.setItem(VOICE_STORAGE_KEY, value);
+}
+
+function resolveFrenchVoice(voices) {
+  const frenchVoices = Array.isArray(voices) ? voices : getFrenchVoices();
+  if (!frenchVoices.length) {
+    voice = null;
+    return null;
+  }
+
+  const preferredKey = selectedVoiceKey || autoVoiceKey;
+  if (preferredKey) {
+    const matched = frenchVoices.find(v => getVoiceKey(v) === preferredKey);
+    if (matched) {
+      voice = matched;
+      if (!selectedVoiceKey) autoVoiceKey = preferredKey;
+      return voice;
+    }
+  }
+
+  const picked = frenchVoices[0];
+  voice = picked;
+  if (!selectedVoiceKey) autoVoiceKey = getVoiceKey(picked);
+  return voice;
+}
+
+function updateVoiceSelect(voices) {
+  if (!els.voiceSelect) return;
+  const frenchVoices = Array.isArray(voices) ? voices : getFrenchVoices();
+  const currentKey = selectedVoiceKey;
+  els.voiceSelect.innerHTML = '';
+
+  const autoOption = document.createElement('option');
+  autoOption.value = AUTO_VOICE_VALUE;
+  autoOption.textContent = 'Auto (French)';
+  els.voiceSelect.appendChild(autoOption);
+
+  frenchVoices.forEach((v) => {
+    const opt = document.createElement('option');
+    opt.value = getVoiceKey(v);
+    opt.textContent = `${v.name} (${v.lang})`;
+    els.voiceSelect.appendChild(opt);
+  });
+
+  if (currentKey && frenchVoices.some(v => getVoiceKey(v) === currentKey)) {
+    els.voiceSelect.value = currentKey;
+  } else {
+    els.voiceSelect.value = AUTO_VOICE_VALUE;
+  }
+
+  els.voiceSelect.disabled = frenchVoices.length === 0;
+}
+
+function updateVoiceStatus(activeVoice, voices) {
+  if (!els.voiceStatus) return;
+  const frenchVoices = Array.isArray(voices) ? voices : getFrenchVoices();
+  if (!frenchVoices.length) {
+    els.voiceStatus.textContent = 'No French voices found. Install a French voice in your OS.';
+    return;
+  }
+  if (!activeVoice) {
+    els.voiceStatus.textContent = 'French voice not ready yet.';
+    return;
+  }
+  const label = `${activeVoice.name} (${activeVoice.lang})`;
+  if (selectedVoiceKey) {
+    els.voiceStatus.textContent = `Using: ${label}`;
+  } else {
+    els.voiceStatus.textContent = `Auto using: ${label}`;
+  }
 }
 
 function loadVoices() {
-  const voices = synth.getVoices();
-  // Prefer French from France, then any French
-  voice = pickFrenchVoice(voices);
-  const hasFrenchVoice = Boolean(voice);
+  const frenchVoices = getFrenchVoices();
+  const activeVoice = resolveFrenchVoice(frenchVoices);
+  const hasFrenchVoice = Boolean(activeVoice);
   if (els.speakerBtn) {
     els.speakerBtn.disabled = !hasFrenchVoice;
     els.speakerBtn.title = hasFrenchVoice
       ? 'Lire la phrase en français'
       : 'Aucune voix française disponible sur cet appareil.';
   }
+  updateVoiceSelect(frenchVoices);
+  updateVoiceStatus(activeVoice, frenchVoices);
 }
 if (speechSynthesis.onvoiceschanged !== undefined) {
   speechSynthesis.onvoiceschanged = loadVoices;
 }
+loadVoicePreference();
 loadVoices();
 
+if (els.voiceSelect) {
+  els.voiceSelect.addEventListener('change', () => {
+    saveVoicePreference(els.voiceSelect.value);
+    const activeVoice = resolveFrenchVoice();
+    updateVoiceStatus(activeVoice);
+  });
+}
+
 function speak(text) {
-  if (!text) return;
-  const voices = synth.getVoices();
-  const preferredVoice = pickFrenchVoice(voices);
-  if (preferredVoice) {
-    voice = preferredVoice;
-  }
-  if (!voice) {
-    return;
-  }
+  const normalized = (text || '').trim();
+  if (!normalized) return;
+  const preferredVoice = resolveFrenchVoice();
+  if (!preferredVoice) return;
+
+  const utteranceLang = isFrenchLang(preferredVoice.lang) ? preferredVoice.lang : FORCED_LANG;
   synth.cancel();
-  const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
-  if (wordCount <= 2) {
+  const wordCount = normalized.split(/\s+/).filter(Boolean).length;
+  if (wordCount <= PRIMER_WORD_THRESHOLD) {
     const primer = new SpeechSynthesisUtterance(FRENCH_PRIMER_TEXT);
-    primer.voice = voice;
-    primer.voiceURI = voice.voiceURI;
-    primer.lang = voice.lang || 'fr-FR';
-    primer.rate = 0.9;
+    primer.voice = preferredVoice;
+    primer.voiceURI = preferredVoice.voiceURI;
+    primer.lang = utteranceLang;
+    primer.rate = 1.2;
     primer.volume = 0;
     synth.speak(primer);
   }
-  const u = new SpeechSynthesisUtterance(text);
-  u.voice = voice;
-  u.voiceURI = voice.voiceURI;
-  u.lang = voice.lang || 'fr-FR';
+  const u = new SpeechSynthesisUtterance(normalized);
+  u.voice = preferredVoice;
+  u.voiceURI = preferredVoice.voiceURI;
+  u.lang = utteranceLang;
   u.rate = 0.9;
   synth.speak(u);
 }
@@ -1166,5 +1297,6 @@ updateUI();
 updateTokenSizeControl();
 
 </script>
-</body>
-</html>
+
+
+</body></html>
