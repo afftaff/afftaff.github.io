@@ -194,7 +194,8 @@
       font-weight: 600;
       line-height: 1.5;
       color: var(--text-main);
-      opacity: 1;
+      opacity: 0;
+      filter: blur(0);
       transition: opacity 0.4s ease, filter 0.4s ease;
       max-width: 100%;
     }
@@ -202,6 +203,11 @@
     .sentence-display.obscured {
       opacity: 0.15;
       filter: blur(16px);
+    }
+
+    .sentence-display.revealed {
+      opacity: 1;
+      filter: blur(0);
     }
     
     /* --- Token Grid (The Table Mode) --- */
@@ -716,6 +722,7 @@ function updateSentenceReveal(card, cState) {
   const allFrenchRevealed = cState.frRevealed.every(Boolean);
   els.sentenceText.textContent = card.sentence;
   els.sentenceText.classList.toggle('obscured', !allFrenchRevealed);
+  els.sentenceText.classList.toggle('revealed', allFrenchRevealed);
   els.card.classList.toggle('show-sentence', allFrenchRevealed);
 }
 
@@ -725,6 +732,7 @@ function renderCurrentCard() {
     els.card.className = 'card'; // reset
     els.sentenceText.textContent = "Deck Complete! 🎉";
     els.sentenceText.classList.remove('obscured');
+    els.sentenceText.classList.add('revealed');
     els.speakerBtn.style.display = 'none';
     els.tokenGrid.innerHTML = '';
     els.translationLine.classList.add('hidden');
@@ -742,6 +750,7 @@ function renderCurrentCard() {
   if (cState.stage === 0) {
     els.sentenceText.textContent = card.sentence;
     els.sentenceText.classList.add('obscured');
+    els.sentenceText.classList.remove('revealed');
     els.tokenGrid.innerHTML = ''; // Clear grid
     els.translationLine.classList.add('hidden');
   } 
@@ -749,6 +758,7 @@ function renderCurrentCard() {
   else if (cState.stage === 2) {
     els.card.classList.add('mode-tokens');
     els.sentenceText.classList.add('obscured');
+    els.sentenceText.classList.remove('revealed');
     renderTokenGrid(card, cState);
     updateTokenControls(card, cState);
     updateSentenceReveal(card, cState);
