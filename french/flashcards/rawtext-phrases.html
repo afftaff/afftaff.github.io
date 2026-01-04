@@ -799,6 +799,7 @@ function renderTokenGrid(card, cState) {
   els.tokenGrid.innerHTML = '';
   els.tokenGrid.classList.toggle('single-word', state.tokenGroupSize === 1);
   const groups = getTokenGroups(card.tokens, state.tokenGroupSize);
+  const allFrenchRevealed = cState.frRevealed.every(Boolean);
 
   groups.forEach(group => {
     const groupText = group.tokens.map(token => token.fr).join(' ');
@@ -841,10 +842,15 @@ function renderTokenGrid(card, cState) {
           clearTimeout(clickTimer);
           clickTimer = null;
         }
-        if (cState.frRevealed[actualIndex]) return;
-        cState.frRevealed[actualIndex] = true;
-        if (cState.frRevealed.every(Boolean)) {
-          cState.phase = 'en';
+        if (!cState.frRevealed[actualIndex]) {
+          cState.frRevealed[actualIndex] = true;
+          if (cState.frRevealed.every(Boolean)) {
+            cState.phase = 'en';
+          }
+        } else if (allFrenchRevealed) {
+          group.indices.forEach(idx => {
+            cState.enRevealed[idx] = true;
+          });
         }
         renderTokenGrid(card, cState);
         updateSentenceReveal(card, cState);
