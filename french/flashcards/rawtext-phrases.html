@@ -842,21 +842,7 @@ function renderTokenGrid(card, cState) {
       pair.appendChild(en);
       groupEl.appendChild(pair);
 
-      pair.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (clickTimer) return;
-        clickTimer = setTimeout(() => {
-          speak(groupText);
-          clickTimer = null;
-        }, 250);
-      });
-
-      pair.addEventListener('dblclick', (e) => {
-        e.stopPropagation();
-        if (clickTimer) {
-          clearTimeout(clickTimer);
-          clickTimer = null;
-        }
+      const revealTokenGroup = () => {
         if (!cState.frRevealed[actualIndex]) {
           cState.frRevealed[actualIndex] = true;
           if (cState.frRevealed.every(Boolean)) {
@@ -872,7 +858,36 @@ function renderTokenGrid(card, cState) {
         updateTranslationDisplay(card, cState);
         updateTokenControls(card, cState);
         saveState();
-      });
+      };
+
+      const startPress = (e) => {
+        e.stopPropagation();
+        if (clickTimer) clearTimeout(clickTimer);
+        clickTimer = setTimeout(() => {
+          clickTimer = null;
+          revealTokenGroup();
+        }, 450);
+      };
+
+      const endPress = (e) => {
+        e.stopPropagation();
+        if (!clickTimer) return;
+        clearTimeout(clickTimer);
+        clickTimer = null;
+        speak(groupText);
+      };
+
+      const cancelPress = (e) => {
+        e.stopPropagation();
+        if (!clickTimer) return;
+        clearTimeout(clickTimer);
+        clickTimer = null;
+      };
+
+      pair.addEventListener('pointerdown', startPress);
+      pair.addEventListener('pointerup', endPress);
+      pair.addEventListener('pointerleave', cancelPress);
+      pair.addEventListener('pointercancel', cancelPress);
     });
 
     els.tokenGrid.appendChild(groupEl);
