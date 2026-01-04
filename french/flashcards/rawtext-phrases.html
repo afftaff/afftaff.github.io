@@ -501,6 +501,10 @@
         <button type="button" class="segment active" data-size="3">3 word</button>
         <button type="button" class="segment" data-size="5">5 word</button>
       </div>
+      <div class="segmented-control" id="revealModeControl" role="group" aria-label="Reveal mode">
+        <button type="button" class="segment" data-mode="group">Grouped</button>
+        <button type="button" class="segment" data-mode="single">Individual</button>
+      </div>
     </div>
     <div class="token-grid" id="tokenGrid"><div class="token-group"><div class="token-pair"><div class="token-fr">Un</div><div class="token-en">A</div></div><div class="token-pair"><div class="token-fr">groupe</div><div class="token-en">group</div></div><div class="token-pair"><div class="token-fr">de</div><div class="token-en">of</div></div></div><div class="token-group"><div class="token-pair"><div class="token-fr">soi-disant</div><div class="token-en">so-called</div></div><div class="token-pair"><div class="token-fr">scientifiques</div><div class="token-en">scientists</div></div><div class="token-pair hide-fr"><div class="token-fr">me</div><div class="token-en">me</div></div></div><div class="token-group"><div class="token-pair hide-fr"><div class="token-fr">retient</div><div class="token-en">holds</div></div><div class="token-pair hide-fr"><div class="token-fr">en</div><div class="token-en">in</div></div><div class="token-pair hide-fr"><div class="token-fr">otage</div><div class="token-en">hostage</div></div></div></div>
 
@@ -549,7 +553,8 @@ const state = {
   queue: [],
   currentCardId: null,
   cardData: {}, // Stores visual state per card { id: { stage, tokensHiddenFr, tokensShownEn } }
-  tokenGroupSize: 1
+  tokenGroupSize: 1,
+  tokenRevealMode: 'group'
 };
 
 /* --- ELEMENTS --- */
@@ -574,6 +579,7 @@ const els = {
   tokenGrid: document.getElementById('tokenGrid'),
   translationLine: document.getElementById('translationLine'),
   tokenSizeControl: document.getElementById('tokenSizeControl'),
+  revealModeControl: document.getElementById('revealModeControl'),
   
   toggleFrBtn: document.getElementById('toggleFrBtn'),
   revealEnBtn: document.getElementById('revealEnBtn'),
@@ -781,6 +787,7 @@ function loadState() {
       state.cardData = data.cardData || {};
       state.currentCardId = data.currentCardId;
       state.tokenGroupSize = data.tokenGroupSize || 1;
+      state.tokenRevealMode = data.tokenRevealMode || 'group';
       
       if (state.deck) {
         els.setupDetails.removeAttribute('open'); // Close settings if deck exists
@@ -788,6 +795,7 @@ function loadState() {
         updateUI();
       }
       updateTokenSizeControl();
+      updateRevealModeControl();
     } catch (e) { console.error('Load error', e); }
   }
 }
@@ -973,6 +981,7 @@ function updateTokenControls(card, cState) {
   els.toggleFrBtn.disabled = allFrenchRevealed;
   els.revealEnBtn.disabled = !allFrenchRevealed || allEnglishRevealed;
   updateTokenSizeControl();
+  updateRevealModeControl();
 }
 
 function updateTokenSizeControl() {
@@ -984,11 +993,19 @@ function updateTokenSizeControl() {
   });
 }
 
+function updateRevealModeControl() {
+  if (!els.revealModeControl) return;
+  const buttons = els.revealModeControl.querySelectorAll('.segment');
+  buttons.forEach(btn => {
+    const mode = btn.dataset.mode;
+    btn.classList.toggle('active', mode === state.tokenRevealMode);
+  });
+}
+
 function renderTokenGrid(card, cState) {
   els.tokenGrid.innerHTML = '';
   els.tokenGrid.classList.toggle('single-word', state.tokenGroupSize === 1);
   const groups = getTokenGroups(card.tokens, state.tokenGroupSize);
-  const allFrenchRevealed = cState.frRevealed.every(Boolean);
 
   groups.forEach(group => {
     const groupText = group.tokens.map(token => token.fr).join(' ');
@@ -1017,13 +1034,22 @@ function renderTokenGrid(card, cState) {
       groupEl.appendChild(pair);
 
       const revealTokenGroup = () => {
-        if (!cState.frRevealed[actualIndex]) {
-          cState.frRevealed[actualIndex] = true;
-          if (cState.frRevealed.every(Boolean)) {
+        const revealIndices = state.tokenRevealMode === 'group' ? group.indices : [actualIndex];
+        const allFrenchRevealed = cState.frRevealed.every(Boolean);
+
+        if (!allFrenchRevealed) {
+          let didReveal = false;
+          revealIndices.forEach(idx => {
+            if (!cState.frRevealed[idx]) {
+              cState.frRevealed[idx] = true;
+              didReveal = true;
+            }
+          });
+          if (didReveal && cState.frRevealed.every(Boolean)) {
             cState.phase = 'en';
           }
-        } else if (allFrenchRevealed) {
-          group.indices.forEach(idx => {
+        } else {
+          revealIndices.forEach(idx => {
             cState.enRevealed[idx] = true;
           });
         }
@@ -1152,6 +1178,28 @@ if (els.tokenSizeControl) {
       if (!size || size === state.tokenGroupSize) return;
       state.tokenGroupSize = size;
       updateTokenSizeControl();
+      const card = getCurrentCard();
+      if (card) {
+        const cState = state.cardData[card.id];
+        if (cState.stage === 2) {
+          renderTokenGrid(card, cState);
+        }
+        updateTokenControls(card, cState);
+      }
+      saveState();
+    });
+  });
+}
+
+if (els.revealModeControl) {
+  const modeButtons = els.revealModeControl.querySelectorAll('.segment');
+  modeButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const mode = btn.dataset.mode;
+      if (!mode || mode === state.tokenRevealMode) return;
+      state.tokenRevealMode = mode;
+      updateRevealModeControl();
       const card = getCurrentCard();
       if (card) {
         const cState = state.cardData[card.id];
@@ -1299,6 +1347,7 @@ loadState();
 renderCurrentCard();
 updateUI();
 updateTokenSizeControl();
+updateRevealModeControl();
 
 </script>
 
