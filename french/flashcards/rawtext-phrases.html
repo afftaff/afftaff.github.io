@@ -194,9 +194,14 @@
       font-weight: 600;
       line-height: 1.5;
       color: var(--text-main);
-      opacity: 0;
-      transition: opacity 0.4s ease;
+      opacity: 1;
+      transition: opacity 0.4s ease, filter 0.4s ease;
       max-width: 100%;
+    }
+
+    .sentence-display.obscured {
+      opacity: 0.15;
+      filter: blur(16px);
     }
     
     /* --- Token Grid (The Table Mode) --- */
@@ -209,14 +214,15 @@
       margin-top: 10px;
     }
 
-    .card.mode-tokens .sentence-display { display: none; }
+    .card.mode-tokens .sentence-display {
+      display: block;
+      margin-top: 16px;
+    }
     .card.mode-tokens .speaker-btn { display: none; } /* Hide speaker in grid mode to focus on reading? Optional */
     .card.mode-tokens .token-grid { display: flex; }
     .card.mode-tokens .token-settings { display: flex; }
     .card.mode-tokens.show-sentence .sentence-display {
-      display: block;
       opacity: 1;
-      margin-top: 16px;
     }
 
     .token-settings {
@@ -709,7 +715,7 @@ function updateSentenceReveal(card, cState) {
   }
   const allFrenchRevealed = cState.frRevealed.every(Boolean);
   els.sentenceText.textContent = card.sentence;
-  els.sentenceText.style.opacity = allFrenchRevealed ? 1 : 0;
+  els.sentenceText.classList.toggle('obscured', !allFrenchRevealed);
   els.card.classList.toggle('show-sentence', allFrenchRevealed);
 }
 
@@ -718,7 +724,7 @@ function renderCurrentCard() {
   if (!card) {
     els.card.className = 'card'; // reset
     els.sentenceText.textContent = "Deck Complete! 🎉";
-    els.sentenceText.style.opacity = 1;
+    els.sentenceText.classList.remove('obscured');
     els.speakerBtn.style.display = 'none';
     els.tokenGrid.innerHTML = '';
     els.translationLine.classList.add('hidden');
@@ -735,13 +741,14 @@ function renderCurrentCard() {
   // Stage 0: Speaker Only (Hidden text)
   if (cState.stage === 0) {
     els.sentenceText.textContent = card.sentence;
-    els.sentenceText.style.opacity = 0; // Hidden but takes space
+    els.sentenceText.classList.add('obscured');
     els.tokenGrid.innerHTML = ''; // Clear grid
     els.translationLine.classList.add('hidden');
   } 
   // Stage 2: Token Grid Mode
   else if (cState.stage === 2) {
     els.card.classList.add('mode-tokens');
+    els.sentenceText.classList.add('obscured');
     renderTokenGrid(card, cState);
     updateTokenControls(card, cState);
     updateSentenceReveal(card, cState);
