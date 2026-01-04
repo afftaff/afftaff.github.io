@@ -795,15 +795,7 @@ function renderTokenGrid(card, cState) {
         e.stopPropagation();
         if (clickTimer) return;
         clickTimer = setTimeout(() => {
-          if (!cState.frRevealed[actualIndex]) {
-            speak(t.fr);
-          } else if (!cState.enRevealed[actualIndex]) {
-            cState.enRevealed[actualIndex] = true;
-            renderTokenGrid(card, cState);
-            updateTranslationDisplay(card, cState);
-            updateTokenControls(card, cState);
-            saveState();
-          }
+          speak(t.fr);
           clickTimer = null;
         }, 250);
       });
