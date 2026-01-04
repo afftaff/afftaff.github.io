@@ -577,6 +577,7 @@ const els = {
 /* --- SPEECH --- */
 const synth = window.speechSynthesis;
 let voice = null;
+const FRENCH_PRIMER_TEXT = 'Bonjour';
 
 function pickFrenchVoice(voices) {
   return voices.find(v => v.lang === 'fr-FR')
@@ -604,14 +605,28 @@ loadVoices();
 function speak(text) {
   if (!text) return;
   const voices = synth.getVoices();
-  voice = voice || pickFrenchVoice(voices);
+  const preferredVoice = pickFrenchVoice(voices);
+  if (preferredVoice) {
+    voice = preferredVoice;
+  }
   if (!voice) {
     return;
   }
   synth.cancel();
+  const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
+  if (wordCount <= 2) {
+    const primer = new SpeechSynthesisUtterance(FRENCH_PRIMER_TEXT);
+    primer.voice = voice;
+    primer.voiceURI = voice.voiceURI;
+    primer.lang = voice.lang || 'fr-FR';
+    primer.rate = 0.9;
+    primer.volume = 0;
+    synth.speak(primer);
+  }
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'fr-FR';
   u.voice = voice;
+  u.voiceURI = voice.voiceURI;
+  u.lang = voice.lang || 'fr-FR';
   u.rate = 0.9;
   synth.speak(u);
 }
