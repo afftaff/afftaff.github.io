@@ -361,19 +361,21 @@
     .translation {
       width: 100%;
       margin-top: 16px;
-      background: #f1f5f9;
-      border: 2px dashed var(--border);
+      background: #ffffff;
+      border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 14px 16px;
-      font-weight: 600;
+      padding: 12px 20px;
+      font-weight: 500;
       color: transparent;
       cursor: pointer;
-      transition: color 0.3s ease;
+      transition: color 0.3s ease, box-shadow 0.2s ease, transform 0.2s ease;
       min-height: 52px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
+      line-height: 1.5;
+      box-shadow: var(--shadow-sm);
     }
 
     .translation.revealed {
@@ -487,7 +489,7 @@
     </div>
 
     <!-- Stage 4: Natural Translation -->
-    <div class="translation hidden" id="translationLine" data-placeholder="Click to reveal the actual translation"></div>
+    <div class="translation hidden" id="translationLine" data-placeholder="Show translation"></div>
   </div>
 
   <!-- 4. Rating Buttons -->
@@ -720,7 +722,7 @@ function updateTranslationDisplay(card, cState) {
   }
 
   els.translationLine.classList.remove('hidden');
-  els.translationLine.dataset.placeholder = "Click to reveal the actual translation";
+  els.translationLine.dataset.placeholder = "Show translation";
   els.translationLine.textContent = card.translation || '';
   if (cState.translationRevealed) {
     els.translationLine.classList.add('revealed');
@@ -866,7 +868,7 @@ function renderTokenGrid(card, cState) {
         clickTimer = setTimeout(() => {
           clickTimer = null;
           revealTokenGroup();
-        }, 450);
+        }, 350);
       };
 
       const endPress = (e) => {
