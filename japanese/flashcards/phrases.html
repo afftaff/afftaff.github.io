@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Japanese Phrase Decks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --ink: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #1f2937;
+      --accent: #38bdf8;
+      --accent-dark: #0ea5e9;
+      --shadow: 0 20px 40px rgba(15, 23, 42, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Noto Sans JP", system-ui, sans-serif;
+      background: radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.08), transparent 40%),
+        radial-gradient(circle at 90% 5%, rgba(14, 165, 233, 0.12), transparent 35%),
+        var(--bg);
+      color: var(--ink);
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px 48px;
+      min-height: 100vh;
+    }
+
+    .app {
+      width: min(980px, 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    .controls {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .controls label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .controls select {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 1rem;
+      min-width: 180px;
+      background: #0b1220;
+      color: var(--ink);
+    }
+
+    .pill {
+      background: rgba(56, 189, 248, 0.15);
+      color: #bae6fd;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .phrase {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-align: center;
+    }
+
+    .reveal-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .reveal-card {
+      background: #0b1220;
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 120px;
+    }
+
+    .reveal-label {
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .reveal-value {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: transparent;
+      transition: color 0.2s ease;
+    }
+
+    .reveal-value.revealed {
+      color: var(--ink);
+    }
+
+    .reveal-btn {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-weight: 600;
+      cursor: pointer;
+      align-self: flex-start;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .rate-btn {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #0b1220;
+    }
+
+    .rate-btn.again { background: #f87171; }
+    .rate-btn.hard { background: #fbbf24; }
+    .rate-btn.good { background: #34d399; }
+    .rate-btn.easy { background: #60a5fa; }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .speak-btn {
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: #0b1220;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Japanese Phrase Decks</h1>
+      <p>Hardcoded practice phrases split into 50-card decks (200 total).</p>
+    </header>
+
+    <section class="controls">
+      <div>
+        <label for="deckSelect">Deck</label>
+        <select id="deckSelect"></select>
+      </div>
+      <div class="pill" id="deckLabel">Deck 1</div>
+      <div class="pill" id="deckProgress">1 / 50</div>
+      <button class="speak-btn" id="speakBtn" type="button">🔊 Speak</button>
+    </section>
+
+    <section class="card">
+      <div class="phrase" id="japanesePhrase">こんにちは</div>
+      <div class="reveal-grid">
+        <div class="reveal-card">
+          <div class="reveal-label">Romaji</div>
+          <div class="reveal-value" id="romajiValue">konnichiwa</div>
+          <button class="reveal-btn" data-reveal="romaji" type="button">Reveal</button>
+        </div>
+        <div class="reveal-card">
+          <div class="reveal-label">English</div>
+          <div class="reveal-value" id="englishValue">Hello.</div>
+          <button class="reveal-btn" data-reveal="english" type="button">Reveal</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="rate-btn again" data-rating="again" type="button">Again</button>
+        <button class="rate-btn hard" data-rating="hard" type="button">Hard</button>
+        <button class="rate-btn good" data-rating="good" type="button">Good</button>
+        <button class="rate-btn easy" data-rating="easy" type="button">Easy</button>
+      </div>
+
+      <div class="footer">
+        <div id="statusText">0 completed, 50 in review.</div>
+        <div id="queueCount">Cards left: 50</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const DECK_SIZE = 50;
+    const PHRASES = [
+      { japanese: "こんにちは", romaji: "konnichiwa", english: "Hello." },
+      { japanese: "おはようございます", romaji: "ohayou gozaimasu", english: "Good morning." },
+      { japanese: "こんばんは", romaji: "konbanwa", english: "Good evening." },
+      { japanese: "おやすみなさい", romaji: "oyasuminasai", english: "Good night." },
+      { japanese: "ありがとう", romaji: "arigatou", english: "Thank you." },
+      { japanese: "ありがとうございます", romaji: "arigatou gozaimasu", english: "Thank you very much." },
+      { japanese: "すみません", romaji: "sumimasen", english: "Excuse me / I'm sorry." },
+      { japanese: "ごめんなさい", romaji: "gomennasai", english: "I'm sorry." },
+      { japanese: "はい", romaji: "hai", english: "Yes." },
+      { japanese: "いいえ", romaji: "iie", english: "No." },
+      { japanese: "お願いします", romaji: "onegaishimasu", english: "Please." },
+      { japanese: "どういたしまして", romaji: "dou itashimashite", english: "You're welcome." },
+      { japanese: "大丈夫です", romaji: "daijoubu desu", english: "It's okay." },
+      { japanese: "元気ですか", romaji: "genki desu ka", english: "How are you?" },
+      { japanese: "元気です", romaji: "genki desu", english: "I'm fine." },
+      { japanese: "お名前は何ですか", romaji: "onamae wa nan desu ka", english: "What's your name?" },
+      { japanese: "私は〜です", romaji: "watashi wa ~ desu", english: "I am ~." },
+      { japanese: "はじめまして", romaji: "hajimemashite", english: "Nice to meet you." },
+      { japanese: "よろしくお願いします", romaji: "yoroshiku onegaishimasu", english: "Nice to meet you (lit.)." },
+      { japanese: "どこから来ましたか", romaji: "doko kara kimashita ka", english: "Where are you from?" },
+      { japanese: "アメリカから来ました", romaji: "amerika kara kimashita", english: "I'm from America." },
+      { japanese: "日本語を勉強しています", romaji: "nihongo o benkyou shiteimasu", english: "I'm studying Japanese." },
+      { japanese: "ゆっくり話してください", romaji: "yukkuri hanashite kudasai", english: "Please speak slowly." },
+      { japanese: "もう一度言ってください", romaji: "mou ichido itte kudasai", english: "Please say it again." },
+      { japanese: "わかりません", romaji: "wakarimasen", english: "I don't understand." },
+      { japanese: "わかりました", romaji: "wakarimashita", english: "I understand." },
+      { japanese: "英語は話せますか", romaji: "eigo wa hanasemasu ka", english: "Do you speak English?" },
+      { japanese: "日本語が少し話せます", romaji: "nihongo ga sukoshi hanasemasu", english: "I can speak a little Japanese." },
+      { japanese: "トイレはどこですか", romaji: "toire wa doko desu ka", english: "Where is the restroom?" },
+      { japanese: "これはいくらですか", romaji: "kore wa ikura desu ka", english: "How much is this?" },
+      { japanese: "ちょっと高いです", romaji: "chotto takai desu", english: "It's a bit expensive." },
+      { japanese: "安くしてください", romaji: "yasuku shite kudasai", english: "Please make it cheaper." },
+      { japanese: "クレジットカードは使えますか", romaji: "kurejitto kaado wa tsukaemasu ka", english: "Can I use a credit card?" },
+      { japanese: "現金で払います", romaji: "genkin de haraimasu", english: "I'll pay in cash." },
+      { japanese: "レシートをください", romaji: "reshiito o kudasai", english: "Receipt, please." },
+      { japanese: "これをください", romaji: "kore o kudasai", english: "I'll take this." },
+      { japanese: "試着してもいいですか", romaji: "shichaku shite mo ii desu ka", english: "Can I try it on?" },
+      { japanese: "サイズはありますか", romaji: "saizu wa arimasu ka", english: "Do you have my size?" },
+      { japanese: "手伝ってもらえますか", romaji: "tetsudatte moraemasu ka", english: "Can you help me?" },
+      { japanese: "大丈夫です、見ているだけです", romaji: "daijoubu desu, mite iru dake desu", english: "I'm just looking." },
+      { japanese: "予約しています", romaji: "yoyaku shiteimasu", english: "I have a reservation." },
+      { japanese: "何名様ですか", romaji: "nanmei sama desu ka", english: "For how many people?" },
+      { japanese: "一人です", romaji: "hitori desu", english: "Just one." },
+      { japanese: "二人です", romaji: "futari desu", english: "Two people." },
+      { japanese: "メニューをください", romaji: "menyuu o kudasai", english: "Menu, please." },
+      { japanese: "おすすめは何ですか", romaji: "osusume wa nan desu ka", english: "What do you recommend?" },
+      { japanese: "水をください", romaji: "mizu o kudasai", english: "Water, please." },
+      { japanese: "これは辛いですか", romaji: "kore wa karai desu ka", english: "Is this spicy?" },
+      { japanese: "アレルギーがあります", romaji: "arerugii ga arimasu", english: "I have an allergy." },
+      { japanese: "お会計お願いします", romaji: "okaikei onegaishimasu", english: "The bill, please." },
+      { japanese: "とても美味しいです", romaji: "totemo oishii desu", english: "It's very delicious." },
+      { japanese: "お腹が空きました", romaji: "onaka ga sukimashita", english: "I'm hungry." },
+      { japanese: "お腹がいっぱいです", romaji: "onaka ga ippai desu", english: "I'm full." },
+      { japanese: "もう少しください", romaji: "mou sukoshi kudasai", english: "A little more, please." },
+      { japanese: "ここに座ってもいいですか", romaji: "koko ni suwatte mo ii desu ka", english: "May I sit here?" },
+      { japanese: "写真を撮ってもいいですか", romaji: "shashin o totte mo ii desu ka", english: "May I take a photo?" },
+      { japanese: "写真を撮りましょうか", romaji: "shashin o torimashou ka", english: "Shall I take a photo?" },
+      { japanese: "すぐ戻ります", romaji: "sugu modorimasu", english: "I'll be right back." },
+      { japanese: "ちょっと待ってください", romaji: "chotto matte kudasai", english: "Please wait a moment." },
+      { japanese: "急いでいます", romaji: "isoideimasu", english: "I'm in a hurry." },
+      { japanese: "道に迷いました", romaji: "michi ni mayoimashita", english: "I'm lost." },
+      { japanese: "駅はどこですか", romaji: "eki wa doko desu ka", english: "Where is the station?" },
+      { japanese: "ここから遠いですか", romaji: "koko kara tooi desu ka", english: "Is it far from here?" },
+      { japanese: "右に曲がってください", romaji: "migi ni magatte kudasai", english: "Please turn right." },
+      { japanese: "左に曲がってください", romaji: "hidari ni magatte kudasai", english: "Please turn left." },
+      { japanese: "まっすぐ行ってください", romaji: "massugu itte kudasai", english: "Please go straight." },
+      { japanese: "次の信号で止まってください", romaji: "tsugi no shingou de tomatte kudasai", english: "Please stop at the next light." },
+      { japanese: "バスで行けますか", romaji: "basu de ikemasu ka", english: "Can I go by bus?" },
+      { japanese: "電車に乗ります", romaji: "densha ni norimasu", english: "I will take the train." },
+      { japanese: "どの線ですか", romaji: "dono sen desu ka", english: "Which line is it?" },
+      { japanese: "切符を買いたいです", romaji: "kippu o kaitai desu", english: "I'd like to buy a ticket." },
+      { japanese: "一日券はありますか", romaji: "ichinichiken wa arimasu ka", english: "Do you have a day pass?" },
+      { japanese: "次の電車は何時ですか", romaji: "tsugi no densha wa nanji desu ka", english: "When is the next train?" },
+      { japanese: "この電車は渋谷に行きますか", romaji: "kono densha wa shibuya ni ikimasu ka", english: "Does this train go to Shibuya?" },
+      { japanese: "乗り換えはどこですか", romaji: "norikae wa doko desu ka", english: "Where do I transfer?" },
+      { japanese: "降ります", romaji: "orimasu", english: "I'm getting off." },
+      { japanese: "タクシーを呼んでください", romaji: "takushii o yonde kudasai", english: "Please call a taxi." },
+      { japanese: "ここで止めてください", romaji: "koko de tomete kudasai", english: "Please stop here." },
+      { japanese: "空港までお願いします", romaji: "kuukou made onegaishimasu", english: "To the airport, please." },
+      { japanese: "どれくらいかかりますか", romaji: "dorekurai kakarimasu ka", english: "How long does it take?" },
+      { japanese: "ホテルに着きました", romaji: "hoteru ni tsukimashita", english: "I arrived at the hotel." },
+      { japanese: "チェックインをお願いします", romaji: "chekkuin o onegaishimasu", english: "I'd like to check in." },
+      { japanese: "予約名は〜です", romaji: "yoyakumei wa ~ desu", english: "The reservation name is ~." },
+      { japanese: "パスポートを見せてください", romaji: "pasupooto o misete kudasai", english: "Please show your passport." },
+      { japanese: "Wi-Fiはありますか", romaji: "waifai wa arimasu ka", english: "Is there Wi-Fi?" },
+      { japanese: "朝食は含まれていますか", romaji: "choushoku wa fukumareteimasu ka", english: "Is breakfast included?" },
+      { japanese: "鍵をなくしました", romaji: "kagi o nakushimashita", english: "I lost my key." },
+      { japanese: "部屋を変えてもらえますか", romaji: "heya o kaete moraemasu ka", english: "Can I change rooms?" },
+      { japanese: "もう一泊したいです", romaji: "mou ippaku shitai desu", english: "I'd like to stay one more night." },
+      { japanese: "チェックアウトお願いします", romaji: "chekkuauto onegaishimasu", english: "I'd like to check out." },
+      { japanese: "きれいです", romaji: "kirei desu", english: "It's beautiful/clean." },
+      { japanese: "素敵ですね", romaji: "suteki desu ne", english: "That's lovely." },
+      { japanese: "面白いです", romaji: "omoshiroi desu", english: "It's interesting." },
+      { japanese: "楽しいです", romaji: "tanoshii desu", english: "It's fun." },
+      { japanese: "暑いですね", romaji: "atsui desu ne", english: "It's hot, isn't it?" },
+      { japanese: "寒いですね", romaji: "samui desu ne", english: "It's cold, isn't it?" },
+      { japanese: "雨が降っています", romaji: "ame ga futteimasu", english: "It's raining." },
+      { japanese: "今日は晴れです", romaji: "kyou wa hare desu", english: "It's sunny today." },
+      { japanese: "風が強いです", romaji: "kaze ga tsuyoi desu", english: "It's windy." },
+      { japanese: "気をつけてください", romaji: "ki o tsukete kudasai", english: "Please be careful." },
+      { japanese: "大丈夫でしたか", romaji: "daijoubu deshita ka", english: "Are you okay?" },
+      { japanese: "助けてください", romaji: "tasukete kudasai", english: "Please help." },
+      { japanese: "病院はどこですか", romaji: "byouin wa doko desu ka", english: "Where is the hospital?" },
+      { japanese: "薬が必要です", romaji: "kusuri ga hitsuyou desu", english: "I need medicine." },
+      { japanese: "頭が痛いです", romaji: "atama ga itai desu", english: "My head hurts." },
+      { japanese: "気分が悪いです", romaji: "kibun ga warui desu", english: "I feel sick." },
+      { japanese: "体温を測ってください", romaji: "taion o hakatte kudasai", english: "Please take my temperature." },
+      { japanese: "予約を取りたいです", romaji: "yoyaku o toritai desu", english: "I'd like to make an appointment." },
+      { japanese: "今暇ですか", romaji: "ima hima desu ka", english: "Are you free now?" },
+      { japanese: "後で電話します", romaji: "ato de denwa shimasu", english: "I'll call later." },
+      { japanese: "メッセージを送ります", romaji: "messeji o okurimasu", english: "I'll send a message." },
+      { japanese: "会いましょう", romaji: "aimashou", english: "Let's meet." },
+      { japanese: "何時に会えますか", romaji: "nanji ni aemasu ka", english: "What time can we meet?" },
+      { japanese: "明日はどうですか", romaji: "ashita wa dou desu ka", english: "How about tomorrow?" },
+      { japanese: "今日は忙しいです", romaji: "kyou wa isogashii desu", english: "I'm busy today." },
+      { japanese: "予定があります", romaji: "yotei ga arimasu", english: "I have plans." },
+      { japanese: "手伝いが必要ですか", romaji: "tetsudai ga hitsuyou desu ka", english: "Do you need help?" },
+      { japanese: "手伝ってくれてありがとう", romaji: "tetsudatte kurete arigatou", english: "Thanks for helping me." },
+      { japanese: "私は学生です", romaji: "watashi wa gakusei desu", english: "I am a student." },
+      { japanese: "仕事は何ですか", romaji: "shigoto wa nan desu ka", english: "What is your job?" },
+      { japanese: "エンジニアです", romaji: "enjinia desu", english: "I'm an engineer." },
+      { japanese: "会社で働いています", romaji: "kaisha de hataraiteimasu", english: "I work at a company." },
+      { japanese: "学校へ行きます", romaji: "gakkou e ikimasu", english: "I go to school." },
+      { japanese: "毎日勉強します", romaji: "mainichi benkyou shimasu", english: "I study every day." },
+      { japanese: "日本語が好きです", romaji: "nihongo ga suki desu", english: "I like Japanese." },
+      { japanese: "音楽を聴きます", romaji: "ongaku o kikimasu", english: "I listen to music." },
+      { japanese: "映画を見ます", romaji: "eiga o mimasu", english: "I watch movies." },
+      { japanese: "本を読みます", romaji: "hon o yomimasu", english: "I read books." },
+      { japanese: "料理をします", romaji: "ryouri o shimasu", english: "I cook." },
+      { japanese: "旅行が好きです", romaji: "ryokou ga suki desu", english: "I like traveling." },
+      { japanese: "週末は何をしますか", romaji: "shuumatsu wa nani o shimasu ka", english: "What do you do on weekends?" },
+      { japanese: "今日はどこに行きますか", romaji: "kyou wa doko ni ikimasu ka", english: "Where are you going today?" },
+      { japanese: "一緒に行きませんか", romaji: "issho ni ikimasen ka", english: "Would you like to go together?" },
+      { japanese: "もう一度お願いします", romaji: "mou ichido onegaishimasu", english: "One more time, please." },
+      { japanese: "ゆっくり話してもらえますか", romaji: "yukkuri hanashite moraemasu ka", english: "Can you speak slowly?" },
+      { japanese: "これは何ですか", romaji: "kore wa nan desu ka", english: "What is this?" },
+      { japanese: "それは誰のですか", romaji: "sore wa dare no desu ka", english: "Whose is that?" },
+      { japanese: "どうやって使いますか", romaji: "dou yatte tsukaimasu ka", english: "How do you use it?" },
+      { japanese: "ちょっと見せてください", romaji: "chotto misete kudasai", english: "Please show me." },
+      { japanese: "ここに書いてください", romaji: "koko ni kaite kudasai", english: "Please write it here." },
+      { japanese: "大きいサイズはありますか", romaji: "ookii saizu wa arimasu ka", english: "Do you have a larger size?" },
+      { japanese: "小さいサイズはありますか", romaji: "chiisai saizu wa arimasu ka", english: "Do you have a smaller size?" },
+      { japanese: "赤が好きです", romaji: "aka ga suki desu", english: "I like red." },
+      { japanese: "青が好きです", romaji: "ao ga suki desu", english: "I like blue." },
+      { japanese: "白はありますか", romaji: "shiro wa arimasu ka", english: "Do you have it in white?" },
+      { japanese: "これは必要ありません", romaji: "kore wa hitsuyou arimasen", english: "I don't need this." },
+      { japanese: "もう少し考えます", romaji: "mou sukoshi kangaemasu", english: "I'll think a bit more." },
+      { japanese: "それで大丈夫です", romaji: "sore de daijoubu desu", english: "That's fine." },
+      { japanese: "写真を送ってください", romaji: "shashin o okutte kudasai", english: "Please send the photo." },
+      { japanese: "充電できますか", romaji: "juuden dekimasu ka", english: "Can I charge (my phone)?" },
+      { japanese: "Wi-Fiのパスワードは何ですか", romaji: "waifai no pasuwaado wa nan desu ka", english: "What's the Wi-Fi password?" },
+      { japanese: "連絡してください", romaji: "renraku shite kudasai", english: "Please contact me." },
+      { japanese: "遅れてすみません", romaji: "okurete sumimasen", english: "Sorry I'm late." },
+      { japanese: "すぐ行きます", romaji: "sugu ikimasu", english: "I'm coming right away." },
+      { japanese: "もう着きました", romaji: "mou tsukimashita", english: "I've arrived already." },
+      { japanese: "ちょっと疲れました", romaji: "chotto tsukaremashita", english: "I'm a bit tired." },
+      { japanese: "今日は休みです", romaji: "kyou wa yasumi desu", english: "I'm off today." },
+      { japanese: "明日は休みです", romaji: "ashita wa yasumi desu", english: "I'm off tomorrow." },
+      { japanese: "お誕生日おめでとう", romaji: "otanjoubi omedetou", english: "Happy birthday." },
+      { japanese: "おめでとうございます", romaji: "omedetou gozaimasu", english: "Congratulations." },
+      { japanese: "よい旅を", romaji: "yoi tabi o", english: "Have a good trip." },
+      { japanese: "気をつけて", romaji: "ki o tsukete", english: "Take care." },
+      { japanese: "乾杯しましょう", romaji: "kanpai shimashou", english: "Let's toast." },
+      { japanese: "もう一杯どうですか", romaji: "mou ippai dou desu ka", english: "Another drink?" },
+      { japanese: "お先に失礼します", romaji: "osaki ni shitsurei shimasu", english: "I'm leaving first." },
+      { japanese: "ただいま", romaji: "tadaima", english: "I'm home." },
+      { japanese: "おかえりなさい", romaji: "okaerinasai", english: "Welcome home." },
+      { japanese: "いってきます", romaji: "ittekimasu", english: "I'm leaving." },
+      { japanese: "いってらっしゃい", romaji: "itterasshai", english: "Take care." },
+      { japanese: "今何時ですか", romaji: "ima nanji desu ka", english: "What time is it now?" },
+      { japanese: "もう遅いです", romaji: "mou osoi desu", english: "It's already late." },
+      { japanese: "早く起きましょう", romaji: "hayaku okimashou", english: "Let's get up early." },
+      { japanese: "眠いです", romaji: "nemui desu", english: "I'm sleepy." },
+      { japanese: "もう寝ます", romaji: "mou nemasu", english: "I'm going to sleep." },
+      { japanese: "電気を消してください", romaji: "denki o keshite kudasai", english: "Please turn off the light." },
+      { japanese: "窓を開けてもいいですか", romaji: "mado o akete mo ii desu ka", english: "May I open the window?" },
+      { japanese: "エアコンをつけてください", romaji: "eakon o tsukete kudasai", english: "Please turn on the AC." },
+      { japanese: "エアコンを消してください", romaji: "eakon o keshite kudasai", english: "Please turn off the AC." },
+      { japanese: "今日は何日ですか", romaji: "kyou wa nan nichi desu ka", english: "What's the date today?" },
+      { japanese: "来週の月曜日は忙しいですか", romaji: "raishuu no getsuyoubi wa isogashii desu ka", english: "Are you busy next Monday?" },
+      { japanese: "今週末に会えますか", romaji: "konshuumatsu ni aemasu ka", english: "Can you meet this weekend?" },
+      { japanese: "いつが都合いいですか", romaji: "itsu ga tsugou ii desu ka", english: "When is convenient?" },
+      { japanese: "予定を確認します", romaji: "yotei o kakunin shimasu", english: "I'll check my schedule." },
+      { japanese: "すみません、間違えました", romaji: "sumimasen, machigaemashita", english: "Sorry, I made a mistake." },
+      { japanese: "もう一度説明してください", romaji: "mou ichido setsumei shite kudasai", english: "Please explain again." },
+      { japanese: "質問があります", romaji: "shitsumon ga arimasu", english: "I have a question." },
+      { japanese: "これは大事ですか", romaji: "kore wa daiji desu ka", english: "Is this important?" },
+      { japanese: "忘れないでください", romaji: "wasurenai de kudasai", english: "Please don't forget." },
+      { japanese: "ちょっと考えさせてください", romaji: "chotto kangaesete kudasai", english: "Let me think about it." },
+      { japanese: "それはいい考えです", romaji: "sore wa ii kangae desu", english: "That's a good idea." },
+      { japanese: "同意します", romaji: "doui shimasu", english: "I agree." },
+      { japanese: "反対です", romaji: "hantai desu", english: "I disagree." },
+      { japanese: "本当にですか", romaji: "hontou ni desu ka", english: "Really?" },
+      { japanese: "信じられません", romaji: "shinjiraremasen", english: "I can't believe it." },
+      { japanese: "頑張ってください", romaji: "ganbatte kudasai", english: "Do your best." },
+      { japanese: "すごいですね", romaji: "sugoi desu ne", english: "That's amazing." },
+      { japanese: "落ち着いてください", romaji: "ochitsuite kudasai", english: "Please calm down." },
+      { japanese: "それは問題ありません", romaji: "sore wa mondai arimasen", english: "That's not a problem." },
+      { japanese: "すぐ終わります", romaji: "sugu owarimasu", english: "It'll finish soon." },
+      { japanese: "今日はここまでにしましょう", romaji: "kyou wa koko made ni shimashou", english: "Let's stop here today." }
+    ];
+
+    const els = {
+      deckSelect: document.getElementById("deckSelect"),
+      deckLabel: document.getElementById("deckLabel"),
+      deckProgress: document.getElementById("deckProgress"),
+      statusText: document.getElementById("statusText"),
+      queueCount: document.getElementById("queueCount"),
+      japanesePhrase: document.getElementById("japanesePhrase"),
+      romajiValue: document.getElementById("romajiValue"),
+      englishValue: document.getElementById("englishValue"),
+      speakBtn: document.getElementById("speakBtn"),
+      revealButtons: Array.from(document.querySelectorAll(".reveal-btn")),
+      ratingButtons: Array.from(document.querySelectorAll(".rate-btn"))
+    };
+
+    const synth = window.speechSynthesis;
+    let voice = null;
+
+    const state = {
+      decks: [],
+      deckIndex: 0,
+      queue: [],
+      finished: []
+    };
+
+    function buildDecks(entries) {
+      const decks = [];
+      for (let i = 0; i < entries.length; i += DECK_SIZE) {
+        const slice = entries.slice(i, i + DECK_SIZE);
+        decks.push({
+          label: `Deck ${decks.length + 1} (${slice.length})`,
+          entries: slice
+        });
+      }
+      return decks;
+    }
+
+    function refreshDeckSelect() {
+      els.deckSelect.innerHTML = "";
+      state.decks.forEach((deck, index) => {
+        const option = document.createElement("option");
+        option.value = index;
+        option.textContent = deck.label;
+        els.deckSelect.appendChild(option);
+      });
+      els.deckSelect.value = String(state.deckIndex);
+    }
+
+    function setDeck(index) {
+      state.deckIndex = Math.max(0, Math.min(index, state.decks.length - 1));
+      const deck = state.decks[state.deckIndex];
+      state.queue = deck ? [...deck.entries] : [];
+      state.finished = [];
+      els.deckLabel.textContent = deck ? deck.label : "No deck";
+      renderCard();
+    }
+
+    function updateProgress() {
+      const total = state.queue.length + state.finished.length;
+      const completed = state.finished.length;
+      const current = total ? Math.min(completed + 1, total) : 0;
+      els.deckProgress.textContent = `${current} / ${total}`;
+      els.statusText.textContent = total
+        ? `${completed} completed, ${state.queue.length} in review.`
+        : "No phrases available.";
+      els.queueCount.textContent = `Cards left: ${state.queue.length}`;
+    }
+
+    function resetReveals() {
+      els.romajiValue.classList.remove("revealed");
+      els.englishValue.classList.remove("revealed");
+      els.revealButtons.forEach((btn) => {
+        btn.textContent = "Reveal";
+      });
+    }
+
+    function renderCard() {
+      const current = state.queue[0];
+      if (!current) {
+        els.japanesePhrase.textContent = "All done!";
+        els.romajiValue.textContent = "";
+        els.englishValue.textContent = "";
+        resetReveals();
+        updateProgress();
+        return;
+      }
+
+      els.japanesePhrase.textContent = current.japanese;
+      els.romajiValue.textContent = current.romaji;
+      els.englishValue.textContent = current.english;
+      resetReveals();
+      updateProgress();
+    }
+
+    function applyRating(rating) {
+      if (!state.queue.length) return;
+      const card = state.queue.shift();
+      if (rating === "easy") {
+        state.finished.push(card);
+      } else {
+        const insertMap = { again: 2, hard: 5, good: 10 };
+        const offset = insertMap[rating] ?? 3;
+        const index = Math.min(offset, state.queue.length);
+        state.queue.splice(index, 0, card);
+      }
+      renderCard();
+    }
+
+    function loadVoices() {
+      const voices = synth.getVoices();
+      voice =
+        voices.find((v) => v.lang.toLowerCase().startsWith("ja")) ||
+        voices.find((v) => v.lang.toLowerCase().includes("ja")) ||
+        null;
+    }
+
+    function speak(text) {
+      if (!text) return;
+      loadVoices();
+      synth.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "ja-JP";
+      if (voice) utter.voice = voice;
+      synth.speak(utter);
+    }
+
+    els.revealButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.reveal === "romaji" ? els.romajiValue : els.englishValue;
+        target.classList.toggle("revealed");
+        btn.textContent = target.classList.contains("revealed") ? "Hide" : "Reveal";
+      });
+    });
+
+    els.ratingButtons.forEach((btn) => {
+      btn.addEventListener("click", () => applyRating(btn.dataset.rating));
+    });
+
+    els.deckSelect.addEventListener("change", (event) => {
+      setDeck(Number(event.target.value));
+    });
+
+    els.speakBtn.addEventListener("click", () => {
+      const current = state.queue[0];
+      if (current) speak(current.japanese);
+    });
+
+    synth.onvoiceschanged = loadVoices;
+    loadVoices();
+
+    state.decks = buildDecks(PHRASES);
+    refreshDeckSelect();
+    setDeck(0);
+  </script>
+</body>
+</html>
