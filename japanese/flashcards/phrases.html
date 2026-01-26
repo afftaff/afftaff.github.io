@@ -128,6 +128,10 @@
       min-height: 120px;
     }
 
+    .reveal-card.is-hidden {
+      display: none;
+    }
+
     .reveal-label {
       text-transform: uppercase;
       font-size: 0.75rem;
@@ -214,6 +218,14 @@
         <label for="deckSelect">Deck</label>
         <select id="deckSelect"></select>
       </div>
+      <div>
+        <label for="frontSelect">Show first</label>
+        <select id="frontSelect">
+          <option value="japanese">Japanese (hiragana)</option>
+          <option value="romaji">Romaji</option>
+          <option value="english">English</option>
+        </select>
+      </div>
       <div class="pill" id="deckLabel">Deck 1</div>
       <div class="pill" id="deckProgress">1 / 50</div>
       <button class="speak-btn" id="speakBtn" type="button">🔊 Speak</button>
@@ -222,12 +234,17 @@
     <section class="card">
       <div class="phrase" id="japanesePhrase">こんにちは</div>
       <div class="reveal-grid">
-        <div class="reveal-card">
+        <div class="reveal-card" data-field="japanese">
+          <div class="reveal-label">Japanese (hiragana)</div>
+          <div class="reveal-value" id="japaneseValue">こんにちは</div>
+          <button class="reveal-btn" data-reveal="japanese" type="button">Reveal</button>
+        </div>
+        <div class="reveal-card" data-field="romaji">
           <div class="reveal-label">Romaji</div>
           <div class="reveal-value" id="romajiValue">konnichiwa</div>
           <button class="reveal-btn" data-reveal="romaji" type="button">Reveal</button>
         </div>
-        <div class="reveal-card">
+        <div class="reveal-card" data-field="english">
           <div class="reveal-label">English</div>
           <div class="reveal-value" id="englishValue">Hello.</div>
           <button class="reveal-btn" data-reveal="english" type="button">Reveal</button>
@@ -305,14 +322,17 @@
 
     const els = {
       deckSelect: document.getElementById("deckSelect"),
+      frontSelect: document.getElementById("frontSelect"),
       deckLabel: document.getElementById("deckLabel"),
       deckProgress: document.getElementById("deckProgress"),
       statusText: document.getElementById("statusText"),
       queueCount: document.getElementById("queueCount"),
       japanesePhrase: document.getElementById("japanesePhrase"),
+      japaneseValue: document.getElementById("japaneseValue"),
       romajiValue: document.getElementById("romajiValue"),
       englishValue: document.getElementById("englishValue"),
       speakBtn: document.getElementById("speakBtn"),
+      revealCards: Array.from(document.querySelectorAll(".reveal-card")),
       revealButtons: Array.from(document.querySelectorAll(".reveal-btn")),
       ratingButtons: Array.from(document.querySelectorAll(".rate-btn"))
     };
@@ -324,7 +344,8 @@
       decks: [],
       deckIndex: 0,
       queue: [],
-      finished: []
+      finished: [],
+      front: "japanese"
     };
 
     function buildDecks(entries) {
@@ -371,6 +392,7 @@
     }
 
     function resetReveals() {
+      els.japaneseValue.classList.remove("revealed");
       els.romajiValue.classList.remove("revealed");
       els.englishValue.classList.remove("revealed");
       els.revealButtons.forEach((btn) => {
@@ -378,10 +400,18 @@
       });
     }
 
+    function updateRevealVisibility() {
+      els.revealCards.forEach((card) => {
+        const field = card.dataset.field;
+        card.classList.toggle("is-hidden", field === state.front);
+      });
+    }
+
     function renderCard() {
       const current = state.queue[0];
       if (!current) {
         els.japanesePhrase.textContent = "All done!";
+        els.japaneseValue.textContent = "";
         els.romajiValue.textContent = "";
         els.englishValue.textContent = "";
         resetReveals();
@@ -389,10 +419,18 @@
         return;
       }
 
-      els.japanesePhrase.textContent = current.japanese;
+      const frontMap = {
+        japanese: current.japanese,
+        romaji: current.romaji,
+        english: current.english
+      };
+
+      els.japanesePhrase.textContent = frontMap[state.front] || current.japanese;
+      els.japaneseValue.textContent = current.japanese;
       els.romajiValue.textContent = current.romaji;
       els.englishValue.textContent = current.english;
       resetReveals();
+      updateRevealVisibility();
       updateProgress();
     }
 
@@ -430,7 +468,13 @@
 
     els.revealButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
-        const target = btn.dataset.reveal === "romaji" ? els.romajiValue : els.englishValue;
+        const revealMap = {
+          japanese: els.japaneseValue,
+          romaji: els.romajiValue,
+          english: els.englishValue
+        };
+        const target = revealMap[btn.dataset.reveal];
+        if (!target) return;
         target.classList.toggle("revealed");
         btn.textContent = target.classList.contains("revealed") ? "Hide" : "Reveal";
       });
@@ -444,6 +488,11 @@
       setDeck(Number(event.target.value));
     });
 
+    els.frontSelect.addEventListener("change", (event) => {
+      state.front = event.target.value;
+      renderCard();
+    });
+
     els.speakBtn.addEventListener("click", () => {
       const current = state.queue[0];
       if (current) speak(current.japanese);
@@ -454,6 +503,7 @@
 
     state.decks = buildDecks(PHRASES);
     refreshDeckSelect();
+    els.frontSelect.value = state.front;
     setDeck(0);
   </script>
 </body>
