@@ -210,7 +210,7 @@
   <div class="app">
     <header>
       <h1>Japanese Phrase Decks</h1>
-      <p>Hardcoded practice phrases split into 5-card decks (50 total).</p>
+      <p>Hardcoded practice phrases split into 5-card decks.</p>
     </header>
 
     <section class="controls">
@@ -221,7 +221,7 @@
       <div>
         <label for="frontSelect">Show first</label>
         <select id="frontSelect">
-          <option value="japanese">Japanese (hiragana)</option>
+          <option value="japanese">Japanese</option>
           <option value="romaji">Romaji</option>
           <option value="english">English</option>
         </select>
@@ -235,7 +235,7 @@
       <div class="phrase" id="japanesePhrase">こんにちは</div>
       <div class="reveal-grid">
         <div class="reveal-card" data-field="japanese">
-          <div class="reveal-label">Japanese (hiragana)</div>
+          <div class="reveal-label">Japanese</div>
           <div class="reveal-value" id="japaneseValue">こんにちは</div>
           <button class="reveal-btn" data-reveal="japanese" type="button">Reveal</button>
         </div>
@@ -267,57 +267,148 @@
 
   <script>
     const DECK_SIZE = 5;
+    
+    // Updated list: 100 phrases total (20 decks)
     const PHRASES = [
+      // Deck 1: Basic Greetings
       { japanese: "こんにちは。", romaji: "konnichiwa.", english: "Hello." },
       { japanese: "おはようございます。", romaji: "ohayou gozaimasu.", english: "Good morning." },
       { japanese: "こんばんは。", romaji: "konbanwa.", english: "Good evening." },
       { japanese: "おやすみなさい。", romaji: "oyasuminasai.", english: "Good night." },
       { japanese: "ありがとう。", romaji: "arigatou.", english: "Thank you." },
+      
+      // Deck 2: Politeness
       { japanese: "すみません。", romaji: "sumimasen.", english: "Excuse me." },
       { japanese: "ごめんなさい。", romaji: "gomennasai.", english: "Sorry." },
       { japanese: "はい、そうです。", romaji: "hai, sou desu.", english: "Yes, it is." },
       { japanese: "いいえ、ちがいます。", romaji: "iie, chigaimasu.", english: "No, it's different." },
       { japanese: "おねがいします。", romaji: "onegaishimasu.", english: "Please." },
+
+      // Deck 3: Introductions
       { japanese: "げんきですか。", romaji: "genki desu ka.", english: "How are you?" },
       { japanese: "げんきです。", romaji: "genki desu.", english: "I'm fine." },
       { japanese: "なまえはなんですか。", romaji: "namae wa nan desu ka.", english: "What is your name?" },
       { japanese: "わたしはあんなです。", romaji: "watashi wa anna desu.", english: "I am Anna." },
       { japanese: "はじめまして。", romaji: "hajimemashite.", english: "Nice to meet you." },
+
+      // Deck 4: Background
       { japanese: "どこからきましたか。", romaji: "doko kara kimashita ka.", english: "Where are you from?" },
       { japanese: "あめりかからきました。", romaji: "amerika kara kimashita.", english: "I am from America." },
       { japanese: "にほんごをべんきょうします。", romaji: "nihongo o benkyou shimasu.", english: "I study Japanese." },
       { japanese: "えいごをはなします。", romaji: "eigo o hanashimasu.", english: "I speak English." },
       { japanese: "にほんごはすこしです。", romaji: "nihongo wa sukoshi desu.", english: "My Japanese is a little." },
+
+      // Deck 5: Objects & Demonstratives
       { japanese: "これはなんですか。", romaji: "kore wa nan desu ka.", english: "What is this?" },
       { japanese: "それはわたしのです。", romaji: "sore wa watashi no desu.", english: "That is mine." },
       { japanese: "これはほんです。", romaji: "kore wa hon desu.", english: "This is a book." },
       { japanese: "あれはねこです。", romaji: "are wa neko desu.", english: "That is a cat." },
       { japanese: "みずをください。", romaji: "mizu o kudasai.", english: "Water, please." },
+
+      // Deck 6: Requests & Restaurants 1
       { japanese: "ぱんをください。", romaji: "pan o kudasai.", english: "Bread, please." },
       { japanese: "こーひーをください。", romaji: "koohii o kudasai.", english: "Coffee, please." },
       { japanese: "といれはどこですか。", romaji: "toire wa doko desu ka.", english: "Where is the restroom?" },
       { japanese: "ここにすわっていいですか。", romaji: "koko ni suwatte ii desu ka.", english: "May I sit here?" },
       { japanese: "ちょっとまってください。", romaji: "chotto matte kudasai.", english: "Please wait." },
+
+      // Deck 7: Communication Issues
       { japanese: "わかりません。", romaji: "wakarimasen.", english: "I don't understand." },
       { japanese: "もういちどおねがいします。", romaji: "mou ichido onegaishimasu.", english: "One more time, please." },
       { japanese: "ゆっくりはなしてください。", romaji: "yukkuri hanashite kudasai.", english: "Please speak slowly." },
       { japanese: "だいじょうぶです。", romaji: "daijoubu desu.", english: "It's okay." },
       { japanese: "たすけてください。", romaji: "tasukete kudasai.", english: "Please help." },
+
+      // Deck 8: Directions 1
       { japanese: "みちにまよいました。", romaji: "michi ni mayoimashita.", english: "I am lost." },
       { japanese: "えきはどこですか。", romaji: "eki wa doko desu ka.", english: "Where is the station?" },
       { japanese: "みぎにいってください。", romaji: "migi ni itte kudasai.", english: "Please go right." },
       { japanese: "ひだりにいってください。", romaji: "hidari ni itte kudasai.", english: "Please go left." },
       { japanese: "まっすぐいってください。", romaji: "massugu itte kudasai.", english: "Please go straight." },
+
+      // Deck 9: Time & Schedules
       { japanese: "いまなんじですか。", romaji: "ima nanji desu ka.", english: "What time is it?" },
       { japanese: "きょうはげつようびです。", romaji: "kyou wa getsuyoubi desu.", english: "Today is Monday." },
       { japanese: "あしたはやすみです。", romaji: "ashita wa yasumi desu.", english: "I am off tomorrow." },
+      { japanese: "いつしゅっぱつしますか。", romaji: "itsu shuppatsu shimasu ka.", english: "When do we leave?" },
+      { japanese: "じゅっぷんまちました。", romaji: "juppun machimashita.", english: "I waited 10 minutes." },
+
+      // Deck 10: Daily Actions 1
       { japanese: "わたしはがくせいです。", romaji: "watashi wa gakusei desu.", english: "I am a student." },
       { japanese: "しごとにいきます。", romaji: "shigoto ni ikimasu.", english: "I go to work." },
       { japanese: "がっこうへいきます。", romaji: "gakkou e ikimasu.", english: "I go to school." },
       { japanese: "いえにかえります。", romaji: "ie ni kaerimasu.", english: "I go home." },
+      { japanese: "ともだちにあいます。", romaji: "tomodachi ni aimasu.", english: "I meet a friend." },
+
+      // Deck 11: Daily Actions 2
       { japanese: "えいがをみます。", romaji: "eiga o mimasu.", english: "I watch movies." },
       { japanese: "おんがくをききます。", romaji: "ongaku o kikimasu.", english: "I listen to music." },
-      { japanese: "ほんをよみます。", romaji: "hon o yomimasu.", english: "I read books." }
+      { japanese: "ほんをよみます。", romaji: "hon o yomimasu.", english: "I read books." },
+      { japanese: "しゃわーをあびます。", romaji: "shawaa o abimasu.", english: "I take a shower." },
+      { japanese: "しゃしんをとります。", romaji: "shashin o torimasu.", english: "I take a photo." },
+
+      // Deck 12: Shopping
+      { japanese: "いくらですか。", romaji: "ikura desu ka.", english: "How much is it?" },
+      { japanese: "これをください。", romaji: "kore o kudasai.", english: "I'll take this one." },
+      { japanese: "かーどはつかえますか。", romaji: "kaado wa tsukaemasu ka.", english: "Can I use a credit card?" },
+      { japanese: "しちゃくしてもいいですか。", romaji: "shichaku shite mo ii desu ka.", english: "Can I try this on?" },
+      { japanese: "ただみているだけです。", romaji: "tada miteiru dake desu.", english: "I'm just looking." },
+
+      // Deck 13: Restaurant 2
+      { japanese: "めにゅーをください。", romaji: "menyuu o kudasai.", english: "Menu, please." },
+      { japanese: "おすすめはなんですか。", romaji: "osusume wa nan desu ka.", english: "What do you recommend?" },
+      { japanese: "おかいけいをおねがいします。", romaji: "okaikei o onegaishimasu.", english: "Check, please." },
+      { japanese: "いただきます。", romaji: "itadakimasu.", english: "Bon appétit (before eating)." },
+      { japanese: "ごちそうさまでした。", romaji: "gochisousama deshita.", english: "Thank you for the meal (after)." },
+
+      // Deck 14: Adjectives/Feelings
+      { japanese: "たのしいです。", romaji: "tanoshii desu.", english: "It is fun." },
+      { japanese: "おいしいです。", romaji: "oishii desu.", english: "It is delicious." },
+      { japanese: "あついです。", romaji: "atsui desu.", english: "It is hot." },
+      { japanese: "さむいです。", romaji: "samui desu.", english: "It is cold." },
+      { japanese: "むずかしいです。", romaji: "muzukashii desu.", english: "It is difficult." },
+
+      // Deck 15: Convenience Store (Konbini)
+      { japanese: "ふくろはいりません。", romaji: "fukuro wa irimasen.", english: "I don't need a bag." },
+      { japanese: "あたためますか。", romaji: "atatamemasu ka.", english: "Do you want it heated?" },
+      { japanese: "おはしをつけてください。", romaji: "ohashi o tsukete kudasai.", english: "Please include chopsticks." },
+      { japanese: "れしーとはいりません。", romaji: "reshiito wa irimasen.", english: "I don't need a receipt." },
+      { japanese: "いちばんくじはありますか。", romaji: "ichiban kuji wa arimasu ka.", english: "Do you have Ichiban Kuji?" },
+
+      // Deck 16: Transportation
+      { japanese: "きっぷうりばはどこですか。", romaji: "kippu uriba wa doko desu ka.", english: "Where is the ticket office?" },
+      { japanese: "このでんしゃはとうきょうにいきますか。", romaji: "kono densha wa toukyou ni ikimasu ka.", english: "Does this train go to Tokyo?" },
+      { japanese: "たくしーをよんでください。", romaji: "takushii o yonde kudasai.", english: "Please call a taxi." },
+      { japanese: "ちずがありますか。", romaji: "chizu ga arimasu ka.", english: "Do you have a map?" },
+      { japanese: "とおいですか。", romaji: "tooi desu ka.", english: "Is it far?" },
+
+      // Deck 17: Health/Emergency
+      { japanese: "あたまがいたいです。", romaji: "atama ga itai desu.", english: "I have a headache." },
+      { japanese: "きぶんがわるいです。", romaji: "kibun ga warui desu.", english: "I feel sick." },
+      { japanese: "びょういんにいきたいです。", romaji: "byouin ni ikitai desu.", english: "I want to go to a hospital." },
+      { japanese: "けいさつをよんでください。", romaji: "keisatsu o yonde kudasai.", english: "Please call the police." },
+      { japanese: "ぱすぽーとをなくしました。", romaji: "pasupooto o nakushimashita.", english: "I lost my passport." },
+
+      // Deck 18: Locations
+      { japanese: "ちかくにこんびにがありますか。", romaji: "chikaku ni konbini ga arimasu ka.", english: "Is there a convenience store nearby?" },
+      { japanese: "いりぐちはどこですか。", romaji: "iriguchi wa doko desu ka.", english: "Where is the entrance?" },
+      { japanese: "でぐちはあそこです。", romaji: "deguchi wa asoko desu.", english: "The exit is over there." },
+      { japanese: "つぎのしんごうをみぎです。", romaji: "tsugi no shingou o migi desu.", english: "Turn right at the next light." },
+      { japanese: "えきのまえにいます。", romaji: "eki no mae ni imasu.", english: "I am in front of the station." },
+
+      // Deck 19: Casual/Conversation
+      { japanese: "もちろん。", romaji: "mochiron.", english: "Of course." },
+      { japanese: "しっています。", romaji: "shitte imasu.", english: "I know." },
+      { japanese: "わすれました。", romaji: "wasuremashita.", english: "I forgot." },
+      { japanese: "ほんとうですか。", romaji: "hontou desu ka.", english: "Really?" },
+      { japanese: "いいですね。", romaji: "ii desu ne.", english: "That's good/nice." },
+
+      // Deck 20: Body/Sensations
+      { japanese: "おなかがすきました。", romaji: "onaka ga sukimashita.", english: "I am hungry." },
+      { japanese: "のどがかわきました。", romaji: "nodo ga kawakimashita.", english: "I am thirsty." },
+      { japanese: "ねむいです。", romaji: "nemui desu.", english: "I am sleepy." },
+      { japanese: "つかれました。", romaji: "tsukaremashita.", english: "I am tired." },
+      { japanese: "うれしいです。", romaji: "ureshii desu.", english: "I am happy." }
     ];
 
     const els = {
@@ -458,7 +549,9 @@
 
     function speak(text) {
       if (!text) return;
-      loadVoices();
+      // Ensure voices are loaded (sometimes fails on first load in some browsers)
+      if (!voice) loadVoices();
+      
       synth.cancel();
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = "ja-JP";
